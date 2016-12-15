@@ -1,13 +1,12 @@
 {
   "name": "vue-eslint-parser",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "The ESLint custom parser for `.vue` files.",
   "engines": {
     "node": ">=4"
   },
   "main": "index.js",
-  "files": [
-  ],
+  "files": [],
   "scripts": {
     "clean": "rimraf .nyc_output coverage",
     "coverage": "nyc report --reporter lcov && opener ./coverage/lcov-report/index.html",
