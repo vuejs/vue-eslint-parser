@@ -73,3 +73,47 @@ describe("About fixtures/hello.vue", () => {
         assert(actual === expected)
     })
 })
+
+describe("About fixtures/notvue.js", () => {
+    beforeEach(() => {
+        fs.copySync(ORIGINAL_FIXTURE_DIR, FIXTURE_DIR)
+    })
+    afterEach(() => {
+        fs.removeSync(FIXTURE_DIR)
+    })
+
+    it("should notify a 'semi' error", () => {
+        const cli = new CLIEngine({
+            cwd: FIXTURE_DIR,
+            envs: ["es6", "node"],
+            parser: PARSER_PATH,
+            rules: {semi: "error"},
+            useEslintrc: false,
+        })
+        const report = cli.executeOnFiles(["notvue.js"])
+        const messages = report.results[0].messages
+
+        assert(messages.length === 1)
+        assert(messages[0].ruleId === "semi")
+        assert(messages[0].line === 1)
+        assert(messages[0].column === 21)
+        assert(messages[0].source === "console.log(\"hello\")")
+    })
+
+    it("should fix a 'semi' error with --fix option", () => {
+        const cli = new CLIEngine({
+            cwd: FIXTURE_DIR,
+            envs: ["es6", "node"],
+            fix: true,
+            parser: PARSER_PATH,
+            rules: {semi: "error"},
+            useEslintrc: false,
+        })
+        CLIEngine.outputFixes(cli.executeOnFiles(["notvue.js"]))
+
+        const actual = fs.readFileSync(path.join(FIXTURE_DIR, "notvue.js"), "utf8")
+        const expected = fs.readFileSync(path.join(FIXTURE_DIR, "notvue.js.fixed"), "utf8")
+
+        assert(actual === expected)
+    })
+})

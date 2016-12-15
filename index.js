@@ -9,6 +9,7 @@
 // Requirements
 //------------------------------------------------------------------------------
 
+const path = require("path")
 const espree = require("espree")
 const SAXParser = require("parse5").SAXParser
 
@@ -55,7 +56,23 @@ function extractFirstScript(originalText) {
 // Exports
 //------------------------------------------------------------------------------
 
+/**
+ * Parses the source code.
+ *
+ * If `options.filePath` is a `.vue` file, this extracts the first `<script>`
+ * element then parses it.
+ *
+ * @memberof module:vue-eslint-parser
+ * @function parse
+ * @param {string} text - The source code to be parsed.
+ * @param {object} options - The option object for espree.
+ * @returns {ASTNode} The AST object as the result of parsing.
+ */
 module.exports.parse = function parse(text, options) {
+    if (path.extname(options.filePath || "unknown.js") !== ".vue") {
+        return espree.parse(text, options)
+    }
+
     const script = extractFirstScript(text)
     const ast = espree.parse(script.text, options)
 
