@@ -6,7 +6,7 @@
 [![Coverage Status](https://codecov.io/gh/mysticatea/vue-eslint-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/mysticatea/vue-eslint-parser)
 [![Dependency Status](https://david-dm.org/mysticatea/vue-eslint-parser.svg)](https://david-dm.org/mysticatea/vue-eslint-parser)
 
-The ESLint custom parser of `.vue` file.
+The ESLint custom parser for `.vue` files.
 
 ESLint supports autofix on custom parsers but does not support autofix on plugins which have processors ([eslint/eslint#7510](https://github.com/eslint/eslint/issues/7510)). The motivation of this custom parser is that it supports autofix on `.vue` files.
 
