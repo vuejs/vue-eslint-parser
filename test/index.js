@@ -117,3 +117,61 @@ describe("About fixtures/notvue.js", () => {
         assert(actual === expected)
     })
 })
+
+describe("About fixtures/lines-around-directive.vue", () => {
+    beforeEach(() => {
+        fs.copySync(ORIGINAL_FIXTURE_DIR, FIXTURE_DIR)
+    })
+    afterEach(() => {
+        fs.removeSync(FIXTURE_DIR)
+    })
+
+    it("should notify no 'lines-around-directive' error (never)", () => {
+        const cli = new CLIEngine({
+            cwd: FIXTURE_DIR,
+            envs: ["es6", "node"],
+            parser: PARSER_PATH,
+            rules: {"lines-around-directive": ["error", "never"]},
+            useEslintrc: false,
+        })
+        const report = cli.executeOnFiles(["lines-around-directive.vue"])
+        const messages = report.results[0].messages
+
+        assert(messages.length === 0)
+    })
+
+    it("should notify a 'lines-around-directive' error (always)", () => {
+        const cli = new CLIEngine({
+            cwd: FIXTURE_DIR,
+            envs: ["es6", "node"],
+            parser: PARSER_PATH,
+            rules: {"lines-around-directive": ["error", "always"]},
+            useEslintrc: false,
+        })
+        const report = cli.executeOnFiles(["lines-around-directive.vue"])
+        const messages = report.results[0].messages
+
+        assert(messages.length === 1)
+        assert(messages[0].ruleId === "lines-around-directive")
+        assert(messages[0].line === 6)
+        assert(messages[0].column === 1)
+        assert(messages[0].source === "\"use strict\"")
+    })
+
+    it("should fix 'lines-around-directive' errors with --fix option", () => {
+        const cli = new CLIEngine({
+            cwd: FIXTURE_DIR,
+            envs: ["es6", "node"],
+            fix: true,
+            parser: PARSER_PATH,
+            rules: {"lines-around-directive": ["error", "always"]},
+            useEslintrc: false,
+        })
+        CLIEngine.outputFixes(cli.executeOnFiles(["lines-around-directive.vue"]))
+
+        const actual = fs.readFileSync(path.join(FIXTURE_DIR, "lines-around-directive.vue"), "utf8")
+        const expected = fs.readFileSync(path.join(FIXTURE_DIR, "lines-around-directive-always.vue.fixed"), "utf8")
+
+        assert(actual === expected)
+    })
+})
