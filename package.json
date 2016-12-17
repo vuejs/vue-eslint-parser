@@ -15,7 +15,7 @@
     "postversion": "git push && git push --tags",
     "pretest": "npm run lint",
     "preversion": "npm test",
-    "test": "nyc mocha \"test/*.js\" --compilers js:babel-register --reporter progress --timeout 10000",
+    "test": "nyc mocha \"test/*.js\" --compilers js:babel-register --reporter progress --timeout 30000",
     "watch": "mocha \"test/*.js\" --compilers js:babel-register --growl --reporter progress --watch",
     "codecov": "nyc report --reporter lcovonly && codecov"
   },
