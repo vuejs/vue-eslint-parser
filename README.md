@@ -36,6 +36,11 @@ $ eslint "src/**.{js,vue}"
 $ eslint src --ext .vue
 ```
 
+## :warning: Known Limitations
+
+- [no-trailing-spaces](http://eslint.org/docs/rules/no-trailing-spaces) rule is warning lines outside of `<script>` tags as well.
+- Rules which are using the source code text instead of AST might be confused.
+
 ## :newspaper: Changelog
 
 - [GitHub Releases](https://github.com/mysticatea/vue-eslint-parser/releases)
