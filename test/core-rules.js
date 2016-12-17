@@ -19,7 +19,30 @@ const RuleTester = require("./fixtures/eslint/lib/testers/rule-tester")
 
 const RULES_ROOT = path.join(__dirname, "fixtures/eslint/tests/lib/rules")
 const PARSER_PATH = path.resolve(__dirname, "../index.js")
+const EXCEPTIONS = new Set([
+    // Those rules check outside `<script>` tag as well.
+    // It cannot fix the behavior in vue-eslint-parser side.
+    "eol-last",
+    "max-len",
+    "max-lines",
+
+    // Wrapper includes line-breaks, so it changed the number of errors.
+    // It cannot test this rule correctly.
+    "linebreak-style",
+
+    // Tests about the head/last of source code failed because "<script>" tokens
+    // are added.
+    // It cannot test this rule correctly.
+    "lines-around-comment",
+    "lines-around-directive",
+    "newline-after-var",
+    "no-multiple-empty-lines",
+
+    // The inside of "<script>" tags is not related to Unicode BOM.
+    "unicode-bom",
+])
 const originalRun = RuleTester.prototype.run
+const processed = new Set()
 
 /**
  * Wrap the given code with a `<script>` tag.
@@ -28,7 +51,11 @@ const originalRun = RuleTester.prototype.run
  * @returns {string} The wrapped code.
  */
 function wrapCode(code) {
-    const eol = code.indexOf("\r\n") !== -1 ? "\r\n" : "\n"
+    const eol = "\n"
+
+    if (code.charCodeAt(0) === 0xFEFF) {
+        return `\uFEFF<script>${eol}${code.slice(1)}${eol}</script>`
+    }
     return `<script>${eol}${code}${eol}</script>`
 }
 
@@ -40,13 +67,19 @@ function wrapCode(code) {
  */
 function modifyPattern(pattern) {
     if (typeof pattern === "string") {
+        if (pattern.startsWith("#!")) {
+            return null
+        }
         return {
             code: wrapCode(pattern),
             filename: "test.vue",
             parser: PARSER_PATH,
         }
     }
-    if (pattern.parser != null || pattern.filename != null) {
+    if (pattern.parser != null ||
+        pattern.filename != null ||
+        pattern.code.startsWith("#!")
+    ) {
         return null
     }
 
@@ -58,12 +91,14 @@ function modifyPattern(pattern) {
     }
     if (Array.isArray(pattern.errors)) {
         for (const error of pattern.errors) {
-            if (typeof error === "object") {
+            if (typeof error === "object" && !processed.has(error)) {
+                processed.add(error)
+
                 if (error.line != null) {
-                    error.line += 1
+                    error.line = Number(error.line) + 1
                 }
                 if (error.endLine != null) {
-                    error.endLine += 1
+                    error.endLine = Number(error.endLine) + 1
                 }
             }
         }
@@ -97,10 +132,17 @@ RuleTester.prototype.run = overrideRun
 try {
     describe("Tests of ESLint core rules", () => {
         for (const fileName of fs.readdirSync(RULES_ROOT)) {
+            if (path.extname(fileName) !== ".js" ||
+                EXCEPTIONS.has(path.basename(fileName, ".js"))
+            ) {
+                continue
+            }
+
             require(path.join(RULES_ROOT, fileName))
         }
     })
 }
 finally {
     RuleTester.prototype.run = originalRun
+    processed.clear()
 }
