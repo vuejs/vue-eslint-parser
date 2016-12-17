@@ -1,3 +1,5 @@
 {
-    "presets": ["power-assert"]
+    "presets": ["power-assert"],
+    "only": "test/*.js",
+    "sourceMaps": "inline"
 }
