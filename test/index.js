@@ -198,3 +198,89 @@ describe("About fixtures/crlf.vue", () => {
         assert(messages.length === 0)
     })
 })
+
+describe("About fixtures/typed.vue", () => {
+    beforeEach(() => {
+        fs.copySync(ORIGINAL_FIXTURE_DIR, FIXTURE_DIR)
+    })
+    afterEach(() => {
+        fs.removeSync(FIXTURE_DIR)
+    })
+
+    it("should notify no error with 'babel-eslint'", () => {
+        const cli = new CLIEngine({
+            cwd: FIXTURE_DIR,
+            envs: ["es6", "node"],
+            parser: PARSER_PATH,
+            parserOptions: {
+                parser: "babel-eslint",
+                sourceType: "module",
+            },
+            rules: {semi: ["error", "never"]},
+            useEslintrc: false,
+        })
+        const report = cli.executeOnFiles(["typed.vue"])
+        const messages = report.results[0].messages
+
+        assert(messages.length === 0)
+    })
+
+    it("should notify no error with 'typescript-eslint-parser'", () => {
+        const cli = new CLIEngine({
+            cwd: FIXTURE_DIR,
+            envs: ["es6", "node"],
+            parser: PARSER_PATH,
+            parserOptions: {
+                parser: "typescript-eslint-parser",
+                sourceType: "module",
+            },
+            rules: {semi: ["error", "never"]},
+            useEslintrc: false,
+        })
+        const report = cli.executeOnFiles(["typed.vue"])
+        const messages = report.results[0].messages
+
+        assert(messages.length === 0)
+    })
+
+    it("should fix 'semi' errors with --fix option with 'babel-eslint'", () => {
+        const cli = new CLIEngine({
+            cwd: FIXTURE_DIR,
+            envs: ["es6", "node"],
+            fix: true,
+            parser: PARSER_PATH,
+            parserOptions: {
+                parser: "babel-eslint",
+                sourceType: "module",
+            },
+            rules: {semi: ["error", "always"]},
+            useEslintrc: false,
+        })
+        CLIEngine.outputFixes(cli.executeOnFiles(["typed.vue"]))
+
+        const actual = fs.readFileSync(path.join(FIXTURE_DIR, "typed.vue"), "utf8")
+        const expected = fs.readFileSync(path.join(FIXTURE_DIR, "typed.vue.fixed"), "utf8")
+
+        assert(actual === expected)
+    })
+
+    it("should fix 'semi' errors with --fix option with 'typescript-eslint-parser'", () => {
+        const cli = new CLIEngine({
+            cwd: FIXTURE_DIR,
+            envs: ["es6", "node"],
+            fix: true,
+            parser: PARSER_PATH,
+            parserOptions: { //
+                parser: "typescript-eslint-parser",
+            },
+            rules: {semi: ["error", "always"]},
+            useEslintrc: false,
+        })
+        CLIEngine.outputFixes(cli.executeOnFiles(["typed.vue"]))
+
+        const actual = fs.readFileSync(path.join(FIXTURE_DIR, "typed.vue"), "utf8")
+        const expected = fs.readFileSync(path.join(FIXTURE_DIR, "typed.vue.fixed"), "utf8")
+
+        assert(actual === expected)
+    })
+})

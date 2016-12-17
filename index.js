@@ -10,7 +10,6 @@
 //------------------------------------------------------------------------------
 
 const path = require("path")
-const espree = require("espree")
 const SAXParser = require("parse5").SAXParser
 
 //------------------------------------------------------------------------------
@@ -18,6 +17,18 @@ const SAXParser = require("parse5").SAXParser
 //------------------------------------------------------------------------------
 
 const LINE_TERMINATORS = /\r\n|\r|\n|\u2028|\u2029/g
+
+/**
+ * Gets the specified parser.
+ * If it's unspecified, this returns espree.
+ *
+ * @param {object} options - The option object.
+ * @param {string} [options.parser] - The parser name to get.
+ * @returns {object} The gotten parser.
+ */
+function getParser(options) {
+    return require(options.parser || "espree")
+}
 
 /**
  * Calculates the end location.
@@ -132,12 +143,14 @@ function extractFirstScript(originalText) {
  * @returns {ASTNode} The AST object as the result of parsing.
  */
 module.exports.parse = function parse(text, options) {
+    const parser = getParser(options)
+
     if (path.extname(options.filePath || "unknown.js") !== ".vue") {
-        return espree.parse(text, options)
+        return parser.parse(text, options)
     }
 
     const script = extractFirstScript(text)
-    const ast = espree.parse(script.text, options)
+    const ast = parser.parse(script.text, options)
 
     ast.start = script.offset
     if (script.startToken) {

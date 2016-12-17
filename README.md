@@ -36,6 +36,37 @@ $ eslint "src/**.{js,vue}"
 $ eslint src --ext .vue
 ```
 
+## :wrench: Options
+
+`parserOptions` is the same as what [espree](https://github.com/eslint/espree#usage), the default parser of ESLint, is supporting.
+For example:
+
+```json
+{
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2017
+        // ...
+    }
+}
+```
+
+On the other hand, you can specify a custom parser to parse `<script>` tags.
+In this case, specify `parser` property. Other properties than `parser` would be given to the specified parser.
+For example:
+
+```json
+{
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "parser": "babel-eslint",
+        "sourceType": "module",
+        "allowImportExportEverywhere": false
+    }
+}
+```
+
 ## :warning: Known Limitations
 
 - [no-trailing-spaces](http://eslint.org/docs/rules/no-trailing-spaces) rule is warning lines outside of `<script>` tags as well.
