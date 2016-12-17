@@ -175,3 +175,26 @@ describe("About fixtures/lines-around-directive.vue", () => {
         assert(actual === expected)
     })
 })
+
+describe("About fixtures/crlf.vue", () => {
+    beforeEach(() => {
+        fs.copySync(ORIGINAL_FIXTURE_DIR, FIXTURE_DIR)
+    })
+    afterEach(() => {
+        fs.removeSync(FIXTURE_DIR)
+    })
+
+    it("should notify no 'indent' error", () => {
+        const cli = new CLIEngine({
+            cwd: FIXTURE_DIR,
+            envs: ["es6", "node"],
+            parser: PARSER_PATH,
+            rules: {indent: "error"},
+            useEslintrc: false,
+        })
+        const report = cli.executeOnFiles(["crlf.vue"])
+        const messages = report.results[0].messages
+
+        assert(messages.length === 0)
+    })
+})

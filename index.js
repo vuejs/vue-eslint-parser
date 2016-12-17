@@ -98,13 +98,16 @@ function extractFirstScript(originalText) {
             parser.stop()
         }
     })
-    parser.on("text", (scriptText, location) => {
+    parser.on("text", (_, location) => {
         if (startToken != null) {
+            const start = location.startOffset
             const countLines = location.line - 1
             const lineTerminators = "\n".repeat(countLines)
-            const spaces = " ".repeat(location.startOffset - countLines)
+            const spaces = " ".repeat(start - countLines)
+            const scriptText = originalText.slice(start, location.endOffset)
+
             text = `${spaces}${lineTerminators}${scriptText}`
-            offset = location.startOffset
+            offset = start
         }
     })
     parser.end(originalText)
