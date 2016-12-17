@@ -69,8 +69,15 @@ For example:
 
 ## :warning: Known Limitations
 
-- [no-trailing-spaces](http://eslint.org/docs/rules/no-trailing-spaces) rule is warning lines outside of `<script>` tags as well.
-- Rules which are using the source code text instead of AST might be confused.
+- Those rules are warning code due to the outside of `<script>` tags.
+  Please disable those rules for `.vue` files as necessary.
+    - [eol-last](http://eslint.org/docs/rules/eol-last)
+    - [linebreak-style](http://eslint.org/docs/rules/linebreak-style)
+    - [max-len](http://eslint.org/docs/rules/max-len)
+    - [max-lines](http://eslint.org/docs/rules/max-lines)
+    - [no-trailing-spaces](http://eslint.org/docs/rules/no-trailing-spaces)
+    - [unicode-bom](http://eslint.org/docs/rules/unicode-bom)
+- Other rules which are using the source code text instead of AST might be confused as well.
 
 ## :newspaper: Changelog
 
