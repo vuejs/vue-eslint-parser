@@ -11,10 +11,10 @@
     "clean": "rimraf .nyc_output coverage",
     "coverage": "nyc report --reporter lcov && opener ./coverage/lcov-report/index.html",
     "lint": "eslint index.js \"test/*.js\"",
-    "postinstall": "git submodule update --init && cd test/fixtures/eslint && npm install",
     "postversion": "git push && git push --tags",
     "pretest": "npm run lint",
     "preversion": "npm test",
+    "setup": "git submodule update --init && cd test/fixtures/eslint && npm install",
     "test": "nyc mocha \"test/*.js\" --compilers js:babel-register --reporter progress --timeout 30000",
     "watch": "mocha \"test/*.js\" --compilers js:babel-register --growl --reporter progress --watch",
     "codecov": "nyc report --reporter lcovonly && codecov"
