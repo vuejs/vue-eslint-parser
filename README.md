@@ -31,14 +31,14 @@ $ npm install --save-dev eslint vue-eslint-parser
 ```
 
 ```bash
-$ eslint "src/**.{js,vue}"
+$ eslint "src/**/*.{js,vue}"
 # or
 $ eslint src --ext .vue
 ```
 
 ## :wrench: Options
 
-`parserOptions` is the same as what [espree](https://github.com/eslint/espree#usage), the default parser of ESLint, is supporting.
+`parserOptions` has the same properties as what [espree](https://github.com/eslint/espree#usage), the default parser of ESLint, is supporting.  
 For example:
 
 ```json
@@ -46,14 +46,19 @@ For example:
     "parser": "vue-eslint-parser",
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 2017
-        // ...
+        "ecmaVersion": 2017,
+        "ecmaFeatures": {
+            "globalReturn": false,
+            "impliedStrict": false,
+            "jsx": false,
+            "experimentalObjectRestSpread": false
+        }
     }
 }
 ```
 
-On the other hand, you can specify a custom parser to parse `<script>` tags.
-In this case, specify `parser` property. Other properties than `parser` would be given to the specified parser.
+Also, you can use `parser` property to specify a custom parser to parse `<script>` tags.
+Other properties than parser would be given to the specified parser.  
 For example:
 
 ```json
@@ -67,16 +72,26 @@ For example:
 }
 ```
 
+```json
+{
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "parser": "typescript-eslint-parser"
+    }
+}
+```
+
 ## :warning: Known Limitations
 
-- Those rules are warning code due to the outside of `<script>` tags.
-  Please disable those rules for `.vue` files as necessary.
-    - [eol-last](http://eslint.org/docs/rules/eol-last)
-    - [linebreak-style](http://eslint.org/docs/rules/linebreak-style)
-    - [max-len](http://eslint.org/docs/rules/max-len)
-    - [max-lines](http://eslint.org/docs/rules/max-lines)
-    - [no-trailing-spaces](http://eslint.org/docs/rules/no-trailing-spaces)
-    - [unicode-bom](http://eslint.org/docs/rules/unicode-bom)
+Some rules make warnings due to the outside of `<script>` tags.
+Please disable those rules for `.vue` files as necessary.
+
+- [eol-last](http://eslint.org/docs/rules/eol-last)
+- [linebreak-style](http://eslint.org/docs/rules/linebreak-style)
+- [max-len](http://eslint.org/docs/rules/max-len)
+- [max-lines](http://eslint.org/docs/rules/max-lines)
+- [no-trailing-spaces](http://eslint.org/docs/rules/no-trailing-spaces)
+- [unicode-bom](http://eslint.org/docs/rules/unicode-bom)
 - Other rules which are using the source code text instead of AST might be confused as well.
 
 ## :newspaper: Changelog

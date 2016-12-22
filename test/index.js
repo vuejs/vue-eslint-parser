@@ -83,6 +83,70 @@ describe("Basic tests", () => {
         })
     })
 
+    describe("About fixtures/empty.vue", () => {
+        it("should notify no error", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["es6", "node"],
+                parser: PARSER_PATH,
+                rules: {semi: "error"},
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles(["empty.vue"])
+            const messages = report.results[0].messages
+
+            assert(messages.length === 0)
+        })
+    })
+
+    describe("About fixtures/no-script.vue", () => {
+        it("should notify no error", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["es6", "node"],
+                parser: PARSER_PATH,
+                rules: {semi: "error"},
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles(["no-script.vue"])
+            const messages = report.results[0].messages
+
+            assert(messages.length === 0)
+        })
+    })
+
+    describe("About fixtures/empty-script.vue", () => {
+        it("should notify no error", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["es6", "node"],
+                parser: PARSER_PATH,
+                rules: {semi: "error"},
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles(["empty-script.vue"])
+            const messages = report.results[0].messages
+
+            assert(messages.length === 0)
+        })
+    })
+
+    describe("About fixtures/no-end-script-tag.vue", () => {
+        it("should notify no error", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["es6", "node"],
+                parser: PARSER_PATH,
+                rules: {semi: "error"},
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles(["no-end-script-tag.vue"])
+            const messages = report.results[0].messages
+
+            assert(messages.length === 0)
+        })
+    })
+
     describe("About fixtures/notvue.js", () => {
         it("should notify a 'semi' error", () => {
             const cli = new CLIEngine({
@@ -211,9 +275,8 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
-                parserOptions: {
+                parserOptions: { //
                     parser: "typescript-eslint-parser",
-                    sourceType: "module",
                 },
                 rules: {semi: ["error", "never"]},
                 useEslintrc: false,
