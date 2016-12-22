@@ -16,7 +16,7 @@ ESLint supports autofix on custom parsers but does not support autofix on plugin
 $ npm install --save-dev eslint vue-eslint-parser
 ```
 
-- `vue-eslint-parser` requires ESLint 3.5.0 or later.
+- `vue-eslint-parser` requires ESLint 3.9.0 or later.
 
 ## :book: Usage
 
