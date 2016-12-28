@@ -9,7 +9,7 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-const Parser = require("./lib/parser")
+const parse = require("./lib/parse-component")
 
 //------------------------------------------------------------------------------
 // Exports
@@ -29,10 +29,7 @@ module.exports = {
      *
      * @param {string} code - The source code to be parsed.
      * @param {object} options - The option object.
-     * @returns {{ast: ASTNode, services: any}} The result of parsing.
+     * @returns {ASTNode} The parsing result.
      */
-    parse(code, options) {
-        const parser = new Parser(options)
-        return parser.parseComponent(code)
-    },
+    parse,
 }
