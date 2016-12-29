@@ -1,7 +1,8 @@
 {
     "eslint.validate": [
-        "javascript", 
-        {"language": "html", "autoFix": true}, 
+        "javascript",
+        {"language": "html", "autoFix": true},
         {"language": "vue", "autoFix": true}
-    ]
+    ],
+    "typescript.check.workspaceVersion": false
 }
