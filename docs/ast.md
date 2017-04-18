@@ -16,10 +16,10 @@ extend interface Node {
 }
 ```
 
-This AST spec enhances the [Node] nodes as same as ESLint.
-The `range` property is an array which has 2 integers.
-The 1st integer is the offset of the start location of the node.
-The 3st integer is the offset of the end location of the node.
+- This AST spec enhances the [Node] nodes like ESLint.
+- The `range` property is an array which has 2 integers.  
+  The 1st integer is the offset of the start location of the node.  
+  The 2nd integer is the offset of the end location of the node.
 
 ## VIdentifier
 
@@ -30,12 +30,14 @@ interface VIdentifier <: Node {
 }
 ```
 
-- The `name` property can include any characters except U+0000-U+001F, U+007F-U+009F,
-  U+0020, U+0022, U+0027, U+003E, U+002F, U+003D, U+FDD0-U+FDEF, U+FFFE, U+FFFF,
-  U+1FFFE, U+1FFFF, U+2FFFE, U+2FFFF, U+3FFFE, U+3FFFF, U+4FFFE, U+4FFFF, U+5FFFE,
-  U+5FFFF, U+6FFFE, U+6FFFF, U+7FFFE, U+7FFFF, U+8FFFE, U+8FFFF, U+9FFFE, U+9FFFF,
-  U+AFFFE, U+AFFFF, U+BFFFE, U+BFFFF, U+CFFFE, U+CFFFF, U+DFFFE, U+DFFFF, U+EFFFE,
-  U+EFFFF, U+FFFFE, U+FFFFF, U+10FFFE or U+10FFFF.
+- This is similar to [Identifier] nodes but this `name` property can include any
+  characters except U+0000-U+001F, U+007F-U+009F, U+0020, U+0022, U+0027, U+003E,
+  U+002F, U+003D, U+FDD0-U+FDEF, U+FFFE, U+FFFF, U+1FFFE, U+1FFFF, U+2FFFE, U+2FFFF,
+  U+3FFFE, U+3FFFF, U+4FFFE, U+4FFFF, U+5FFFE, U+5FFFF, U+6FFFE, U+6FFFF, U+7FFFE,
+  U+7FFFF, U+8FFFE, U+8FFFF, U+9FFFE, U+9FFFF, U+AFFFE, U+AFFFF, U+BFFFE, U+BFFFF,
+  U+CFFFE, U+CFFFF, U+DFFFE, U+DFFFF, U+EFFFE, U+EFFFF, U+FFFFE, U+FFFFF, U+10FFFE
+  and U+10FFFF.
+- This is tag names or attribute names.
 
 ## VText
 
@@ -58,6 +60,7 @@ interface VExpressionContainer <: Node {
 }
 ```
 
+- This is mustaches or directive values.
 - If syntax errors exist, `expression` is `null` and `syntaxError` is an error object. Otherwise, `expression` is an [Expression] node and `syntaxError` is `null`.
 
 ## VDirectiveKey
@@ -73,8 +76,8 @@ interface VDirectiveKey <: Node {
 ```
 
 - The `name` property doesn't have `v-` prefix. It's dropped.
-- In the shorthand of `v-bind` cases, the `id` property is `":"` and the `shorthand` property is `true`.
-- In the shorthand of `v-on` cases, the `id` property is `"@"` and the `shorthand` property is `true`.
+- In the shorthand of `v-bind` cases, the `name` property is `"bind"` and the `shorthand` property is `true`.
+- In the shorthand of `v-on` cases, the `name` property is `"on"` and the `shorthand` property is `true`.
 - Otherwise, `shorthand` property is always `false`.
 
 ## VAttributeValue
@@ -101,8 +104,8 @@ interface VAttribute <: Node {
 ```
 
 - If the `directive` property is `true`, this is a directive of Vue.js.  
-  In that case, the `id` property is a `VDirectiveKey` node and the `value` property is a `VExpressionContainer` node.
-- Otherwise, the `id` property is a `VIdentifier` node and the `value` property is a `VAttributeValue` node.
+  In that case, the `key` property is a `VDirectiveKey` node and the `value` property is a `VExpressionContainer` node.
+- Otherwise, the `key` property is a `VIdentifier` node and the `value` property is a `VAttributeValue` node.
 - If the `value` property is `null`, their attribute value does not exist.
 
 ## VStartTag
@@ -157,3 +160,4 @@ This supports only HTML for now. However, I'm going to add other languages Vue.j
 [Expression]: https://github.com/estree/estree/blob/master/es5.md#expression
 [Literal]:    https://github.com/estree/estree/blob/master/es5.md#literal
 [Pattern]:    https://github.com/estree/estree/blob/master/es5.md#patterns
+[Identifier]: https://github.com/estree/estree/blob/master/es5.md#identifier

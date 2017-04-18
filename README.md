@@ -81,6 +81,14 @@ For example:
 }
 ```
 
+## :book: Usage for custom rules / plugins
+
+`vue-eslint-parser` provides `parserServices` to traverse `<template>`.
+
+The spec of `<template>` AST is [here](./docs/ast.md).
+
+TODO: write examples.
+
 ## :warning: Known Limitations
 
 Some rules make warnings due to the outside of `<script>` tags.
