@@ -10,11 +10,11 @@
 //------------------------------------------------------------------------------
 
 const assert = require("assert")
-const EventEmitter = require("events")
 const fs = require("fs")
 const path = require("path")
 const parse = require("..").parse
 const traverseNodes = require("../lib/traverse-nodes")
+const RuleContext = require("./stub-rule-context")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -25,7 +25,7 @@ const TARGETS = fs.readdirSync(ROOT)
     .filter(name => name.endsWith(".source.vue"))
     .map(name => path.basename(name, ".source.vue"))
 const PARSER_OPTIONS = {
-    comments: true,
+    comment: true,
     ecmaVersion: 6,
     loc: true,
     range: true,
@@ -72,21 +72,25 @@ function getTokens(ast, code) {
  */
 function getTraversal(result, code) {
     const retv = []
-    const ruleContext = {
-        eslint: new EventEmitter(),
-        getSourceCode: () => ruleContext,
-    }
+    const ruleContext = new RuleContext(code, result.ast)
 
     result.services.registerTemplateBodyVisitor(ruleContext, {
         "*"(node) {
-            retv.push(["enter", node.type, code.slice(node.range[0], node.range[1])])
+            retv.push([
+                "enter",
+                node.type,
+                code.slice(node.range[0], node.range[1]),
+            ])
         },
         "*:exit"(node) {
-            retv.push(["leave", node.type, code.slice(node.range[0], node.range[1])])
+            retv.push([
+                "leave",
+                node.type,
+                code.slice(node.range[0], node.range[1]),
+            ])
         },
     })
-
-    ruleContext.eslint.emit("Program:exit", result.ast)
+    ruleContext.traverseThisAst()
 
     return retv
 }

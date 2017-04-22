@@ -23,7 +23,7 @@ const TARGETS = fs.readdirSync(ROOT)
     .filter(name => name.endsWith(".source.vue"))
     .map(name => path.basename(name, ".source.vue"))
 const PARSER_OPTIONS = {
-    comments: true,
+    comment: true,
     ecmaVersion: 6,
     loc: true,
     range: true,
