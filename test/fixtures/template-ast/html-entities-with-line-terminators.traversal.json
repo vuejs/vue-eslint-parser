@@ -2,7 +2,7 @@
     [
         "enter",
         "VElement",
-        "<template>\n    <div v-if=\"a &amp;&amp; b\">{{a &amp;&amp; b}}</div>\n</template>"
+        "<template>\n    <div>{{\n        a\n        &amp;&amp;\n        b\n    }}</div>\n</template>"
     ],
     [
         "enter",
@@ -37,12 +37,12 @@
     [
         "enter",
         "VElement",
-        "<div v-if=\"a &amp;&amp; b\">{{a &amp;&amp; b}}</div>"
+        "<div>{{\n        a\n        &amp;&amp;\n        b\n    }}</div>"
     ],
     [
         "enter",
         "VStartTag",
-        "<div v-if=\"a &amp;&amp; b\">"
+        "<div>"
     ],
     [
         "enter",
@@ -55,79 +55,19 @@
         "div"
     ],
     [
-        "enter",
-        "VAttribute",
-        "v-if=\"a &amp;&amp; b\""
-    ],
-    [
-        "enter",
-        "VDirectiveKey",
-        "v-if"
-    ],
-    [
-        "leave",
-        "VDirectiveKey",
-        "v-if"
-    ],
-    [
-        "enter",
-        "VExpressionContainer",
-        "\"a &amp;&amp; b\""
-    ],
-    [
-        "enter",
-        "LogicalExpression",
-        "a &amp;&amp; b"
-    ],
-    [
-        "enter",
-        "Identifier",
-        "a"
-    ],
-    [
-        "leave",
-        "Identifier",
-        "a"
-    ],
-    [
-        "enter",
-        "Identifier",
-        "b"
-    ],
-    [
-        "leave",
-        "Identifier",
-        "b"
-    ],
-    [
-        "leave",
-        "LogicalExpression",
-        "a &amp;&amp; b"
-    ],
-    [
-        "leave",
-        "VExpressionContainer",
-        "\"a &amp;&amp; b\""
-    ],
-    [
-        "leave",
-        "VAttribute",
-        "v-if=\"a &amp;&amp; b\""
-    ],
-    [
         "leave",
         "VStartTag",
-        "<div v-if=\"a &amp;&amp; b\">"
+        "<div>"
     ],
     [
         "enter",
         "VExpressionContainer",
-        "{{a &amp;&amp; b}}"
+        "{{\n        a\n        &amp;&amp;\n        b\n    }}"
     ],
     [
         "enter",
         "LogicalExpression",
-        "a &amp;&amp; b"
+        "a\n        &amp;&amp;\n        b"
     ],
     [
         "enter",
@@ -152,12 +92,12 @@
     [
         "leave",
         "LogicalExpression",
-        "a &amp;&amp; b"
+        "a\n        &amp;&amp;\n        b"
     ],
     [
         "leave",
         "VExpressionContainer",
-        "{{a &amp;&amp; b}}"
+        "{{\n        a\n        &amp;&amp;\n        b\n    }}"
     ],
     [
         "enter",
@@ -182,7 +122,7 @@
     [
         "leave",
         "VElement",
-        "<div v-if=\"a &amp;&amp; b\">{{a &amp;&amp; b}}</div>"
+        "<div>{{\n        a\n        &amp;&amp;\n        b\n    }}</div>"
     ],
     [
         "enter",
@@ -217,6 +157,6 @@
     [
         "leave",
         "VElement",
-        "<template>\n    <div v-if=\"a &amp;&amp; b\">{{a &amp;&amp; b}}</div>\n</template>"
+        "<template>\n    <div>{{\n        a\n        &amp;&amp;\n        b\n    }}</div>\n</template>"
     ]
 ]

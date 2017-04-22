@@ -2,7 +2,7 @@
     [
         "enter",
         "VElement",
-        "<template>\n    <div v-if=\"a &amp;&amp; b\">{{a &amp;&amp; b}}</div>\n</template>"
+        "<template>\n    <!-- a &amp;&amp; b -->\n    <div foo=\"a &amp;&amp; b\">a &amp;&amp; b</div>\n</template>"
     ],
     [
         "enter",
@@ -36,13 +36,23 @@
     ],
     [
         "enter",
+        "VText",
+        "\n    "
+    ],
+    [
+        "leave",
+        "VText",
+        "\n    "
+    ],
+    [
+        "enter",
         "VElement",
-        "<div v-if=\"a &amp;&amp; b\">{{a &amp;&amp; b}}</div>"
+        "<div foo=\"a &amp;&amp; b\">a &amp;&amp; b</div>"
     ],
     [
         "enter",
         "VStartTag",
-        "<div v-if=\"a &amp;&amp; b\">"
+        "<div foo=\"a &amp;&amp; b\">"
     ],
     [
         "enter",
@@ -57,107 +67,47 @@
     [
         "enter",
         "VAttribute",
-        "v-if=\"a &amp;&amp; b\""
+        "foo=\"a &amp;&amp; b\""
     ],
     [
         "enter",
-        "VDirectiveKey",
-        "v-if"
+        "VIdentifier",
+        "foo"
     ],
     [
         "leave",
-        "VDirectiveKey",
-        "v-if"
+        "VIdentifier",
+        "foo"
     ],
     [
         "enter",
-        "VExpressionContainer",
+        "VAttributeValue",
         "\"a &amp;&amp; b\""
     ],
     [
-        "enter",
-        "LogicalExpression",
-        "a &amp;&amp; b"
-    ],
-    [
-        "enter",
-        "Identifier",
-        "a"
-    ],
-    [
         "leave",
-        "Identifier",
-        "a"
-    ],
-    [
-        "enter",
-        "Identifier",
-        "b"
-    ],
-    [
-        "leave",
-        "Identifier",
-        "b"
-    ],
-    [
-        "leave",
-        "LogicalExpression",
-        "a &amp;&amp; b"
-    ],
-    [
-        "leave",
-        "VExpressionContainer",
+        "VAttributeValue",
         "\"a &amp;&amp; b\""
     ],
     [
         "leave",
         "VAttribute",
-        "v-if=\"a &amp;&amp; b\""
+        "foo=\"a &amp;&amp; b\""
     ],
     [
         "leave",
         "VStartTag",
-        "<div v-if=\"a &amp;&amp; b\">"
+        "<div foo=\"a &amp;&amp; b\">"
     ],
     [
         "enter",
-        "VExpressionContainer",
-        "{{a &amp;&amp; b}}"
-    ],
-    [
-        "enter",
-        "LogicalExpression",
-        "a &amp;&amp; b"
-    ],
-    [
-        "enter",
-        "Identifier",
-        "a"
-    ],
-    [
-        "leave",
-        "Identifier",
-        "a"
-    ],
-    [
-        "enter",
-        "Identifier",
-        "b"
-    ],
-    [
-        "leave",
-        "Identifier",
-        "b"
-    ],
-    [
-        "leave",
-        "LogicalExpression",
+        "VText",
         "a &amp;&amp; b"
     ],
     [
         "leave",
-        "VExpressionContainer",
-        "{{a &amp;&amp; b}}"
+        "VText",
+        "a &amp;&amp; b"
     ],
     [
         "enter",
@@ -182,7 +132,7 @@
     [
         "leave",
         "VElement",
-        "<div v-if=\"a &amp;&amp; b\">{{a &amp;&amp; b}}</div>"
+        "<div foo=\"a &amp;&amp; b\">a &amp;&amp; b</div>"
     ],
     [
         "enter",
@@ -217,6 +167,6 @@
     [
         "leave",
         "VElement",
-        "<template>\n    <div v-if=\"a &amp;&amp; b\">{{a &amp;&amp; b}}</div>\n</template>"
+        "<template>\n    <!-- a &amp;&amp; b -->\n    <div foo=\"a &amp;&amp; b\">a &amp;&amp; b</div>\n</template>"
     ]
 ]
