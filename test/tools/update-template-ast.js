@@ -12,7 +12,7 @@
 const fs = require("fs")
 const path = require("path")
 const parse = require("../..").parse
-const traverse = require("../../lib/register-template-body-visitor").traverse
+const traverseNodes = require("../../lib/traverse-nodes")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -37,7 +37,7 @@ const PARSER_OPTIONS = {
  */
 function removeParent(ast) {
     if (ast.templateBody != null) {
-        traverse(ast.templateBody, {
+        traverseNodes(ast.templateBody, {
             enterNode(node) {
                 delete node.parent
             },
@@ -48,15 +48,18 @@ function removeParent(ast) {
     }
 }
 
+/**
+ * Get the traversal order.
+ * @param {ASTNode} ast The node to get.
+ * @param {string} code The whole source code to check ranges.
+ * @returns {(string[])[]} The traversal order.
+ */
 function getTraversalOrder(ast, code) {
     const retv = []
 
     if (ast.templateBody != null) {
-        traverse(ast.templateBody, {
+        traverseNodes(ast.templateBody, {
             enterNode(node) {
-                if (node.range == null) {
-                    console.log(node)
-                }
                 retv.push(["enter", node.type, code.slice(node.range[0], node.range[1])])
             },
             leaveNode(node) {

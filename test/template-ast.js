@@ -14,7 +14,7 @@ const EventEmitter = require("events")
 const fs = require("fs")
 const path = require("path")
 const parse = require("..").parse
-const traverse = require("../lib/register-template-body-visitor").traverse
+const traverseNodes = require("../lib/traverse-nodes")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -39,7 +39,7 @@ const PARSER_OPTIONS = {
  */
 function removeParent(ast) {
     if (ast.templateBody != null) {
-        traverse(ast.templateBody, {
+        traverseNodes(ast.templateBody, {
             enterNode(node) {
                 delete node.parent
             },
