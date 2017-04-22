@@ -57,11 +57,18 @@ interface VExpressionContainer <: Node {
     type: "VExpressionContainer"
     expression: Expression | null
     syntaxError: Error | null
+    references: [ Reference ]
+}
+
+interface Reference {
+    id: Identifier
+    mode: "rw" | "r" | "w"
 }
 ```
 
 - This is mustaches or directive values.
 - If syntax errors exist, `expression` is `null` and `syntaxError` is an error object. Otherwise, `expression` is an [Expression] node and `syntaxError` is `null`.
+- `Reference` is objects but not `Node`. Those are external references which are in the expression.
 
 ## VDirectiveKey
 
@@ -138,10 +145,16 @@ interface VElement <: Node {
     startTag: VStartTag
     children: [ VText | VExpressionContainer | VElement ]
     endTag: VEndTag | null
+    variables: [ Variable ]
+}
+
+interface Variable {
+    id: Identifier
 }
 ```
 
-If `startTag.selfClosing` is `false` and `endTag` is `null`, the element does not have their end tag. E.g. `<li>Foo.`.
+- If `startTag.selfClosing` is `false` and `endTag` is `null`, the element does not have their end tag. E.g. `<li>Foo.`.
+- `Variable` is objects but not `Node`. Those are variable declarations that child elements can use. The elements which have [`v-for` directives] or a special attribute [scope] can declare variables.
 
 ## Program
 
@@ -161,3 +174,6 @@ This supports only HTML for now. However, I'm going to add other languages Vue.j
 [Literal]:    https://github.com/estree/estree/blob/master/es5.md#literal
 [Pattern]:    https://github.com/estree/estree/blob/master/es5.md#patterns
 [Identifier]: https://github.com/estree/estree/blob/master/es5.md#identifier
+
+[`v-for` directives]: https://vuejs.org/v2/guide/list.html#v-for
+[scope]:              https://vuejs.org/v2/guide/components.html#Scoped-Slots

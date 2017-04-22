@@ -108,11 +108,13 @@
                         12,
                         19
                     ],
-                    "name": "message",
-                    "tokens": [
-                        {
+                    "name": "message"
+                },
+                "syntaxError": null,
+                "references": [
+                    {
+                        "id": {
                             "type": "Identifier",
-                            "value": "message",
                             "start": 12,
                             "end": 19,
                             "loc": {
@@ -128,12 +130,12 @@
                             "range": [
                                 12,
                                 19
-                            ]
-                        }
-                    ],
-                    "comments": []
-                },
-                "syntaxError": null
+                            ],
+                            "name": "message"
+                        },
+                        "mode": "r"
+                    }
+                ]
             }
         ],
         "endTag": {
@@ -171,6 +173,7 @@
                 "name": "template"
             }
         },
+        "variables": [],
         "tokens": [
             {
                 "type": "Punctuator",

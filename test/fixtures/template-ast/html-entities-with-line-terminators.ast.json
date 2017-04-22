@@ -220,11 +220,13 @@
                                     61
                                 ],
                                 "name": "b"
-                            },
-                            "tokens": [
-                                {
+                            }
+                        },
+                        "syntaxError": null,
+                        "references": [
+                            {
+                                "id": {
                                     "type": "Identifier",
-                                    "value": "a",
                                     "start": 31,
                                     "end": 32,
                                     "loc": {
@@ -240,31 +242,14 @@
                                     "range": [
                                         31,
                                         32
-                                    ]
+                                    ],
+                                    "name": "a"
                                 },
-                                {
-                                    "type": "Punctuator",
-                                    "value": "&&",
-                                    "start": 41,
-                                    "end": 43,
-                                    "loc": {
-                                        "start": {
-                                            "line": 4,
-                                            "column": 8
-                                        },
-                                        "end": {
-                                            "line": 4,
-                                            "column": 18
-                                        }
-                                    },
-                                    "range": [
-                                        41,
-                                        51
-                                    ]
-                                },
-                                {
+                                "mode": "r"
+                            },
+                            {
+                                "id": {
                                     "type": "Identifier",
-                                    "value": "b",
                                     "start": 52,
                                     "end": 53,
                                     "loc": {
@@ -280,12 +265,12 @@
                                     "range": [
                                         60,
                                         61
-                                    ]
-                                }
-                            ],
-                            "comments": []
-                        },
-                        "syntaxError": null
+                                    ],
+                                    "name": "b"
+                                },
+                                "mode": "r"
+                            }
+                        ]
                     }
                 ],
                 "endTag": {
@@ -322,7 +307,8 @@
                         },
                         "name": "div"
                     }
-                }
+                },
+                "variables": []
             },
             {
                 "type": "VText",
@@ -378,6 +364,7 @@
                 "name": "template"
             }
         },
+        "variables": [],
         "tokens": [
             {
                 "type": "Punctuator",

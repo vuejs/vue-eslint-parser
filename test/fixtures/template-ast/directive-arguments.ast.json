@@ -221,7 +221,8 @@
                         },
                         "name": "div"
                     }
-                }
+                },
+                "variables": []
             },
             {
                 "type": "VText",
@@ -388,7 +389,8 @@
                         },
                         "name": "div"
                     }
-                }
+                },
+                "variables": []
             },
             {
                 "type": "VText",
@@ -531,11 +533,13 @@
                                         71,
                                         72
                                     ],
-                                    "name": "c",
-                                    "tokens": [
-                                        {
+                                    "name": "c"
+                                },
+                                "syntaxError": null,
+                                "references": [
+                                    {
+                                        "id": {
                                             "type": "Identifier",
-                                            "value": "c",
                                             "start": 71,
                                             "end": 72,
                                             "loc": {
@@ -551,12 +555,12 @@
                                             "range": [
                                                 71,
                                                 72
-                                            ]
-                                        }
-                                    ],
-                                    "comments": []
-                                },
-                                "syntaxError": null
+                                            ],
+                                            "name": "c"
+                                        },
+                                        "mode": "r"
+                                    }
+                                ]
                             }
                         }
                     ],
@@ -597,7 +601,8 @@
                         },
                         "name": "div"
                     }
-                }
+                },
+                "variables": []
             },
             {
                 "type": "VText",
@@ -653,6 +658,7 @@
                 "name": "template"
             }
         },
+        "variables": [],
         "tokens": [
             {
                 "type": "Punctuator",

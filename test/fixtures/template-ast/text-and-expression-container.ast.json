@@ -126,11 +126,13 @@
                         24,
                         28
                     ],
-                    "name": "name",
-                    "tokens": [
-                        {
+                    "name": "name"
+                },
+                "syntaxError": null,
+                "references": [
+                    {
+                        "id": {
                             "type": "Identifier",
-                            "value": "name",
                             "start": 24,
                             "end": 28,
                             "loc": {
@@ -146,12 +148,12 @@
                             "range": [
                                 24,
                                 28
-                            ]
-                        }
-                    ],
-                    "comments": []
-                },
-                "syntaxError": null
+                            ],
+                            "name": "name"
+                        },
+                        "mode": "r"
+                    }
+                ]
             },
             {
                 "type": "VText",
@@ -205,11 +207,13 @@
                         54,
                         61
                     ],
-                    "name": "hobbies",
-                    "tokens": [
-                        {
+                    "name": "hobbies"
+                },
+                "syntaxError": null,
+                "references": [
+                    {
+                        "id": {
                             "type": "Identifier",
-                            "value": "hobbies",
                             "start": 54,
                             "end": 61,
                             "loc": {
@@ -225,12 +229,12 @@
                             "range": [
                                 54,
                                 61
-                            ]
-                        }
-                    ],
-                    "comments": []
-                },
-                "syntaxError": null
+                            ],
+                            "name": "hobbies"
+                        },
+                        "mode": "r"
+                    }
+                ]
             },
             {
                 "type": "VText",
@@ -286,6 +290,7 @@
                 "name": "template"
             }
         },
+        "variables": [],
         "tokens": [
             {
                 "type": "Punctuator",
