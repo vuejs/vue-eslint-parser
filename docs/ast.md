@@ -17,8 +17,8 @@ extend interface Node {
 ```
 
 - This AST spec enhances the [Node] nodes like ESLint.
-- The `range` property is an array which has 2 integers.  
-  The 1st integer is the offset of the start location of the node.  
+- The `range` property is an array which has 2 integers.
+  The 1st integer is the offset of the start location of the node.
   The 2nd integer is the offset of the end location of the node.
 
 ## VIdentifier
@@ -64,11 +64,20 @@ interface Reference {
     id: Identifier
     mode: "rw" | "r" | "w"
 }
+
+interface VForExpression <: Expression {
+    type: "VForExpression"
+    left: [ Pattern ]
+    right: Expression
+}
 ```
 
 - This is mustaches or directive values.
 - If syntax errors exist, `expression` is `null` and `syntaxError` is an error object. Otherwise, `expression` is an [Expression] node and `syntaxError` is `null`.
 - `Reference` is objects but not `Node`. Those are external references which are in the expression.
+- `VForExpression` is an expression node like [ForInStatement] but it has an array as `left` property and does not have `body` property. This is the value of `v-for` directives.
+
+> Note: `vue-eslint-parser` transforms `v-for="(x, i) in list"` to `for([x, i] in list);` then gives the configured parser (`espree` by default) it. This implies that it needs the capability to parse ES2015 destructuring in order to parse `v-for` directives.
 
 ## VDirectiveKey
 
@@ -110,7 +119,7 @@ interface VAttribute <: Node {
 }
 ```
 
-- If the `directive` property is `true`, this is a directive of Vue.js.  
+- If the `directive` property is `true`, this is a directive of Vue.js.
   In that case, the `key` property is a `VDirectiveKey` node and the `value` property is a `VExpressionContainer` node.
 - Otherwise, the `key` property is a `VIdentifier` node and the `value` property is a `VAttributeValue` node.
 - If the `value` property is `null`, their attribute value does not exist.
@@ -174,6 +183,7 @@ This supports only HTML for now. However, I'm going to add other languages Vue.j
 [Literal]:    https://github.com/estree/estree/blob/master/es5.md#literal
 [Pattern]:    https://github.com/estree/estree/blob/master/es5.md#patterns
 [Identifier]: https://github.com/estree/estree/blob/master/es5.md#identifier
+[ForInStatement]: https://github.com/estree/estree/blob/master/es5.md#forinstatement
 
 [`v-for` directives]: https://vuejs.org/v2/guide/list.html#v-for
 [scope]:              https://vuejs.org/v2/guide/components.html#Scoped-Slots

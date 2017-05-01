@@ -99,7 +99,7 @@ describe("[variables] elements", () => {
 
             assert(element.type === "VElement")
             assert(element.variables.length === 1)
-            assert(element.variables[0].id === directive.value.expression.left)
+            assert(element.variables[0].id === directive.value.expression.left[0])
             assert(directive.value.references.length === 1)
             assert(directive.value.references[0].id === directive.value.expression.right)
         })
@@ -119,8 +119,8 @@ describe("[variables] elements", () => {
 
             assert(element.type === "VElement")
             assert(element.variables.length === 2)
-            assert(element.variables[0].id === directive.value.expression.left.expressions[0])
-            assert(element.variables[1].id === directive.value.expression.left.expressions[1])
+            assert(element.variables[0].id === directive.value.expression.left[0])
+            assert(element.variables[1].id === directive.value.expression.left[1])
             assert(directive.value.references.length === 1)
             assert(directive.value.references[0].id === directive.value.expression.right)
         })
