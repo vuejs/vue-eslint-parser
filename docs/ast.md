@@ -159,6 +159,7 @@ interface VElement <: Node {
 
 interface Variable {
     id: Identifier
+    kind: "v-for" | "scope"
 }
 ```
 
