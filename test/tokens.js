@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 
 const assert = require("assert")
-const parse = require("..").parse
+const parse = require("..").parseForESLint
 const RuleContext = require("./stub-rule-context")
 
 //------------------------------------------------------------------------------

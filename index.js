@@ -31,5 +31,17 @@ module.exports = {
      * @param {object} options - The option object.
      * @returns {ASTNode} The parsing result.
      */
-    parse,
+    parse: (code, options) => parse(code, options).ast,
+
+    /**
+     * Parses the source code.
+     *
+     * If `options.filePath` is a `.vue` file, this extracts the first `<script>`
+     * element then parses it.
+     *
+     * @param {string} code - The source code to be parsed.
+     * @param {object} options - The option object.
+     * @returns {object} The parsing result.
+     */
+    parseForESLint: parse,
 }

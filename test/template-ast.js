@@ -12,7 +12,7 @@
 const assert = require("assert")
 const fs = require("fs")
 const path = require("path")
-const parse = require("..").parse
+const parse = require("..").parseForESLint
 const traverseNodes = require("../lib/traverse-nodes")
 const RuleContext = require("./stub-rule-context")
 
