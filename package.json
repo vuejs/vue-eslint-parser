@@ -19,6 +19,7 @@
     "preversion": "npm test",
     "setup": "git submodule update --init && cd test/fixtures/eslint && npm install",
     "test": "nyc npm run _mocha",
+    "update-fixtures": "node test/tools/update-template-ast.js",
     "watch": "npm run _mocha -- --growl --watch",
     "codecov": "nyc report --reporter lcovonly && codecov"
   },

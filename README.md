@@ -118,4 +118,6 @@ Please use GitHub's Issues/PRs.
 - `npm run coverage` shows the coverage result of `npm test` command with the default browser.
 - `npm run clean` removes the coverage result of `npm test` command.
 - `npm run lint` runs ESLint.
+- `npm run setup` setups submodules to develop.
+- `npm run update-fixtures` updates files in `test/fixtures/template-ast` directory based on `*.source.vue` files.
 - `npm run watch` runs tests with `--watch` option.
