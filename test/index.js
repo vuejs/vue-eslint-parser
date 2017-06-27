@@ -328,4 +328,32 @@ describe("Basic tests", () => {
             assert(actual === expected)
         })
     })
+
+    describe("About fixtures/svg-attrs.vue", () => {
+        it("parses attributes with colons", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["es6", "node"],
+                parser: PARSER_PATH,
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles(["svg-attrs-colon.vue"])
+            const messages = report.results[0].messages
+
+            assert(messages.length === 0)
+        })
+
+        it("parses camelCased attributes", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["es6", "node"],
+                parser: PARSER_PATH,
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles(["svg-attrs-camel-case.vue"])
+            const messages = report.results[0].messages
+
+            assert(messages.length === 0)
+        })
+    })
 })
