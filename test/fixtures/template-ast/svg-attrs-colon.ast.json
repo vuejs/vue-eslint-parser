@@ -1,0 +1,1154 @@
+{
+    "type": "Program",
+    "end": 113,
+    "loc": {
+        "start": {
+            "line": 8,
+            "column": 0
+        },
+        "end": {
+            "line": 8,
+            "column": 19
+        }
+    },
+    "range": [
+        93,
+        112
+    ],
+    "body": [
+        {
+            "type": "ExpressionStatement",
+            "start": 93,
+            "end": 112,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 0
+                },
+                "end": {
+                    "line": 8,
+                    "column": 19
+                }
+            },
+            "range": [
+                93,
+                112
+            ],
+            "expression": {
+                "type": "AssignmentExpression",
+                "start": 93,
+                "end": 112,
+                "loc": {
+                    "start": {
+                        "line": 8,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 8,
+                        "column": 19
+                    }
+                },
+                "range": [
+                    93,
+                    112
+                ],
+                "operator": "=",
+                "left": {
+                    "type": "MemberExpression",
+                    "start": 93,
+                    "end": 107,
+                    "loc": {
+                        "start": {
+                            "line": 8,
+                            "column": 0
+                        },
+                        "end": {
+                            "line": 8,
+                            "column": 14
+                        }
+                    },
+                    "range": [
+                        93,
+                        107
+                    ],
+                    "object": {
+                        "type": "Identifier",
+                        "start": 93,
+                        "end": 99,
+                        "loc": {
+                            "start": {
+                                "line": 8,
+                                "column": 0
+                            },
+                            "end": {
+                                "line": 8,
+                                "column": 6
+                            }
+                        },
+                        "range": [
+                            93,
+                            99
+                        ],
+                        "name": "module"
+                    },
+                    "property": {
+                        "type": "Identifier",
+                        "start": 100,
+                        "end": 107,
+                        "loc": {
+                            "start": {
+                                "line": 8,
+                                "column": 7
+                            },
+                            "end": {
+                                "line": 8,
+                                "column": 14
+                            }
+                        },
+                        "range": [
+                            100,
+                            107
+                        ],
+                        "name": "exports"
+                    },
+                    "computed": false
+                },
+                "right": {
+                    "type": "ObjectExpression",
+                    "start": 110,
+                    "end": 112,
+                    "loc": {
+                        "start": {
+                            "line": 8,
+                            "column": 17
+                        },
+                        "end": {
+                            "line": 8,
+                            "column": 19
+                        }
+                    },
+                    "range": [
+                        110,
+                        112
+                    ],
+                    "properties": []
+                }
+            }
+        }
+    ],
+    "sourceType": "script",
+    "comments": [],
+    "tokens": [
+        {
+            "type": "Punctuator",
+            "range": [
+                84,
+                92
+            ],
+            "loc": {
+                "start": {
+                    "line": 7,
+                    "column": 0
+                },
+                "end": {
+                    "line": 7,
+                    "column": 8
+                }
+            },
+            "value": "<script>"
+        },
+        {
+            "type": "Identifier",
+            "value": "module",
+            "start": 93,
+            "end": 99,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 0
+                },
+                "end": {
+                    "line": 8,
+                    "column": 6
+                }
+            },
+            "range": [
+                93,
+                99
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": ".",
+            "start": 99,
+            "end": 100,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 6
+                },
+                "end": {
+                    "line": 8,
+                    "column": 7
+                }
+            },
+            "range": [
+                99,
+                100
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "exports",
+            "start": 100,
+            "end": 107,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 7
+                },
+                "end": {
+                    "line": 8,
+                    "column": 14
+                }
+            },
+            "range": [
+                100,
+                107
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "=",
+            "start": 108,
+            "end": 109,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 15
+                },
+                "end": {
+                    "line": 8,
+                    "column": 16
+                }
+            },
+            "range": [
+                108,
+                109
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "{",
+            "start": 110,
+            "end": 111,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 17
+                },
+                "end": {
+                    "line": 8,
+                    "column": 18
+                }
+            },
+            "range": [
+                110,
+                111
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "}",
+            "start": 111,
+            "end": 112,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 18
+                },
+                "end": {
+                    "line": 8,
+                    "column": 19
+                }
+            },
+            "range": [
+                111,
+                112
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "range": [
+                113,
+                122
+            ],
+            "loc": {
+                "start": {
+                    "line": 9,
+                    "column": 0
+                },
+                "end": {
+                    "line": 9,
+                    "column": 9
+                }
+            },
+            "value": "</script>"
+        }
+    ],
+    "templateBody": {
+        "range": [
+            0,
+            82
+        ],
+        "loc": {
+            "start": {
+                "line": 1,
+                "column": 0
+            },
+            "end": {
+                "line": 5,
+                "column": 11
+            }
+        },
+        "type": "VElement",
+        "startTag": {
+            "type": "VStartTag",
+            "range": [
+                0,
+                10
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 10
+                }
+            },
+            "id": {
+                "type": "VIdentifier",
+                "range": [
+                    1,
+                    9
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 1
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 9
+                    }
+                },
+                "name": "template"
+            },
+            "attributes": [],
+            "selfClosing": false
+        },
+        "children": [
+            {
+                "type": "VText",
+                "range": [
+                    10,
+                    15
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "range": [
+                    15,
+                    70
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 10
+                    }
+                },
+                "type": "VElement",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        15,
+                        20
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 2,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 2,
+                            "column": 9
+                        }
+                    },
+                    "id": {
+                        "type": "VIdentifier",
+                        "range": [
+                            16,
+                            19
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 5
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 8
+                            }
+                        },
+                        "name": "svg"
+                    },
+                    "attributes": [],
+                    "selfClosing": false
+                },
+                "children": [
+                    {
+                        "type": "VText",
+                        "range": [
+                            20,
+                            29
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 9
+                            },
+                            "end": {
+                                "line": 3,
+                                "column": 8
+                            }
+                        },
+                        "value": "\n        "
+                    },
+                    {
+                        "range": [
+                            29,
+                            59
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 3,
+                                "column": 8
+                            },
+                            "end": {
+                                "line": 3,
+                                "column": 38
+                            }
+                        },
+                        "type": "VElement",
+                        "startTag": {
+                            "type": "VStartTag",
+                            "range": [
+                                29,
+                                53
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 3,
+                                    "column": 8
+                                },
+                                "end": {
+                                    "line": 3,
+                                    "column": 32
+                                }
+                            },
+                            "id": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    30,
+                                    33
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 3,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 3,
+                                        "column": 12
+                                    }
+                                },
+                                "name": "use"
+                            },
+                            "attributes": [
+                                {
+                                    "type": "VAttribute",
+                                    "range": [
+                                        34,
+                                        52
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 3,
+                                            "column": 13
+                                        },
+                                        "end": {
+                                            "line": 3,
+                                            "column": 31
+                                        }
+                                    },
+                                    "directive": false,
+                                    "key": {
+                                        "type": "VIdentifier",
+                                        "range": [
+                                            34,
+                                            44
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "line": 3,
+                                                "column": 13
+                                            },
+                                            "end": {
+                                                "line": 3,
+                                                "column": 23
+                                            }
+                                        },
+                                        "name": "xlink:href"
+                                    },
+                                    "value": {
+                                        "type": "VAttributeValue",
+                                        "range": [
+                                            45,
+                                            52
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "line": 3,
+                                                "column": 24
+                                            },
+                                            "end": {
+                                                "line": 3,
+                                                "column": 31
+                                            }
+                                        },
+                                        "value": "#test"
+                                    }
+                                }
+                            ],
+                            "selfClosing": false
+                        },
+                        "children": [],
+                        "endTag": {
+                            "type": "VEndTag",
+                            "range": [
+                                53,
+                                59
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 3,
+                                    "column": 32
+                                },
+                                "end": {
+                                    "line": 3,
+                                    "column": 38
+                                }
+                            },
+                            "id": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    55,
+                                    58
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 3,
+                                        "column": 34
+                                    },
+                                    "end": {
+                                        "line": 3,
+                                        "column": 37
+                                    }
+                                },
+                                "name": "use"
+                            }
+                        },
+                        "variables": []
+                    },
+                    {
+                        "type": "VText",
+                        "range": [
+                            59,
+                            64
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 3,
+                                "column": 38
+                            },
+                            "end": {
+                                "line": 4,
+                                "column": 4
+                            }
+                        },
+                        "value": "\n    "
+                    }
+                ],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        64,
+                        70
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 4,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 4,
+                            "column": 10
+                        }
+                    },
+                    "id": {
+                        "type": "VIdentifier",
+                        "range": [
+                            66,
+                            69
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 4,
+                                "column": 6
+                            },
+                            "end": {
+                                "line": 4,
+                                "column": 9
+                            }
+                        },
+                        "name": "svg"
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    70,
+                    71
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 0
+                    }
+                },
+                "value": "\n"
+            }
+        ],
+        "endTag": {
+            "type": "VEndTag",
+            "range": [
+                71,
+                82
+            ],
+            "loc": {
+                "start": {
+                    "line": 5,
+                    "column": 0
+                },
+                "end": {
+                    "line": 5,
+                    "column": 11
+                }
+            },
+            "id": {
+                "type": "VIdentifier",
+                "range": [
+                    73,
+                    81
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 2
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 10
+                    }
+                },
+                "name": "template"
+            }
+        },
+        "variables": [],
+        "tokens": [
+            {
+                "type": "Punctuator",
+                "range": [
+                    0,
+                    1
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 1
+                    }
+                },
+                "value": "<"
+            },
+            {
+                "type": "VIdentifier",
+                "range": [
+                    1,
+                    9
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 1
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 9
+                    }
+                },
+                "value": "template"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    9,
+                    10
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 10
+                    }
+                },
+                "value": ">"
+            },
+            {
+                "type": "VText",
+                "range": [
+                    10,
+                    15
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    15,
+                    16
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 5
+                    }
+                },
+                "value": "<"
+            },
+            {
+                "type": "VIdentifier",
+                "range": [
+                    16,
+                    19
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 5
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 8
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    19,
+                    20
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 9
+                    }
+                },
+                "value": ">"
+            },
+            {
+                "type": "VText",
+                "range": [
+                    20,
+                    29
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 8
+                    }
+                },
+                "value": "\n        "
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    29,
+                    30
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 9
+                    }
+                },
+                "value": "<"
+            },
+            {
+                "type": "VIdentifier",
+                "range": [
+                    30,
+                    33
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 12
+                    }
+                },
+                "value": "use"
+            },
+            {
+                "type": "VIdentifier",
+                "range": [
+                    34,
+                    44
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 13
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 23
+                    }
+                },
+                "value": "xlink:href"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    44,
+                    45
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 23
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 24
+                    }
+                },
+                "value": "="
+            },
+            {
+                "type": "VAttributeValue",
+                "range": [
+                    45,
+                    52
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 31
+                    }
+                },
+                "value": "\"#test\""
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    52,
+                    53
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 31
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 32
+                    }
+                },
+                "value": ">"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    53,
+                    55
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 32
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 34
+                    }
+                },
+                "value": "</"
+            },
+            {
+                "type": "VIdentifier",
+                "range": [
+                    55,
+                    58
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 34
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 37
+                    }
+                },
+                "value": "use"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    58,
+                    59
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 37
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 38
+                    }
+                },
+                "value": ">"
+            },
+            {
+                "type": "VText",
+                "range": [
+                    59,
+                    64
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 38
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    64,
+                    66
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 6
+                    }
+                },
+                "value": "</"
+            },
+            {
+                "type": "VIdentifier",
+                "range": [
+                    66,
+                    69
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 6
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 9
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    69,
+                    70
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 10
+                    }
+                },
+                "value": ">"
+            },
+            {
+                "type": "VText",
+                "range": [
+                    70,
+                    71
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 0
+                    }
+                },
+                "value": "\n"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    71,
+                    73
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 2
+                    }
+                },
+                "value": "</"
+            },
+            {
+                "type": "VIdentifier",
+                "range": [
+                    73,
+                    81
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 2
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 10
+                    }
+                },
+                "value": "template"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    81,
+                    82
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 11
+                    }
+                },
+                "value": ">"
+            }
+        ],
+        "comments": []
+    }
+}
