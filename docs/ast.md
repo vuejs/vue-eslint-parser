@@ -37,7 +37,7 @@ interface VIdentifier <: Node {
   U+7FFFF, U+8FFFE, U+8FFFF, U+9FFFE, U+9FFFF, U+AFFFE, U+AFFFF, U+BFFFE, U+BFFFF,
   U+CFFFE, U+CFFFF, U+DFFFE, U+DFFFF, U+EFFFE, U+EFFFF, U+FFFFE, U+FFFFF, U+10FFFE
   and U+10FFFF.
-- This is tag names or attribute names.
+- This is attribute names.
 
 ## VText
 
@@ -45,10 +45,12 @@ interface VIdentifier <: Node {
 interface VText <: Node {
     type: "VText"
     value: string
+    raw: string
 }
 ```
 
 - Plain text of HTML.
+- HTML entities in the `value` property are decoded. Those in the `raw` property are not.
 
 ## VExpressionContainer
 
@@ -56,7 +58,6 @@ interface VText <: Node {
 interface VExpressionContainer <: Node {
     type: "VExpressionContainer"
     expression: Expression | null
-    syntaxError: Error | null
     references: [ Reference ]
 }
 
@@ -73,7 +74,7 @@ interface VForExpression <: Expression {
 ```
 
 - This is mustaches or directive values.
-- If syntax errors exist, `expression` is `null` and `syntaxError` is an error object. Otherwise, `expression` is an [Expression] node and `syntaxError` is `null`.
+- If syntax errors exist, `VExpressionContainer#expression` is `null`.
 - `Reference` is objects but not `Node`. Those are external references which are in the expression.
 - `VForExpression` is an expression node like [ForInStatement] but it has an array as `left` property and does not have `body` property. This is the value of `v-for` directives.
 
@@ -96,10 +97,10 @@ interface VDirectiveKey <: Node {
 - In the shorthand of `v-on` cases, the `name` property is `"on"` and the `shorthand` property is `true`.
 - Otherwise, `shorthand` property is always `false`.
 
-## VAttributeValue
+## VLiteral
 
 ```js
-interface VAttributeValue <: Node {
+interface VLiteral <: Node {
     type: "VAttributeValue"
     value: string
     raw: string
@@ -107,15 +108,23 @@ interface VAttributeValue <: Node {
 ```
 
 - This is similar to [Literal] nodes but this is not always quoted.
+- HTML entities in the `value` property are decoded. Those in the `raw` property are not.
 
 ## VAttribute
 
 ```js
 interface VAttribute <: Node {
     type: "VAttribute"
-    directive: boolean
-    key: VIdentifier | VDirectiveKey
-    value: VAttributeValue | VExpressionContainer | null
+    directive: false
+    key: VIdentifier
+    value: VLiteral | null
+}
+
+interface VDirective <: Node {
+    type: "VAttribute"
+    directive: true
+    key: VDirectiveKey
+    value: VExpressionContainer | null
 }
 ```
 
@@ -129,7 +138,6 @@ interface VAttribute <: Node {
 ```js
 interface VStartTag <: Node {
     type: "VStartTag"
-    id: VIdentifier
     attributes: [ VAttribute ]
     selfClosing: boolean
 }
@@ -142,7 +150,6 @@ If `selfClosing` is `true`, it means having `/`. E.g. `<br/>`.
 ```js
 interface VEndTag <: Node {
     type: "VEndTag"
-    id: VIdentifier
 }
 ```
 
@@ -151,6 +158,7 @@ interface VEndTag <: Node {
 ```js
 interface VElement <: Node {
     type: "VElement"
+    name: string
     startTag: VStartTag
     children: [ VText | VExpressionContainer | VElement ]
     endTag: VEndTag | null

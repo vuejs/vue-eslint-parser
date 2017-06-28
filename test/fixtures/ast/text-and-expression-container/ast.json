@@ -1,0 +1,719 @@
+{
+    "type": "Program",
+    "start": 0,
+    "end": 0,
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 0
+        }
+    },
+    "range": [
+        0,
+        0
+    ],
+    "body": [],
+    "sourceType": "script",
+    "comments": [],
+    "tokens": [],
+    "templateBody": {
+        "type": "VElement",
+        "range": [
+            0,
+            76
+        ],
+        "loc": {
+            "start": {
+                "line": 1,
+                "column": 0
+            },
+            "end": {
+                "line": 4,
+                "column": 11
+            }
+        },
+        "name": "template",
+        "startTag": {
+            "type": "VStartTag",
+            "range": [
+                0,
+                10
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 10
+                }
+            },
+            "attributes": []
+        },
+        "children": [
+            {
+                "type": "VText",
+                "range": [
+                    10,
+                    22
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 11
+                    }
+                },
+                "value": "\n    Hello, "
+            },
+            {
+                "type": "VExpressionContainer",
+                "range": [
+                    22,
+                    30
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 11
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 19
+                    }
+                },
+                "expression": {
+                    "type": "Identifier",
+                    "start": 24,
+                    "end": 28,
+                    "loc": {
+                        "start": {
+                            "line": 2,
+                            "column": 13
+                        },
+                        "end": {
+                            "line": 2,
+                            "column": 17
+                        }
+                    },
+                    "range": [
+                        24,
+                        28
+                    ],
+                    "name": "name"
+                },
+                "references": [
+                    {
+                        "id": {
+                            "type": "Identifier",
+                            "start": 24,
+                            "end": 28,
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 13
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 17
+                                }
+                            },
+                            "range": [
+                                24,
+                                28
+                            ],
+                            "name": "name"
+                        },
+                        "mode": "r"
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "range": [
+                    30,
+                    52
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 19
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 19
+                    }
+                },
+                "value": "!!\n    My hobbies are "
+            },
+            {
+                "type": "VExpressionContainer",
+                "range": [
+                    52,
+                    63
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 19
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 30
+                    }
+                },
+                "expression": {
+                    "type": "Identifier",
+                    "start": 54,
+                    "end": 61,
+                    "loc": {
+                        "start": {
+                            "line": 3,
+                            "column": 21
+                        },
+                        "end": {
+                            "line": 3,
+                            "column": 28
+                        }
+                    },
+                    "range": [
+                        54,
+                        61
+                    ],
+                    "name": "hobbies"
+                },
+                "references": [
+                    {
+                        "id": {
+                            "type": "Identifier",
+                            "start": 54,
+                            "end": 61,
+                            "loc": {
+                                "start": {
+                                    "line": 3,
+                                    "column": 21
+                                },
+                                "end": {
+                                    "line": 3,
+                                    "column": 28
+                                }
+                            },
+                            "range": [
+                                54,
+                                61
+                            ],
+                            "name": "hobbies"
+                        },
+                        "mode": "r"
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "range": [
+                    63,
+                    65
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 30
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 0
+                    }
+                },
+                "value": ".\n"
+            }
+        ],
+        "endTag": {
+            "type": "VEndTag",
+            "range": [
+                65,
+                76
+            ],
+            "loc": {
+                "start": {
+                    "line": 4,
+                    "column": 0
+                },
+                "end": {
+                    "line": 4,
+                    "column": 11
+                }
+            }
+        },
+        "variables": [],
+        "tokens": [
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    0,
+                    9
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 9
+                    }
+                },
+                "value": "template",
+                "raw": "<template"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    9,
+                    10
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 10
+                    }
+                },
+                "value": "",
+                "raw": ">"
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    10,
+                    15
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 4
+                    }
+                },
+                "value": "\n    ",
+                "raw": "\n    "
+            },
+            {
+                "type": "HTMLText",
+                "range": [
+                    15,
+                    21
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 10
+                    }
+                },
+                "value": "Hello,",
+                "raw": "Hello,"
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    21,
+                    22
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 11
+                    }
+                },
+                "value": " ",
+                "raw": " "
+            },
+            {
+                "type": "VExpressionStart",
+                "range": [
+                    22,
+                    24
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 11
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 13
+                    }
+                },
+                "value": "{{",
+                "raw": "{{"
+            },
+            {
+                "type": "Identifier",
+                "value": "name",
+                "start": 24,
+                "end": 28,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 13
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 17
+                    }
+                },
+                "range": [
+                    24,
+                    28
+                ]
+            },
+            {
+                "type": "VExpressionEnd",
+                "range": [
+                    28,
+                    30
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 17
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 19
+                    }
+                },
+                "value": "}}",
+                "raw": "}}"
+            },
+            {
+                "type": "HTMLText",
+                "range": [
+                    30,
+                    32
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 19
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 21
+                    }
+                },
+                "value": "!!",
+                "raw": "!!"
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    32,
+                    37
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 21
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 4
+                    }
+                },
+                "value": "\n    ",
+                "raw": "\n    "
+            },
+            {
+                "type": "HTMLText",
+                "range": [
+                    37,
+                    39
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 6
+                    }
+                },
+                "value": "My",
+                "raw": "My"
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    39,
+                    40
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 6
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 7
+                    }
+                },
+                "value": " ",
+                "raw": " "
+            },
+            {
+                "type": "HTMLText",
+                "range": [
+                    40,
+                    47
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 7
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 14
+                    }
+                },
+                "value": "hobbies",
+                "raw": "hobbies"
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    47,
+                    48
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 15
+                    }
+                },
+                "value": " ",
+                "raw": " "
+            },
+            {
+                "type": "HTMLText",
+                "range": [
+                    48,
+                    51
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 15
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 18
+                    }
+                },
+                "value": "are",
+                "raw": "are"
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    51,
+                    52
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 18
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 19
+                    }
+                },
+                "value": " ",
+                "raw": " "
+            },
+            {
+                "type": "VExpressionStart",
+                "range": [
+                    52,
+                    54
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 19
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 21
+                    }
+                },
+                "value": "{{",
+                "raw": "{{"
+            },
+            {
+                "type": "Identifier",
+                "value": "hobbies",
+                "start": 54,
+                "end": 61,
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 21
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 28
+                    }
+                },
+                "range": [
+                    54,
+                    61
+                ]
+            },
+            {
+                "type": "VExpressionEnd",
+                "range": [
+                    61,
+                    63
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 28
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 30
+                    }
+                },
+                "value": "}}",
+                "raw": "}}"
+            },
+            {
+                "type": "HTMLText",
+                "range": [
+                    63,
+                    64
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 30
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 31
+                    }
+                },
+                "value": ".",
+                "raw": "."
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    64,
+                    65
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 31
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 0
+                    }
+                },
+                "value": "\n",
+                "raw": "\n"
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    65,
+                    75
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 10
+                    }
+                },
+                "value": "template",
+                "raw": "</template"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    75,
+                    76
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 11
+                    }
+                },
+                "value": "",
+                "raw": ">"
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    76,
+                    77
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 11
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 0
+                    }
+                },
+                "value": "\n",
+                "raw": "\n"
+            }
+        ],
+        "comments": [],
+        "errors": []
+    }
+}

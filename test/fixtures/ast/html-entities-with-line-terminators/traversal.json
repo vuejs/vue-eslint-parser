@@ -1,0 +1,122 @@
+[
+    [
+        "enter",
+        "VElement",
+        "<template>\n    <div>{{\n        a\n        &amp;&amp;\n        b\n    }}</div>\n</template>"
+    ],
+    [
+        "enter",
+        "VStartTag",
+        "<template>"
+    ],
+    [
+        "leave",
+        "VStartTag",
+        "<template>"
+    ],
+    [
+        "enter",
+        "VText",
+        "\n    "
+    ],
+    [
+        "leave",
+        "VText",
+        "\n    "
+    ],
+    [
+        "enter",
+        "VElement",
+        "<div>{{\n        a\n        &amp;&amp;\n        b\n    }}</div>"
+    ],
+    [
+        "enter",
+        "VStartTag",
+        "<div>"
+    ],
+    [
+        "leave",
+        "VStartTag",
+        "<div>"
+    ],
+    [
+        "enter",
+        "VExpressionContainer",
+        "{{\n        a\n        &amp;&amp;\n        b\n    }}"
+    ],
+    [
+        "enter",
+        "LogicalExpression",
+        "a\n        &amp;&amp;\n        b"
+    ],
+    [
+        "enter",
+        "Identifier",
+        "a"
+    ],
+    [
+        "leave",
+        "Identifier",
+        "a"
+    ],
+    [
+        "enter",
+        "Identifier",
+        "b"
+    ],
+    [
+        "leave",
+        "Identifier",
+        "b"
+    ],
+    [
+        "leave",
+        "LogicalExpression",
+        "a\n        &amp;&amp;\n        b"
+    ],
+    [
+        "leave",
+        "VExpressionContainer",
+        "{{\n        a\n        &amp;&amp;\n        b\n    }}"
+    ],
+    [
+        "enter",
+        "VEndTag",
+        "</div>"
+    ],
+    [
+        "leave",
+        "VEndTag",
+        "</div>"
+    ],
+    [
+        "leave",
+        "VElement",
+        "<div>{{\n        a\n        &amp;&amp;\n        b\n    }}</div>"
+    ],
+    [
+        "enter",
+        "VText",
+        "\n"
+    ],
+    [
+        "leave",
+        "VText",
+        "\n"
+    ],
+    [
+        "enter",
+        "VEndTag",
+        "</template>"
+    ],
+    [
+        "leave",
+        "VEndTag",
+        "</template>"
+    ],
+    [
+        "leave",
+        "VElement",
+        "<template>\n    <div>{{\n        a\n        &amp;&amp;\n        b\n    }}</div>\n</template>"
+    ]
+]

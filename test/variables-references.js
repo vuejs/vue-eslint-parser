@@ -134,14 +134,17 @@ describe("[variables] elements", () => {
             ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
         })
 
-        it("should have references", () => {
+        it("should have variables", () => {
             const element = ast.templateBody.children[0]
             const attribute = element.startTag.attributes[0]
 
             assert(element.type === "VElement")
             assert(element.variables.length === 1)
-            assert(element.variables[0].id === attribute.value.expression)
-            assert(attribute.value.references.length === 0)
+            assert(element.variables[0].id.name === "a")
+            assert(element.variables[0].id.range[0] === 27)
+            assert(element.variables[0].id.range[1] === 28)
+            assert(element.variables[0].kind === "scope")
+            assert(attribute.value.type === "VLiteral")
         })
     })
 })

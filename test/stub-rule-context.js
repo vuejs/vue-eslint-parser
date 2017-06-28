@@ -11,7 +11,7 @@
 
 const EventEmitter = require("events")
 const NodeEventGenerator = require("eslint/lib/util/node-event-generator")
-const traverseNodes = require("../lib/traverse-nodes")
+const traverseNodes = require("..").AST.traverseNodes
 
 //------------------------------------------------------------------------------
 // Helpers

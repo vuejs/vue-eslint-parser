@@ -31,6 +31,12 @@ const PARSER_OPTIONS = {
  * @returns {string} The value of the node.
  */
 function toValue(token) {
+    if (token.type === "HTMLAssociation") {
+        return "="
+    }
+    if (token.type === "HTMLTagClose") {
+        return ">"
+    }
     return token.value
 }
 
@@ -59,12 +65,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "<", "template", ">", "\n    ", "\n    ", "<", "div", "a",
-                    "=", "\"b\"", "v-show", "=", "\"", "c", "<", "3", "&&",
-                    "ok", "==", "\"ok\"", "\"", ">", "{{", "message", "}}",
-                    "</", "div", ">", "\n", "</", "template", ">",
-                ]
+                ["template", ">", "\n    ", "\n    ", "div", "a", "=", "b", "v-show", "=", "\"", "c", "<", "3", "&&", "ok", "==", "\"ok\"", "\"", ">", "{{", "message", "}}", "div", ">", "\n", "template", ">"]
             )
         })
 
@@ -73,13 +74,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "<", "template", ">", "\n    ", "comment1", "\n    ", "<",
-                    "div", "a", "=", "\"b\"", "v-show", "=", "\"", "c", "<",
-                    "3", "&&", "ok", "==", "\"ok\"", "\"", ">", "comment2",
-                    "{{", "message", "comment3", "}}", "comment4", "</", "div",
-                    ">", "\n", "</", "template", ">",
-                ]
+                ["template", ">", "\n    ", "comment1", "\n    ", "div", "a", "=", "b", "v-show", "=", "\"", "c", "<", "3", "&&", "ok", "==", "\"ok\"", "\"", ">", "comment2", "{{", "message", "comment3", "}}", "comment4", "div", ">", "\n", "template", ">"]
             )
         })
     })
@@ -91,9 +86,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "\n    ",
-                ]
+                ["\n    "]
             )
         })
     })
@@ -103,13 +96,14 @@ describe("services.getTemplateBodyTokenStore", () => {
             const node = ast.templateBody.children[2]
             const actual = tokens.getTokens(node).map(toValue)
 
+            require("fs").writeFileSync("a.json", JSON.stringify({
+                range: node.range,
+                tokens: tokens.getTokens(node),
+            }, null, 4))
+
             assert.deepStrictEqual(
                 actual,
-                [
-                    "<", "div", "a", "=", "\"b\"", "v-show", "=", "\"", "c",
-                    "<", "3", "&&", "ok", "==", "\"ok\"", "\"", ">", "{{",
-                    "message", "}}", "</", "div", ">",
-                ]
+                ["div", "a", "=", "b", "v-show", "=", "\"", "c", "<", "3", "&&", "ok", "==", "\"ok\"", "\"", ">", "{{", "message", "}}", "div", ">"]
             )
         })
     })
@@ -121,10 +115,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "<", "div", "a", "=", "\"b\"", "v-show", "=", "\"", "c",
-                    "<", "3", "&&", "ok", "==", "\"ok\"", "\"", ">",
-                ]
+                ["div", "a", "=", "b", "v-show", "=", "\"", "c", "<", "3", "&&", "ok", "==", "\"ok\"", "\"", ">"]
             )
         })
     })
@@ -136,9 +127,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "a", "=", "\"b\"",
-                ]
+                ["a", "=", "b"]
             )
         })
     })
@@ -150,9 +139,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "a",
-                ]
+                ["a"]
             )
         })
     })
@@ -164,9 +151,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "\"b\"",
-                ]
+                ["b"]
             )
         })
     })
@@ -178,9 +163,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "v-show",
-                ]
+                ["v-show"]
             )
         })
     })
@@ -192,9 +175,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "\"", "c", "<", "3", "&&", "ok", "==", "\"ok\"", "\"",
-                ]
+                ["\"", "c", "<", "3", "&&", "ok", "==", "\"ok\"", "\""]
             )
         })
     })
@@ -206,9 +187,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "c", "<", "3", "&&", "ok", "==", "\"ok\"",
-                ]
+                ["c", "<", "3", "&&", "ok", "==", "\"ok\""]
             )
         })
     })
@@ -220,9 +199,7 @@ describe("services.getTemplateBodyTokenStore", () => {
 
             assert.deepStrictEqual(
                 actual,
-                [
-                    "</", "div", ">",
-                ]
+                ["div", ">"]
             )
         })
     })

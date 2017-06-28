@@ -11,8 +11,8 @@
 
 const assert = require("assert")
 const path = require("path")
-const CLIEngine = require("eslint").CLIEngine
 const fs = require("fs-extra")
+const CLIEngine = require("./fixtures/eslint").CLIEngine
 
 //------------------------------------------------------------------------------
 // Helpers

@@ -1,0 +1,132 @@
+[
+    [
+        "enter",
+        "VElement",
+        "<template>\n    <!-- a &amp;&amp; b -->\n    <div foo=\"a &amp;&amp; b\">a &amp;&amp; b</div>\n</template>"
+    ],
+    [
+        "enter",
+        "VStartTag",
+        "<template>"
+    ],
+    [
+        "leave",
+        "VStartTag",
+        "<template>"
+    ],
+    [
+        "enter",
+        "VText",
+        "\n    "
+    ],
+    [
+        "leave",
+        "VText",
+        "\n    "
+    ],
+    [
+        "enter",
+        "VText",
+        "\n    "
+    ],
+    [
+        "leave",
+        "VText",
+        "\n    "
+    ],
+    [
+        "enter",
+        "VElement",
+        "<div foo=\"a &amp;&amp; b\">a &amp;&amp; b</div>"
+    ],
+    [
+        "enter",
+        "VStartTag",
+        "<div foo=\"a &amp;&amp; b\">"
+    ],
+    [
+        "enter",
+        "VAttribute",
+        "foo=\"a &amp;&amp; b\""
+    ],
+    [
+        "enter",
+        "VIdentifier",
+        "foo"
+    ],
+    [
+        "leave",
+        "VIdentifier",
+        "foo"
+    ],
+    [
+        "enter",
+        "VLiteral",
+        "\"a &amp;&amp; b\""
+    ],
+    [
+        "leave",
+        "VLiteral",
+        "\"a &amp;&amp; b\""
+    ],
+    [
+        "leave",
+        "VAttribute",
+        "foo=\"a &amp;&amp; b\""
+    ],
+    [
+        "leave",
+        "VStartTag",
+        "<div foo=\"a &amp;&amp; b\">"
+    ],
+    [
+        "enter",
+        "VText",
+        "a &amp;&amp; b"
+    ],
+    [
+        "leave",
+        "VText",
+        "a &amp;&amp; b"
+    ],
+    [
+        "enter",
+        "VEndTag",
+        "</div>"
+    ],
+    [
+        "leave",
+        "VEndTag",
+        "</div>"
+    ],
+    [
+        "leave",
+        "VElement",
+        "<div foo=\"a &amp;&amp; b\">a &amp;&amp; b</div>"
+    ],
+    [
+        "enter",
+        "VText",
+        "\n"
+    ],
+    [
+        "leave",
+        "VText",
+        "\n"
+    ],
+    [
+        "enter",
+        "VEndTag",
+        "</template>"
+    ],
+    [
+        "leave",
+        "VEndTag",
+        "</template>"
+    ],
+    [
+        "leave",
+        "VElement",
+        "<template>\n    <!-- a &amp;&amp; b -->\n    <div foo=\"a &amp;&amp; b\">a &amp;&amp; b</div>\n</template>"
+    ]
+]

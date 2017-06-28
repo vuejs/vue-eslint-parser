@@ -12,19 +12,17 @@
 const fs = require("fs")
 const path = require("path")
 const parse = require("../..").parseForESLint
-const traverseNodes = require("../../lib/traverse-nodes")
+const traverseNodes = require("../..").AST.traverseNodes
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 
-const ROOT = path.join(__dirname, "../fixtures/template-ast")
+const ROOT = path.join(__dirname, "../fixtures/ast")
 const TARGETS = fs.readdirSync(ROOT)
-    .filter(name => name.endsWith(".source.vue"))
-    .map(name => path.basename(name, ".source.vue"))
 const PARSER_OPTIONS = {
     comment: true,
-    ecmaVersion: 6,
+    ecmaVersion: 2017,
     loc: true,
     range: true,
     tokens: true,
@@ -32,20 +30,23 @@ const PARSER_OPTIONS = {
 
 /**
  * Remove `parent` proeprties from the given AST.
- * @param {ASTNode} ast The node to remove.
- * @returns {void}
+ * @param {string} key The key.
+ * @param {any} value The value of the key.
+ * @returns {any} The value of the key to output.
  */
-function removeParent(ast) {
-    if (ast.templateBody != null) {
-        traverseNodes(ast.templateBody, {
-            enterNode(node) {
-                delete node.parent
-            },
-            leaveNode() {
-                // do nothing.
-            },
-        })
+function replacer(key, value) {
+    if (key === "parent") {
+        return undefined
     }
+    if (key === "errors" && Array.isArray(value)) {
+        return value.map(e => ({
+            message: e.message,
+            index: e.index,
+            lineNumber: e.lineNumber,
+            column: e.column,
+        }))
+    }
+    return value
 }
 
 /**
@@ -76,20 +77,13 @@ function getTraversalOrder(ast, code) {
 //------------------------------------------------------------------------------
 
 for (const name of TARGETS) {
-    const sourcePath = path.join(ROOT, `${name}.source.vue`)
-    const astPath = path.join(ROOT, `${name}.ast.json`)
-    const tokensPath = path.join(ROOT, `${name}.tokens.json`)
-    const traversalPath = path.join(ROOT, `${name}.traversal.json`)
+    const sourcePath = path.join(ROOT, `${name}/source.vue`)
+    const astPath = path.join(ROOT, `${name}/ast.json`)
+    const traversalPath = path.join(ROOT, `${name}/traversal.json`)
     const source = fs.readFileSync(sourcePath, "utf8")
     const actual = parse(source, Object.assign({filePath: sourcePath}, PARSER_OPTIONS))
-    const tokens = (actual.ast.templateBody == null)
-        ? []
-        : actual.ast.templateBody.tokens.map(t => [t.type, source.slice(t.range[0], t.range[1])])
     const traversal = getTraversalOrder(actual.ast, source)
 
-    removeParent(actual.ast, source)
-
-    fs.writeFileSync(astPath, JSON.stringify(actual.ast, null, 4))
-    fs.writeFileSync(tokensPath, JSON.stringify(tokens, null, 4))
-    fs.writeFileSync(traversalPath, JSON.stringify(traversal, null, 4))
+    fs.writeFileSync(astPath, JSON.stringify(actual.ast, replacer, 4))
+    fs.writeFileSync(traversalPath, JSON.stringify(traversal, replacer, 4))
 }

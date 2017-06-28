@@ -1,0 +1,43 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "allowJs": false,
+        "allowSyntheticDefaultImports": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "alwaysStrict": true,
+        "baseUrl": ".",
+        "checkJs": false,
+        "declaration": true,
+        "diagnostics": true,
+        "forceConsistentCasingInFileNames": true,
+        "inlineSources": true,
+        "lib": [
+            "es2015"
+        ],
+        "module": "es2015",
+        "moduleResolution": "node",
+        "newLine": "LF",
+        "noEmitOnError": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "outDir": ".temp",
+        "paths": {
+            "*": ["typings/*"]
+        },
+        "pretty": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "sourceRoot": "src",
+        "strict": true,
+        "strictNullChecks": true,
+        "target": "es2015"
+    },
+    "include": [
+        "src/**/*.ts"
+    ]
+}

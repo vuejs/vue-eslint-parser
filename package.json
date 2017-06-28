@@ -7,49 +7,63 @@
   },
   "main": "index.js",
   "files": [
-    "lib"
+    "index.d.ts",
+    "index.js",
+    "index.js.map"
   ],
-  "scripts": {
-    "_mocha": "_mocha \"test/*.js\" --compilers js:babel-register --reporter progress --timeout 30000",
-    "clean": "rimraf .nyc_output coverage",
-    "coverage": "nyc report --reporter lcov && opener ./coverage/lcov-report/index.html",
-    "lint": "eslint index.js lib \"test/*.js\"",
-    "postversion": "git push && git push --tags",
-    "pretest": "npm run lint",
-    "preversion": "npm test",
-    "setup": "git submodule update --init && cd test/fixtures/eslint && npm install",
-    "test": "nyc npm run _mocha",
-    "update-fixtures": "node test/tools/update-template-ast.js",
-    "watch": "npm run _mocha -- --growl --watch",
-    "codecov": "nyc report --reporter lcovonly && codecov"
+  "peerDependencies": {
+    "eslint": ">=3.9.0"
   },
   "dependencies": {
     "debug": "^2.6.3",
     "eslint-scope": "^3.7.1",
-    "espree": ">=3.3.2",
-    "lodash.sortedindex": "^4.1.0",
-    "lodash.sortedindexby": "^4.6.0",
-    "parse5": "^3.0.0"
+    "espree": "^3.3.2",
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "@types/node": "^6.0.52",
+    "@types/debug": "0.0.29",
+    "@types/estree": "0.0.35",
+    "@types/lodash": "^4.14.68",
+    "@types/mocha": "^2.2.41",
     "babel-eslint": "^7.1.1",
-    "babel-preset-power-assert": "^1.0.0",
-    "babel-register": "^6.18.0",
+    "chokidar-cli": "^1.2.0",
     "codecov": "^2.1.0",
-    "eslint": "^3.19.0",
-    "eslint-config-mysticatea": "^10.0.0",
+    "dts-bundle": "^0.7.3",
+    "eslint": "^4.1.1",
+    "eslint-config-mysticatea": "^11.0.0",
     "fs-extra": "^2.1.2",
     "mocha": "^3.2.0",
+    "npm-run-all": "^4.0.2",
     "nyc": "^10.0.0",
     "opener": "^1.4.2",
-    "power-assert": "^1.4.2",
     "rimraf": "^2.5.4",
-    "typescript": "~2.2.1",
-    "typescript-eslint-parser": "^2.1.0"
+    "rollup": "^0.43.0",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-watch": "^4.0.0",
+    "typescript": "~2.3.4",
+    "typescript-eslint-parser": "^3.0.0",
+    "wait-on": "^2.0.2"
   },
-  "peerDependencies": {
-    "eslint": ">=3.9.0"
+  "scripts": {
+    "_mocha": "_mocha \"test/*.js\" --reporter dot",
+    "prebuild": "npm run -s clean",
+    "build": "tsc && rollup -c -o index.js && dts-bundle --name vue-eslint-parser --main .temp/index.d.ts --out ../index.d.ts",
+    "clean": "rimraf .nyc_output .temp coverage index.*",
+    "codecov": "nyc report --reporter lcovonly && codecov",
+    "coverage": "nyc report --reporter lcov && opener ./coverage/lcov-report/index.html",
+    "lint": "eslint lib test",
+    "pretest": "run-s build lint",
+    "test": "nyc npm run _mocha",
+    "preversion": "npm test",
+    "version": "npm run -s build",
+    "postversion": "git push && git push --tags",
+    "prewatch": "npm run -s clean",
+    "watch": "run-p watch:*",
+    "watch:tsc": "tsc --watch",
+    "watch:rollup": "wait-on .temp/index.js && rollup -c -o index.js --watch",
+    "watch:test": "wait-on index.js && chokidar index.js \"test/*.js\" \"test/fixtures/ast/**/*\" --initial --command \"nyc -r lcov npm run -s _mocha\"",
+    "watch:coverage-report": "wait-on coverage/lcov-report/index.html && opener coverage/lcov-report/index.html"
   },
   "repository": {
     "type": "git",
