@@ -53,6 +53,7 @@
     "codecov": "nyc report --reporter lcovonly && codecov",
     "coverage": "nyc report --reporter lcov && opener ./coverage/lcov-report/index.html",
     "lint": "eslint lib test",
+    "setup": "git submodule update --init && cd test/fixtures/eslint && npm install",
     "pretest": "run-s build lint",
     "test": "nyc npm run _mocha",
     "preversion": "npm test",
