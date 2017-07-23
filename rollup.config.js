@@ -14,8 +14,7 @@ const external = [
     "path",
     "eslint/lib/util/node-event-generator",
     "eslint/lib/token-store",
-    ...Object.keys(pkg.dependencies),
-]
+].concat(Object.keys(pkg.dependencies))
 
 export default {
     entry: ".temp/index.js",
