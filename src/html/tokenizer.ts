@@ -919,8 +919,12 @@ export class Tokenizer {
         if (cp === SOLIDUS || cp === GREATER_THAN_SIGN || cp === EOF) {
             return this.reconsumeAs("AFTER_ATTRIBUTE_NAME")
         }
+
         if (cp === EQUALS_SIGN) {
             this.reportParseError("unexpected-equals-sign-before-attribute-name")
+            this.startToken("HTMLIdentifier")
+            this.appendTokenValue(cp, "HTMLIdentifier")
+            return "ATTRIBUTE_NAME"
         }
 
         this.startToken("HTMLIdentifier")
