@@ -57,6 +57,8 @@
     "setup": "git submodule update --init && cd test/fixtures/eslint && npm install",
     "pretest": "run-s build lint",
     "test": "nyc npm run _mocha",
+    "preupdate-fixtures": "npm run -s build",
+    "update-fixtures": "node test/tools/update-template-ast.js",
     "preversion": "npm test",
     "version": "npm run -s build",
     "postversion": "git push && git push --tags",

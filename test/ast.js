@@ -51,10 +51,9 @@ function replacer(key, value) {
 }
 
 /**
- * Get information of tokens.
- * This uses source code text to check the ranges of tokens.
+ * Get all tokens of the given AST.
  * @param {ASTNode} ast The root node of AST.
- * @returns {(string[])[]} Information of tokens.
+ * @returns {Token[]} Tokens.
  */
 function getAllTokens(ast) {
     const tokenArrays = [ast.tokens, ast.comments]
@@ -118,14 +117,12 @@ describe("Template AST", () => {
             })
 
             it("should have correct range.", () => {
-                for (const token of getAllTokens(actual.ast)) {
-                    if (token.raw === undefined) {
-                        continue
-                    }
+                const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
+                const expectedText = fs.readFileSync(resultPath, "utf8")
+                const tokens = getAllTokens(actual.ast).map(t => source.slice(t.range[0], t.range[1]))
+                const actualText = JSON.stringify(tokens, null, 4)
 
-                    const text = source.slice(token.range[0], token.range[1])
-                    assert.strictEqual(text, token.raw)
-                }
+                assert.strictEqual(actualText, expectedText)
             })
 
             it("should have correct location.", () => {
