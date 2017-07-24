@@ -1523,6 +1523,9 @@ export class Tokenizer {
             const semi = text.endsWith(";")
             const next = this.text.codePointAt(this.offset + 1)
 
+            this.offset += length - 1
+            this.column += length - 1
+
             if (this.returnState.startsWith("ATTR") &&
                 !semi &&
                 next != null &&
@@ -1536,9 +1539,6 @@ export class Tokenizer {
                 if (!semi) {
                     this.reportParseError("missing-semicolon-after-character-reference")
                 }
-
-                this.offset += length - 1
-                this.column += length - 1
                 this.buffer = codepoints
             }
 
