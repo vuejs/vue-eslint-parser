@@ -24,7 +24,7 @@
         "type": "VElement",
         "range": [
             0,
-            78
+            84
         ],
         "loc": {
             "start": {
@@ -32,7 +32,7 @@
                 "column": 0
             },
             "end": {
-                "line": 3,
+                "line": 4,
                 "column": 11
             }
         },
@@ -426,7 +426,7 @@
                 "type": "VText",
                 "range": [
                     66,
-                    67
+                    73
                 ],
                 "loc": {
                     "start": {
@@ -434,26 +434,26 @@
                         "column": 55
                     },
                     "end": {
-                        "line": 3,
+                        "line": 4,
                         "column": 0
                     }
                 },
-                "value": "\n"
+                "value": "\n    &\n"
             }
         ],
         "endTag": {
             "type": "VEndTag",
             "range": [
-                67,
-                78
+                73,
+                84
             ],
             "loc": {
                 "start": {
-                    "line": 3,
+                    "line": 4,
                     "column": 0
                 },
                 "end": {
-                    "line": 3,
+                    "line": 4,
                     "column": 11
                 }
             }
@@ -818,7 +818,7 @@
                 "type": "HTMLWhitespace",
                 "range": [
                     66,
-                    67
+                    71
                 ],
                 "loc": {
                     "start": {
@@ -827,6 +827,42 @@
                     },
                     "end": {
                         "line": 3,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLText",
+                "range": [
+                    71,
+                    72
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 5
+                    }
+                },
+                "value": "&"
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    72,
+                    73
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 5
+                    },
+                    "end": {
+                        "line": 4,
                         "column": 0
                     }
                 },
@@ -835,16 +871,16 @@
             {
                 "type": "HTMLEndTagOpen",
                 "range": [
-                    67,
-                    77
+                    73,
+                    83
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
+                        "line": 4,
                         "column": 0
                     },
                     "end": {
-                        "line": 3,
+                        "line": 4,
                         "column": 10
                     }
                 },
@@ -853,16 +889,16 @@
             {
                 "type": "HTMLTagClose",
                 "range": [
-                    77,
-                    78
+                    83,
+                    84
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
+                        "line": 4,
                         "column": 10
                     },
                     "end": {
-                        "line": 3,
+                        "line": 4,
                         "column": 11
                     }
                 },
@@ -871,16 +907,16 @@
             {
                 "type": "HTMLWhitespace",
                 "range": [
-                    78,
-                    79
+                    84,
+                    85
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
+                        "line": 4,
                         "column": 11
                     },
                     "end": {
-                        "line": 4,
+                        "line": 5,
                         "column": 0
                     }
                 },

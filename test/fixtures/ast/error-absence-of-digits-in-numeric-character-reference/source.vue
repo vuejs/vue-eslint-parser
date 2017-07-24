@@ -1,0 +1,4 @@
+<template>
+    &#zz;
+    &#xzz;
+</template>
