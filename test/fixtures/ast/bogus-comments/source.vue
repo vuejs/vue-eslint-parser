@@ -3,5 +3,4 @@
     </ aaa>
     <!DOCTYPE bbb>
     <![CDATA[ ccc ]]>
-    <! ddd >
-</template>
+    <! ddd 

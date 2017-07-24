@@ -24,7 +24,7 @@
         "type": "VElement",
         "range": [
             0,
-            114
+            94
         ],
         "loc": {
             "start": {
@@ -32,8 +32,8 @@
                 "column": 0
             },
             "end": {
-                "line": 7,
-                "column": 11
+                "line": 6,
+                "column": 4
             }
         },
         "name": "template",
@@ -146,43 +146,9 @@
                     }
                 },
                 "value": "\n    "
-            },
-            {
-                "type": "VText",
-                "range": [
-                    102,
-                    103
-                ],
-                "loc": {
-                    "start": {
-                        "line": 6,
-                        "column": 12
-                    },
-                    "end": {
-                        "line": 7,
-                        "column": 0
-                    }
-                },
-                "value": "\n"
             }
         ],
-        "endTag": {
-            "type": "VEndTag",
-            "range": [
-                103,
-                114
-            ],
-            "loc": {
-                "start": {
-                    "line": 7,
-                    "column": 0
-                },
-                "end": {
-                    "line": 7,
-                    "column": 11
-                }
-            }
-        },
+        "endTag": null,
         "variables": [],
         "tokens": [
             {
@@ -310,78 +276,6 @@
                     }
                 },
                 "value": "\n    "
-            },
-            {
-                "type": "HTMLWhitespace",
-                "range": [
-                    102,
-                    103
-                ],
-                "loc": {
-                    "start": {
-                        "line": 6,
-                        "column": 12
-                    },
-                    "end": {
-                        "line": 7,
-                        "column": 0
-                    }
-                },
-                "value": "\n"
-            },
-            {
-                "type": "HTMLEndTagOpen",
-                "range": [
-                    103,
-                    113
-                ],
-                "loc": {
-                    "start": {
-                        "line": 7,
-                        "column": 0
-                    },
-                    "end": {
-                        "line": 7,
-                        "column": 10
-                    }
-                },
-                "value": "template"
-            },
-            {
-                "type": "HTMLTagClose",
-                "range": [
-                    113,
-                    114
-                ],
-                "loc": {
-                    "start": {
-                        "line": 7,
-                        "column": 10
-                    },
-                    "end": {
-                        "line": 7,
-                        "column": 11
-                    }
-                },
-                "value": ""
-            },
-            {
-                "type": "HTMLWhitespace",
-                "range": [
-                    114,
-                    115
-                ],
-                "loc": {
-                    "start": {
-                        "line": 7,
-                        "column": 11
-                    },
-                    "end": {
-                        "line": 8,
-                        "column": 0
-                    }
-                },
-                "value": "\n"
             }
         ],
         "comments": [
@@ -469,11 +363,11 @@
                         "column": 4
                     },
                     "end": {
-                        "line": 6,
-                        "column": 12
+                        "line": 7,
+                        "column": 0
                     }
                 },
-                "value": " ddd "
+                "value": " ddd \n"
             }
         ],
         "errors": [
