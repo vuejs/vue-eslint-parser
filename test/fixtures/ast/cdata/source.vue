@@ -1,5 +1,5 @@
 <template>
-    <svg width="100" height="100">
+    <SVG Width="100" heiGht="100" viewbox="0 0 100 100">
         <style><![CDATA[
             path {
                 stroke: black;
