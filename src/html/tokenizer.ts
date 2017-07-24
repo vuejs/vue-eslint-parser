@@ -1161,6 +1161,7 @@ export class Tokenizer {
         }
 
         this.reportParseError("unexpected-solidus-in-tag")
+        this.clearStartTokenMark()
         return this.reconsumeAs("BEFORE_ATTRIBUTE_NAME")
     }
 
