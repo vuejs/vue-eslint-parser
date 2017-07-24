@@ -167,6 +167,7 @@ export class Tokenizer {
      * @param text The source code to tokenize.
      */
     constructor(text: string) {
+        debug("[html] the source code length: %d", text.length)
         this.text = text
         this.gaps = []
         this.lineTerminators = []
@@ -196,17 +197,14 @@ export class Tokenizer {
      * @returns The next token or null.
      */
     public nextToken(): Token {
-        let cp = NULL
-        while (this.tokens.length === 0) {
+        let cp = this.lastCodePoint
+        while (this.tokens.length === 0 && (cp !== EOF || this.reconsuming)) {
             if (this.reconsuming) {
                 this.reconsuming = false
                 cp = this.lastCodePoint
             }
             else {
                 cp = this.consumeNextCodePoint()
-            }
-            if (cp === EOF) {
-                break
             }
 
             debug("[html] parse", cp, this.state)
@@ -396,14 +394,14 @@ export class Tokenizer {
         this.currentToken = null
         this.tokenStartOffset = -1
 
+        token.range[1] = offset
+        token.loc.end.line = line
+        token.loc.end.column = column
+
         if (token.range[0] === offset && !provisional) {
             debug("[html] abandon token: %j %s %j", token.range, token.type, token.value)
             return null
         }
-
-        token.range[1] = offset
-        token.loc.end.line = line
-        token.loc.end.column = column
 
         if (provisional) {
             this.provisionalTokens.push(token)
@@ -658,6 +656,7 @@ export class Tokenizer {
             return this.reconsumeAs("BOGUS_COMMENT")
         }
         if (cp === EOF) {
+            this.clearStartTokenMark()
             this.reportParseError("eof-before-tag-name")
             this.appendTokenValue(LESS_THAN_SIGN, "HTMLText")
             return "DATA"
@@ -683,6 +682,7 @@ export class Tokenizer {
             return "DATA"
         }
         if (cp === EOF) {
+            this.clearStartTokenMark()
             this.reportParseError("eof-before-tag-name")
             this.appendTokenValue(LESS_THAN_SIGN, "HTMLText")
             this.appendTokenValue(SOLIDUS, "HTMLText")
