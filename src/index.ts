@@ -49,6 +49,14 @@ function isScriptElement(node: AST.VNode): node is AST.VElement {
  * @returns The parsing result.
  */
 export function parseForESLint(code: string, options: any): AST.ESLintExtendedProgram {
+    options = Object.assign({
+        comment: true,
+        ecmaVersion: 2015,
+        loc: true,
+        range: true,
+        tokens: true,
+    }, options || {})
+
     if (!isVueFile(code, options)) {
         return parseScript(code, options)
     }

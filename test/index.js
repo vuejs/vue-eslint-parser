@@ -12,6 +12,7 @@
 const assert = require("assert")
 const path = require("path")
 const fs = require("fs-extra")
+const parse = require("..").parse
 const CLIEngine = require("./fixtures/eslint").CLIEngine
 
 //------------------------------------------------------------------------------
@@ -354,6 +355,117 @@ describe("Basic tests", () => {
             const messages = report.results[0].messages
 
             assert(messages.length === 0)
+        })
+    })
+
+    describe("About unexpected-null-character errors", () => {
+        it("should keep NULL in DATA state.", () => {
+            const ast = parse("<template>\u0000</template>")
+            const text = ast.templateBody.children[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(text.value, "\u0000")
+            assert.equal(errors.length, 1)
+            assert.equal(errors[0].code, "unexpected-null-character")
+        })
+
+        it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in RCDATA state.", () => {
+            const ast = parse("<template><textarea>\u0000</textarea></template>")
+            const text = ast.templateBody.children[0].children[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(text.value, "\uFFFD")
+            assert.equal(errors.length, 1)
+            assert.equal(errors[0].code, "unexpected-null-character")
+        })
+
+        it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in RAWTEXT state.", () => {
+            const ast = parse("<template><style>\u0000</style></template>")
+            const text = ast.templateBody.children[0].children[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(text.value, "\uFFFD")
+            assert.equal(errors.length, 1)
+            assert.equal(errors[0].code, "unexpected-null-character")
+        })
+
+        it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in TAG_NAME state.", () => {
+            const ast = parse("<template><test\u0000></template>")
+            const element = ast.templateBody.children[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(element.name, "test\uFFFD")
+            assert.equal(errors.length, 1)
+            assert.equal(errors[0].code, "unexpected-null-character")
+        })
+
+        it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_NAME state.", () => {
+            const ast = parse("<template><div a\u0000></div></template>")
+            const attribute = ast.templateBody.children[0].startTag.attributes[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(attribute.key.name, "a\uFFFD")
+            assert.equal(errors.length, 1)
+            assert.equal(errors[0].code, "unexpected-null-character")
+        })
+
+        it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_DOUBLE_QUOTED state.", () => {
+            const ast = parse("<template><div a=\"\u0000\"></div></template>")
+            const attribute = ast.templateBody.children[0].startTag.attributes[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(attribute.value.value, "\uFFFD")
+            assert.equal(errors.length, 1)
+            assert.equal(errors[0].code, "unexpected-null-character")
+        })
+
+        it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_SINGLE_QUOTED state.", () => {
+            const ast = parse("<template><div a='\u0000'></div></template>")
+            const attribute = ast.templateBody.children[0].startTag.attributes[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(attribute.value.value, "\uFFFD")
+            assert.equal(errors.length, 1)
+            assert.equal(errors[0].code, "unexpected-null-character")
+        })
+
+        it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_UNQUOTED state.", () => {
+            const ast = parse("<template><div a=\u0000></div></template>")
+            const attribute = ast.templateBody.children[0].startTag.attributes[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(attribute.value.value, "\uFFFD")
+            assert.equal(errors.length, 1)
+            assert.equal(errors[0].code, "unexpected-null-character")
+        })
+
+        it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in COMMENT state.", () => {
+            const ast = parse("<template><!-- \u0000 --></template>")
+            const comment = ast.templateBody.comments[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(comment.value, " \uFFFD ")
+            assert.equal(errors.length, 1)
+            assert.equal(errors[0].code, "unexpected-null-character")
+        })
+
+        it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in BOGUS_COMMENT state.", () => {
+            const ast = parse("<template><? \u0000 ?></template>")
+            const comment = ast.templateBody.comments[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(comment.value, "? \uFFFD ?")
+            assert.equal(errors.length, 1)
+            assert.equal(errors[0].code, "unexpected-question-mark-instead-of-tag-name")
+        })
+
+        it("should not error in CDATA section state.", () => {
+            const ast = parse("<template><svg><![CDATA[\u0000]]></template>")
+            const cdata = ast.templateBody.children[0].children[0]
+            const errors = ast.templateBody.errors
+
+            assert.equal(cdata.value, "\u0000")
+            assert.equal(errors.length, 0)
         })
     })
 })

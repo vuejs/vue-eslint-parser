@@ -947,6 +947,10 @@ export class Tokenizer {
                 return "BEFORE_ATTRIBUTE_VALUE"
             }
 
+            if (cp === NULL) {
+                this.reportParseError("unexpected-null-character")
+                cp = NULL_REPLACEMENT
+            }
             if (cp === QUOTATION_MARK || cp === APOSTROPHE || cp === LESS_THAN_SIGN) {
                 this.reportParseError("unexpected-character-in-attribute-name")
             }
