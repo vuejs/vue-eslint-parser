@@ -1705,10 +1705,19 @@ export class Tokenizer {
      * @returns The next state.
      */
     protected CHARACTER_REFERENCE_END(_cp: number): TokenizerState {
+        assert(this.currentToken != null)
+
+        // The this.buffer.length is not new length since it includes surrogate pairs.
+        // Calculate new length.
+        const token = this.currentToken as Token
+        const len0 = token.value.length
         for (const cp1 of this.buffer) {
             this.appendTokenValue(cp1, null)
         }
-        for (let i = this.crStartOffset + this.buffer.length; i < this.offset; ++i) {
+        const newLength = token.value.length - len0
+
+        // Make gaps in the difference of length.
+        for (let i = this.crStartOffset + newLength; i < this.offset; ++i) {
             this.gaps.push(i)
         }
 
