@@ -7,7 +7,7 @@ import * as lodash from "lodash"
 import {debug} from "../common/debug"
 import {ErrorCode, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement, VNode, VText} from "../ast"
 import {MATHML_ATTRIBUTE_NAME_MAP, SVG_ATTRIBUTE_NAME_MAP} from "./util/attribute-names"
-import {HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_VOID_ELEMENT_TAGS, SVG_ELEMENT_NAME_MAP} from "./util/tag-names"
+import {HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_RAWTEXT_TAGS, HTML_RCDATA_TAGS, HTML_VOID_ELEMENT_TAGS, SVG_ELEMENT_NAME_MAP} from "./util/tag-names"
 import {Tokenizer, TokenType} from "./tokenizer"
 
 /**
@@ -476,6 +476,9 @@ export class Parser {
         this.tokens.push(token)
 
         const attribute = this.currentNode
+        if (attribute.type === "VEndTag") {
+            return
+        }
         if (attribute.type !== "VAttribute" || attribute.directive === true) {
             throw new Error("unreachable")
         }
@@ -573,6 +576,16 @@ export class Parser {
         // Pop the element if it's a end tag.
         if (tag.type === "VEndTag" || HTML_VOID_ELEMENT_TAGS.has(tag.parent.name)) {
             this.popNodeStack()
+        }
+
+        // Update the content type of this element.
+        if (tag.type === "VStartTag" && tag.parent.namespace === NS.HTML) {
+            if (HTML_RCDATA_TAGS.has(tag.parent.name)) {
+                this.tokenizer.state = "RCDATA"
+            }
+            if (HTML_RAWTEXT_TAGS.has(tag.parent.name)) {
+                this.tokenizer.state = "RAWTEXT"
+            }
         }
     }
 

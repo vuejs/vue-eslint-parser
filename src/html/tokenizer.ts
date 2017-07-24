@@ -8,7 +8,6 @@ import {debug} from "../common/debug"
 import {ErrorCode, Namespace, NS, ParseError, Token} from "../ast"
 import {alternativeCR} from "./util/alternative-cr"
 import {entitySets} from "./util/entities"
-import {HTML_RAWTEXT_TAGS, HTML_RCDATA_TAGS} from "./util/tag-names"
 import {
     AMPERSAND, APOSTROPHE, CARRIAGE_RETURN, EOF, EQUALS_SIGN, EXCLAMATION_MARK,
     GRAVE_ACCENT, GREATER_THAN_SIGN, HYPHEN_MINUS, isControl, isDigit,
@@ -138,19 +137,23 @@ export class Tokenizer {
     private line: number
 
     // Tokenizing
-    private state: TokenizerState
     private returnState: TokenizerState
     private reconsuming: boolean
     private buffer: number[]
     private crStartOffset: number
     private crCode: number
-    private tokens: Token[]
-    private provisionalTokens: Token[] // can rollback in this.
+    private committedToken: Token | null
+    private provisionalToken: Token | null // can be rollbacked.
     private currentToken: Token | null
     private lastTagOpenToken: Token | null
     private tokenStartOffset: number
     private tokenStartLine: number
     private tokenStartColumn: number
+
+    /**
+     * The current state.
+     */
+    public state: TokenizerState
 
     /**
      * Syntax errors.
@@ -182,8 +185,8 @@ export class Tokenizer {
         this.crStartOffset = -1
         this.crCode = 0
         this.errors = []
-        this.tokens = []
-        this.provisionalTokens = []
+        this.committedToken = null
+        this.provisionalToken = null
         this.currentToken = null
         this.lastTagOpenToken = null
         this.tokenStartOffset = -1
@@ -198,7 +201,14 @@ export class Tokenizer {
      */
     public nextToken(): Token {
         let cp = this.lastCodePoint
-        while (this.tokens.length === 0 && (cp !== EOF || this.reconsuming)) {
+        while (this.committedToken == null && (cp !== EOF || this.reconsuming)) {
+            if (this.provisionalToken != null && !this.isProvisionalState()) {
+                this.commitProvisionalToken()
+                if (this.committedToken != null) {
+                    break
+                }
+            }
+
             if (this.reconsuming) {
                 this.reconsuming = false
                 cp = this.lastCodePoint
@@ -211,19 +221,24 @@ export class Tokenizer {
             this.state = this[this.state](cp)
         }
 
-        const token = this.tokens.shift()
-        if (token != null) {
-            return token
+        {
+            const token = this.consumeCommittedToken()
+            if (token != null) {
+                return token
+            }
         }
 
         assert(cp === EOF)
 
         if (this.currentToken != null && this.currentToken.type !== "EOF") {
             this.endToken()
-            if (this.tokens.length >= 1) {
-                return this.tokens.shift() as Token
+
+            const token = this.consumeCommittedToken()
+            if (token != null) {
+                return token
             }
         }
+
         if (this.currentToken == null) {
             const offset = this.offset
             const line = this.line
@@ -237,6 +252,16 @@ export class Tokenizer {
             }
         }
         return this.currentToken
+    }
+
+    /**
+     * Consume the last committed token.
+     * @returns The last committed token.
+     */
+    private consumeCommittedToken(): Token | null {
+        const token = this.committedToken
+        this.committedToken = null
+        return token
     }
 
     /**
@@ -387,9 +412,7 @@ export class Tokenizer {
         const offset = this.tokenStartOffset
         const line = this.tokenStartLine
         const column = this.tokenStartColumn
-        const provisional =
-            this.state.startsWith("RCDATA_") ||
-            this.state.startsWith("RAWTEXT_")
+        const provisional = this.isProvisionalState()
 
         this.currentToken = null
         this.tokenStartOffset = -1
@@ -404,42 +427,67 @@ export class Tokenizer {
         }
 
         if (provisional) {
-            this.provisionalTokens.push(token)
-            debug("[html] provisional commit token: %j %s %j", token.range, token.type, token.value)
+            if (this.provisionalToken != null) {
+                this.commitProvisionalToken()
+            }
+            this.provisionalToken = token
+            debug("[html] provisional-commit token: %j %s %j", token.range, token.type, token.value)
         }
         else {
-            this.tokens.push(token)
-            this.onCommit(token)
+            this.commitToken(token)
         }
 
         return token
     }
 
     /**
-     * Commit provisional tokens.
+     * Commit the given token.
+     * @param token The token to commit.
      */
-    private commitProvisionalTokens(): void {
-        for (const token of this.provisionalTokens) {
-            if (token.range[0] === token.range[1]) {
-                continue
-            }
+    private commitToken(token: Token): void {
+        assert(this.committedToken == null, "Invalid state: the commited token existed already.")
+        debug("[html] commit token: %j %j %s %j", token.range, token.loc, token.type, token.value)
 
-            this.tokens.push(token)
-            this.onCommit(token)
+        this.committedToken = token
+        if (token.type === "HTMLTagOpen") {
+            this.lastTagOpenToken = token
         }
-        this.provisionalTokens = []
     }
 
     /**
-     * Cancel the current token and set the last provisional token as the current token.
+     * Check whether this is provisional state or not.
+     * @returns `true` if this is provisional state.
      */
-    private rollbackToken(): void {
+    private isProvisionalState(): boolean {
+        return this.state.startsWith("RCDATA_") || this.state.startsWith("RAWTEXT_")
+    }
+
+    /**
+     * Commit the last provisional committed token.
+     */
+    private commitProvisionalToken(): void {
+        assert(this.provisionalToken != null, "Invalid state: the provisional token was not found.")
+
+        const token = this.provisionalToken as Token
+        this.provisionalToken = null
+
+        if (token.range[0] < token.range[1]) {
+            this.commitToken(token)
+        }
+    }
+
+    /**
+     * Cancel the current token and set the last provisional committed token as the current token.
+     */
+    private rollbackProvisionalToken(): void {
         assert(this.currentToken != null)
-        assert(this.provisionalTokens.length >= 1)
+        assert(this.provisionalToken != null)
 
         const token = this.currentToken as Token
-        this.currentToken = this.provisionalTokens.pop() as Token
         debug("[html] rollback token: %d %s", token.range[0], token.type)
+
+        this.currentToken = this.provisionalToken as Token
+        this.provisionalToken = null
     }
 
     /**
@@ -460,18 +508,6 @@ export class Tokenizer {
     }
 
     /**
-     * Do postprocess.
-     * @param token The token which is commited.
-     */
-    private onCommit(token: Token): void {
-        debug("[html] commit token: %j %j %s %j", token.range, token.loc, token.type, token.value)
-
-        if (token.type === "HTMLTagOpen") {
-            this.lastTagOpenToken = token
-        }
-    }
-
-    /**
      * Check whether the current token is appropriate `HTMLEndTagOpen` token.
      * @returns {boolean} `true` if the current token is appropriate `HTMLEndTagOpen` token.
      */
@@ -485,23 +521,6 @@ export class Tokenizer {
     }
 
     /**
-     * Ensure the correct tokenizer state for the content of the current element.
-     */
-    private nextDataType(): TokenizerState {
-        if (this.namespace === NS.HTML) {
-            const token = this.lastTagOpenToken
-
-            if (token && HTML_RCDATA_TAGS.has(token.value)) {
-                return "RCDATA"
-            }
-            if (token && HTML_RAWTEXT_TAGS.has(token.value)) {
-                return "RAWTEXT"
-            }
-        }
-        return "DATA"
-    }
-
-    /**
      * https://html.spec.whatwg.org/multipage/syntax.html#data-state
      * @param cp The current code point.
      * @returns The next state.
@@ -511,7 +530,11 @@ export class Tokenizer {
 
         while (true) {
             const type = isWhitespace(cp) ? "HTMLWhitespace" : "HTMLText"
-            if (this.currentToken == null || this.currentToken.type !== type) {
+            if (this.currentToken != null && this.currentToken.type !== type) {
+                this.endToken()
+                return this.reconsumeAs(this.state)
+            }
+            if (this.currentToken == null) {
                 this.startToken(type)
             }
 
@@ -556,7 +579,11 @@ export class Tokenizer {
 
         while (true) {
             const type = isWhitespace(cp) ? "HTMLWhitespace" : "HTMLRCDataText"
-            if (this.currentToken == null || this.currentToken.type !== type) {
+            if (this.currentToken != null && this.currentToken.type !== type) {
+                this.endToken()
+                return this.reconsumeAs(this.state)
+            }
+            if (this.currentToken == null) {
                 this.startToken(type)
             }
 
@@ -602,7 +629,11 @@ export class Tokenizer {
 
         while (true) {
             const type = isWhitespace(cp) ? "HTMLWhitespace" : "HTMLRawText"
-            if (this.currentToken == null || this.currentToken.type !== type) {
+            if (this.currentToken != null && this.currentToken.type !== type) {
+                this.endToken()
+                return this.reconsumeAs(this.state)
+            }
+            if (this.currentToken == null) {
                 this.startToken(type)
             }
 
@@ -713,7 +744,7 @@ export class Tokenizer {
             }
             if (cp === GREATER_THAN_SIGN) {
                 this.startToken("HTMLTagClose")
-                return this.nextDataType()
+                return "DATA"
             }
             if (cp === EOF) {
                 this.reportParseError("eof-in-tag")
@@ -773,22 +804,19 @@ export class Tokenizer {
         while (true) {
             if (isWhitespace(cp) && this.isAppropriateEndTagOpen()) {
                 this.endToken()
-                this.commitProvisionalTokens()
                 return "BEFORE_ATTRIBUTE_NAME"
             }
             if (cp === SOLIDUS && this.isAppropriateEndTagOpen()) {
                 this.endToken()
-                this.commitProvisionalTokens()
                 this.setStartTokenMark()
                 return "SELF_CLOSING_START_TAG"
             }
             if (cp === GREATER_THAN_SIGN && this.isAppropriateEndTagOpen()) {
                 this.startToken("HTMLTagClose")
-                this.commitProvisionalTokens()
                 return "DATA"
             }
             if (!isLetter(cp)) {
-                this.rollbackToken()
+                this.rollbackProvisionalToken()
                 this.appendTokenValue(LESS_THAN_SIGN, "HTMLRCDataText")
                 this.appendTokenValue(SOLIDUS, "HTMLRCDataText")
                 for (const cp1 of this.buffer) {
@@ -847,22 +875,19 @@ export class Tokenizer {
         while (true) {
             if (cp === SOLIDUS && this.isAppropriateEndTagOpen()) {
                 this.endToken()
-                this.commitProvisionalTokens()
                 this.setStartTokenMark()
                 return "SELF_CLOSING_START_TAG"
             }
             if (cp === GREATER_THAN_SIGN && this.isAppropriateEndTagOpen()) {
                 this.startToken("HTMLTagClose")
-                this.commitProvisionalTokens()
                 return "DATA"
             }
             if (isWhitespace(cp) && this.isAppropriateEndTagOpen()) {
                 this.endToken()
-                this.commitProvisionalTokens()
                 return "BEFORE_ATTRIBUTE_NAME"
             }
             if (!isLetter(cp)) {
-                this.rollbackToken()
+                this.rollbackProvisionalToken()
                 this.appendTokenValue(LESS_THAN_SIGN, "HTMLRawText")
                 this.appendTokenValue(SOLIDUS, "HTMLRawText")
                 for (const cp1 of this.buffer) {
@@ -950,7 +975,7 @@ export class Tokenizer {
         }
         if (cp === GREATER_THAN_SIGN) {
             this.startToken("HTMLTagClose")
-            return this.nextDataType()
+            return "DATA"
         }
 
         if (cp === EOF) {
@@ -975,7 +1000,7 @@ export class Tokenizer {
         if (cp === GREATER_THAN_SIGN) {
             this.reportParseError("missing-attribute-value")
             this.startToken("HTMLTagClose")
-            return this.nextDataType()
+            return "DATA"
         }
 
         this.startToken("HTMLLiteral")
@@ -1063,7 +1088,7 @@ export class Tokenizer {
             }
             if (cp === GREATER_THAN_SIGN) {
                 this.startToken("HTMLTagClose")
-                return this.nextDataType()
+                return "DATA"
             }
 
             if (cp === NULL) {
@@ -1100,7 +1125,7 @@ export class Tokenizer {
         }
         if (cp === GREATER_THAN_SIGN) {
             this.startToken("HTMLTagClose")
-            return this.nextDataType()
+            return "DATA"
         }
 
         if (cp === EOF) {
