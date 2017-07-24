@@ -1,0 +1,5 @@
+<template>
+    <div a"="b"></div>
+    <div c<d></div>
+    <div e'f></div>
+</template>
