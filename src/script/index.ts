@@ -178,7 +178,6 @@ export function parseScriptElement(node: VElement, globalLocationCalculator: Loc
                 range: startTag.range,
                 loc: startTag.loc,
                 value: "<script>",
-                raw: "<script>",
             })
         }
         if (endTag != null) {
@@ -187,7 +186,6 @@ export function parseScriptElement(node: VElement, globalLocationCalculator: Loc
                 range: endTag.range,
                 loc: endTag.loc,
                 value: "</script>",
-                raw: "</script>",
             })
         }
     }

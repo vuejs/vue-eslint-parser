@@ -232,7 +232,6 @@ export class Tokenizer {
                 range: [offset, offset],
                 loc: {start: {line, column}, end: {line, column}},
                 value: "",
-                raw: "",
             }
         }
         return this.currentToken
@@ -365,7 +364,6 @@ export class Tokenizer {
                 end: {line: -1, column: -1},
             },
             value: "",
-            raw: "",
         }
 
         debug("[html] start token: %d %s", offset, token.type)
@@ -402,7 +400,6 @@ export class Tokenizer {
         token.range[1] = offset
         token.loc.end.line = line
         token.loc.end.column = column
-        token.raw = this.text.slice(token.range[0], token.range[1])
 
         if (provisional) {
             this.provisionalTokens.push(token)

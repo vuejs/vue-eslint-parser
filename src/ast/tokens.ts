@@ -18,9 +18,4 @@ export interface Token extends HasLocation {
      * Processed values.
      */
     value: string
-
-    /**
-     * Raw values.
-     */
-    raw: string
 }

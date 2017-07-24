@@ -522,7 +522,6 @@ export class TemplateTransformer {
                 end: this.locationCalculator.getLocation(end),
             },
             value,
-            raw: value,
         }
     }
 

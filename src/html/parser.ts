@@ -164,7 +164,6 @@ export class Parser {
             loc: {start: token.loc.start, end: token.loc.end},
             parent: parentElement,
             value: token.value,
-            raw: token.raw,
         })
         parentElement.children.push(text)
     }
