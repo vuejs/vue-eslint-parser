@@ -1650,7 +1650,7 @@ export class Tokenizer {
     protected DECIMAL_CHARACTER_REFERENCE(cp: number): TokenizerState {
         while (true) {
             if (isDigit(cp)) {
-                this.crCode = 16 * this.crCode + (cp - 0x30)
+                this.crCode = 10 * this.crCode + (cp - 0x30)
             }
             else {
                 if (cp === SEMICOLON) {
