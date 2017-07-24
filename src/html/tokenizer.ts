@@ -678,6 +678,7 @@ export class Tokenizer {
             return this.reconsumeAs("TAG_NAME")
         }
         if (cp === GREATER_THAN_SIGN) {
+            this.endToken() // < Commit or abandon the current text token.
             this.reportParseError("missing-end-tag-name")
             return "DATA"
         }

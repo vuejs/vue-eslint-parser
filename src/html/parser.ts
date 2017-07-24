@@ -285,11 +285,6 @@ export class Parser {
      */
     private processComment(token: Token): void {
         this.comments.push(token)
-
-        // Sepalate text nodes.
-        if (this.currentNode.type === "VText") {
-            this.popNodeStack()
-        }
     }
 
     /**
@@ -308,10 +303,17 @@ export class Parser {
         }
 
         if (this.currentNode.type === "VText") {
-            this.currentNode.value += token.value
-            this.currentNode.range[1] = token.range[1]
-            this.currentNode.loc.end = token.loc.end
-            return
+            if (this.currentNode.range[1] === token.range[0]) {
+                this.currentNode.value += token.value
+                this.currentNode.range[1] = token.range[1]
+                this.currentNode.loc.end = token.loc.end
+                return
+            }
+
+            this.popNodeStack()
+            if (this.currentNode.type === "VText") {
+                throw new Error("unreachable")
+            }
         }
 
         const parentElement = this.currentNode
