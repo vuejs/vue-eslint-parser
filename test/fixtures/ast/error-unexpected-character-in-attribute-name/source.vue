@@ -1,5 +1,3 @@
 <template>
-    <div a"="b"></div>
-    <div c<d></div>
-    <div e'f></div>
+    <div a"="b" c<d  e'f = g></div>
 </template>

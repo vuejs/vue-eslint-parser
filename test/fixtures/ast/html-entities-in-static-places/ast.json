@@ -24,7 +24,7 @@
         "type": "VElement",
         "range": [
             0,
-            101
+            137
         ],
         "loc": {
             "start": {
@@ -97,7 +97,7 @@
                 "type": "VElement",
                 "range": [
                     43,
-                    89
+                    125
                 ],
                 "loc": {
                     "start": {
@@ -106,7 +106,7 @@
                     },
                     "end": {
                         "line": 3,
-                        "column": 50
+                        "column": 86
                     }
                 },
                 "name": "div",
@@ -115,7 +115,7 @@
                     "type": "VStartTag",
                     "range": [
                         43,
-                        69
+                        105
                     ],
                     "loc": {
                         "start": {
@@ -124,7 +124,7 @@
                         },
                         "end": {
                             "line": 3,
-                            "column": 30
+                            "column": 66
                         }
                     },
                     "attributes": [
@@ -181,6 +181,114 @@
                                 },
                                 "value": "a && b"
                             }
+                        },
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                69,
+                                89
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 3,
+                                    "column": 30
+                                },
+                                "end": {
+                                    "line": 3,
+                                    "column": 50
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    69,
+                                    72
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 3,
+                                        "column": 30
+                                    },
+                                    "end": {
+                                        "line": 3,
+                                        "column": 33
+                                    }
+                                },
+                                "name": "bar"
+                            },
+                            "value": {
+                                "type": "VLiteral",
+                                "range": [
+                                    73,
+                                    89
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 3,
+                                        "column": 34
+                                    },
+                                    "end": {
+                                        "line": 3,
+                                        "column": 50
+                                    }
+                                },
+                                "value": "a && b"
+                            }
+                        },
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                90,
+                                104
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 3,
+                                    "column": 51
+                                },
+                                "end": {
+                                    "line": 3,
+                                    "column": 65
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    90,
+                                    93
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 3,
+                                        "column": 51
+                                    },
+                                    "end": {
+                                        "line": 3,
+                                        "column": 54
+                                    }
+                                },
+                                "name": "baz"
+                            },
+                            "value": {
+                                "type": "VLiteral",
+                                "range": [
+                                    94,
+                                    104
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 3,
+                                        "column": 55
+                                    },
+                                    "end": {
+                                        "line": 3,
+                                        "column": 65
+                                    }
+                                },
+                                "value": "&&"
+                            }
                         }
                     ]
                 },
@@ -188,17 +296,17 @@
                     {
                         "type": "VText",
                         "range": [
-                            69,
-                            83
+                            105,
+                            119
                         ],
                         "loc": {
                             "start": {
                                 "line": 3,
-                                "column": 30
+                                "column": 66
                             },
                             "end": {
                                 "line": 3,
-                                "column": 44
+                                "column": 80
                             }
                         },
                         "value": "a && b"
@@ -207,17 +315,17 @@
                 "endTag": {
                     "type": "VEndTag",
                     "range": [
-                        83,
-                        89
+                        119,
+                        125
                     ],
                     "loc": {
                         "start": {
                             "line": 3,
-                            "column": 44
+                            "column": 80
                         },
                         "end": {
                             "line": 3,
-                            "column": 50
+                            "column": 86
                         }
                     }
                 },
@@ -226,13 +334,13 @@
             {
                 "type": "VText",
                 "range": [
-                    89,
-                    90
+                    125,
+                    126
                 ],
                 "loc": {
                     "start": {
                         "line": 3,
-                        "column": 50
+                        "column": 86
                     },
                     "end": {
                         "line": 4,
@@ -245,8 +353,8 @@
         "endTag": {
             "type": "VEndTag",
             "range": [
-                90,
-                101
+                126,
+                137
             ],
             "loc": {
                 "start": {
@@ -406,19 +514,127 @@
                 "value": "a && b"
             },
             {
-                "type": "HTMLTagClose",
+                "type": "HTMLIdentifier",
                 "range": [
-                    68,
-                    69
+                    69,
+                    72
                 ],
                 "loc": {
                     "start": {
                         "line": 3,
-                        "column": 29
+                        "column": 30
                     },
                     "end": {
                         "line": 3,
-                        "column": 30
+                        "column": 33
+                    }
+                },
+                "value": "bar"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    72,
+                    73
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 33
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 34
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLLiteral",
+                "range": [
+                    73,
+                    89
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 34
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 50
+                    }
+                },
+                "value": "a && b"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    90,
+                    93
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 51
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 54
+                    }
+                },
+                "value": "baz"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    93,
+                    94
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 54
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 55
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLLiteral",
+                "range": [
+                    94,
+                    104
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 55
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 65
+                    }
+                },
+                "value": "&&"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    104,
+                    105
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 65
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 66
                     }
                 },
                 "value": ""
@@ -426,17 +642,17 @@
             {
                 "type": "HTMLText",
                 "range": [
-                    69,
-                    70
+                    105,
+                    106
                 ],
                 "loc": {
                     "start": {
                         "line": 3,
-                        "column": 30
+                        "column": 66
                     },
                     "end": {
                         "line": 3,
-                        "column": 31
+                        "column": 67
                     }
                 },
                 "value": "a"
@@ -444,17 +660,17 @@
             {
                 "type": "HTMLWhitespace",
                 "range": [
-                    70,
-                    71
+                    106,
+                    107
                 ],
                 "loc": {
                     "start": {
                         "line": 3,
-                        "column": 31
+                        "column": 67
                     },
                     "end": {
                         "line": 3,
-                        "column": 32
+                        "column": 68
                     }
                 },
                 "value": " "
@@ -462,17 +678,17 @@
             {
                 "type": "HTMLText",
                 "range": [
-                    71,
-                    81
+                    107,
+                    117
                 ],
                 "loc": {
                     "start": {
                         "line": 3,
-                        "column": 32
+                        "column": 68
                     },
                     "end": {
                         "line": 3,
-                        "column": 42
+                        "column": 78
                     }
                 },
                 "value": "&&"
@@ -480,17 +696,17 @@
             {
                 "type": "HTMLWhitespace",
                 "range": [
-                    81,
-                    82
+                    117,
+                    118
                 ],
                 "loc": {
                     "start": {
                         "line": 3,
-                        "column": 42
+                        "column": 78
                     },
                     "end": {
                         "line": 3,
-                        "column": 43
+                        "column": 79
                     }
                 },
                 "value": " "
@@ -498,17 +714,17 @@
             {
                 "type": "HTMLText",
                 "range": [
-                    82,
-                    83
+                    118,
+                    119
                 ],
                 "loc": {
                     "start": {
                         "line": 3,
-                        "column": 43
+                        "column": 79
                     },
                     "end": {
                         "line": 3,
-                        "column": 44
+                        "column": 80
                     }
                 },
                 "value": "b"
@@ -516,17 +732,17 @@
             {
                 "type": "HTMLEndTagOpen",
                 "range": [
-                    83,
-                    88
+                    119,
+                    124
                 ],
                 "loc": {
                     "start": {
                         "line": 3,
-                        "column": 44
+                        "column": 80
                     },
                     "end": {
                         "line": 3,
-                        "column": 49
+                        "column": 85
                     }
                 },
                 "value": "div"
@@ -534,17 +750,17 @@
             {
                 "type": "HTMLTagClose",
                 "range": [
-                    88,
-                    89
+                    124,
+                    125
                 ],
                 "loc": {
                     "start": {
                         "line": 3,
-                        "column": 49
+                        "column": 85
                     },
                     "end": {
                         "line": 3,
-                        "column": 50
+                        "column": 86
                     }
                 },
                 "value": ""
@@ -552,13 +768,13 @@
             {
                 "type": "HTMLWhitespace",
                 "range": [
-                    89,
-                    90
+                    125,
+                    126
                 ],
                 "loc": {
                     "start": {
                         "line": 3,
-                        "column": 50
+                        "column": 86
                     },
                     "end": {
                         "line": 4,
@@ -570,8 +786,8 @@
             {
                 "type": "HTMLEndTagOpen",
                 "range": [
-                    90,
-                    100
+                    126,
+                    136
                 ],
                 "loc": {
                     "start": {
@@ -588,8 +804,8 @@
             {
                 "type": "HTMLTagClose",
                 "range": [
-                    100,
-                    101
+                    136,
+                    137
                 ],
                 "loc": {
                     "start": {
@@ -606,8 +822,8 @@
             {
                 "type": "HTMLWhitespace",
                 "range": [
-                    101,
-                    102
+                    137,
+                    138
                 ],
                 "loc": {
                     "start": {
