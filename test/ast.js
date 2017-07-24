@@ -93,7 +93,7 @@ describe("Template AST", () => {
             })
 
             it("should have correct location.", () => {
-                const lines = source.match(/[^\r\n]*\r?\n/g) || []
+                const lines = source.match(/[^\r\n]*(?:\r?\n|$)/g) || []
                 lines.push(String.fromCodePoint(0))
                 for (const token of getAllTokens(actual.ast)) {
                     const line0 = token.loc.start.line - 1
