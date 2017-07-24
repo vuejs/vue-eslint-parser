@@ -1,0 +1,3 @@
+<template>
+    <svg>
+        <script><![CDATA[

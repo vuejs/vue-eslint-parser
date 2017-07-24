@@ -4,6 +4,7 @@
             path {
                 stroke: black;
             }
+            /* ] ]] ]]] */
         ]]></style>
         <path d="M0,0 L100,100"/>
     </svg>
