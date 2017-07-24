@@ -8,9 +8,14 @@
 
 The ESLint custom parser for `.vue` files.
 
-ESLint supports autofix on custom parsers but does not support autofix on plugins which have processors ([eslint/eslint#7510](https://github.com/eslint/eslint/issues/7510)). The motivation of this custom parser is that it supports autofix on `.vue` files.
+## ⤴️ Motivation
 
-## :cd: Installation
+- **This parser allows us to lint the `<template>` of `.vue` files.**  
+  We can make mistakes easily on `<template>` if we use complex directives and expressions in the template. This parser and the rules of [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue) would catch some of the mistakes.
+- **This parser allows us to fix our mistakes automatically.**  
+  ESLint supports autofix on custom parsers but does not support autofix on plugins which have processors ([eslint/eslint#7510](https://github.com/eslint/eslint/issues/7510)). This parser supports autofix on `.vue` files.
+
+## 💿 Installation
 
 ```bash
 $ npm install --save-dev eslint vue-eslint-parser
@@ -18,9 +23,9 @@ $ npm install --save-dev eslint vue-eslint-parser
 
 - `vue-eslint-parser` requires ESLint 3.9.0 or later.
 
-## :book: Usage
+## 📖 Usage
 
-1. Write `parser` option in your `.eslintrc.*` file.
+1. Write `parser` option into your `.eslintrc.*` file.
 2. Use glob patterns or `--ext .vue` CLI option.
 
 ```json
@@ -30,13 +35,13 @@ $ npm install --save-dev eslint vue-eslint-parser
 }
 ```
 
-```bash
+```console
 $ eslint "src/**/*.{js,vue}"
 # or
 $ eslint src --ext .vue
 ```
 
-## :wrench: Options
+## 🔧 Options
 
 `parserOptions` has the same properties as what [espree](https://github.com/eslint/espree#usage), the default parser of ESLint, is supporting.  
 For example:
@@ -81,15 +86,15 @@ For example:
 }
 ```
 
-## :book: Usage for custom rules / plugins
+## 🎇 Usage for custom rules / plugins
 
-`vue-eslint-parser` provides `parserServices` to traverse `<template>`.
+This parser provides `parserServices` to traverse `<template>`.
 
 The spec of `<template>` AST is [here](./docs/ast.md).
 
 TODO: write examples.
 
-## :warning: Known Limitations
+## ⚠️ Known Limitations
 
 Some rules make warnings due to the outside of `<script>` tags.
 Please disable those rules for `.vue` files as necessary.
@@ -102,11 +107,11 @@ Please disable those rules for `.vue` files as necessary.
 - [unicode-bom](http://eslint.org/docs/rules/unicode-bom)
 - Other rules which are using the source code text instead of AST might be confused as well.
 
-## :newspaper: Changelog
+## 📰 Changelog
 
 - [GitHub Releases](https://github.com/mysticatea/vue-eslint-parser/releases)
 
-## :muscle: Contributing
+## 🍻 Contributing
 
 Welcome contributing!
 
@@ -119,5 +124,5 @@ Please use GitHub's Issues/PRs.
 - `npm run clean` removes the coverage result of `npm test` command.
 - `npm run lint` runs ESLint.
 - `npm run setup` setups submodules to develop.
-- `npm run update-fixtures` updates files in `test/fixtures/template-ast` directory based on `*.source.vue` files.
+- `npm run update-fixtures` updates files in `test/fixtures/ast` directory based on `~/*/source.vue` files.
 - `npm run watch` runs tests with `--watch` option.
