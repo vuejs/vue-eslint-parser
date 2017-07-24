@@ -13,7 +13,6 @@ const assert = require("assert")
 const fs = require("fs")
 const path = require("path")
 const parser = require("..")
-const RuleContext = require("./stub-rule-context")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -61,38 +60,6 @@ function getAllTokens(ast) {
         tokenArrays.push(ast.templateBody.tokens, ast.templateBody.comments)
     }
     return Array.prototype.concat.apply([], tokenArrays)
-}
-
-/**
- * Get information of tokens.
- * This uses source code text to check the ranges of tokens.
- * @param {{ast:ASTNode,services:object}} result The parsing result.
- * @param {string} code The whole source code.
- * @returns {(string[])[]} Information of tokens.
- */
-function getTraversal(result, code) {
-    const retv = []
-    const ruleContext = new RuleContext(code, result.ast)
-
-    result.services.registerTemplateBodyVisitor(ruleContext, {
-        "*"(node) {
-            retv.push([
-                "enter",
-                node.type,
-                code.slice(node.range[0], node.range[1]),
-            ])
-        },
-        "*:exit"(node) {
-            retv.push([
-                "leave",
-                node.type,
-                code.slice(node.range[0], node.range[1]),
-            ])
-        },
-    })
-    ruleContext.traverseThisAst()
-
-    return retv
 }
 
 //------------------------------------------------------------------------------
@@ -153,16 +120,6 @@ describe("Template AST", () => {
                         `${JSON.stringify(token, null, 4)} expected ${JSON.stringify(expected)}, but got ${JSON.stringify(text)}`
                     )
                 }
-            })
-
-            it("should be traversed in the correct order.", () => {
-                const resultPath = path.join(ROOT, `${name}/traversal.json`)
-                const expected = fs.readFileSync(resultPath, "utf8")
-
-                assert.strictEqual(
-                    JSON.stringify(getTraversal(actual, source), replacer, 4),
-                    expected
-                )
             })
         })
     }

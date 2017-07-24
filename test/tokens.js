@@ -96,11 +96,6 @@ describe("services.getTemplateBodyTokenStore", () => {
             const node = ast.templateBody.children[2]
             const actual = tokens.getTokens(node).map(toValue)
 
-            require("fs").writeFileSync("a.json", JSON.stringify({
-                range: node.range,
-                tokens: tokens.getTokens(node),
-            }, null, 4))
-
             assert.deepStrictEqual(
                 actual,
                 ["div", "a", "=", "b", "v-show", "=", "\"", "c", "<", "3", "&&", "ok", "==", "\"ok\"", "\"", ">", "{{", "message", "}}", "div", ">"]

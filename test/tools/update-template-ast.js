@@ -12,7 +12,6 @@
 const fs = require("fs")
 const path = require("path")
 const parse = require("../..").parseForESLint
-const traverseNodes = require("../..").AST.traverseNodes
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -62,29 +61,6 @@ function getAllTokens(ast) {
     return Array.prototype.concat.apply([], tokenArrays)
 }
 
-/**
- * Get the traversal order.
- * @param {ASTNode} ast The node to get.
- * @param {string} code The whole source code to check ranges.
- * @returns {(string[])[]} The traversal order.
- */
-function getTraversalOrder(ast, code) {
-    const retv = []
-
-    if (ast.templateBody != null) {
-        traverseNodes(ast.templateBody, {
-            enterNode(node) {
-                retv.push(["enter", node.type, code.slice(node.range[0], node.range[1])])
-            },
-            leaveNode(node) {
-                retv.push(["leave", node.type, code.slice(node.range[0], node.range[1])])
-            },
-        })
-    }
-
-    return retv
-}
-
 //------------------------------------------------------------------------------
 // Main
 //------------------------------------------------------------------------------
@@ -93,13 +69,10 @@ for (const name of TARGETS) {
     const sourcePath = path.join(ROOT, `${name}/source.vue`)
     const astPath = path.join(ROOT, `${name}/ast.json`)
     const tokenRangesPath = path.join(ROOT, `${name}/token-ranges.json`)
-    const traversalPath = path.join(ROOT, `${name}/traversal.json`)
     const source = fs.readFileSync(sourcePath, "utf8")
     const actual = parse(source, Object.assign({filePath: sourcePath}, PARSER_OPTIONS))
     const tokenRanges = getAllTokens(actual.ast).map(t => source.slice(t.range[0], t.range[1]))
-    const traversal = getTraversalOrder(actual.ast, source)
 
     fs.writeFileSync(astPath, JSON.stringify(actual.ast, replacer, 4))
     fs.writeFileSync(tokenRangesPath, JSON.stringify(tokenRanges, replacer, 4))
-    fs.writeFileSync(traversalPath, JSON.stringify(traversal, replacer, 4))
 }
