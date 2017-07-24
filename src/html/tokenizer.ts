@@ -1690,8 +1690,6 @@ export class Tokenizer {
         }
         else if (code === 0x0D || (isControl(code) && !isWhitespace(code))) {
             this.reportParseError("control-character-reference")
-        }
-        else if (code >= 0x80 && code <= 0x9F) {
             code = alternativeCR.get(code) || code
         }
 
