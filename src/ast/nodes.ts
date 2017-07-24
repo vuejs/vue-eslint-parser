@@ -530,6 +530,26 @@ export interface ESLintLegacySpreadProperty extends HasLocation, HasParent {
 //------------------------------------------------------------------------------
 
 /**
+ * Constants of namespaces.
+ * @see https://infra.spec.whatwg.org/#namespaces
+ */
+export const NS = Object.freeze({
+    HTML: "http://www.w3.org/1999/xhtml" as "http://www.w3.org/1999/xhtml",
+    MathML: "http://www.w3.org/1998/Math/MathML" as "http://www.w3.org/1998/Math/MathML",
+    SVG: "http://www.w3.org/2000/svg" as "http://www.w3.org/2000/svg",
+    XLink: "http://www.w3.org/1999/xlink" as "http://www.w3.org/1999/xlink",
+    XML: "http://www.w3.org/XML/1998/namespace" as "http://www.w3.org/XML/1998/namespace",
+    XMLNS: "http://www.w3.org/2000/xmlns/" as "http://www.w3.org/2000/xmlns/",
+})
+
+/**
+ * Type of namespaces.
+ */
+export type Namespace =
+    typeof NS.HTML | typeof NS.MathML | typeof NS.SVG | typeof NS.XLink |
+    typeof NS.XML | typeof NS.XMLNS
+
+/**
  * Type of variable definitions.
  */
 export interface Variable {
@@ -675,6 +695,7 @@ export interface HasConcreteInfo {
 export interface VElement extends HasLocation, HasParent {
     type: "VElement"
     parent: VDocumentFragment | VElement
+    namespace: Namespace
     name: string
     startTag: VStartTag
     children: (VElement | VText | VExpressionContainer)[]

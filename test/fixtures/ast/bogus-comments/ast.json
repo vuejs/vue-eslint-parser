@@ -24,7 +24,7 @@
         "type": "VElement",
         "range": [
             0,
-            58
+            114
         ],
         "loc": {
             "start": {
@@ -32,7 +32,7 @@
                 "column": 0
             },
             "end": {
-                "line": 5,
+                "line": 7,
                 "column": 11
             }
         },
@@ -76,55 +76,15 @@
                 "value": "\n    "
             },
             {
-                "type": "VElement",
-                "range": [
-                    15,
-                    22
-                ],
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 4
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 11
-                    }
-                },
-                "name": "aaa",
-                "namespace": "http://www.w3.org/1999/xhtml",
-                "startTag": {
-                    "type": "VStartTag",
-                    "range": [
-                        15,
-                        22
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 2,
-                            "column": 4
-                        },
-                        "end": {
-                            "line": 2,
-                            "column": 11
-                        }
-                    },
-                    "attributes": []
-                },
-                "children": [],
-                "endTag": null,
-                "variables": []
-            },
-            {
                 "type": "VText",
                 "range": [
-                    22,
-                    27
+                    36,
+                    41
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 11
+                        "column": 25
                     },
                     "end": {
                         "line": 3,
@@ -134,50 +94,10 @@
                 "value": "\n    "
             },
             {
-                "type": "VElement",
-                "range": [
-                    27,
-                    34
-                ],
-                "loc": {
-                    "start": {
-                        "line": 3,
-                        "column": 4
-                    },
-                    "end": {
-                        "line": 3,
-                        "column": 11
-                    }
-                },
-                "name": "bbb",
-                "namespace": "http://www.w3.org/1999/xhtml",
-                "startTag": {
-                    "type": "VStartTag",
-                    "range": [
-                        27,
-                        34
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 3,
-                            "column": 4
-                        },
-                        "end": {
-                            "line": 3,
-                            "column": 11
-                        }
-                    },
-                    "attributes": []
-                },
-                "children": [],
-                "endTag": null,
-                "variables": []
-            },
-            {
                 "type": "VText",
                 "range": [
-                    34,
-                    39
+                    48,
+                    53
                 ],
                 "loc": {
                     "start": {
@@ -192,58 +112,54 @@
                 "value": "\n    "
             },
             {
-                "type": "VElement",
-                "range": [
-                    39,
-                    46
-                ],
-                "loc": {
-                    "start": {
-                        "line": 4,
-                        "column": 4
-                    },
-                    "end": {
-                        "line": 4,
-                        "column": 11
-                    }
-                },
-                "name": "ccc",
-                "namespace": "http://www.w3.org/1999/xhtml",
-                "startTag": {
-                    "type": "VStartTag",
-                    "range": [
-                        39,
-                        46
-                    ],
-                    "loc": {
-                        "start": {
-                            "line": 4,
-                            "column": 4
-                        },
-                        "end": {
-                            "line": 4,
-                            "column": 11
-                        }
-                    },
-                    "attributes": []
-                },
-                "children": [],
-                "endTag": null,
-                "variables": []
-            },
-            {
                 "type": "VText",
                 "range": [
-                    46,
-                    47
+                    67,
+                    72
                 ],
                 "loc": {
                     "start": {
                         "line": 4,
-                        "column": 11
+                        "column": 18
                     },
                     "end": {
                         "line": 5,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "VText",
+                "range": [
+                    89,
+                    94
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 21
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "VText",
+                "range": [
+                    102,
+                    103
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 7,
                         "column": 0
                     }
                 },
@@ -253,16 +169,16 @@
         "endTag": {
             "type": "VEndTag",
             "range": [
-                47,
-                58
+                103,
+                114
             ],
             "loc": {
                 "start": {
-                    "line": 5,
+                    "line": 7,
                     "column": 0
                 },
                 "end": {
-                    "line": 5,
+                    "line": 7,
                     "column": 11
                 }
             }
@@ -324,51 +240,15 @@
                 "value": "\n    "
             },
             {
-                "type": "HTMLTagOpen",
-                "range": [
-                    15,
-                    19
-                ],
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 4
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 8
-                    }
-                },
-                "value": "aaa"
-            },
-            {
-                "type": "HTMLSelfClosingTagClose",
-                "range": [
-                    20,
-                    22
-                ],
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 11
-                    }
-                },
-                "value": ""
-            },
-            {
                 "type": "HTMLWhitespace",
                 "range": [
-                    22,
-                    27
+                    36,
+                    41
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 11
+                        "column": 25
                     },
                     "end": {
                         "line": 3,
@@ -378,46 +258,10 @@
                 "value": "\n    "
             },
             {
-                "type": "HTMLTagOpen",
-                "range": [
-                    27,
-                    31
-                ],
-                "loc": {
-                    "start": {
-                        "line": 3,
-                        "column": 4
-                    },
-                    "end": {
-                        "line": 3,
-                        "column": 8
-                    }
-                },
-                "value": "bbb"
-            },
-            {
-                "type": "HTMLSelfClosingTagClose",
-                "range": [
-                    32,
-                    34
-                ],
-                "loc": {
-                    "start": {
-                        "line": 3,
-                        "column": 9
-                    },
-                    "end": {
-                        "line": 3,
-                        "column": 11
-                    }
-                },
-                "value": ""
-            },
-            {
                 "type": "HTMLWhitespace",
                 "range": [
-                    34,
-                    39
+                    48,
+                    53
                 ],
                 "loc": {
                     "start": {
@@ -432,54 +276,54 @@
                 "value": "\n    "
             },
             {
-                "type": "HTMLTagOpen",
-                "range": [
-                    39,
-                    43
-                ],
-                "loc": {
-                    "start": {
-                        "line": 4,
-                        "column": 4
-                    },
-                    "end": {
-                        "line": 4,
-                        "column": 8
-                    }
-                },
-                "value": "ccc"
-            },
-            {
-                "type": "HTMLSelfClosingTagClose",
-                "range": [
-                    44,
-                    46
-                ],
-                "loc": {
-                    "start": {
-                        "line": 4,
-                        "column": 9
-                    },
-                    "end": {
-                        "line": 4,
-                        "column": 11
-                    }
-                },
-                "value": ""
-            },
-            {
                 "type": "HTMLWhitespace",
                 "range": [
-                    46,
-                    47
+                    67,
+                    72
                 ],
                 "loc": {
                     "start": {
                         "line": 4,
-                        "column": 11
+                        "column": 18
                     },
                     "end": {
                         "line": 5,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    89,
+                    94
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 21
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    102,
+                    103
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 7,
                         "column": 0
                     }
                 },
@@ -488,16 +332,16 @@
             {
                 "type": "HTMLEndTagOpen",
                 "range": [
-                    47,
-                    57
+                    103,
+                    113
                 ],
                 "loc": {
                     "start": {
-                        "line": 5,
+                        "line": 7,
                         "column": 0
                     },
                     "end": {
-                        "line": 5,
+                        "line": 7,
                         "column": 10
                     }
                 },
@@ -506,16 +350,16 @@
             {
                 "type": "HTMLTagClose",
                 "range": [
-                    57,
-                    58
+                    113,
+                    114
                 ],
                 "loc": {
                     "start": {
-                        "line": 5,
+                        "line": 7,
                         "column": 10
                     },
                     "end": {
-                        "line": 5,
+                        "line": 7,
                         "column": 11
                     }
                 },
@@ -524,41 +368,138 @@
             {
                 "type": "HTMLWhitespace",
                 "range": [
-                    58,
-                    59
+                    114,
+                    115
                 ],
                 "loc": {
                     "start": {
-                        "line": 5,
+                        "line": 7,
                         "column": 11
                     },
                     "end": {
-                        "line": 6,
+                        "line": 8,
                         "column": 0
                     }
                 },
                 "value": "\n"
             }
         ],
-        "comments": [],
+        "comments": [
+            {
+                "type": "HTMLBogusComment",
+                "range": [
+                    15,
+                    36
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 25
+                    }
+                },
+                "value": "?xml version=\"1.0\"?"
+            },
+            {
+                "type": "HTMLBogusComment",
+                "range": [
+                    41,
+                    48
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 11
+                    }
+                },
+                "value": " aaa"
+            },
+            {
+                "type": "HTMLBogusComment",
+                "range": [
+                    53,
+                    67
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 18
+                    }
+                },
+                "value": "DOCTYPE bbb"
+            },
+            {
+                "type": "HTMLBogusComment",
+                "range": [
+                    72,
+                    89
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 21
+                    }
+                },
+                "value": "[CDATA[ ccc ]]"
+            },
+            {
+                "type": "HTMLBogusComment",
+                "range": [
+                    94,
+                    102
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 12
+                    }
+                },
+                "value": " ddd "
+            }
+        ],
         "errors": [
             {
-                "message": "non-void-html-element-start-tag-with-trailing-solidus (2:9)",
-                "index": 20,
+                "message": "unexpected-question-mark-instead-of-tag-name (2:5)",
+                "index": 16,
                 "lineNumber": 2,
-                "column": 9
+                "column": 5
             },
             {
-                "message": "non-void-html-element-start-tag-with-trailing-solidus (3:9)",
-                "index": 32,
+                "message": "invalid-first-character-of-tag-name (3:6)",
+                "index": 43,
                 "lineNumber": 3,
-                "column": 9
+                "column": 6
             },
             {
-                "message": "non-void-html-element-start-tag-with-trailing-solidus (4:9)",
-                "index": 44,
-                "lineNumber": 4,
-                "column": 9
+                "message": "cdata-in-html-content (5:12)",
+                "index": 80,
+                "lineNumber": 5,
+                "column": 12
+            },
+            {
+                "message": "incorrectly-opened-comment (6:6)",
+                "index": 96,
+                "lineNumber": 6,
+                "column": 6
             }
         ]
     }

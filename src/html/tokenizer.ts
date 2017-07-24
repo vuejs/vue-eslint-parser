@@ -5,12 +5,10 @@
  */
 import assert from "assert"
 import {debug} from "../common/debug"
-import {ErrorCode, ParseError, Token} from "../ast"
+import {ErrorCode, Namespace, NS, ParseError, Token} from "../ast"
 import {alternativeCR} from "./util/alternative-cr"
 import {entitySets} from "./util/entities"
-import {
-    HTML_RAWTEXT_TAGS, HTML_RCDATA_TAGS, MATHML_TAGS, SVG_TAGS,
-} from "./util/tag-names"
+import {HTML_RAWTEXT_TAGS, HTML_RCDATA_TAGS} from "./util/tag-names"
 import {
     AMPERSAND, APOSTROPHE, CARRIAGE_RETURN, EOF, EQUALS_SIGN, EXCLAMATION_MARK,
     GRAVE_ACCENT, GREATER_THAN_SIGN, HYPHEN_MINUS, isControl, isDigit,
@@ -160,6 +158,11 @@ export class Tokenizer {
     public errors: ParseError[]
 
     /**
+     * The current namespace.
+     */
+    public namespace: Namespace
+
+    /**
      * Initialize this tokenizer.
      * @param text The source code to tokenize.
      */
@@ -185,6 +188,7 @@ export class Tokenizer {
         this.tokenStartOffset = -1
         this.tokenStartColumn = -1
         this.tokenStartLine = 1
+        this.namespace = NS.HTML
     }
 
     /**
@@ -483,30 +487,18 @@ export class Tokenizer {
     }
 
     /**
-     * Check whether the current token is in HTML context.
-     * @returns {boolean} `true` if the current token is in HTML context.
-     */
-    private isHtmlContext(): boolean {
-        return (
-            this.lastTagOpenToken == null ||
-            (
-                !SVG_TAGS.has(this.lastTagOpenToken.value) &&
-                !MATHML_TAGS.has(this.lastTagOpenToken.value)
-            )
-        )
-    }
-
-    /**
      * Ensure the correct tokenizer state for the content of the current element.
      */
     private nextDataType(): TokenizerState {
-        const token = this.lastTagOpenToken
+        if (this.namespace === NS.HTML) {
+            const token = this.lastTagOpenToken
 
-        if (token && HTML_RCDATA_TAGS.has(token.value)) {
-            return "RCDATA"
-        }
-        if (token && HTML_RAWTEXT_TAGS.has(token.value)) {
-            return "RAWTEXT"
+            if (token && HTML_RCDATA_TAGS.has(token.value)) {
+                return "RCDATA"
+            }
+            if (token && HTML_RAWTEXT_TAGS.has(token.value)) {
+                return "RAWTEXT"
+            }
         }
         return "DATA"
     }
@@ -617,9 +609,6 @@ export class Tokenizer {
             }
 
             if (cp === LESS_THAN_SIGN) {
-                if (this.currentToken && this.currentToken.type === "HTMLWhitespace") {
-                    this.startToken("HTMLRawText")
-                }
                 this.setStartTokenMark()
                 return "RAWTEXT_LESS_THAN_SIGN"
             }
@@ -1192,11 +1181,11 @@ export class Tokenizer {
             this.appendTokenValue(cp, "HTMLBogusComment")
             return "BOGUS_COMMENT"
         }
-        if (cp === LEFT_SQUARE_BRACKET && this.text.slice(this.offset + 1, this.offset + 8) === "[CDATA[") {
-            this.offset += 7
-            this.column += 7
+        if (cp === LEFT_SQUARE_BRACKET && this.text.slice(this.offset + 1, this.offset + 7) === "CDATA[") {
+            this.offset += 6
+            this.column += 6
 
-            if (this.isHtmlContext()) {
+            if (this.namespace === NS.HTML) {
                 this.reportParseError("cdata-in-html-content")
                 this.startToken("HTMLBogusComment").value = "[CDATA["
                 return "BOGUS_COMMENT"

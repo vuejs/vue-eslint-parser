@@ -3,21 +3,67 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
+import * as lodash from "lodash"
 import {debug} from "../common/debug"
-import {ErrorCode, ParseError, Token, VAttribute, VDocumentFragment, VElement, VNode} from "../ast"
-import {HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_VOID_ELEMENT_TAGS} from "./util/tag-names"
+import {ErrorCode, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement, VNode, VText} from "../ast"
+import {MATHML_ATTRIBUTE_NAME_MAP, SVG_ATTRIBUTE_NAME_MAP} from "./util/attribute-names"
+import {HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_VOID_ELEMENT_TAGS, SVG_ELEMENT_NAME_MAP} from "./util/tag-names"
 import {Tokenizer, TokenType} from "./tokenizer"
 
 /**
+ * Check whether the element is a MathML text integration point or not.
+ * @see https://html.spec.whatwg.org/multipage/parsing.html#tree-construction-dispatcher
+ * @param element The current element.
+ * @returns `true` if the element is a MathML text integration point.
+ */
+function isMathMLIntegrationPoint(element: VElement): boolean {
+    if (element.namespace === NS.MathML) {
+        const name = element.name
+        return name === "mi" || name === "mo" || name === "mn" || name === "ms" || name === "mtext"
+    }
+    return false
+}
+
+/**
+ * Check whether the element is a HTML integration point or not.
+ * @see https://html.spec.whatwg.org/multipage/parsing.html#tree-construction-dispatcher
+ * @param element The current element.
+ * @returns `true` if the element is a HTML integration point.
+ */
+function isHTMLIntegrationPoint(element: VElement): boolean {
+    if (element.namespace === NS.MathML) {
+        return (
+            element.name === "annotation-xml" &&
+            element.startTag.attributes.some(a =>
+                a.directive === false &&
+                a.key.name === "encoding" &&
+                a.value != null &&
+                (
+                    a.value.value === "text/html" ||
+                    a.value.value === "application/xhtml+xml"
+                )
+            )
+        )
+    }
+    if (element.namespace === NS.SVG) {
+        const name = element.name
+        return name === "foreignObject" || name === "desc" || name === "title"
+    }
+
+    return false
+}
+
+/**
  * The parser of HTML.
+ * This is not following to the HTML spec completely because Vue.js template spec is pretty different to HTML.
  */
 export class Parser {
     private tokenizer: Tokenizer
     private tokens: Token[]
     private comments: Token[]
-    private errors: ParseError[]
     private currentNode: VNode
     private nodeStack: VNode[]
+    private namespaceStack: VElement[]
 
     /**
      * Initialize this parser.
@@ -28,7 +74,6 @@ export class Parser {
         this.tokenizer = tokenizer
         this.tokens = []
         this.comments = []
-        this.errors = this.tokenizer.errors
         this.currentNode = {
             type: "VDocumentFragment",
             range: [0, 0],
@@ -40,9 +85,27 @@ export class Parser {
             children: [],
             tokens: this.tokens,
             comments: this.comments,
-            errors: this.errors,
+            errors: this.tokenizer.errors,
         }
         this.nodeStack = []
+        this.namespaceStack = []
+    }
+
+    /**
+     * The syntax errors which are found in this parsing.
+     */
+    get errors(): ParseError[] {
+        return this.tokenizer.errors
+    }
+
+    /**
+     * The current namespace.
+     */
+    get namespace(): Namespace {
+        return this.tokenizer.namespace
+    }
+    set namespace(value: Namespace) { //eslint-disable-line require-jsdoc
+        this.tokenizer.namespace = value
     }
 
     /**
@@ -79,15 +142,18 @@ export class Parser {
     /**
      * Push the given node to the current node stack.
      * @param node The node to push.
-     * @returns The pushed node.
      */
-    private pushNodeStack<T extends VNode>(node: T): T {
+    private pushNodeStack(node: VNode): void {
         debug("[html] push node: %s", node.type)
 
         this.nodeStack.push(this.currentNode)
         this.currentNode = node
 
-        return node
+        // Update the current namespace.
+        if (node.type === "VElement" && node.namespace !== this.namespace) {
+            this.namespaceStack.push(node)
+            this.namespace = node.namespace
+        }
     }
 
     /**
@@ -106,6 +172,97 @@ export class Parser {
         poppedNode.loc.end = node.loc.end
 
         this.currentNode = poppedNode
+
+        // Update the current namespace.
+        if (node === lodash.last(this.namespaceStack)) {
+            this.namespaceStack.pop()
+
+            const namespaceElement = lodash.last(this.namespaceStack)
+            if (namespaceElement != null) {
+                this.namespace = namespaceElement.namespace
+            }
+            else {
+                this.namespace = NS.HTML
+            }
+        }
+    }
+
+    /**
+     * Adjust element names by the current namespace.
+     * @param name The lowercase element name to adjust.
+     * @returns The adjusted element name.
+     */
+    private adjustElementName(name: string): string {
+        if (this.namespace === NS.SVG) {
+            return SVG_ELEMENT_NAME_MAP.get(name) || name
+        }
+        return name
+    }
+
+    /**
+     * Adjust attribute names by the current namespace.
+     * @param name The lowercase attribute name to adjust.
+     * @returns The adjusted attribute name.
+     */
+    private adjustAttributeName(name: string): string {
+        if (this.namespace === NS.SVG) {
+            return SVG_ATTRIBUTE_NAME_MAP.get(name) || name
+        }
+        if (this.namespace === NS.MathML) {
+            return MATHML_ATTRIBUTE_NAME_MAP.get(name) || name
+        }
+        return name
+    }
+
+    /**
+     * Get the current element.
+     * @returns The current element.
+     */
+    private getCurrentElement(): VElement | undefined {
+        if (this.currentNode != null && this.currentNode.type === "VElement") {
+            return this.currentNode
+        }
+
+        for (let i = this.nodeStack.length - 1; i >= 0; --i) {
+            const node = this.nodeStack[i]
+            if (node.type === "VElement") {
+                return node
+            }
+        }
+
+        return undefined
+    }
+
+    /**
+     * Detect the namespace of the new element.
+     * @param name The value of a HTMLTagOpen token.
+     * @returns The namespace of the new element.
+     */
+    private detectNamespace(name: string): Namespace {
+        let ns = this.namespace
+
+        if (ns === NS.MathML || ns === NS.SVG) {
+            const element = this.getCurrentElement()
+            if (element != null) {
+                if (element.namespace === NS.MathML && element.name === "annotation-xml" && name === "svg") {
+                    return NS.SVG
+                }
+                if (isHTMLIntegrationPoint(element) || (isMathMLIntegrationPoint(element) && name !== "mglyph" && name !== "malignmark")) {
+                    ns = NS.HTML
+                }
+            }
+        }
+
+        if (ns === NS.HTML) {
+            if (name === "svg") {
+                return NS.SVG
+            }
+            if (name === "math") {
+                return NS.MathML
+            }
+        }
+
+        return ns
     }
 
     /**
@@ -158,14 +315,16 @@ export class Parser {
         }
 
         const parentElement = this.currentNode
-        const text = this.pushNodeStack({
+        const text: VText = {
             type: "VText",
             range: [token.range[0], token.range[1]],
             loc: {start: token.loc.start, end: token.loc.end},
             parent: parentElement,
             value: token.value,
-        })
+        }
         parentElement.children.push(text)
+
+        this.pushNodeStack(text)
     }
 
     /**
@@ -256,12 +415,14 @@ export class Parser {
 
         // Push the end tag.
         const element = this.currentNode
-        element.endTag = this.pushNodeStack({
+        element.endTag = {
             type: "VEndTag",
             range: [token.range[0], token.range[1]],
             loc: {start: token.loc.start, end: token.loc.end},
             parent: element,
-        })
+        }
+
+        this.pushNodeStack(element.endTag)
     }
 
     /**
@@ -295,13 +456,14 @@ export class Parser {
                 range: [token.range[0], token.range[1]],
                 loc: {start: token.loc.start, end: token.loc.end},
                 parent: {} as VAttribute,
-                name: token.value,
+                name: this.adjustAttributeName(token.value),
             },
             value: null,
         }
         attribute.key.parent = attribute
+        startTag.attributes.push(attribute)
 
-        startTag.attributes.push(this.pushNodeStack(attribute))
+        this.pushNodeStack(attribute)
     }
 
     /**
@@ -316,6 +478,15 @@ export class Parser {
             throw new Error("unreachable")
         }
 
+        // Check namespace
+        if (attribute.key.name === "xmlns" && token.value !== this.namespace) {
+            this.reportParseError(token, "x-invalid-namespace")
+        }
+        if (attribute.key.name === "xmlns:xlink" && token.value !== NS.XLink) {
+            this.reportParseError(token, "x-invalid-namespace")
+        }
+
+        // Initialize the attribute value.
         attribute.range[1] = token.range[1]
         attribute.loc.end = token.loc.end
         attribute.value = {
@@ -422,7 +593,8 @@ export class Parser {
             range: [token.range[0], token.range[1]],
             loc: {start: token.loc.start, end: token.loc.end},
             parent: parentElement,
-            name: token.value,
+            name: this.adjustElementName(token.value),
+            namespace: this.detectNamespace(token.value),
             startTag: {
                 type: "VStartTag",
                 range: [token.range[0], token.range[1]],

@@ -3,7 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import lodash from "lodash"
+import * as lodash from "lodash"
 import {HasLocation, Location, ParseError} from "../ast"
 
 const LOC_PATTERN = /\((\d+):(\d+)\)/g

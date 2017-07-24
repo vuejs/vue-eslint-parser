@@ -3,7 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import lodash from "lodash"
+import * as lodash from "lodash"
 import {HasConcreteInfo, HasLocation, ParseError, Reference, Token, Variable, VAttribute, VDirective, VDirectiveKey, VDocumentFragment, VElement, VExpressionContainer, VIdentifier, VLiteral, VText} from "../ast"
 import {debug} from "../common/debug"
 import {LocationCalculator} from "../common/location-calculator"
