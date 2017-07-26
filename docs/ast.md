@@ -45,12 +45,11 @@ interface VIdentifier <: Node {
 interface VText <: Node {
     type: "VText"
     value: string
-    raw: string
 }
 ```
 
 - Plain text of HTML.
-- HTML entities in the `value` property are decoded. Those in the `raw` property are not.
+- HTML entities in the `value` property are decoded.
 
 ## VExpressionContainer
 
@@ -78,7 +77,7 @@ interface VForExpression <: Expression {
 - `Reference` is objects but not `Node`. Those are external references which are in the expression.
 - `VForExpression` is an expression node like [ForInStatement] but it has an array as `left` property and does not have `body` property. This is the value of `v-for` directives.
 
-> Note: `vue-eslint-parser` transforms `v-for="(x, i) in list"` to `for([x, i] in list);` then gives the configured parser (`espree` by default) it. This implies that it needs the capability to parse ES2015 destructuring in order to parse `v-for` directives.
+> Note: `vue-eslint-parser` transforms `v-for="(x, i) in list"` to `for(let [x, i] in list);` then gives the configured parser (`espree` by default) it. This implies that it needs the capability to parse ES2015 destructuring in order to parse `v-for` directives.
 
 ## VDirectiveKey
 
@@ -103,12 +102,11 @@ interface VDirectiveKey <: Node {
 interface VLiteral <: Node {
     type: "VAttributeValue"
     value: string
-    raw: string
 }
 ```
 
 - This is similar to [Literal] nodes but this is not always quoted.
-- HTML entities in the `value` property are decoded. Those in the `raw` property are not.
+- HTML entities in the `value` property are decoded.
 
 ## VAttribute
 
@@ -128,10 +126,7 @@ interface VDirective <: Node {
 }
 ```
 
-- If the `directive` property is `true`, this is a directive of Vue.js.
-  In that case, the `key` property is a `VDirectiveKey` node and the `value` property is a `VExpressionContainer` node.
-- Otherwise, the `key` property is a `VIdentifier` node and the `value` property is a `VAttributeValue` node.
-- If the `value` property is `null`, their attribute value does not exist.
+- If their attribute value does not exist, the `value` property is `null`.
 
 ## VStartTag
 
@@ -139,11 +134,8 @@ interface VDirective <: Node {
 interface VStartTag <: Node {
     type: "VStartTag"
     attributes: [ VAttribute ]
-    selfClosing: boolean
 }
 ```
-
-If `selfClosing` is `true`, it means having `/`. E.g. `<br/>`.
 
 ## VEndTag
 
@@ -158,6 +150,7 @@ interface VEndTag <: Node {
 ```js
 interface VElement <: Node {
     type: "VElement"
+    namespace: string
     name: string
     startTag: VStartTag
     children: [ VText | VExpressionContainer | VElement ]
@@ -171,7 +164,6 @@ interface Variable {
 }
 ```
 
-- If `startTag.selfClosing` is `false` and `endTag` is `null`, the element does not have their end tag. E.g. `<li>Foo.`.
 - `Variable` is objects but not `Node`. Those are variable declarations that child elements can use. The elements which have [`v-for` directives] or a special attribute [scope] can declare variables.
 
 ## Program

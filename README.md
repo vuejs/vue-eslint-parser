@@ -117,12 +117,17 @@ Welcome contributing!
 
 Please use GitHub's Issues/PRs.
 
+If you want to write code, please execute `npm install && npm run setup` after you cloned this repository.
+The `npm install` command installs dependencies.
+The `npm run setup` command initializes ESLint as git submodules for tests.
+
 ### Development Tools
 
 - `npm test` runs tests and measures coverage.
+- `npm run build` compiles TypeScript source code to `index.js`, `index.js.map`, and `index.d.ts`.
 - `npm run coverage` shows the coverage result of `npm test` command with the default browser.
-- `npm run clean` removes the coverage result of `npm test` command.
+- `npm run clean` removes the temporary files which are created by `npm test` and `npm run build`.
 - `npm run lint` runs ESLint.
 - `npm run setup` setups submodules to develop.
-- `npm run update-fixtures` updates files in `test/fixtures/ast` directory based on `~/*/source.vue` files.
-- `npm run watch` runs tests with `--watch` option.
+- `npm run update-fixtures` updates files in `test/fixtures/ast` directory based on `test/fixtures/ast/*/source.vue` files.
+- `npm run watch` runs `build`, `update-fixtures`, and tests with `--watch` option.
