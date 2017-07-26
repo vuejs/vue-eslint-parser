@@ -1,0 +1,2717 @@
+{
+    "type": "Program",
+    "start": 0,
+    "end": 0,
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 0
+        }
+    },
+    "range": [
+        0,
+        0
+    ],
+    "body": [],
+    "sourceType": "script",
+    "comments": [],
+    "tokens": [],
+    "templateBody": {
+        "type": "VElement",
+        "range": [
+            0,
+            451
+        ],
+        "loc": {
+            "start": {
+                "line": 1,
+                "column": 0
+            },
+            "end": {
+                "line": 13,
+                "column": 11
+            }
+        },
+        "name": "template",
+        "namespace": "http://www.w3.org/1999/xhtml",
+        "startTag": {
+            "type": "VStartTag",
+            "range": [
+                0,
+                10
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 10
+                }
+            },
+            "attributes": []
+        },
+        "children": [
+            {
+                "type": "VText",
+                "range": [
+                    10,
+                    26
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 4
+                    }
+                },
+                "value": "\n    Valid:\n    "
+            },
+            {
+                "type": "VElement",
+                "range": [
+                    26,
+                    74
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 52
+                    }
+                },
+                "name": "div",
+                "namespace": "http://www.w3.org/1999/xhtml",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        26,
+                        68
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 3,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 3,
+                            "column": 46
+                        }
+                    },
+                    "attributes": [
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                31,
+                                67
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 3,
+                                    "column": 9
+                                },
+                                "end": {
+                                    "line": 3,
+                                    "column": 45
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    31,
+                                    36
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 3,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 3,
+                                        "column": 14
+                                    }
+                                },
+                                "name": "xmlns"
+                            },
+                            "value": {
+                                "type": "VLiteral",
+                                "range": [
+                                    37,
+                                    67
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 3,
+                                        "column": 15
+                                    },
+                                    "end": {
+                                        "line": 3,
+                                        "column": 45
+                                    }
+                                },
+                                "value": "http://www.w3.org/1999/xhtml"
+                            }
+                        }
+                    ]
+                },
+                "children": [],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        68,
+                        74
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 3,
+                            "column": 46
+                        },
+                        "end": {
+                            "line": 3,
+                            "column": 52
+                        }
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    74,
+                    79
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 52
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "VElement",
+                "range": [
+                    79,
+                    125
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 50
+                    }
+                },
+                "name": "svg",
+                "namespace": "http://www.w3.org/2000/svg",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        79,
+                        119
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 4,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 4,
+                            "column": 44
+                        }
+                    },
+                    "attributes": [
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                84,
+                                118
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 4,
+                                    "column": 9
+                                },
+                                "end": {
+                                    "line": 4,
+                                    "column": 43
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    84,
+                                    89
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 4,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 4,
+                                        "column": 14
+                                    }
+                                },
+                                "name": "xmlns"
+                            },
+                            "value": {
+                                "type": "VLiteral",
+                                "range": [
+                                    90,
+                                    118
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 4,
+                                        "column": 15
+                                    },
+                                    "end": {
+                                        "line": 4,
+                                        "column": 43
+                                    }
+                                },
+                                "value": "http://www.w3.org/2000/svg"
+                            }
+                        }
+                    ]
+                },
+                "children": [],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        119,
+                        125
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 4,
+                            "column": 44
+                        },
+                        "end": {
+                            "line": 4,
+                            "column": 50
+                        }
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    125,
+                    130
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 50
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "VElement",
+                "range": [
+                    130,
+                    184
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 58
+                    }
+                },
+                "name": "svg",
+                "namespace": "http://www.w3.org/2000/svg",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        130,
+                        178
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 5,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 5,
+                            "column": 52
+                        }
+                    },
+                    "attributes": [
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                135,
+                                177
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 5,
+                                    "column": 9
+                                },
+                                "end": {
+                                    "line": 5,
+                                    "column": 51
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    135,
+                                    146
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 5,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 5,
+                                        "column": 20
+                                    }
+                                },
+                                "name": "xmlns:xlink"
+                            },
+                            "value": {
+                                "type": "VLiteral",
+                                "range": [
+                                    147,
+                                    177
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 5,
+                                        "column": 21
+                                    },
+                                    "end": {
+                                        "line": 5,
+                                        "column": 51
+                                    }
+                                },
+                                "value": "http://www.w3.org/1999/xlink"
+                            }
+                        }
+                    ]
+                },
+                "children": [],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        178,
+                        184
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 5,
+                            "column": 52
+                        },
+                        "end": {
+                            "line": 5,
+                            "column": 58
+                        }
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    184,
+                    189
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 58
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "VElement",
+                "range": [
+                    189,
+                    216
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 31
+                    }
+                },
+                "name": "svg",
+                "namespace": "http://www.w3.org/2000/svg",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        189,
+                        210
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 6,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 6,
+                            "column": 25
+                        }
+                    },
+                    "attributes": [
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                194,
+                                209
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 6,
+                                    "column": 9
+                                },
+                                "end": {
+                                    "line": 6,
+                                    "column": 24
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    194,
+                                    203
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 18
+                                    }
+                                },
+                                "name": "xmlns:foo"
+                            },
+                            "value": {
+                                "type": "VLiteral",
+                                "range": [
+                                    204,
+                                    209
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 19
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 24
+                                    }
+                                },
+                                "value": "foo"
+                            }
+                        }
+                    ]
+                },
+                "children": [],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        210,
+                        216
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 6,
+                            "column": 25
+                        },
+                        "end": {
+                            "line": 6,
+                            "column": 31
+                        }
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    216,
+                    234
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 31
+                    },
+                    "end": {
+                        "line": 8,
+                        "column": 4
+                    }
+                },
+                "value": "\n    Invalid:\n    "
+            },
+            {
+                "type": "VElement",
+                "range": [
+                    234,
+                    251
+                ],
+                "loc": {
+                    "start": {
+                        "line": 8,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 8,
+                        "column": 21
+                    }
+                },
+                "name": "div",
+                "namespace": "http://www.w3.org/1999/xhtml",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        234,
+                        245
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 8,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 8,
+                            "column": 15
+                        }
+                    },
+                    "attributes": [
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                239,
+                                244
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 8,
+                                    "column": 9
+                                },
+                                "end": {
+                                    "line": 8,
+                                    "column": 14
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    239,
+                                    244
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 8,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 8,
+                                        "column": 14
+                                    }
+                                },
+                                "name": "xmlns"
+                            },
+                            "value": null
+                        }
+                    ]
+                },
+                "children": [],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        245,
+                        251
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 8,
+                            "column": 15
+                        },
+                        "end": {
+                            "line": 8,
+                            "column": 21
+                        }
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    251,
+                    256
+                ],
+                "loc": {
+                    "start": {
+                        "line": 8,
+                        "column": 21
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "VElement",
+                "range": [
+                    256,
+                    276
+                ],
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 24
+                    }
+                },
+                "name": "div",
+                "namespace": "http://www.w3.org/1999/xhtml",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        256,
+                        270
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 9,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 9,
+                            "column": 18
+                        }
+                    },
+                    "attributes": [
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                261,
+                                269
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 9,
+                                    "column": 9
+                                },
+                                "end": {
+                                    "line": 9,
+                                    "column": 17
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    261,
+                                    266
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 9,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 9,
+                                        "column": 14
+                                    }
+                                },
+                                "name": "xmlns"
+                            },
+                            "value": {
+                                "type": "VLiteral",
+                                "range": [
+                                    267,
+                                    269
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 9,
+                                        "column": 15
+                                    },
+                                    "end": {
+                                        "line": 9,
+                                        "column": 17
+                                    }
+                                },
+                                "value": ""
+                            }
+                        }
+                    ]
+                },
+                "children": [],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        270,
+                        276
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 9,
+                            "column": 18
+                        },
+                        "end": {
+                            "line": 9,
+                            "column": 24
+                        }
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    276,
+                    281
+                ],
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 10,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "VElement",
+                "range": [
+                    281,
+                    327
+                ],
+                "loc": {
+                    "start": {
+                        "line": 10,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 10,
+                        "column": 50
+                    }
+                },
+                "name": "div",
+                "namespace": "http://www.w3.org/1999/xhtml",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        281,
+                        321
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 10,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 10,
+                            "column": 44
+                        }
+                    },
+                    "attributes": [
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                286,
+                                320
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 10,
+                                    "column": 9
+                                },
+                                "end": {
+                                    "line": 10,
+                                    "column": 43
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    286,
+                                    291
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 10,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 10,
+                                        "column": 14
+                                    }
+                                },
+                                "name": "xmlns"
+                            },
+                            "value": {
+                                "type": "VLiteral",
+                                "range": [
+                                    292,
+                                    320
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 10,
+                                        "column": 15
+                                    },
+                                    "end": {
+                                        "line": 10,
+                                        "column": 43
+                                    }
+                                },
+                                "value": "http://www.w3.org/2000/svg"
+                            }
+                        }
+                    ]
+                },
+                "children": [],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        321,
+                        327
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 10,
+                            "column": 44
+                        },
+                        "end": {
+                            "line": 10,
+                            "column": 50
+                        }
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    327,
+                    332
+                ],
+                "loc": {
+                    "start": {
+                        "line": 10,
+                        "column": 50
+                    },
+                    "end": {
+                        "line": 11,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "VElement",
+                "range": [
+                    332,
+                    380
+                ],
+                "loc": {
+                    "start": {
+                        "line": 11,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 11,
+                        "column": 52
+                    }
+                },
+                "name": "svg",
+                "namespace": "http://www.w3.org/2000/svg",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        332,
+                        374
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 11,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 11,
+                            "column": 46
+                        }
+                    },
+                    "attributes": [
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                337,
+                                373
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 11,
+                                    "column": 9
+                                },
+                                "end": {
+                                    "line": 11,
+                                    "column": 45
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    337,
+                                    342
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 11,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 11,
+                                        "column": 14
+                                    }
+                                },
+                                "name": "xmlns"
+                            },
+                            "value": {
+                                "type": "VLiteral",
+                                "range": [
+                                    343,
+                                    373
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 11,
+                                        "column": 15
+                                    },
+                                    "end": {
+                                        "line": 11,
+                                        "column": 45
+                                    }
+                                },
+                                "value": "http://www.w3.org/1999/xhtml"
+                            }
+                        }
+                    ]
+                },
+                "children": [],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        374,
+                        380
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 11,
+                            "column": 46
+                        },
+                        "end": {
+                            "line": 11,
+                            "column": 52
+                        }
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    380,
+                    385
+                ],
+                "loc": {
+                    "start": {
+                        "line": 11,
+                        "column": 52
+                    },
+                    "end": {
+                        "line": 12,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "VElement",
+                "range": [
+                    385,
+                    439
+                ],
+                "loc": {
+                    "start": {
+                        "line": 12,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 12,
+                        "column": 58
+                    }
+                },
+                "name": "svg",
+                "namespace": "http://www.w3.org/2000/svg",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        385,
+                        433
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 12,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 12,
+                            "column": 52
+                        }
+                    },
+                    "attributes": [
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                390,
+                                432
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 12,
+                                    "column": 9
+                                },
+                                "end": {
+                                    "line": 12,
+                                    "column": 51
+                                }
+                            },
+                            "directive": false,
+                            "key": {
+                                "type": "VIdentifier",
+                                "range": [
+                                    390,
+                                    401
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 12,
+                                        "column": 9
+                                    },
+                                    "end": {
+                                        "line": 12,
+                                        "column": 20
+                                    }
+                                },
+                                "name": "xmlns:xlink"
+                            },
+                            "value": {
+                                "type": "VLiteral",
+                                "range": [
+                                    402,
+                                    432
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 12,
+                                        "column": 21
+                                    },
+                                    "end": {
+                                        "line": 12,
+                                        "column": 51
+                                    }
+                                },
+                                "value": "http://www.w3.org/1999/xhtml"
+                            }
+                        }
+                    ]
+                },
+                "children": [],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        433,
+                        439
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 12,
+                            "column": 52
+                        },
+                        "end": {
+                            "line": 12,
+                            "column": 58
+                        }
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    439,
+                    440
+                ],
+                "loc": {
+                    "start": {
+                        "line": 12,
+                        "column": 58
+                    },
+                    "end": {
+                        "line": 13,
+                        "column": 0
+                    }
+                },
+                "value": "\n"
+            }
+        ],
+        "endTag": {
+            "type": "VEndTag",
+            "range": [
+                440,
+                451
+            ],
+            "loc": {
+                "start": {
+                    "line": 13,
+                    "column": 0
+                },
+                "end": {
+                    "line": 13,
+                    "column": 11
+                }
+            }
+        },
+        "variables": [],
+        "tokens": [
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    0,
+                    9
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 9
+                    }
+                },
+                "value": "template"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    9,
+                    10
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 10
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    10,
+                    15
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLText",
+                "range": [
+                    15,
+                    21
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 10
+                    }
+                },
+                "value": "Valid:"
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    21,
+                    26
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    26,
+                    30
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 8
+                    }
+                },
+                "value": "div"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    31,
+                    36
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 14
+                    }
+                },
+                "value": "xmlns"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    36,
+                    37
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 15
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLLiteral",
+                "range": [
+                    37,
+                    67
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 15
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 45
+                    }
+                },
+                "value": "http://www.w3.org/1999/xhtml"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    67,
+                    68
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 45
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 46
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    68,
+                    73
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 46
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 51
+                    }
+                },
+                "value": "div"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    73,
+                    74
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 51
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 52
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    74,
+                    79
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 52
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    79,
+                    83
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 8
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    84,
+                    89
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 14
+                    }
+                },
+                "value": "xmlns"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    89,
+                    90
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 15
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLLiteral",
+                "range": [
+                    90,
+                    118
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 15
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 43
+                    }
+                },
+                "value": "http://www.w3.org/2000/svg"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    118,
+                    119
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 43
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 44
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    119,
+                    124
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 44
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 49
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    124,
+                    125
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 49
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 50
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    125,
+                    130
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 50
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    130,
+                    134
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 8
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    135,
+                    146
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 20
+                    }
+                },
+                "value": "xmlns:xlink"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    146,
+                    147
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 21
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLLiteral",
+                "range": [
+                    147,
+                    177
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 21
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 51
+                    }
+                },
+                "value": "http://www.w3.org/1999/xlink"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    177,
+                    178
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 51
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 52
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    178,
+                    183
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 52
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 57
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    183,
+                    184
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 57
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 58
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    184,
+                    189
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 58
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    189,
+                    193
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 8
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    194,
+                    203
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 18
+                    }
+                },
+                "value": "xmlns:foo"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    203,
+                    204
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 18
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 19
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLLiteral",
+                "range": [
+                    204,
+                    209
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 19
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 24
+                    }
+                },
+                "value": "foo"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    209,
+                    210
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 25
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    210,
+                    215
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 25
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 30
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    215,
+                    216
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 30
+                    },
+                    "end": {
+                        "line": 6,
+                        "column": 31
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    216,
+                    221
+                ],
+                "loc": {
+                    "start": {
+                        "line": 6,
+                        "column": 31
+                    },
+                    "end": {
+                        "line": 7,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLText",
+                "range": [
+                    221,
+                    229
+                ],
+                "loc": {
+                    "start": {
+                        "line": 7,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 7,
+                        "column": 12
+                    }
+                },
+                "value": "Invalid:"
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    229,
+                    234
+                ],
+                "loc": {
+                    "start": {
+                        "line": 7,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 8,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    234,
+                    238
+                ],
+                "loc": {
+                    "start": {
+                        "line": 8,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 8,
+                        "column": 8
+                    }
+                },
+                "value": "div"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    239,
+                    244
+                ],
+                "loc": {
+                    "start": {
+                        "line": 8,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 8,
+                        "column": 14
+                    }
+                },
+                "value": "xmlns"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    244,
+                    245
+                ],
+                "loc": {
+                    "start": {
+                        "line": 8,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 8,
+                        "column": 15
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    245,
+                    250
+                ],
+                "loc": {
+                    "start": {
+                        "line": 8,
+                        "column": 15
+                    },
+                    "end": {
+                        "line": 8,
+                        "column": 20
+                    }
+                },
+                "value": "div"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    250,
+                    251
+                ],
+                "loc": {
+                    "start": {
+                        "line": 8,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 8,
+                        "column": 21
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    251,
+                    256
+                ],
+                "loc": {
+                    "start": {
+                        "line": 8,
+                        "column": 21
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    256,
+                    260
+                ],
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 8
+                    }
+                },
+                "value": "div"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    261,
+                    266
+                ],
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 14
+                    }
+                },
+                "value": "xmlns"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    266,
+                    267
+                ],
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 15
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLLiteral",
+                "range": [
+                    267,
+                    269
+                ],
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 15
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 17
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    269,
+                    270
+                ],
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 17
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 18
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    270,
+                    275
+                ],
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 18
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 23
+                    }
+                },
+                "value": "div"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    275,
+                    276
+                ],
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 23
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 24
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    276,
+                    281
+                ],
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 10,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    281,
+                    285
+                ],
+                "loc": {
+                    "start": {
+                        "line": 10,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 10,
+                        "column": 8
+                    }
+                },
+                "value": "div"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    286,
+                    291
+                ],
+                "loc": {
+                    "start": {
+                        "line": 10,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 10,
+                        "column": 14
+                    }
+                },
+                "value": "xmlns"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    291,
+                    292
+                ],
+                "loc": {
+                    "start": {
+                        "line": 10,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 10,
+                        "column": 15
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLLiteral",
+                "range": [
+                    292,
+                    320
+                ],
+                "loc": {
+                    "start": {
+                        "line": 10,
+                        "column": 15
+                    },
+                    "end": {
+                        "line": 10,
+                        "column": 43
+                    }
+                },
+                "value": "http://www.w3.org/2000/svg"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    320,
+                    321
+                ],
+                "loc": {
+                    "start": {
+                        "line": 10,
+                        "column": 43
+                    },
+                    "end": {
+                        "line": 10,
+                        "column": 44
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    321,
+                    326
+                ],
+                "loc": {
+                    "start": {
+                        "line": 10,
+                        "column": 44
+                    },
+                    "end": {
+                        "line": 10,
+                        "column": 49
+                    }
+                },
+                "value": "div"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    326,
+                    327
+                ],
+                "loc": {
+                    "start": {
+                        "line": 10,
+                        "column": 49
+                    },
+                    "end": {
+                        "line": 10,
+                        "column": 50
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    327,
+                    332
+                ],
+                "loc": {
+                    "start": {
+                        "line": 10,
+                        "column": 50
+                    },
+                    "end": {
+                        "line": 11,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    332,
+                    336
+                ],
+                "loc": {
+                    "start": {
+                        "line": 11,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 11,
+                        "column": 8
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    337,
+                    342
+                ],
+                "loc": {
+                    "start": {
+                        "line": 11,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 11,
+                        "column": 14
+                    }
+                },
+                "value": "xmlns"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    342,
+                    343
+                ],
+                "loc": {
+                    "start": {
+                        "line": 11,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 11,
+                        "column": 15
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLLiteral",
+                "range": [
+                    343,
+                    373
+                ],
+                "loc": {
+                    "start": {
+                        "line": 11,
+                        "column": 15
+                    },
+                    "end": {
+                        "line": 11,
+                        "column": 45
+                    }
+                },
+                "value": "http://www.w3.org/1999/xhtml"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    373,
+                    374
+                ],
+                "loc": {
+                    "start": {
+                        "line": 11,
+                        "column": 45
+                    },
+                    "end": {
+                        "line": 11,
+                        "column": 46
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    374,
+                    379
+                ],
+                "loc": {
+                    "start": {
+                        "line": 11,
+                        "column": 46
+                    },
+                    "end": {
+                        "line": 11,
+                        "column": 51
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    379,
+                    380
+                ],
+                "loc": {
+                    "start": {
+                        "line": 11,
+                        "column": 51
+                    },
+                    "end": {
+                        "line": 11,
+                        "column": 52
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    380,
+                    385
+                ],
+                "loc": {
+                    "start": {
+                        "line": 11,
+                        "column": 52
+                    },
+                    "end": {
+                        "line": 12,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    385,
+                    389
+                ],
+                "loc": {
+                    "start": {
+                        "line": 12,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 12,
+                        "column": 8
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    390,
+                    401
+                ],
+                "loc": {
+                    "start": {
+                        "line": 12,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 12,
+                        "column": 20
+                    }
+                },
+                "value": "xmlns:xlink"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    401,
+                    402
+                ],
+                "loc": {
+                    "start": {
+                        "line": 12,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 12,
+                        "column": 21
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLLiteral",
+                "range": [
+                    402,
+                    432
+                ],
+                "loc": {
+                    "start": {
+                        "line": 12,
+                        "column": 21
+                    },
+                    "end": {
+                        "line": 12,
+                        "column": 51
+                    }
+                },
+                "value": "http://www.w3.org/1999/xhtml"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    432,
+                    433
+                ],
+                "loc": {
+                    "start": {
+                        "line": 12,
+                        "column": 51
+                    },
+                    "end": {
+                        "line": 12,
+                        "column": 52
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    433,
+                    438
+                ],
+                "loc": {
+                    "start": {
+                        "line": 12,
+                        "column": 52
+                    },
+                    "end": {
+                        "line": 12,
+                        "column": 57
+                    }
+                },
+                "value": "svg"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    438,
+                    439
+                ],
+                "loc": {
+                    "start": {
+                        "line": 12,
+                        "column": 57
+                    },
+                    "end": {
+                        "line": 12,
+                        "column": 58
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    439,
+                    440
+                ],
+                "loc": {
+                    "start": {
+                        "line": 12,
+                        "column": 58
+                    },
+                    "end": {
+                        "line": 13,
+                        "column": 0
+                    }
+                },
+                "value": "\n"
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    440,
+                    450
+                ],
+                "loc": {
+                    "start": {
+                        "line": 13,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 13,
+                        "column": 10
+                    }
+                },
+                "value": "template"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    450,
+                    451
+                ],
+                "loc": {
+                    "start": {
+                        "line": 13,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 13,
+                        "column": 11
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    451,
+                    452
+                ],
+                "loc": {
+                    "start": {
+                        "line": 13,
+                        "column": 11
+                    },
+                    "end": {
+                        "line": 14,
+                        "column": 0
+                    }
+                },
+                "value": "\n"
+            }
+        ],
+        "comments": [],
+        "errors": [
+            {
+                "message": "x-invalid-namespace (8:9)",
+                "index": 239,
+                "lineNumber": 8,
+                "column": 9
+            },
+            {
+                "message": "x-invalid-namespace (9:9)",
+                "index": 261,
+                "lineNumber": 9,
+                "column": 9
+            },
+            {
+                "message": "x-invalid-namespace (10:9)",
+                "index": 286,
+                "lineNumber": 10,
+                "column": 9
+            },
+            {
+                "message": "x-invalid-namespace (11:9)",
+                "index": 337,
+                "lineNumber": 11,
+                "column": 9
+            },
+            {
+                "message": "x-invalid-namespace (12:9)",
+                "index": 390,
+                "lineNumber": 12,
+                "column": 9
+            }
+        ]
+    }
+}

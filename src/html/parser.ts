@@ -5,7 +5,7 @@
  */
 import * as lodash from "lodash"
 import {debug} from "../common/debug"
-import {ErrorCode, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement, VNode, VText} from "../ast"
+import {ErrorCode, HasLocation, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement, VNode, VText} from "../ast"
 import {MATHML_ATTRIBUTE_NAME_MAP, SVG_ATTRIBUTE_NAME_MAP} from "./util/attribute-names"
 import {HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_RAWTEXT_TAGS, HTML_RCDATA_TAGS, HTML_VOID_ELEMENT_TAGS, SVG_ELEMENT_NAME_MAP} from "./util/tag-names"
 import {Tokenizer, TokenType} from "./tokenizer"
@@ -132,7 +132,7 @@ export class Parser {
      * Report an invalid character error.
      * @param code The error code.
      */
-    private reportParseError(token: Token, code: ErrorCode): void {
+    private reportParseError(token: HasLocation, code: ErrorCode): void {
         const error = ParseError.fromCode(code, token.range[0], token.loc.start.line, token.loc.start.column)
         this.errors.push(error)
 
@@ -183,6 +183,18 @@ export class Parser {
             }
             else {
                 this.namespace = NS.HTML
+            }
+        }
+        // Check namespace
+        else if (node.type === "VAttribute" && node.directive === false) {
+            const key = node.key.name
+            const value = node.value && node.value.value
+
+            if (key === "xmlns" && value !== this.namespace) {
+                this.reportParseError(node, "x-invalid-namespace")
+            }
+            if (key === "xmlns:xlink" && value !== NS.XLink) {
+                this.reportParseError(node, "x-invalid-namespace")
             }
         }
     }
@@ -481,14 +493,6 @@ export class Parser {
         }
         if (attribute.type !== "VAttribute" || attribute.directive === true) {
             throw new Error("unreachable")
-        }
-
-        // Check namespace
-        if (attribute.key.name === "xmlns" && token.value !== this.namespace) {
-            this.reportParseError(token, "x-invalid-namespace")
-        }
-        if (attribute.key.name === "xmlns:xlink" && token.value !== NS.XLink) {
-            this.reportParseError(token, "x-invalid-namespace")
         }
 
         // Initialize the attribute value.
