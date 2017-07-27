@@ -3,12 +3,16 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
+import assert from "assert"
 import * as lodash from "lodash"
 import {debug} from "../common/debug"
-import {ErrorCode, HasLocation, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement, VNode, VText} from "../ast"
+import {ErrorCode, HasLocation, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement} from "../ast"
 import {MATHML_ATTRIBUTE_NAME_MAP, SVG_ATTRIBUTE_NAME_MAP} from "./util/attribute-names"
 import {HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_RAWTEXT_TAGS, HTML_RCDATA_TAGS, HTML_VOID_ELEMENT_TAGS, SVG_ELEMENT_NAME_MAP} from "./util/tag-names"
-import {Tokenizer, TokenType} from "./tokenizer"
+import {IntermediateToken, IntermediateTokenizer, EndTag, StartTag, Text} from "./intermediate-tokenizer"
+import {Tokenizer} from "./tokenizer"
+
+const DUMMY_PARENT: any = Object.freeze({})
 
 /**
  * Check whether the element is a MathML text integration point or not.
@@ -54,41 +58,67 @@ function isHTMLIntegrationPoint(element: VElement): boolean {
 }
 
 /**
+ * Adjust element names by the current namespace.
+ * @param name The lowercase element name to adjust.
+ * @param namespace The current namespace.
+ * @returns The adjusted element name.
+ */
+function adjustElementName(name: string, namespace: Namespace): string {
+    if (namespace === NS.SVG) {
+        return SVG_ELEMENT_NAME_MAP.get(name) || name
+    }
+    return name
+}
+
+/**
+ * Adjust attribute names by the current namespace.
+ * @param name The lowercase attribute name to adjust.
+ * @param namespace The current namespace.
+ * @returns The adjusted attribute name.
+ */
+function adjustAttributeName(name: string, namespace: Namespace): string {
+    if (namespace === NS.SVG) {
+        return SVG_ATTRIBUTE_NAME_MAP.get(name) || name
+    }
+    if (namespace === NS.MathML) {
+        return MATHML_ATTRIBUTE_NAME_MAP.get(name) || name
+    }
+    return name
+}
+
+/**
+ * Set the location of the last child node to the end location of the given node.
+ * @param node The node to commit the end location.
+ */
+function propagateEndLocation(node: VDocumentFragment | VElement): void {
+    const lastChild = (node.type === "VElement" ? node.endTag : null) || lodash.last(node.children)
+    if (lastChild != null) {
+        node.range[1] = lastChild.range[1]
+        node.loc.end = lastChild.loc.end
+    }
+}
+
+/**
  * The parser of HTML.
  * This is not following to the HTML spec completely because Vue.js template spec is pretty different to HTML.
  */
 export class Parser {
-    private tokenizer: Tokenizer
-    private tokens: Token[]
-    private comments: Token[]
-    private currentNode: VNode
-    private nodeStack: VNode[]
-    private namespaceStack: VElement[]
+    private tokenizer: IntermediateTokenizer
+    private document: VDocumentFragment
+    private elementStack: VElement[]
 
     /**
-     * Initialize this parser.
-     * @param tokenizer The tokenizer to parse.
-     * @param postprocess The callback function to postprocess nodes.
+     * The tokens.
      */
-    constructor(tokenizer: Tokenizer) {
-        this.tokenizer = tokenizer
-        this.tokens = []
-        this.comments = []
-        this.currentNode = {
-            type: "VDocumentFragment",
-            range: [0, 0],
-            loc: {
-                start: {line: 1, column: 0},
-                end: {line: 1, column: 0},
-            },
-            parent: null,
-            children: [],
-            tokens: this.tokens,
-            comments: this.comments,
-            errors: this.tokenizer.errors,
-        }
-        this.nodeStack = []
-        this.namespaceStack = []
+    get tokens(): Token[] {
+        return this.tokenizer.tokens
+    }
+
+    /**
+     * The comments.
+     */
+    get comments(): Token[] {
+        return this.tokenizer.comments
     }
 
     /**
@@ -109,23 +139,49 @@ export class Parser {
     }
 
     /**
+     * Get the current node.
+     */
+    private get currentNode(): VDocumentFragment | VElement {
+        return lodash.last(this.elementStack) || this.document
+    }
+
+    /**
+     * Initialize this parser.
+     * @param tokenizer The tokenizer to parse.
+     * @param postprocess The callback function to postprocess nodes.
+     */
+    constructor(tokenizer: Tokenizer) {
+        this.tokenizer = new IntermediateTokenizer(tokenizer)
+        this.document = {
+            type: "VDocumentFragment",
+            range: [0, 0],
+            loc: {
+                start: {line: 1, column: 0},
+                end: {line: 1, column: 0},
+            },
+            parent: null,
+            children: [],
+            tokens: this.tokens,
+            comments: this.comments,
+            errors: this.errors,
+        }
+        this.elementStack = []
+    }
+
+    /**
      * Parse the HTML which was given in this constructor.
      * @returns The result of parsing.
      */
     parse(): VDocumentFragment {
-        let token: Token
-        while ((token = this.tokenizer.nextToken()).type !== "EOF") {
-            this[token.type as TokenType](token)
+        let token: IntermediateToken | null = null
+        while ((token = this.tokenizer.nextToken()) != null) {
+            (this as any)[token.type](token)
         }
 
-        while (this.nodeStack.length >= 1) {
-            this.popNodeStack()
-        }
+        this.popElementStackUntil(0)
+        propagateEndLocation(this.document)
 
-        debug("[html] GAP = %j", this.tokenizer.gaps)
-        debug("[html] LT  = %j", this.tokenizer.lineTerminators)
-
-        return this.currentNode as VDocumentFragment
+        return this.document
     }
 
     /**
@@ -140,109 +196,27 @@ export class Parser {
     }
 
     /**
-     * Push the given node to the current node stack.
-     * @param node The node to push.
+     * Pop an element from the current element stack.
      */
-    private pushNodeStack(node: VNode): void {
-        debug("[html] push node: %s", node.type)
+    private popElementStack(): void {
+        assert(this.elementStack.length >= 1)
 
-        this.nodeStack.push(this.currentNode)
-        this.currentNode = node
+        const element = this.elementStack.pop() as VElement
+        propagateEndLocation(element)
 
         // Update the current namespace.
-        if (node.type === "VElement" && node.namespace !== this.namespace) {
-            this.namespaceStack.push(node)
-            this.namespace = node.namespace
-        }
+        const current = this.currentNode
+        this.namespace = (current.type === "VElement") ? current.namespace : NS.HTML
     }
 
     /**
-     * Pop a node from the current node stack.
+     * Pop elements from the current element stack.
+     * @param index The index of the element you want to pop.
      */
-    private popNodeStack(): void {
-        debug("[html] pop node: %s %j", this.currentNode.type, this.currentNode.range)
-
-        const node = this.currentNode
-        const poppedNode = this.nodeStack.pop()
-        if (poppedNode == null) {
-            throw new Error("unreachable")
+    private popElementStackUntil(index: number): void {
+        while (this.elementStack.length > index) {
+            this.popElementStack()
         }
-
-        poppedNode.range[1] = node.range[1]
-        poppedNode.loc.end = node.loc.end
-
-        this.currentNode = poppedNode
-
-        // Update the current namespace.
-        if (node === lodash.last(this.namespaceStack)) {
-            this.namespaceStack.pop()
-
-            const namespaceElement = lodash.last(this.namespaceStack)
-            if (namespaceElement != null) {
-                this.namespace = namespaceElement.namespace
-            }
-            else {
-                this.namespace = NS.HTML
-            }
-        }
-        // Check namespace
-        else if (node.type === "VAttribute" && node.directive === false) {
-            const key = node.key.name
-            const value = node.value && node.value.value
-
-            if (key === "xmlns" && value !== this.namespace) {
-                this.reportParseError(node, "x-invalid-namespace")
-            }
-            if (key === "xmlns:xlink" && value !== NS.XLink) {
-                this.reportParseError(node, "x-invalid-namespace")
-            }
-        }
-    }
-
-    /**
-     * Adjust element names by the current namespace.
-     * @param name The lowercase element name to adjust.
-     * @returns The adjusted element name.
-     */
-    private adjustElementName(name: string): string {
-        if (this.namespace === NS.SVG) {
-            return SVG_ELEMENT_NAME_MAP.get(name) || name
-        }
-        return name
-    }
-
-    /**
-     * Adjust attribute names by the current namespace.
-     * @param name The lowercase attribute name to adjust.
-     * @returns The adjusted attribute name.
-     */
-    private adjustAttributeName(name: string): string {
-        if (this.namespace === NS.SVG) {
-            return SVG_ATTRIBUTE_NAME_MAP.get(name) || name
-        }
-        if (this.namespace === NS.MathML) {
-            return MATHML_ATTRIBUTE_NAME_MAP.get(name) || name
-        }
-        return name
-    }
-
-    /**
-     * Get the current element.
-     * @returns The current element.
-     */
-    private getCurrentElement(): VElement | undefined {
-        if (this.currentNode != null && this.currentNode.type === "VElement") {
-            return this.currentNode
-        }
-
-        for (let i = this.nodeStack.length - 1; i >= 0; --i) {
-            const node = this.nodeStack[i]
-            if (node.type === "VElement") {
-                return node
-            }
-        }
-
-        return undefined
     }
 
     /**
@@ -254,8 +228,8 @@ export class Parser {
         let ns = this.namespace
 
         if (ns === NS.MathML || ns === NS.SVG) {
-            const element = this.getCurrentElement()
-            if (element != null) {
+            const element = this.currentNode
+            if (element.type === "VElement") {
                 if (element.namespace === NS.MathML && element.name === "annotation-xml" && name === "svg") {
                     return NS.SVG
                 }
@@ -278,389 +252,138 @@ export class Parser {
     }
 
     /**
-     * Check whether the given tag name is valid as a end tag.
-     * @param name The tag name to check.
-     * @returns `true` if an element which has the name is opened.
-     */
-    private isValidEndTag(name: string): boolean {
-        if (this.currentNode != null && this.currentNode.type === "VElement" && this.currentNode.name === name) {
-            return true
-        }
-        return this.nodeStack.some(node =>
-            node.type === "VElement" && node.name === name
-        )
-    }
-
-    /**
-     * Process the given comment token.
-     * @param token The comment token to process.
-     */
-    private processComment(token: Token): void {
-        this.comments.push(token)
-    }
-
-    /**
-     * Process the given text token.
-     * @param token The text token to process.
-     */
-    private processText(token: Token): void {
-        this.tokens.push(token)
-
-        while (
-            this.currentNode.type !== "VText" &&
-            this.currentNode.type !== "VElement" &&
-            this.currentNode.type !== "VDocumentFragment"
-        ) {
-            this.popNodeStack()
-        }
-
-        if (this.currentNode.type === "VText") {
-            if (this.currentNode.range[1] === token.range[0]) {
-                this.currentNode.value += token.value
-                this.currentNode.range[1] = token.range[1]
-                this.currentNode.loc.end = token.loc.end
-                return
-            }
-
-            this.popNodeStack()
-            if (this.currentNode.type === "VText") {
-                throw new Error("unreachable")
-            }
-        }
-
-        const parentElement = this.currentNode
-        const text: VText = {
-            type: "VText",
-            range: [token.range[0], token.range[1]],
-            loc: {start: token.loc.start, end: token.loc.end},
-            parent: parentElement,
-            value: token.value,
-        }
-        parentElement.children.push(text)
-
-        this.pushNodeStack(text)
-    }
-
-    /**
      * Close the current element if necessary.
      * @param name The tag name to check.
      */
     private closeCurrentElementIfNecessary(name: string): void {
-        if (this.currentNode.type === "VText") {
-            this.popNodeStack()
-        }
-
         const element = this.currentNode
         if (element.type !== "VElement") {
             return
         }
 
         if (element.name === "p" && HTML_NON_FHRASING_TAGS.has(name)) {
-            this.popNodeStack()
+            this.popElementStack()
         }
         if (element.name === name && HTML_CAN_BE_LEFT_OPEN_TAGS.has(name)) {
-            this.popNodeStack()
+            this.popElementStack()
         }
     }
 
     /**
-     * Process an EOF token.
-     * @param token The token to process.
+     * Adjust and validate the given attribute node.
+     * @param node The attribute node to handle.
+     * @param namespace The current namespace.
      */
-    protected EOF(_token: Token): void { //eslint-disable-line class-methods-use-this
-        throw new Error("never called")
-    }
+    private handleAttribute(node: VAttribute, namespace: Namespace): void {
+        const key = node.key.name = adjustAttributeName(node.key.name, namespace)
+        const value = node.value && node.value.value
 
-    /**
-     * Process a HTMLAssociation token.
-     * @param token The token to process.
-     */
-    protected HTMLAssociation(token: Token): void {
-        this.tokens.push(token)
-
-        const attribute = this.currentNode
-        if (attribute.type === "VAttribute") {
-            attribute.range[1] = token.range[1]
-            attribute.loc.end = token.loc.end
+        if (key === "xmlns" && value !== namespace) {
+            this.reportParseError(node, "x-invalid-namespace")
+        }
+        else if (key === "xmlns:xlink" && value !== NS.XLink) {
+            this.reportParseError(node, "x-invalid-namespace")
         }
     }
 
     /**
-     * Process a HTMLBogusComment token.
-     * @param token The token to process.
+     * Handle the start tag token.
+     * @param token The token to handle.
      */
-    protected HTMLBogusComment(token: Token): void {
-        this.processComment(token)
-    }
+    protected StartTag(token: StartTag): void {
+        debug("[html] StartTag %j", token)
 
-    /**
-     * Process a HTMLCDataText token.
-     * @param token The token to process.
-     */
-    protected HTMLCDataText(token: Token): void {
-        this.processText(token)
-    }
+        this.closeCurrentElementIfNecessary(token.name)
 
-    /**
-     * Process a HTMLComment token.
-     * @param token The token to process.
-     */
-    protected HTMLComment(token: Token): void {
-        this.processComment(token)
-    }
-
-    /**
-     * Process a HTMLEndTagOpen token.
-     * @param token The token to process.
-     */
-    protected HTMLEndTagOpen(token: Token): void {
-        this.tokens.push(token)
-
-        // Check whether this is a valid end tag.
-        if (!this.isValidEndTag(token.value)) {
-            this.reportParseError(token, "x-invalid-end-tag")
-            return
-        }
-
-        // Pop until the correspond element.
-        while (this.currentNode.type !== "VElement" || this.currentNode.name !== token.value) {
-            this.popNodeStack()
-        }
-
-        // Push the end tag.
-        const element = this.currentNode
-        element.endTag = {
-            type: "VEndTag",
+        const parent = this.currentNode
+        const namespace = this.detectNamespace(token.name)
+        const element: VElement = {
+            type: "VElement",
             range: [token.range[0], token.range[1]],
             loc: {start: token.loc.start, end: token.loc.end},
-            parent: element,
-        }
-
-        this.pushNodeStack(element.endTag)
-    }
-
-    /**
-     * Process a HTMLIdentifier token.
-     * @param token The token to process.
-     */
-    protected HTMLIdentifier(token: Token): void {
-        this.tokens.push(token)
-
-        if (this.currentNode.type === "VAttribute") {
-            this.popNodeStack()
-        }
-
-        const startTag = this.currentNode
-        if (startTag.type === "VEndTag") {
-            this.reportParseError(token, "end-tag-with-attributes")
-            return
-        }
-        if (startTag.type !== "VStartTag") {
-            throw new Error("unreachable")
-        }
-
-        const attribute: VAttribute = {
-            type: "VAttribute",
-            range: [token.range[0], token.range[1]],
-            loc: {start: token.loc.start, end: token.loc.end},
-            parent: startTag,
-            directive: false,
-            key: {
-                type: "VIdentifier",
+            parent,
+            name: adjustElementName(token.name, namespace),
+            namespace,
+            startTag: {
+                type: "VStartTag",
                 range: [token.range[0], token.range[1]],
                 loc: {start: token.loc.start, end: token.loc.end},
-                parent: {} as VAttribute,
-                name: this.adjustAttributeName(token.value),
+                parent: DUMMY_PARENT,
+                attributes: token.attributes,
             },
-            value: null,
-        }
-        attribute.key.parent = attribute
-        startTag.attributes.push(attribute)
-
-        this.pushNodeStack(attribute)
-    }
-
-    /**
-     * Process a HTMLLiteral token.
-     * @param token The token to process.
-     */
-    protected HTMLLiteral(token: Token): void {
-        this.tokens.push(token)
-
-        const attribute = this.currentNode
-        if (attribute.type === "VEndTag") {
-            return
-        }
-        if (attribute.type !== "VAttribute" || attribute.directive === true) {
-            throw new Error("unreachable")
+            children: [],
+            endTag: null,
+            variables: [],
         }
 
-        // Initialize the attribute value.
-        attribute.range[1] = token.range[1]
-        attribute.loc.end = token.loc.end
-        attribute.value = {
-            type: "VLiteral",
-            range: [token.range[0], token.range[1]],
-            loc: {start: token.loc.start, end: token.loc.end},
-            parent: attribute,
-            value: token.value,
+        // Setup relations.
+        for (const attribute of token.attributes) {
+            attribute.parent = element.startTag
+            this.handleAttribute(attribute, namespace)
         }
-    }
+        element.startTag.parent = element
+        parent.children.push(element)
 
-    /**
-     * Process a HTMLRCDataText token.
-     * @param token The token to process.
-     */
-    protected HTMLRCDataText(token: Token): void {
-        this.processText(token)
-    }
-
-    /**
-     * Process a HTMLRawText token.
-     * @param token The token to process.
-     */
-    protected HTMLRawText(token: Token): void {
-        this.processText(token)
-    }
-
-    /**
-     * Process a HTMLSelfClosingTagClose token.
-     * @param token The token to process.
-     */
-    protected HTMLSelfClosingTagClose(token: Token): void {
-        this.tokens.push(token)
-
-        if (this.currentNode.type === "VAttribute") {
-            this.popNodeStack()
-        }
-
-        if (this.currentNode.type === "VEndTag") {
-            this.reportParseError(token, "end-tag-with-trailing-solidus")
-        }
-        else if (this.currentNode.type === "VStartTag") {
-            const element = this.currentNode.parent
-            if (!HTML_VOID_ELEMENT_TAGS.has(element.name)) {
-                this.reportParseError(token, "non-void-html-element-start-tag-with-trailing-solidus")
-            }
-        }
-        else {
+        // Vue.js supports self-closing elements even if it's not one of void elements.
+        if (token.selfClosing || HTML_VOID_ELEMENT_TAGS.has(element.name)) {
             return
         }
 
-        const tag = this.currentNode
-        tag.range[1] = token.range[1]
-        tag.loc.end = token.loc.end
-
-        // Pop the start/end tag.
-        this.popNodeStack()
-        // Pop the element. Note Vue.js supports self-closing start tags.
-        this.popNodeStack()
-    }
-
-    /**
-     * Process a HTMLTagClose token.
-     * @param token The token to process.
-     */
-    protected HTMLTagClose(token: Token): void {
-        this.tokens.push(token)
-
-        if (this.currentNode.type === "VAttribute") {
-            this.popNodeStack()
-        }
-        if (this.currentNode.type !== "VStartTag" && this.currentNode.type !== "VEndTag") {
-            return
-        }
-
-        const tag = this.currentNode
-        tag.range[1] = token.range[1]
-        tag.loc.end = token.loc.end
-
-        // Pop the start/end tag.
-        this.popNodeStack()
-        // Pop the element if it's a end tag.
-        if (tag.type === "VEndTag" || HTML_VOID_ELEMENT_TAGS.has(tag.parent.name)) {
-            this.popNodeStack()
-        }
+        // Push to stack.
+        this.elementStack.push(element)
+        this.namespace = namespace
 
         // Update the content type of this element.
-        if (tag.type === "VStartTag" && tag.parent.namespace === NS.HTML) {
-            if (HTML_RCDATA_TAGS.has(tag.parent.name)) {
+        if (namespace === NS.HTML) {
+            if (HTML_RCDATA_TAGS.has(element.name)) {
                 this.tokenizer.state = "RCDATA"
             }
-            if (HTML_RAWTEXT_TAGS.has(tag.parent.name)) {
+            if (HTML_RAWTEXT_TAGS.has(element.name)) {
                 this.tokenizer.state = "RAWTEXT"
             }
         }
     }
 
     /**
-     * Process a HTMLTagOpen token.
-     * @param token The token to process.
+     * Handle the end tag token.
+     * @param token The token to handle.
      */
-    protected HTMLTagOpen(token: Token): void {
-        this.tokens.push(token)
+    protected EndTag(token: EndTag): void {
+        debug("[html] EndTag %j", token)
 
-        this.closeCurrentElementIfNecessary(token.value)
-
-        const parentElement = this.currentNode
-        if (parentElement.type !== "VElement" && parentElement.type !== "VDocumentFragment") {
-            throw new Error("unreachable")
+        const i = lodash.findLastIndex(this.elementStack, (el) =>
+            el.name.toLowerCase() === token.name
+        )
+        if (i === -1) {
+            this.reportParseError(token, "x-invalid-end-tag")
+            return
         }
 
-        const element: VElement = {
-            type: "VElement",
-            range: [token.range[0], token.range[1]],
-            loc: {start: token.loc.start, end: token.loc.end},
-            parent: parentElement,
-            name: this.adjustElementName(token.value),
-            namespace: this.detectNamespace(token.value),
-            startTag: {
-                type: "VStartTag",
-                range: [token.range[0], token.range[1]],
-                loc: {start: token.loc.start, end: token.loc.end},
-                parent: {} as VElement,
-                attributes: [],
-            },
-            children: [],
-            endTag: null,
-            variables: [],
+        const element = this.elementStack[i]
+        element.endTag = {
+            type: "VEndTag",
+            range: token.range,
+            loc: token.loc,
+            parent: element,
         }
-        element.startTag.parent = element
-        parentElement.children.push(element)
 
-        this.pushNodeStack(element)
-        this.pushNodeStack(element.startTag)
+        this.popElementStackUntil(i)
     }
 
     /**
-     * Process a HTMLText token.
-     * @param token The token to process.
+     * Handle the text token.
+     * @param token The token to handle.
      */
-    protected HTMLText(token: Token): void {
-        this.processText(token)
-    }
+    protected Text(token: Text): void {
+        debug("[html] Text %j", token)
 
-    /**
-     * Process a HTMLWhitespace token.
-     * @param token The token to process.
-     */
-    protected HTMLWhitespace(token: Token): void {
-        this.processText(token)
-    }
-
-    /**
-     * Process a VExpressionStart token.
-     * @param token The token to process.
-     */
-    protected VExpressionStart(token: Token): void {
-        this.processText(token)
-    }
-
-    /**
-     * Process a VExpressionEnd token.
-     * @param token The token to process.
-     */
-    protected VExpressionEnd(token: Token): void {
-        this.processText(token)
+        const parent = this.currentNode
+        parent.children.push({
+            type: "VText",
+            range: token.range,
+            loc: token.loc,
+            parent,
+            value: token.value,
+        })
     }
 }

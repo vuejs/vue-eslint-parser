@@ -23,7 +23,6 @@ import {
  * Enumeration of token types.
  */
 export type TokenType =
-    "EOF" |
     "HTMLAssociation" |
     "HTMLBogusComment" |
     "HTMLCDataText" |
@@ -41,6 +40,9 @@ export type TokenType =
     "VExpressionStart" |
     "VExpressionEnd"
 
+/**
+ * Enumeration of tokenizer's state types.
+ */
 export type TokenizerState =
     "DATA" |
     "TAG_OPEN" |
@@ -199,7 +201,7 @@ export class Tokenizer {
      * Get the next token.
      * @returns The next token or null.
      */
-    public nextToken(): Token {
+    public nextToken(): Token | null {
         let cp = this.lastCodePoint
         while (this.committedToken == null && (cp !== EOF || this.reconsuming)) {
             if (this.provisionalToken != null && !this.isProvisionalState()) {
@@ -230,25 +232,12 @@ export class Tokenizer {
 
         assert(cp === EOF)
 
-        if (this.currentToken != null && this.currentToken.type !== "EOF") {
+        if (this.currentToken != null) {
             this.endToken()
 
             const token = this.consumeCommittedToken()
             if (token != null) {
                 return token
-            }
-        }
-
-        if (this.currentToken == null) {
-            const offset = this.offset
-            const line = this.line
-            const column = this.column
-
-            this.currentToken = {
-                type: "EOF",
-                range: [offset, offset],
-                loc: {start: {line, column}, end: {line, column}},
-                value: "",
             }
         }
         return this.currentToken
