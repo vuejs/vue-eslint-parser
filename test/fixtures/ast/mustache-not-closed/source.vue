@@ -1,0 +1,9 @@
+<template>
+    {{a<br>}}
+    {{b<!--comment-->}}
+    {{c</>}}
+    {{</>d}}
+    {{</>}}
+    <br>{{<br>
+    {{{{invalid}}}}
+</template>

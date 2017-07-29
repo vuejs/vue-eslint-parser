@@ -166,7 +166,7 @@ export class IntermediateTokenizer {
             // Concatenate the deferred tokens to the committed token.
             const start = this.expressionStartToken
             const end = lodash.last(this.expressionTokens) || start
-            const value = this.expressionTokens.reduce(concat, start.value) + (start !== end ? end.value : "")
+            const value = this.expressionTokens.reduce(concat, start.value)
             this.expressionStartToken = null
             this.expressionTokens = []
 
@@ -515,11 +515,20 @@ export class IntermediateTokenizer {
         if (this.expressionStartToken == null) {
             return this.processText(token)
         }
-        this.tokens.push(token)
+
+        const start = this.expressionStartToken
+        const end = lodash.last(this.expressionTokens) || start
+
+        // If invalid notation `</>` exists directly before this token, separate it.
+        if (end.range[1] !== token.range[0]) {
+            const result = this.commit()
+            this.processText(token)
+            return result
+        }
 
         // Clear state.
-        const start = this.expressionStartToken
         const value = this.expressionTokens.reduce(concat, "")
+        this.tokens.push(token)
         this.expressionStartToken = null
         this.expressionTokens = []
 
