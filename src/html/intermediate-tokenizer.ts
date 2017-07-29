@@ -498,14 +498,13 @@ export class IntermediateTokenizer {
         if (this.expressionStartToken != null) {
             return this.processText(token)
         }
+        const separated = (this.currentToken != null && this.currentToken.range[1] !== token.range[0])
+        const result = separated ? this.commit() : null
 
         this.tokens.push(token)
         this.expressionStartToken = token
 
-        if (this.currentToken != null && this.currentToken.range[1] !== token.range[0]) {
-            return this.commit()
-        }
-        return null
+        return result
     }
 
     /**
