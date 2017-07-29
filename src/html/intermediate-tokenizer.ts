@@ -4,6 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import assert from "assert"
+import * as lodash from "lodash"
 import {ErrorCode, HasLocation, Namespace, ParseError, Token, VAttribute} from "../ast"
 import {debug} from "../common/debug"
 import {Tokenizer, TokenizerState, TokenType} from "./tokenizer"
@@ -11,9 +12,18 @@ import {Tokenizer, TokenizerState, TokenType} from "./tokenizer"
 const DUMMY_PARENT: any = Object.freeze({})
 
 /**
+ * Concatenate token values.
+ * @param text Concatenated text.
+ * @param token The token to concatenate.
+ */
+function concat(text: string, token: Token): string {
+    return text + token.value
+}
+
+/**
  * The type of intermediate tokens.
  */
-export type IntermediateToken = StartTag | EndTag | Text
+export type IntermediateToken = StartTag | EndTag | Text | Mustache
 
 /**
  * The type of start tags.
@@ -42,15 +52,34 @@ export interface Text extends HasLocation {
 }
 
 /**
+ * The type of text chunks of an expression container.
+ */
+export interface Mustache extends HasLocation {
+    type: "Mustache"
+    value: string
+    startToken: Token
+    endToken: Token
+}
+
+/**
  * The class to create HTML tokens from ESTree-like tokens which are created by a Tokenizer.
  */
 export class IntermediateTokenizer {
     private tokenizer: Tokenizer
     private currentToken: IntermediateToken | null
-    private currentAttribute: VAttribute | null
+    private attribute: VAttribute | null
+    private expressionStartToken: Token | null
+    private expressionTokens: Token[]
 
     public readonly tokens: Token[]
     public readonly comments: Token[]
+
+    /**
+     * The source code text.
+     */
+    get text(): string {
+        return this.tokenizer.text
+    }
 
     /**
      * The parse errors.
@@ -96,7 +125,9 @@ export class IntermediateTokenizer {
     constructor(tokenizer: Tokenizer) {
         this.tokenizer = tokenizer
         this.currentToken = null
-        this.currentAttribute = null
+        this.attribute = null
+        this.expressionStartToken = null
+        this.expressionTokens = []
         this.tokens = []
         this.comments = []
     }
@@ -124,11 +155,38 @@ export class IntermediateTokenizer {
      * Commit the current token.
      */
     private commit(): IntermediateToken {
-        assert(this.currentToken != null)
+        assert(this.currentToken != null || this.expressionStartToken != null)
 
-        const token = this.currentToken
+        let token = this.currentToken
         this.currentToken = null
-        this.currentAttribute = null
+        this.attribute = null
+
+        if (this.expressionStartToken != null) {
+            // VExpressionEnd was not found.
+            // Concatenate the deferred tokens to the committed token.
+            const start = this.expressionStartToken
+            const end = lodash.last(this.expressionTokens) || start
+            const value = this.expressionTokens.reduce(concat, start.value) + (start !== end ? end.value : "")
+            this.expressionStartToken = null
+            this.expressionTokens = []
+
+            if (token == null) {
+                token = {
+                    type: "Text",
+                    range: [start.range[0], end.range[1]],
+                    loc: {start: start.loc.start, end: end.loc.end},
+                    value,
+                }
+            }
+            else if (token.type === "Text") {
+                token.range[1] = end.range[1]
+                token.loc.end = end.loc.end
+                token.value += value
+            }
+            else {
+                throw new Error("unreachable")
+            }
+        }
 
         return token as IntermediateToken
     }
@@ -166,8 +224,19 @@ export class IntermediateTokenizer {
 
         let result: IntermediateToken | null = null
 
-        if (this.currentToken != null && this.currentToken.type === "Text") {
-            if (this.currentToken.range[1] === token.range[0]) {
+        if (this.expressionStartToken != null) {
+            // Defer this token until a VExpressionEnd token or a non-text token appear.
+            const lastToken = lodash.last(this.expressionTokens) || this.expressionStartToken
+            if (lastToken.range[1] === token.range[0]) {
+                this.expressionTokens.push(token)
+                return null
+            }
+
+            result = this.commit()
+        }
+        else if (this.currentToken != null) {
+            // Concatenate this token to the current text token.
+            if (this.currentToken.type === "Text" && this.currentToken.range[1] === token.range[0]) {
                 this.currentToken.value += token.value
                 this.currentToken.range[1] = token.range[1]
                 this.currentToken.loc.end = token.loc.end
@@ -195,9 +264,9 @@ export class IntermediateTokenizer {
     protected HTMLAssociation(token: Token): IntermediateToken | null {
         this.tokens.push(token)
 
-        if (this.currentAttribute != null) {
-            this.currentAttribute.range[1] = token.range[1]
-            this.currentAttribute.loc.end = token.loc.end
+        if (this.attribute != null) {
+            this.attribute.range[1] = token.range[1]
+            this.attribute.loc.end = token.loc.end
 
             if (this.currentToken == null || this.currentToken.type !== "StartTag") {
                 throw new Error("unreachable")
@@ -242,7 +311,7 @@ export class IntermediateTokenizer {
 
         let result: IntermediateToken | null = null
 
-        if (this.currentToken != null) {
+        if (this.currentToken != null || this.expressionStartToken != null) {
             result = this.commit()
         }
 
@@ -263,7 +332,7 @@ export class IntermediateTokenizer {
     protected HTMLIdentifier(token: Token): IntermediateToken | null {
         this.tokens.push(token)
 
-        if (this.currentToken == null || this.currentToken.type === "Text") {
+        if (this.currentToken == null || this.currentToken.type === "Text" || this.currentToken.type === "Mustache") {
             throw new Error("unreachable")
         }
         if (this.currentToken.type === "EndTag") {
@@ -271,7 +340,7 @@ export class IntermediateTokenizer {
             return null
         }
 
-        this.currentAttribute = {
+        this.attribute = {
             type: "VAttribute",
             range: [token.range[0], token.range[1]],
             loc: {start: token.loc.start, end: token.loc.end},
@@ -286,11 +355,11 @@ export class IntermediateTokenizer {
             },
             value: null,
         }
-        this.currentAttribute.key.parent = this.currentAttribute
+        this.attribute.key.parent = this.attribute
 
         this.currentToken.range[1] = token.range[1]
         this.currentToken.loc.end = token.loc.end
-        this.currentToken.attributes.push(this.currentAttribute)
+        this.currentToken.attributes.push(this.attribute)
 
         return null
     }
@@ -302,14 +371,14 @@ export class IntermediateTokenizer {
     protected HTMLLiteral(token: Token): IntermediateToken | null {
         this.tokens.push(token)
 
-        if (this.currentAttribute != null) {
-            this.currentAttribute.range[1] = token.range[1]
-            this.currentAttribute.loc.end = token.loc.end
-            this.currentAttribute.value = {
+        if (this.attribute != null) {
+            this.attribute.range[1] = token.range[1]
+            this.attribute.loc.end = token.loc.end
+            this.attribute.value = {
                 type: "VLiteral",
                 range: [token.range[0], token.range[1]],
                 loc: {start: token.loc.start, end: token.loc.end},
-                parent: this.currentAttribute,
+                parent: this.attribute,
                 value: token.value,
             }
 
@@ -389,7 +458,7 @@ export class IntermediateTokenizer {
 
         let result: IntermediateToken | null = null
 
-        if (this.currentToken != null) {
+        if (this.currentToken != null || this.expressionStartToken != null) {
             result = this.commit()
         }
 
@@ -426,7 +495,17 @@ export class IntermediateTokenizer {
      * @param token The token to process.
      */
     protected VExpressionStart(token: Token): IntermediateToken | null {
-        return this.processText(token)
+        if (this.expressionStartToken != null) {
+            return this.processText(token)
+        }
+
+        this.tokens.push(token)
+        this.expressionStartToken = token
+
+        if (this.currentToken != null && this.currentToken.range[1] !== token.range[0]) {
+            return this.commit()
+        }
+        return null
     }
 
     /**
@@ -434,6 +513,28 @@ export class IntermediateTokenizer {
      * @param token The token to process.
      */
     protected VExpressionEnd(token: Token): IntermediateToken | null {
-        return this.processText(token)
+        if (this.expressionStartToken == null) {
+            return this.processText(token)
+        }
+        this.tokens.push(token)
+
+        // Clear state.
+        const start = this.expressionStartToken
+        const value = this.expressionTokens.reduce(concat, "")
+        this.expressionStartToken = null
+        this.expressionTokens = []
+
+        // Create token.
+        const result = (this.currentToken != null) ? this.commit() : null
+        this.currentToken = {
+            type: "Mustache",
+            range: [start.range[0], token.range[1]],
+            loc: {start: start.loc.start, end: token.loc.end},
+            value,
+            startToken: start,
+            endToken: token,
+        }
+
+        return result || this.commit()
     }
 }

@@ -5,13 +5,16 @@
  */
 import assert from "assert"
 import * as lodash from "lodash"
+import {ErrorCode, HasLocation, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement, VExpressionContainer} from "../ast"
 import {debug} from "../common/debug"
-import {ErrorCode, HasLocation, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement} from "../ast"
+import {LocationCalculator} from "../common/location-calculator"
+import {convertToDirective, defineScopeAttributeVariable, processMustache} from "../template"
 import {MATHML_ATTRIBUTE_NAME_MAP, SVG_ATTRIBUTE_NAME_MAP} from "./util/attribute-names"
 import {HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_RAWTEXT_TAGS, HTML_RCDATA_TAGS, HTML_VOID_ELEMENT_TAGS, SVG_ELEMENT_NAME_MAP} from "./util/tag-names"
-import {IntermediateToken, IntermediateTokenizer, EndTag, StartTag, Text} from "./intermediate-tokenizer"
+import {IntermediateToken, IntermediateTokenizer, EndTag, Mustache, StartTag, Text} from "./intermediate-tokenizer"
 import {Tokenizer} from "./tokenizer"
 
+const DIRECTIVE_NAME = /^(?:v-|[:@]).+[^.:@]$/
 const DUMMY_PARENT: any = Object.freeze({})
 
 /**
@@ -104,8 +107,17 @@ function propagateEndLocation(node: VDocumentFragment | VElement): void {
  */
 export class Parser {
     private tokenizer: IntermediateTokenizer
+    private locationCalculator: LocationCalculator
+    private parserOptions: any
     private document: VDocumentFragment
     private elementStack: VElement[]
+
+    /**
+     * The source code text.
+     */
+    private get text(): string {
+        return this.tokenizer.text
+    }
 
     /**
      * The tokens.
@@ -158,10 +170,12 @@ export class Parser {
     /**
      * Initialize this parser.
      * @param tokenizer The tokenizer to parse.
-     * @param postprocess The callback function to postprocess nodes.
+     * @param parserOptions The parser options to parse inline expressions.
      */
-    constructor(tokenizer: Tokenizer) {
+    constructor(tokenizer: Tokenizer, parserOptions: any) {
         this.tokenizer = new IntermediateTokenizer(tokenizer)
+        this.locationCalculator = new LocationCalculator(tokenizer.gaps, tokenizer.lineTerminators)
+        this.parserOptions = parserOptions
         this.document = {
             type: "VDocumentFragment",
             range: [0, 0],
@@ -289,11 +303,19 @@ export class Parser {
      * @param node The attribute node to handle.
      * @param namespace The current namespace.
      */
-    private handleAttribute(node: VAttribute, namespace: Namespace): void {
+    private processAttribute(node: VAttribute, namespace: Namespace): void {
+        if (DIRECTIVE_NAME.test(node.key.name)) {
+            convertToDirective(this.text, this.parserOptions, this.locationCalculator, node)
+            return
+        }
+
         const key = node.key.name = adjustAttributeName(node.key.name, namespace)
         const value = node.value && node.value.value
 
-        if (key === "xmlns" && value !== namespace) {
+        if (key === "scope" && node.parent.parent.name === "template") {
+            defineScopeAttributeVariable(this.text, this.parserOptions, this.locationCalculator, node)
+        }
+        else if (key === "xmlns" && value !== namespace) {
             this.reportParseError(node, "x-invalid-namespace")
         }
         else if (key === "xmlns:xlink" && value !== NS.XLink) {
@@ -321,8 +343,8 @@ export class Parser {
             namespace,
             startTag: {
                 type: "VStartTag",
-                range: [token.range[0], token.range[1]],
-                loc: {start: token.loc.start, end: token.loc.end},
+                range: token.range,
+                loc: token.loc,
                 parent: DUMMY_PARENT,
                 attributes: token.attributes,
             },
@@ -332,12 +354,12 @@ export class Parser {
         }
 
         // Setup relations.
+        parent.children.push(element)
+        element.startTag.parent = element
         for (const attribute of token.attributes) {
             attribute.parent = element.startTag
-            this.handleAttribute(attribute, namespace)
+            this.processAttribute(attribute, namespace)
         }
-        element.startTag.parent = element
-        parent.children.push(element)
 
         // Check whether the self-closing is valid.
         const isVoid = (namespace === NS.HTML && HTML_VOID_ELEMENT_TAGS.has(element.name))
@@ -415,5 +437,26 @@ export class Parser {
             parent,
             value: token.value,
         })
+    }
+
+    /**
+     * Handle the text token.
+     * @param token The token to handle.
+     */
+    protected Mustache(token: Mustache): void {
+        debug("[html] Mustache %j", token)
+
+        const parent = this.currentNode
+        const container: VExpressionContainer = {
+            type: "VExpressionContainer",
+            range: token.range,
+            loc: token.loc,
+            parent,
+            expression: null,
+            references: [],
+        }
+        processMustache(this.parserOptions, this.locationCalculator, container, token)
+
+        parent.children.push(container)
     }
 }

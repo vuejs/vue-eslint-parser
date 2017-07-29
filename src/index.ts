@@ -8,7 +8,6 @@ import * as AST from "./ast"
 import {LocationCalculator} from "./common/location-calculator"
 import {HTMLParser, HTMLTokenizer} from "./html"
 import {parseScript, parseScriptElement} from "./script"
-import {parseTemplateElement} from "./template"
 import services from "./parser-services"
 
 const STARTS_WITH_LT = /^\s*</
@@ -62,15 +61,20 @@ export function parseForESLint(code: string, options: any): AST.ESLintExtendedPr
     }
 
     const tokenizer = new HTMLTokenizer(code)
-    const rootAST = new HTMLParser(tokenizer).parse()
+    const rootAST = new HTMLParser(tokenizer, options).parse()
     const locationCalcurator = new LocationCalculator(tokenizer.gaps, tokenizer.lineTerminators)
     const script = rootAST.children.find(isScriptElement) as AST.VElement | undefined // https://github.com/Microsoft/TypeScript/issues/7657
     const template = rootAST.children.find(isTemplateElement) as AST.VElement | undefined
     const result = (script != null)
         ? parseScriptElement(script, locationCalcurator, options)
         : parseScript("", options)
+    const concreteInfo: AST.HasConcreteInfo = {
+        tokens: rootAST.tokens,
+        comments: rootAST.comments,
+        errors: rootAST.errors,
+    }
     const templateBody = (template != null)
-        ? parseTemplateElement(code, template, locationCalcurator, options)
+        ? Object.assign(template, concreteInfo)
         : undefined
 
     result.ast.templateBody = templateBody
