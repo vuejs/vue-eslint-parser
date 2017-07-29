@@ -76,13 +76,7 @@ function replaceAliasParens(code: string): string {
  */
 function normalizeLeft(left: ESLintVariableDeclaration | ESLintPattern, replaced: boolean): ESLintPattern[] {
     if (left.type !== "VariableDeclaration") {
-        throw new ParseError(
-            "Unexpected pattern",
-            undefined,
-            left.range[0],
-            left.loc.start.line,
-            left.loc.start.column
-        )
+        throw new Error("unreachable")
     }
     const id = left.declarations[0].id
 
@@ -265,17 +259,15 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
 
     // Restore parentheses from array brackets.
     if (replaced) {
-        const open = statement.left.range[0]
-        const close = statement.left.range[1] - 1
+        const closeOffset = statement.left.range[1] - 1
+        const open = tokens[0]
+        const close = tokens.find(t => t.range[0] === closeOffset)
 
-        for (const token of tokens) {
-            if (token.range[0] === open) {
-                token.value = "("
-            }
-            else if (token.range[0] === close) {
-                token.value = ")"
-                break
-            }
+        if (open != null) {
+            open.value = "("
+        }
+        if (close != null) {
+            close.value = ")"
         }
     }
 
