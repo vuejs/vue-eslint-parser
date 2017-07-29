@@ -168,6 +168,12 @@ export class Tokenizer {
     public namespace: Namespace
 
     /**
+     * The flag which enables expression tokens.
+     * If this is true, this tokenizer will generate V_EXPRESSION_START and V_EXPRESSION_END tokens.
+     */
+    public expressionEnabled: boolean
+
+    /**
      * Initialize this tokenizer.
      * @param text The source code to tokenize.
      */
@@ -195,6 +201,7 @@ export class Tokenizer {
         this.tokenStartColumn = -1
         this.tokenStartLine = 1
         this.namespace = NS.HTML
+        this.expressionEnabled = false
     }
 
     /**
@@ -535,12 +542,12 @@ export class Tokenizer {
                 this.setStartTokenMark()
                 return "TAG_OPEN"
             }
-            if (cp === LEFT_CURLY_BRACKET) {
+            if (cp === LEFT_CURLY_BRACKET && this.expressionEnabled) {
                 this.setStartTokenMark()
                 this.returnState = "DATA"
                 return "V_EXPRESSION_START"
             }
-            if (cp === RIGHT_CURLY_BRACKET) {
+            if (cp === RIGHT_CURLY_BRACKET && this.expressionEnabled) {
                 this.setStartTokenMark()
                 this.returnState = "DATA"
                 return "V_EXPRESSION_END"
@@ -584,12 +591,12 @@ export class Tokenizer {
                 this.setStartTokenMark()
                 return "RCDATA_LESS_THAN_SIGN"
             }
-            if (cp === LEFT_CURLY_BRACKET) {
+            if (cp === LEFT_CURLY_BRACKET && this.expressionEnabled) {
                 this.setStartTokenMark()
                 this.returnState = "RCDATA"
                 return "V_EXPRESSION_START"
             }
-            if (cp === RIGHT_CURLY_BRACKET) {
+            if (cp === RIGHT_CURLY_BRACKET && this.expressionEnabled) {
                 this.setStartTokenMark()
                 this.returnState = "RCDATA"
                 return "V_EXPRESSION_END"
@@ -630,12 +637,12 @@ export class Tokenizer {
                 this.setStartTokenMark()
                 return "RAWTEXT_LESS_THAN_SIGN"
             }
-            if (cp === LEFT_CURLY_BRACKET) {
+            if (cp === LEFT_CURLY_BRACKET && this.expressionEnabled) {
                 this.setStartTokenMark()
                 this.returnState = "RAWTEXT"
                 return "V_EXPRESSION_START"
             }
-            if (cp === RIGHT_CURLY_BRACKET) {
+            if (cp === RIGHT_CURLY_BRACKET && this.expressionEnabled) {
                 this.setStartTokenMark()
                 this.returnState = "RAWTEXT"
                 return "V_EXPRESSION_END"

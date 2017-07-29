@@ -80,6 +80,16 @@ export class IntermediateTokenizer {
     }
 
     /**
+     * The current flag of expression enabled.
+     */
+    get expressionEnabled(): boolean {
+        return this.tokenizer.expressionEnabled
+    }
+    set expressionEnabled(value: boolean) { //eslint-disable-line require-jsdoc
+        this.tokenizer.expressionEnabled = value
+    }
+
+    /**
      * Initialize this intermediate tokenizer.
      * @param tokenizer The tokenizer.
      */

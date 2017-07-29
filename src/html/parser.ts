@@ -110,32 +110,42 @@ export class Parser {
     /**
      * The tokens.
      */
-    get tokens(): Token[] {
+    private get tokens(): Token[] {
         return this.tokenizer.tokens
     }
 
     /**
      * The comments.
      */
-    get comments(): Token[] {
+    private get comments(): Token[] {
         return this.tokenizer.comments
     }
 
     /**
      * The syntax errors which are found in this parsing.
      */
-    get errors(): ParseError[] {
+    private get errors(): ParseError[] {
         return this.tokenizer.errors
     }
 
     /**
      * The current namespace.
      */
-    get namespace(): Namespace {
+    private get namespace(): Namespace {
         return this.tokenizer.namespace
     }
-    set namespace(value: Namespace) { //eslint-disable-line require-jsdoc
+    private set namespace(value: Namespace) { //eslint-disable-line require-jsdoc
         this.tokenizer.namespace = value
+    }
+
+    /**
+     * The current flag of expression enabled.
+     */
+    private get expressionEnabled(): boolean {
+        return this.tokenizer.expressionEnabled
+    }
+    private set expressionEnabled(value: boolean) { //eslint-disable-line require-jsdoc
+        this.tokenizer.expressionEnabled = value
     }
 
     /**
@@ -207,6 +217,11 @@ export class Parser {
         // Update the current namespace.
         const current = this.currentNode
         this.namespace = (current.type === "VElement") ? current.namespace : NS.HTML
+
+        // Update expression flag.
+        if (this.elementStack.length === 0) {
+            this.expressionEnabled = false
+        }
     }
 
     /**
@@ -341,6 +356,15 @@ export class Parser {
 
         // Update the content type of this element.
         if (namespace === NS.HTML) {
+            if (element.name === "template" && element.parent.type === "VDocumentFragment") {
+                const langAttr = element.startTag.attributes.find(a => !a.directive && a.key.name === "lang") as (VAttribute | undefined)
+                const lang = (langAttr && langAttr.value && langAttr.value.value) || "html"
+
+                if (lang !== "html") {
+                    this.tokenizer.state = "RAWTEXT"
+                }
+                this.expressionEnabled = true
+            }
             if (HTML_RCDATA_TAGS.has(element.name)) {
                 this.tokenizer.state = "RCDATA"
             }
