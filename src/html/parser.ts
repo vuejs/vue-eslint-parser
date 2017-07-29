@@ -324,8 +324,14 @@ export class Parser {
         element.startTag.parent = element
         parent.children.push(element)
 
+        // Check whether the self-closing is valid.
+        const isVoid = (namespace === NS.HTML && HTML_VOID_ELEMENT_TAGS.has(element.name))
+        if (token.selfClosing && !isVoid && namespace === NS.HTML) {
+            this.reportParseError(token, "non-void-html-element-start-tag-with-trailing-solidus")
+        }
+
         // Vue.js supports self-closing elements even if it's not one of void elements.
-        if (token.selfClosing || HTML_VOID_ELEMENT_TAGS.has(element.name)) {
+        if (token.selfClosing || isVoid) {
             return
         }
 

@@ -6,7 +6,6 @@
 import assert from "assert"
 import {ErrorCode, HasLocation, Namespace, ParseError, Token, VAttribute} from "../ast"
 import {debug} from "../common/debug"
-import {HTML_VOID_ELEMENT_TAGS} from "./util/tag-names"
 import {Tokenizer, TokenizerState, TokenType} from "./tokenizer"
 
 const DUMMY_PARENT: any = Object.freeze({})
@@ -343,9 +342,6 @@ export class IntermediateTokenizer {
 
         if (this.currentToken.type === "StartTag") {
             this.currentToken.selfClosing = true
-            if (!HTML_VOID_ELEMENT_TAGS.has(this.currentToken.name)) {
-                this.reportParseError(token, "non-void-html-element-start-tag-with-trailing-solidus")
-            }
         }
         else {
             this.reportParseError(token, "end-tag-with-trailing-solidus")
