@@ -6,8 +6,6 @@
 import * as lodash from "lodash"
 import {HasLocation, Location, ParseError} from "../ast"
 
-const LOC_PATTERN = /\((\d+):(\d+)\)/g
-
 /**
  * Location calculators.
  * 
@@ -42,13 +40,6 @@ export class LocationCalculator {
     }
 
     /**
-     * Get the calculator which does not have base offset.
-     */
-    get raw(): LocationCalculator {
-        return new LocationCalculator(this.gapOffsets, this.ltOffsets)
-    }
-
-    /**
      * Get sub calculator which have the given base offset.
      * @param offset The base offset of new sub calculator.
      * @returns Sub calculator.
@@ -70,19 +61,6 @@ export class LocationCalculator {
         const line = lodash.sortedLastIndex(this.ltOffsets, offset) + 1
         const column = offset - (line === 1 ? 0 : this.ltOffsets[line - 2])
         return {line, column}
-    }
-
-    /**
-     * Calculate the offset of the given location.
-     * @param line The line number (1-based) to get offset.
-     * @param column The column number (0-based) to get offset.
-     * @returns The offset of the location, or `-1`.
-     */
-    private _getOffset(line: number, column: number): number {
-        if (line < 0 || line >= this.ltOffsets.length) {
-            return -1
-        }
-        return this.ltOffsets[line] + column
     }
 
     /**
@@ -110,15 +88,6 @@ export class LocationCalculator {
      */
     getLocation(offset: number): Location {
         return this._getLocation(this.baseOffset + offset)
-    }
-
-    /**
-     * Get the offset of the given index.
-     * @param index The index number from `this.baseOffset`.
-     * @returns The offset of the index
-     */
-    getOffsetWithGap(index: number): number {
-        return this.baseOffset + index + this._getGap(index)
     }
 
     /**
@@ -154,17 +123,6 @@ export class LocationCalculator {
      * @param error The error to modify their location.
      */
     fixErrorLocation(error: ParseError) {
-        error.message = error.message.replace(LOC_PATTERN, (whole, lineText, columnText) => {
-            const offset = this._getOffset(
-                parseInt(lineText, 10),
-                parseInt(columnText, 10)
-            )
-            if (offset !== -1) {
-                const loc = this.getLocation(offset)
-                return `(${loc.line}:${loc.column})`
-            }
-            return whole
-        })
         error.index = error.index + this.baseOffset
 
         const loc = this._getLocation(error.index)
