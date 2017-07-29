@@ -338,7 +338,6 @@ export function convertToDirective(code: string, parserOptions: any, locationCal
                 expression: null,
                 references: [],
             }
-            replaceTokens(document, node.value, [])
             insertError(document, err)
         }
         else {
