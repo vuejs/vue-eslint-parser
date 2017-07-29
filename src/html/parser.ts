@@ -15,6 +15,7 @@ import {IntermediateToken, IntermediateTokenizer, EndTag, Mustache, StartTag, Te
 import {Tokenizer} from "./tokenizer"
 
 const DIRECTIVE_NAME = /^(?:v-|[:@]).+[^.:@]$/
+const DT_DD = /^d[dt]$/
 const DUMMY_PARENT: any = Object.freeze({})
 
 /**
@@ -294,6 +295,9 @@ export class Parser {
             this.popElementStack()
         }
         if (element.name === name && HTML_CAN_BE_LEFT_OPEN_TAGS.has(name)) {
+            this.popElementStack()
+        }
+        if (DT_DD.test(element.name) && DT_DD.test(name)) {
             this.popElementStack()
         }
     }

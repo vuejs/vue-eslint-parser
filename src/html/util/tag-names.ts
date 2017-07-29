@@ -41,7 +41,7 @@ export const HTML_VOID_ELEMENT_TAGS = new Set([
  * https://github.com/vuejs/vue/blob/e4da249ab8ef32a0b8156c840c9d2b9773090f8a/src/platforms/web/compiler/util.js#L12
  */
 export const HTML_CAN_BE_LEFT_OPEN_TAGS = new Set([
-    "colgroup", "dd", "dt", "li", "options", "p", "td", "tfoot", "th", "thead", 
+    "colgroup", "li", "options", "p", "td", "tfoot", "th", "thead", 
     "tr", "source",
 ])
 
