@@ -79,7 +79,7 @@ describe("[references] expression containers", () => {
             assert(directive.key.type === "VDirectiveKey")
             assert(directive.key.name === "on")
             assert(directive.value.references.length === 1)
-            assert(directive.value.references[0].id === directive.value.expression.callee)
+            assert(directive.value.references[0].id === directive.value.expression.body[0].expression.callee)
         })
     })
 })

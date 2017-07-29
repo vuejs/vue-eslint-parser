@@ -3,7 +3,8 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import {traverseNodes, ESLintArrayPattern, ESLintExpression, ESLintExpressionStatement, ESLintExtendedProgram, ESLintForInStatement, ESLintForOfStatement, ESLintPattern, ESLintProgram, ESLintVariableDeclaration, Node, ParseError, Reference, Token, Variable, VElement, VExpressionContainer, VForExpression} from "../ast"
+import * as lodash from "lodash"
+import {traverseNodes, ESLintArrayPattern, ESLintBlockStatement, ESLintExpression, ESLintExpressionStatement, ESLintExtendedProgram, ESLintForInStatement, ESLintForOfStatement, ESLintPattern, ESLintProgram, ESLintVariableDeclaration, Node, ParseError, Reference, Token, Variable, VElement, VForExpression, VOnExpression} from "../ast"
 import {debug} from "../common/debug"
 import {LocationCalculator} from "../common/location-calculator"
 import {analyzeExternalReferences, analyzeVariablesAndExternalReferences} from "./scope-analyzer"
@@ -12,6 +13,7 @@ import {analyzeExternalReferences, analyzeVariablesAndExternalReferences} from "
 // [2] = aliases.
 // [3] = all after the aliases.
 const ALIAS_PARENS = /^(\s*)\(([\s\S]+)\)(\s*(?:in|of)\b[\s\S]+)$/
+const DUMMY_PARENT: any = {}
 
 /**
  * The interface of ESLint custom parsers.
@@ -87,6 +89,25 @@ function normalizeLeft(left: ESLintVariableDeclaration | ESLintPattern, replaced
 }
 
 /**
+ * Remove references by name.
+ * @param references The array of references to remove.
+ * @param name The name of target references.
+ */
+function removeByName(references: Reference[], name: string): void {
+    let i = 0
+    while (i < references.length) {
+        const reference = references[i]
+
+        if (reference.id.name === name) {
+            references.splice(i, 1)
+        }
+        else {
+            i += 1
+        }
+    }
+}
+
+/**
  * Parse the given source code.
  *
  * @param code The source code to parse.
@@ -114,7 +135,7 @@ function parseScriptFragment(code: string, locationCalculator: LocationCalculato
  * The result of parsing expressions.
  */
 export interface ExpressionParseResult {
-    expression: ESLintExpression | VForExpression
+    expression: ESLintExpression | VForExpression | VOnExpression
     tokens: Token[]
     comments: Token[]
     references: Reference[]
@@ -245,7 +266,7 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
         type: "VForExpression",
         range: [firstToken.range[0], lastToken.range[1]],
         loc: {start: firstToken.loc.start, end: lastToken.loc.end},
-        parent: {} as VExpressionContainer,
+        parent: DUMMY_PARENT,
         left,
         right,
     }
@@ -272,4 +293,50 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
     }
 
     return {expression, tokens, comments, references, variables}
+}
+
+/**
+ * Parse the source code of inline scripts.
+ * @param code The source code of inline scripts.
+ * @param locationCalculator The location calculator for the inline script.
+ * @param parserOptions The parser options.
+ * @returns The result of parsing.
+ */
+export function parseVOnExpression(code: string, locationCalculator: LocationCalculator, parserOptions: any): ExpressionParseResult {
+    debug("[script] parse v-on expression: \"{%s}\"", code)
+
+    const ast = parseScriptFragment(
+        `{${code}}`,
+        locationCalculator.getSubCalculatorAfter(-1),
+        parserOptions
+    ).ast
+    const references = analyzeExternalReferences(ast, parserOptions)
+    const block = ast.body[0] as ESLintBlockStatement
+    const body = block.body
+    const first = lodash.first(body)
+    const last = lodash.last(body)
+    const expression: VOnExpression = {
+        type: "VOnExpression",
+        range: [
+            (first != null) ? first.range[0] : block.range[0] + 1,
+            (last != null) ? last.range[1] : block.range[1] - 1,
+        ],
+        loc: {
+            start: (first != null) ? first.loc.start : locationCalculator.getLocation(1),
+            end: (last != null) ? last.loc.end : locationCalculator.getLocation(code.length + 1),
+        },
+        parent: DUMMY_PARENT,
+        body,
+    }
+    const tokens = ast.tokens || []
+    const comments = ast.comments || []
+
+    // Remvoe braces.
+    tokens.shift()
+    tokens.pop()
+
+    // Remove $event: https://vuejs.org/v2/api/#v-on
+    removeByName(references, "$event")
+
+    return {expression, tokens, comments, references, variables: []}
 }

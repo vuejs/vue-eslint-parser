@@ -4,9 +4,34 @@ Some types are featured from [ESTree].
 
 - [Program]
 - [Node]
+- [Statement]
+- [BlockStatement]
 - [Expression]
 - [Literal]
 - [Pattern]
+
+You can use the type definition of this AST:
+
+```ts
+import {AST} from "vue-eslint-parser"
+
+export function create(context) {
+    context.parserServices.registerTemplateBodyVisitor(context, {
+        VElement(node: AST.VElement): void {
+            //...
+        }
+    })
+
+    return {
+        Program(node: AST.ESLintProgram): void {
+            //...
+        }
+    }
+}
+```
+
+`AST` has the types of ESLint's AST with the prefix `ESLint`.<br>
+See details: [../src/ast/nodes.ts](../src/ast/nodes.ts)
 
 ## Node
 
@@ -70,14 +95,20 @@ interface VForExpression <: Expression {
     left: [ Pattern ]
     right: Expression
 }
+
+interface VOnExpression <: Expression {
+    type: "VOnExpression"
+    body: [ Statement ]
+}
 ```
 
 - This is mustaches or directive values.
 - If syntax errors exist, `VExpressionContainer#expression` is `null`.
 - `Reference` is objects but not `Node`. Those are external references which are in the expression.
-- `VForExpression` is an expression node like [ForInStatement] but it has an array as `left` property and does not have `body` property. This is the value of `v-for` directives.
+- `VForExpression` is an expression node like [ForInStatement] but it has an array as `left` property and does not have `body` property. This is the value of [`v-for` directives].
+- `VOnExpression` is an expression node like [BlockStatement] but it does not have braces. This is the value of [`v-on` directives].
 
-> Note: `vue-eslint-parser` transforms `v-for="(x, i) in list"` to `for(let [x, i] in list);` then gives the configured parser (`espree` by default) it. This implies that it needs the capability to parse ES2015 destructuring in order to parse `v-for` directives.
+> Note: `vue-eslint-parser` transforms `v-for="(x, i) in list"` to `for(let [x, i] in list);` then gives the configured parser (`espree` by default) it. This implies that it needs the capability to parse ES2015 destructuring in order to parse [`v-for` directives].
 
 ## VDirectiveKey
 
@@ -177,14 +208,17 @@ extend interface Program {
 This spec enhances [Program] nodes as it has the root node of `<template>`.
 This supports only HTML for now. However, I'm going to add other languages Vue.js supports. The AST of other languages may be different form to VElement.
 
-[ESTree]:     https://github.com/estree/estree
-[Program]:    https://github.com/estree/estree/blob/master/es5.md#programs
-[Node]:       https://github.com/estree/estree/blob/master/es5.md#node-objects
-[Expression]: https://github.com/estree/estree/blob/master/es5.md#expression
-[Literal]:    https://github.com/estree/estree/blob/master/es5.md#literal
-[Pattern]:    https://github.com/estree/estree/blob/master/es5.md#patterns
+[ESTree]: https://github.com/estree/estree
+[Program]: https://github.com/estree/estree/blob/master/es5.md#programs
+[Node]: https://github.com/estree/estree/blob/master/es5.md#node-objects
+[Statement]: https://github.com/estree/estree/blob/master/es5.md#statements
+[BlockStatement]: https://github.com/estree/estree/blob/master/es5.md#blockstatement
+[Expression]: https://github.com/estree/estree/blob/master/es5.md#expressions
+[Literal]: https://github.com/estree/estree/blob/master/es5.md#literal
+[Pattern]: https://github.com/estree/estree/blob/master/es5.md#patterns
 [Identifier]: https://github.com/estree/estree/blob/master/es5.md#identifier
 [ForInStatement]: https://github.com/estree/estree/blob/master/es5.md#forinstatement
 
-[`v-for` directives]: https://vuejs.org/v2/guide/list.html#v-for
-[scope]:              https://vuejs.org/v2/guide/components.html#Scoped-Slots
+[`v-for` directives]: https://vuejs.org/v2/api/#v-for
+[`v-on` directives]: https://vuejs.org/v2/api/#v-on
+[scope]: https://vuejs.org/v2/guide/components.html#Scoped-Slots

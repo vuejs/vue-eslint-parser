@@ -7,7 +7,7 @@ import * as lodash from "lodash"
 import {ParseError, Reference, Token, Variable, VAttribute, VDirective, VDirectiveKey, VDocumentFragment, VExpressionContainer, VIdentifier, VLiteral, VNode} from "../ast"
 import {debug} from "../common/debug"
 import {LocationCalculator} from "../common/location-calculator"
-import {ExpressionParseResult, parseExpression, parseVForExpression} from "../script"
+import {ExpressionParseResult, parseExpression, parseVForExpression, parseVOnExpression} from "../script"
 
 /**
  * Extract the variable declarations of scope attributes.
@@ -19,25 +19,6 @@ function extractScopeVariables(references: Reference[], outVariables: Variable[]
     while ((reference = references.shift()) != null) {
         reference.id.parent = null
         outVariables.push({id: reference.id, kind: "scope"})
-    }
-}
-
-/**
- * Remove references by name.
- * @param references The array of references to remove.
- * @param name The name of target references.
- */
-function removeByName(references: Reference[], name: string): void {
-    let i = 0
-    while (i < references.length) {
-        const reference = references[i]
-
-        if (reference.id.name === name) {
-            references.splice(i, 1)
-        }
-        else {
-            i += 1
-        }
     }
 }
 
@@ -237,9 +218,9 @@ function insertError(document: VDocumentFragment | null, error: ParseError): voi
  * @param parserOptions The parser options to parse expressions.
  * @param globalLocationCalculator The location calculator to adjust the locations of nodes.
  * @param node The attribute node to replace. This function modifies this node directly.
- * @param vFor The flag which indicates that this directive is `v-for`.
+ * @param directiveName The name of this directive.
  */
-function parseAttributeValue(code: string, parserOptions: any, globalLocationCalculator: LocationCalculator, node: VLiteral, vFor: boolean): ExpressionParseResult {
+function parseAttributeValue(code: string, parserOptions: any, globalLocationCalculator: LocationCalculator, node: VLiteral, directiveName: string): ExpressionParseResult {
     if (node.value.trim() === "") {
         throw new ParseError(
             "Unexpected empty",
@@ -253,9 +234,11 @@ function parseAttributeValue(code: string, parserOptions: any, globalLocationCal
     const firstChar = code[node.range[0]]
     const quoted = (firstChar === "\"" || firstChar === "'")
     const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(node.range[0] + (quoted ? 1 : 0))
-    const result = vFor
-        ? parseVForExpression(node.value, locationCalculator, parserOptions)
-        : parseExpression(node.value, locationCalculator, parserOptions)
+    const result = (
+        directiveName === "for" ? parseVForExpression(node.value, locationCalculator, parserOptions) :
+        directiveName === "on" ? parseVOnExpression(node.value, locationCalculator, parserOptions) :
+        /* otherwise */ parseExpression(node.value, locationCalculator, parserOptions)
+    )
 
     // Add the tokens of quotes.
     if (quoted) {
@@ -299,15 +282,7 @@ export function convertToDirective(code: string, parserOptions: any, locationCal
     const document = getOwnerDocument(node)
 
     try {
-        const vFor = directive.key.name === "for"
-        const vOn = directive.key.name === "on"
-        const ret = parseAttributeValue(code, parserOptions, locationCalculator, node.value, vFor)
-
-        // https://vuejs.org/v2/api/#v-on
-        // $event is not external references.
-        if (vOn) {
-            removeByName(ret.references, "$event")
-        }
+        const ret = parseAttributeValue(code, parserOptions, locationCalculator, node.value, directive.key.name)
 
         directive.value = {
             type: "VExpressionContainer",
@@ -359,7 +334,7 @@ export function defineScopeAttributeVariable(code: string, parserOptions: any, l
     }
 
     try {
-        const ret = parseAttributeValue(code, parserOptions, locationCalculator, node.value, false)
+        const ret = parseAttributeValue(code, parserOptions, locationCalculator, node.value, "scope")
         extractScopeVariables(ret.references, node.parent.parent.variables)
     }
     catch (err) {
