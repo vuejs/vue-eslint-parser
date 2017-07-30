@@ -14,7 +14,7 @@ import {HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_RAWTEXT_TAGS, H
 import {IntermediateToken, IntermediateTokenizer, EndTag, Mustache, StartTag, Text} from "./intermediate-tokenizer"
 import {Tokenizer} from "./tokenizer"
 
-const DIRECTIVE_NAME = /^(?:v-|[:@]).+[^.:@]$/
+const DIRECTIVE_NAME = /^(?:v-|[:@]).*[^.:@]$/
 const DT_DD = /^d[dt]$/
 const DUMMY_PARENT: any = Object.freeze({})
 

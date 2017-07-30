@@ -108,6 +108,24 @@ function removeByName(references: Reference[], name: string): void {
 }
 
 /**
+ * Throw syntax error for empty.
+ * @param locationCalculator The location calculator to get line/column.
+ */
+function throwEmptyError(locationCalculator: LocationCalculator, expected: string): never {
+    const loc = locationCalculator.getLocation(0)
+    const err = new ParseError(
+        `Expected to be ${expected}, but got empty.`,
+        undefined,
+        0,
+        loc.line,
+        loc.column
+    )
+    locationCalculator.fixErrorLocation(err)
+
+    throw err
+}
+
+/**
  * Parse the given source code.
  *
  * @param code The source code to parse.
@@ -218,6 +236,10 @@ export function parseScriptElement(node: VElement, globalLocationCalculator: Loc
 export function parseExpression(code: string, locationCalculator: LocationCalculator, parserOptions: any): ExpressionParseResult {
     debug("[script] parse expression: \"(%s)\"", code)
 
+    if (code.trim() === "") {
+        throwEmptyError(locationCalculator, "an expression")
+    }
+
     const ast = parseScriptFragment(
         `(${code})`,
         locationCalculator.getSubCalculatorAfter(-1),
@@ -245,6 +267,10 @@ export function parseExpression(code: string, locationCalculator: LocationCalcul
 export function parseVForExpression(code: string, locationCalculator: LocationCalculator, parserOptions: any): ExpressionParseResult {
     const processedCode = replaceAliasParens(code)
     debug("[script] parse v-for expression: \"for(%s);\"", processedCode)
+
+    if (code.trim() === "") {
+        throwEmptyError(locationCalculator, "'<alias> in <expression>'")
+    }
 
     const replaced = processedCode !== code
     const ast = parseScriptFragment(
@@ -312,6 +338,10 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
  */
 export function parseVOnExpression(code: string, locationCalculator: LocationCalculator, parserOptions: any): ExpressionParseResult {
     debug("[script] parse v-on expression: \"{%s}\"", code)
+
+    if (code.trim() === "") {
+        throwEmptyError(locationCalculator, "statements")
+    }
 
     const ast = parseScriptFragment(
         `{${code}}`,

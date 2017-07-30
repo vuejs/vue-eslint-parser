@@ -81,13 +81,13 @@ export class LocationCalculator {
     }
 
     /**
-     * Calculate the location of the given offset.
-     * @param offset The offset to calculate their location.
+     * Calculate the location of the given index.
+     * @param index The index to calculate their location.
      * @param lineTerminators The list of the offset of line terminators.
      * @returns The location of the offset.
      */
-    getLocation(offset: number): Location {
-        return this._getLocation(this.baseOffset + offset)
+    getLocation(index: number): Location {
+        return this._getLocation(this.baseOffset + index)
     }
 
     /**
@@ -123,7 +123,10 @@ export class LocationCalculator {
      * @param error The error to modify their location.
      */
     fixErrorLocation(error: ParseError) {
-        error.index = error.index + this.baseOffset
+        const gap = this._getGap(error.index)
+        const diff = this.baseOffset + Math.max(0, gap)
+
+        error.index += diff
 
         const loc = this._getLocation(error.index)
         error.lineNumber = loc.line

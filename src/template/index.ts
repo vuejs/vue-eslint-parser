@@ -221,16 +221,6 @@ function insertError(document: VDocumentFragment | null, error: ParseError): voi
  * @param directiveName The name of this directive.
  */
 function parseAttributeValue(code: string, parserOptions: any, globalLocationCalculator: LocationCalculator, node: VLiteral, directiveName: string): ExpressionParseResult {
-    if (node.value.trim() === "") {
-        throw new ParseError(
-            "Unexpected empty",
-            undefined,
-            node.range[0],
-            node.loc.start.line,
-            node.loc.end.line
-        )
-    }
-
     const firstChar = code[node.range[0]]
     const quoted = (firstChar === "\"" || firstChar === "'")
     const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(node.range[0] + (quoted ? 1 : 0))

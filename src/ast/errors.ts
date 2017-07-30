@@ -70,7 +70,7 @@ export class ParseError extends SyntaxError {
      * @param column The column number of this error.
      */
     constructor(message: string, code: ErrorCode | undefined, offset: number, line: number, column: number) {
-        super(`${message} (${line}:${column})`)
+        super(message)
         this.code = code
         this.index = offset
         this.lineNumber = line
