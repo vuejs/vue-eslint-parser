@@ -11,7 +11,6 @@
 
 const assert = require("assert")
 const parse = require("..").parseForESLint
-const RuleContext = require("./stub-rule-context")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -54,9 +53,8 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     before(() => {
         const result = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS))
-        const ruleContext = new RuleContext(code, result.ast)
         ast = result.ast
-        tokens = result.services.getTemplateBodyTokenStore(ruleContext)
+        tokens = result.services.getTemplateBodyTokenStore()
     })
 
     describe("ast.templateBody", () => {

@@ -3,6 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
+import assert from "assert"
 import EventEmitter from "events"
 import NodeEventGenerator from "eslint/lib/util/node-event-generator"
 import TokenStore from "eslint/lib/token-store"
@@ -21,7 +22,7 @@ const stores = new WeakMap<object, TokenStore>()
  * @returns The emitter for this context.
  */
 function ensureEmitter(context: any): EventEmitter {
-    const ast = context.getSourceCode()
+    const ast = context.getSourceCode().ast
     let emitter = emitters.get(ast)
 
     if (!emitter) {
@@ -44,31 +45,38 @@ function ensureEmitter(context: any): EventEmitter {
 // Exports
 //------------------------------------------------------------------------------
 
-export default {
-    registerTemplateBodyVisitor(context: any, visitor: {[key: string]: Function}): void {
-        const emitter = ensureEmitter(context)
+/**
+ * Define the parser service
+ * @param rootAST 
+ */
+export function define(rootAST: ESLintProgram) {
+    return {
+        registerTemplateBodyVisitor(context: any, visitor: {[key: string]: Function}): void {
+            assert(context.getSourceCode().ast === rootAST)
+            const emitter = ensureEmitter(context)
 
-        for (const selector of Object.keys(visitor)) {
-            emitter.on(selector, visitor[selector])
-        }
-    },
+            for (const selector of Object.keys(visitor)) {
+                emitter.on(selector, visitor[selector])
+            }
+        },
 
-    /**
-     * Get the token store of the template body.
-     * @param context The rule context to get.
-     * @returns The token store of template body.
-     */
-    getTemplateBodyTokenStore(context: any): TokenStore {
-        const ast = context.getSourceCode().ast.templateBody
-        let store = stores.get(ast)
+        /**
+         * Get the token store of the template body.
+         * @returns The token store of template body.
+         */
+        getTemplateBodyTokenStore(): TokenStore {
+            const ast = rootAST.templateBody
+            const key = ast || stores
+            let store = stores.get(key)
 
-        if (!store) {
-            store = (ast != null)
-                ? new TokenStore(ast.tokens, ast.comments)
-                : new TokenStore([], [])
-            stores.set(ast, store)
-        }
+            if (!store) {
+                store = (ast != null)
+                    ? new TokenStore(ast.tokens, ast.comments)
+                    : new TokenStore([], [])
+                stores.set(key, store)
+            }
 
-        return store
-    },
+            return store
+        },
+    }
 }

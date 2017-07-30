@@ -8,7 +8,7 @@ import * as AST from "./ast"
 import {LocationCalculator} from "./common/location-calculator"
 import {HTMLParser, HTMLTokenizer} from "./html"
 import {parseScript, parseScriptElement} from "./script"
-import services from "./parser-services"
+import * as services from "./parser-services"
 
 const STARTS_WITH_LT = /^\s*</
 
@@ -78,7 +78,7 @@ export function parseForESLint(code: string, options: any): AST.ESLintExtendedPr
         : undefined
 
     result.ast.templateBody = templateBody
-    result.services = Object.assign(result.services || {}, services)
+    result.services = Object.assign(result.services || {}, services.define(result.ast))
 
     return result
 }
