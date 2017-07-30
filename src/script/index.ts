@@ -273,7 +273,9 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
 
     // Modify parent.
     for (const l of left) {
-        l.parent = expression
+        if (l != null) {
+            l.parent = expression
+        }
     }
     right.parent = expression
 

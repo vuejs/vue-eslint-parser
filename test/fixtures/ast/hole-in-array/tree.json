@@ -1,0 +1,109 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div>\n        <div v-for=\"(a,,b) in list\"></div>\n    </div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>\n        <div v-for=\"(a,,b) in list\"></div>\n    </div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<div v-for=\"(a,,b) in list\"></div>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<div v-for=\"(a,,b) in list\">",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "v-for=\"(a,,b) in list\"",
+                                        "children": [
+                                            {
+                                                "type": "VDirectiveKey",
+                                                "text": "v-for",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "\"(a,,b) in list\"",
+                                                "children": [
+                                                    {
+                                                        "type": "VForExpression",
+                                                        "text": "(a,,b) in list",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "a",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "b",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "list",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</div>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
