@@ -83,11 +83,19 @@ export class LocationCalculator {
     /**
      * Calculate the location of the given index.
      * @param index The index to calculate their location.
-     * @param lineTerminators The list of the offset of line terminators.
-     * @returns The location of the offset.
+     * @returns The location of the index.
      */
     getLocation(index: number): Location {
         return this._getLocation(this.baseOffset + index)
+    }
+
+    /**
+     * Calculate the offset of the given index.
+     * @param index The index to calculate their location.
+     * @returns The offset of the index.
+     */
+    getOffsetWithGap(index: number): number {
+        return this.baseOffset + index + this._getGap(index)
     }
 
     /**

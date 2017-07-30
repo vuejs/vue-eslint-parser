@@ -126,6 +126,21 @@ function throwEmptyError(locationCalculator: LocationCalculator, expected: strin
 }
 
 /**
+ * Throw syntax error of outside of code.
+ * @param locationCalculator The location calculator to get line/column.
+ */
+function throwErrorAsAdjustingOutsideOfCode(err: any, code: string, locationCalculator: LocationCalculator): never {
+    if (ParseError.isParseError(err)) {
+        const endOffset = locationCalculator.getOffsetWithGap(code.length)
+        if (err.index >= endOffset) {
+            err.message = "Unexpected end of expression."
+        }
+    }
+
+    throw err
+}
+
+/**
  * Parse the given source code.
  *
  * @param code The source code to parse.
@@ -164,7 +179,6 @@ export interface ExpressionParseResult {
  * The interface of a result of ESLint custom parser.
  */
 export type ESLintCustomParserResult = ESLintProgram | ESLintExtendedProgram
-
 
 /**
  * Parse the given source code.
@@ -237,24 +251,29 @@ export function parseExpression(code: string, locationCalculator: LocationCalcul
     debug("[script] parse expression: \"(%s)\"", code)
 
     if (code.trim() === "") {
-        throwEmptyError(locationCalculator, "an expression")
+        return throwEmptyError(locationCalculator, "an expression")
     }
 
-    const ast = parseScriptFragment(
-        `(${code})`,
-        locationCalculator.getSubCalculatorAfter(-1),
-        parserOptions
-    ).ast
-    const references = analyzeExternalReferences(ast, parserOptions)
-    const expression = (ast.body[0] as ESLintExpressionStatement).expression
-    const tokens = ast.tokens || []
-    const comments = ast.comments || []
+    try {
+        const ast = parseScriptFragment(
+            `(${code})`,
+            locationCalculator.getSubCalculatorAfter(-1),
+            parserOptions
+        ).ast
+        const references = analyzeExternalReferences(ast, parserOptions)
+        const expression = (ast.body[0] as ESLintExpressionStatement).expression
+        const tokens = ast.tokens || []
+        const comments = ast.comments || []
 
-    // Remvoe parens.
-    tokens.shift()
-    tokens.pop()
+        // Remvoe parens.
+        tokens.shift()
+        tokens.pop()
 
-    return {expression, tokens, comments, references, variables: []}
+        return {expression, tokens, comments, references, variables: []}
+    }
+    catch (err) {
+        return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
+    }
 }
 
 /**
@@ -272,61 +291,66 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
         throwEmptyError(locationCalculator, "'<alias> in <expression>'")
     }
 
-    const replaced = processedCode !== code
-    const ast = parseScriptFragment(
-        `for(let ${processedCode});`,
-        locationCalculator.getSubCalculatorAfter(-8),
-        parserOptions
-    ).ast
-    const tokens = ast.tokens || []
-    const comments = ast.comments || []
-    const scope = analyzeVariablesAndExternalReferences(ast, parserOptions)
-    const references = scope.references
-    const variables = scope.variables
-    const statement = ast.body[0] as (ESLintForInStatement | ESLintForOfStatement)
-    const left = normalizeLeft(statement.left, replaced)
-    const right = statement.right
-    const firstToken = tokens[3] || statement.left
-    const lastToken = tokens[tokens.length - 3] || statement.right
-    const expression: VForExpression = {
-        type: "VForExpression",
-        range: [firstToken.range[0], lastToken.range[1]],
-        loc: {start: firstToken.loc.start, end: lastToken.loc.end},
-        parent: DUMMY_PARENT,
-        left,
-        right,
-    }
-
-    // Modify parent.
-    for (const l of left) {
-        if (l != null) {
-            l.parent = expression
+    try {
+        const replaced = processedCode !== code
+        const ast = parseScriptFragment(
+            `for(let ${processedCode});`,
+            locationCalculator.getSubCalculatorAfter(-8),
+            parserOptions
+        ).ast
+        const tokens = ast.tokens || []
+        const comments = ast.comments || []
+        const scope = analyzeVariablesAndExternalReferences(ast, parserOptions)
+        const references = scope.references
+        const variables = scope.variables
+        const statement = ast.body[0] as (ESLintForInStatement | ESLintForOfStatement)
+        const left = normalizeLeft(statement.left, replaced)
+        const right = statement.right
+        const firstToken = tokens[3] || statement.left
+        const lastToken = tokens[tokens.length - 3] || statement.right
+        const expression: VForExpression = {
+            type: "VForExpression",
+            range: [firstToken.range[0], lastToken.range[1]],
+            loc: {start: firstToken.loc.start, end: lastToken.loc.end},
+            parent: DUMMY_PARENT,
+            left,
+            right,
         }
-    }
-    right.parent = expression
 
-    // Remvoe `for` `(` `let` `)` `;`.
-    tokens.shift()
-    tokens.shift()
-    tokens.shift()
-    tokens.pop()
-    tokens.pop()
-
-    // Restore parentheses from array brackets.
-    if (replaced) {
-        const closeOffset = statement.left.range[1] - 1
-        const open = tokens[0]
-        const close = tokens.find(t => t.range[0] === closeOffset)
-
-        if (open != null) {
-            open.value = "("
+        // Modify parent.
+        for (const l of left) {
+            if (l != null) {
+                l.parent = expression
+            }
         }
-        if (close != null) {
-            close.value = ")"
-        }
-    }
+        right.parent = expression
 
-    return {expression, tokens, comments, references, variables}
+        // Remvoe `for` `(` `let` `)` `;`.
+        tokens.shift()
+        tokens.shift()
+        tokens.shift()
+        tokens.pop()
+        tokens.pop()
+
+        // Restore parentheses from array brackets.
+        if (replaced) {
+            const closeOffset = statement.left.range[1] - 1
+            const open = tokens[0]
+            const close = tokens.find(t => t.range[0] === closeOffset)
+
+            if (open != null) {
+                open.value = "("
+            }
+            if (close != null) {
+                close.value = ")"
+            }
+        }
+
+        return {expression, tokens, comments, references, variables}
+    }
+    catch (err) {
+        return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
+    }
 }
 
 /**
@@ -343,43 +367,48 @@ export function parseVOnExpression(code: string, locationCalculator: LocationCal
         throwEmptyError(locationCalculator, "statements")
     }
 
-    const ast = parseScriptFragment(
-        `{${code}}`,
-        locationCalculator.getSubCalculatorAfter(-1),
-        parserOptions
-    ).ast
-    const references = analyzeExternalReferences(ast, parserOptions)
-    const block = ast.body[0] as ESLintBlockStatement
-    const body = block.body
-    const first = lodash.first(body)
-    const last = lodash.last(body)
-    const expression: VOnExpression = {
-        type: "VOnExpression",
-        range: [
-            (first != null) ? first.range[0] : block.range[0] + 1,
-            (last != null) ? last.range[1] : block.range[1] - 1,
-        ],
-        loc: {
-            start: (first != null) ? first.loc.start : locationCalculator.getLocation(1),
-            end: (last != null) ? last.loc.end : locationCalculator.getLocation(code.length + 1),
-        },
-        parent: DUMMY_PARENT,
-        body,
+    try {
+        const ast = parseScriptFragment(
+            `{${code}}`,
+            locationCalculator.getSubCalculatorAfter(-1),
+            parserOptions
+        ).ast
+        const references = analyzeExternalReferences(ast, parserOptions)
+        const block = ast.body[0] as ESLintBlockStatement
+        const body = block.body
+        const first = lodash.first(body)
+        const last = lodash.last(body)
+        const expression: VOnExpression = {
+            type: "VOnExpression",
+            range: [
+                (first != null) ? first.range[0] : block.range[0] + 1,
+                (last != null) ? last.range[1] : block.range[1] - 1,
+            ],
+            loc: {
+                start: (first != null) ? first.loc.start : locationCalculator.getLocation(1),
+                end: (last != null) ? last.loc.end : locationCalculator.getLocation(code.length + 1),
+            },
+            parent: DUMMY_PARENT,
+            body,
+        }
+        const tokens = ast.tokens || []
+        const comments = ast.comments || []
+
+        // Modify parent.
+        for (const b of body) {
+            b.parent = expression
+        }
+
+        // Remvoe braces.
+        tokens.shift()
+        tokens.pop()
+
+        // Remove $event: https://vuejs.org/v2/api/#v-on
+        removeByName(references, "$event")
+
+        return {expression, tokens, comments, references, variables: []}
     }
-    const tokens = ast.tokens || []
-    const comments = ast.comments || []
-
-    // Modify parent.
-    for (const b of body) {
-        b.parent = expression
+    catch (err) {
+        return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
     }
-
-    // Remvoe braces.
-    tokens.shift()
-    tokens.pop()
-
-    // Remove $event: https://vuejs.org/v2/api/#v-on
-    removeByName(references, "$event")
-
-    return {expression, tokens, comments, references, variables: []}
 }
