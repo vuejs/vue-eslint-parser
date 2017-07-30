@@ -1,0 +1,66 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template><div></div><div><div></div></div></template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VElement",
+                "text": "<div><div></div></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<div></div>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<div>",
+                                "children": []
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</div>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

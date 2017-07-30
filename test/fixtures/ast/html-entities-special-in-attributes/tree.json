@@ -1,0 +1,66 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div foo=\"I'm &notit; I tell you\">\n        I'm &notit; I tell you\n    </div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div foo=\"I'm &notit; I tell you\">\n        I'm &notit; I tell you\n    </div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div foo=\"I'm &notit; I tell you\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "foo=\"I'm &notit; I tell you\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"I'm &notit; I tell you\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        I'm &notit; I tell you\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

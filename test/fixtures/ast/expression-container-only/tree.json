@@ -1,0 +1,29 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>{{message}}</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{message}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "message",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

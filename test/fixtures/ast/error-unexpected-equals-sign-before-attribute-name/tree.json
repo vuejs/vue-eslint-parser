@@ -1,0 +1,56 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div  =abc=\"def\">\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div  =abc=\"def\">\n",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div  =abc=\"def\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "=abc=\"def\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "=abc",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"def\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

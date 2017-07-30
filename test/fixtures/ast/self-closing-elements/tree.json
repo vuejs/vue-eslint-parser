@@ -1,0 +1,71 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <aaa />\n    <bbb />\n    <ccc />\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<aaa />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<aaa />",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<bbb />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<bbb />",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<ccc />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<ccc />",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

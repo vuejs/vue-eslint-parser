@@ -1,0 +1,160 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <textarea/>\n    <textarea>Ran &amp; Chen</textarea>\n    <textarea><foo></foo></textarea>\n    <textarea>{{a + b}}</textarea>\n    <textarea></</textarea>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<textarea/>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<textarea/>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<textarea>Ran &amp; Chen</textarea>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<textarea>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "Ran &amp; Chen",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</textarea>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<textarea><foo></foo></textarea>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<textarea>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "<foo></foo>",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</textarea>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<textarea>{{a + b}}</textarea>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<textarea>",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{a + b}}",
+                        "children": [
+                            {
+                                "type": "BinaryExpression",
+                                "text": "a + b",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "b",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</textarea>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<textarea></</textarea>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<textarea>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "</",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</textarea>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

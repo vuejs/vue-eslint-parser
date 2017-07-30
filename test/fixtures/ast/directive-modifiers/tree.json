@@ -1,0 +1,144 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div v-a.b></div>\n    <div v-a.b=v></div>\n    <div v-a.b.c=v></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-a.b></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-a.b>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-a.b",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-a.b",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-a.b=v></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-a.b=v>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-a.b=v",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-a.b",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "v",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "v",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-a.b.c=v></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-a.b.c=v>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-a.b.c=v",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-a.b.c",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "v",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "v",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

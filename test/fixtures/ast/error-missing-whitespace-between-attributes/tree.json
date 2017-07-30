@@ -1,0 +1,77 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div a=\"b\"c=\"d\"></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div a=\"b\"c=\"d\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div a=\"b\"c=\"d\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "a=\"b\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"b\"",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "c=\"d\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "c",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"d\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

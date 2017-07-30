@@ -1,0 +1,100 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div v-if=\"a &amp;&amp; b\">{{a &amp;&amp; b}}</div>\n    &\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-if=\"a &amp;&amp; b\">{{a &amp;&amp; b}}</div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-if=\"a &amp;&amp; b\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-if=\"a &amp;&amp; b\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-if",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"a &amp;&amp; b\"",
+                                        "children": [
+                                            {
+                                                "type": "LogicalExpression",
+                                                "text": "a &amp;&amp; b",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{a &amp;&amp; b}}",
+                        "children": [
+                            {
+                                "type": "LogicalExpression",
+                                "text": "a &amp;&amp; b",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "b",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    &\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

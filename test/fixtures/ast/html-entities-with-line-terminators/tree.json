@@ -1,0 +1,66 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div>{{\n        a\n        &amp;&amp;\n        b\n    }}</div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>{{\n        a\n        &amp;&amp;\n        b\n    }}</div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{\n        a\n        &amp;&amp;\n        b\n    }}",
+                        "children": [
+                            {
+                                "type": "LogicalExpression",
+                                "text": "a\n        &amp;&amp;\n        b",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "b",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

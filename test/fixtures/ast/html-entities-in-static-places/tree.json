@@ -1,0 +1,103 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <!-- a &amp;&amp; b -->\n    <div foo=\"a &amp;&amp; b\" bar='a &amp;&amp; b' baz=&amp;&amp;>a &amp;&amp; b</div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div foo=\"a &amp;&amp; b\" bar='a &amp;&amp; b' baz=&amp;&amp;>a &amp;&amp; b</div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div foo=\"a &amp;&amp; b\" bar='a &amp;&amp; b' baz=&amp;&amp;>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "foo=\"a &amp;&amp; b\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"a &amp;&amp; b\"",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "bar='a &amp;&amp; b'",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "bar",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "'a &amp;&amp; b'",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "baz=&amp;&amp;",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "baz",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "&amp;&amp;",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "a &amp;&amp; b",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

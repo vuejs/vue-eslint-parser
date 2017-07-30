@@ -1,0 +1,55 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    Hello, {{name}}!!\n    My hobbies are {{hobbies}}.\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    Hello, ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{name}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "name",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "!!\n    My hobbies are ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{hobbies}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "hobbies",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": ".\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,279 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div v-a></div>\n    <div v-a=></div>\n    <div v-a=b></div>\n    <div v-a=\"b\"></div>\n    <div v-a='b'></div>\n    <div v-a=\"\"></div>\n    <div v-a=''></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-a></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-a>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-a",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "v-a",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-a=></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-a=>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-a=",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "v-a",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-a=b></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-a=b>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-a=b",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "v-a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "b",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-a=\"b\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-a=\"b\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-a=\"b\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "v-a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"b\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-a='b'></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-a='b'>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-a='b'",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "v-a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "'b'",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-a=\"\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-a=\"\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-a=\"\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "v-a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-a=''></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-a=''>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-a=''",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "v-a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "''",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

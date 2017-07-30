@@ -1,0 +1,113 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <dl>\n        <dt>Title 1\n        <dd>Details 1\n        <dt>Title 2\n        <dd>Details 2\n    </dl>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<dl>\n        <dt>Title 1\n        <dd>Details 1\n        <dt>Title 2\n        <dd>Details 2\n    </dl>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<dl>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<dt>Title 1\n        ",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<dt>",
+                                "children": []
+                            },
+                            {
+                                "type": "VText",
+                                "text": "Title 1\n        ",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<dd>Details 1\n        ",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<dd>",
+                                "children": []
+                            },
+                            {
+                                "type": "VText",
+                                "text": "Details 1\n        ",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<dt>Title 2\n        ",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<dt>",
+                                "children": []
+                            },
+                            {
+                                "type": "VText",
+                                "text": "Title 2\n        ",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<dd>Details 2\n    ",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<dd>",
+                                "children": []
+                            },
+                            {
+                                "type": "VText",
+                                "text": "Details 2\n    ",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</dl>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

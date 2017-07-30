@@ -81,6 +81,27 @@ const KEYS: KeyMap = {
     WithStatement: ["object", "body"],
     YieldExpression: ["argument"],
 
+    // Legacy
+    RestProperty: ["argument"],
+    ExperimentalRestProperty: ["argument"],
+    SpreadProperty: ["argument"],
+    ExperimentalSpreadProperty: ["argument"],
+
+    // JSX
+    JSXIdentifier: [],
+    JSXMemberExpression: ["object", "property"],
+    JSXNamespacedName: ["namespace", "name"],
+    JSXEmptyExpression: [],
+    JSXExpressionContainer: ["expression"],
+    JSXSpreadChild: ["expression"],
+    JSXOpeningElement: ["name", "attributes"],
+    JSXClosingElement: ["name"],
+    JSXAttribute: ["name", "value"],
+    JSXSpreadAttribute: ["argument"],
+    JSXText: [],
+    JSXElement: ["openingElement", "children", "closingElement"],
+
+    // Vue.js
     VAttribute: ["key", "value"],
     VDirectiveKey: [],
     VDocumentFragment: ["children"],
@@ -90,6 +111,7 @@ const KEYS: KeyMap = {
     VForExpression: ["left", "right"],
     VIdentifier: [],
     VLiteral: [],
+    VOnExpression: ["body"],
     VStartTag: ["attributes"],
     VText: [],
 }

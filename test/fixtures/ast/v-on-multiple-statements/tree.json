@@ -1,0 +1,171 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <a @click.prevent=\"setUploadType('DIR'); showModal('uploadFile')\">\n        <i class=\"fa fa-fw fa-lg fa-cloud-upload\" aria-hidden=\"true\"></i>\n    </a>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<a @click.prevent=\"setUploadType('DIR'); showModal('uploadFile')\">\n        <i class=\"fa fa-fw fa-lg fa-cloud-upload\" aria-hidden=\"true\"></i>\n    </a>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<a @click.prevent=\"setUploadType('DIR'); showModal('uploadFile')\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "@click.prevent=\"setUploadType('DIR'); showModal('uploadFile')\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "@click.prevent",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"setUploadType('DIR'); showModal('uploadFile')\"",
+                                        "children": [
+                                            {
+                                                "type": "VOnExpression",
+                                                "text": "setUploadType('DIR'); showModal('uploadFile')",
+                                                "children": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "text": "setUploadType('DIR');",
+                                                        "children": [
+                                                            {
+                                                                "type": "CallExpression",
+                                                                "text": "setUploadType('DIR')",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "setUploadType",
+                                                                        "children": []
+                                                                    },
+                                                                    {
+                                                                        "type": "Literal",
+                                                                        "text": "'DIR'",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "text": "showModal('uploadFile')",
+                                                        "children": [
+                                                            {
+                                                                "type": "CallExpression",
+                                                                "text": "showModal('uploadFile')",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "showModal",
+                                                                        "children": []
+                                                                    },
+                                                                    {
+                                                                        "type": "Literal",
+                                                                        "text": "'uploadFile'",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<i class=\"fa fa-fw fa-lg fa-cloud-upload\" aria-hidden=\"true\"></i>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<i class=\"fa fa-fw fa-lg fa-cloud-upload\" aria-hidden=\"true\">",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "class=\"fa fa-fw fa-lg fa-cloud-upload\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "class",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VLiteral",
+                                                "text": "\"fa fa-fw fa-lg fa-cloud-upload\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "aria-hidden=\"true\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "aria-hidden",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VLiteral",
+                                                "text": "\"true\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</i>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</a>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

@@ -13,11 +13,13 @@ const assert = require("assert")
 const fs = require("fs")
 const path = require("path")
 const parser = require("..")
+const linter = require("./fixtures/eslint").linter
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 
+const PARSER = path.resolve(__dirname, "..")
 const ROOT = path.join(__dirname, "fixtures/ast")
 const TARGETS = fs.readdirSync(ROOT)
 const PARSER_OPTIONS = {
@@ -60,6 +62,48 @@ function getAllTokens(ast) {
         tokenArrays.push(ast.templateBody.tokens, ast.templateBody.comments)
     }
     return Array.prototype.concat.apply([], tokenArrays)
+}
+
+/**
+ * Create simple tree.
+ * @param {string} source The source code.
+ * @param {ASTNode} ast The root node.
+ * @returns {object} Simple tree.
+ */
+function getTree(source) {
+    const stack = []
+    const root = {children: []}
+    let current = root
+
+    linter.reset()
+    linter.defineRule("maketree", (ruleContext) => {
+        ruleContext.parserServices.registerTemplateBodyVisitor(ruleContext, {
+            "*"(node) {
+                stack.push(current)
+                current.children.push(current = {
+                    type: node.type,
+                    text: source.slice(node.range[0], node.range[1]),
+                    children: [],
+                })
+            },
+            "*:exit"() {
+                current = stack.pop()
+            },
+        })
+        return {}
+    })
+    linter.verify(
+        source,
+        {
+            parser: PARSER,
+            parserOptions: {ecmaVersion: 2017},
+            rules: {maketree: "error"},
+        },
+        undefined,
+        true
+    )
+
+    return root.children
 }
 
 //------------------------------------------------------------------------------
@@ -120,6 +164,15 @@ describe("Template AST", () => {
                         `${JSON.stringify(token, null, 4)} expected ${JSON.stringify(expected)}, but got ${JSON.stringify(text)}`
                     )
                 }
+            })
+
+            it("should traverse AST in the correct order.", () => {
+                const resultPath = path.join(ROOT, `${name}/tree.json`)
+                const expectedText = fs.readFileSync(resultPath, "utf8")
+                const tokens = getTree(source)
+                const actualText = JSON.stringify(tokens, null, 4)
+
+                assert.strictEqual(actualText, expectedText)
             })
         })
     }

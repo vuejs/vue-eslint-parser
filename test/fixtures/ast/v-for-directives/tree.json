@@ -1,0 +1,263 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div v-for=\"a in list\"></div>\n    <div v-for=\"(a, b, c) in list\"></div>\n    <div v-for=\"a of list\"></div>\n    <div v-for=\"(a, b, c) of list\"></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"a in list\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"a in list\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"a in list\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"a in list\"",
+                                        "children": [
+                                            {
+                                                "type": "VForExpression",
+                                                "text": "a in list",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "list",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"(a, b, c) in list\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"(a, b, c) in list\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"(a, b, c) in list\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"(a, b, c) in list\"",
+                                        "children": [
+                                            {
+                                                "type": "VForExpression",
+                                                "text": "(a, b, c) in list",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "c",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "list",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"a of list\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"a of list\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"a of list\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"a of list\"",
+                                        "children": [
+                                            {
+                                                "type": "VForExpression",
+                                                "text": "a of list",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "list",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"(a, b, c) of list\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"(a, b, c) of list\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"(a, b, c) of list\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"(a, b, c) of list\"",
+                                        "children": [
+                                            {
+                                                "type": "VForExpression",
+                                                "text": "(a, b, c) of list",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "c",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "list",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

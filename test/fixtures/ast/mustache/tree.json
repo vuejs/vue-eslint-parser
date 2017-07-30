@@ -1,0 +1,206 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    {{a}}\n    <div>{{b}}</div>\n    {{c}}</>{{d}}</>{{e}}\n    {{f}}{{g}}{{h}}\n    <div></div>{{i}}\n    <br>{{j}}\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{a}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "a",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>{{b}}</div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{b}}",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "b",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{c}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "c",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{d}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "d",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{e}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "e",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{f}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "f",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{g}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "g",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{h}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "h",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{i}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "i",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<br>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<br>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{j}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "j",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

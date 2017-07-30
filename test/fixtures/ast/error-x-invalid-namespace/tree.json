@@ -1,0 +1,360 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    Valid:\n    <div xmlns=\"http://www.w3.org/1999/xhtml\"></div>\n    <svg xmlns=\"http://www.w3.org/2000/svg\"></svg>\n    <svg xmlns:xlink=\"http://www.w3.org/1999/xlink\"></svg>\n    <svg xmlns:foo=\"foo\"></svg>\n    Invalid:\n    <div xmlns></div>\n    <div xmlns=\"\"></div>\n    <div xmlns=\"http://www.w3.org/2000/svg\"></div>\n    <svg xmlns=\"http://www.w3.org/1999/xhtml\"></svg>\n    <svg xmlns:xlink=\"http://www.w3.org/1999/xhtml\"></svg>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    Valid:\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div xmlns=\"http://www.w3.org/1999/xhtml\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div xmlns=\"http://www.w3.org/1999/xhtml\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "xmlns=\"http://www.w3.org/1999/xhtml\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "xmlns",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"http://www.w3.org/1999/xhtml\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<svg xmlns=\"http://www.w3.org/2000/svg\"></svg>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<svg xmlns=\"http://www.w3.org/2000/svg\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "xmlns=\"http://www.w3.org/2000/svg\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "xmlns",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"http://www.w3.org/2000/svg\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</svg>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\"></svg>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "xmlns:xlink=\"http://www.w3.org/1999/xlink\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "xmlns:xlink",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"http://www.w3.org/1999/xlink\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</svg>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<svg xmlns:foo=\"foo\"></svg>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<svg xmlns:foo=\"foo\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "xmlns:foo=\"foo\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "xmlns:foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"foo\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</svg>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    Invalid:\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div xmlns></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div xmlns>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "xmlns",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "xmlns",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div xmlns=\"\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div xmlns=\"\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "xmlns=\"\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "xmlns",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div xmlns=\"http://www.w3.org/2000/svg\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div xmlns=\"http://www.w3.org/2000/svg\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "xmlns=\"http://www.w3.org/2000/svg\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "xmlns",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"http://www.w3.org/2000/svg\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<svg xmlns=\"http://www.w3.org/1999/xhtml\"></svg>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<svg xmlns=\"http://www.w3.org/1999/xhtml\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "xmlns=\"http://www.w3.org/1999/xhtml\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "xmlns",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"http://www.w3.org/1999/xhtml\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</svg>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<svg xmlns:xlink=\"http://www.w3.org/1999/xhtml\"></svg>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<svg xmlns:xlink=\"http://www.w3.org/1999/xhtml\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "xmlns:xlink=\"http://www.w3.org/1999/xhtml\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "xmlns:xlink",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"http://www.w3.org/1999/xhtml\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</svg>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

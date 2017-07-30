@@ -1,0 +1,109 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    {{a b}}\n    <div :foo=\"c d\"></div>\n    <template scope=\"e f\"></template>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{a b}}",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div :foo=\"c d\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div :foo=\"c d\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":foo=\"c d\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"c d\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<template scope=\"e f\"></template>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<template scope=\"e f\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "scope=\"e f\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "scope",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"e f\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</template>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

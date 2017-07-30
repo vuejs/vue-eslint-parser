@@ -1,0 +1,108 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <p>1th sentence\n    <p>2nd sentence\n    <hr>\n    <p>3rd sentence\n    <div></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<p>1th sentence\n    ",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<p>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "1th sentence\n    ",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VElement",
+                "text": "<p>2nd sentence\n    ",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<p>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "2nd sentence\n    ",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VElement",
+                "text": "<hr>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<hr>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<p>3rd sentence\n    ",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<p>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "3rd sentence\n    ",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VElement",
+                "text": "<div></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

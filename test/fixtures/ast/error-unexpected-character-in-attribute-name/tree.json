@@ -1,0 +1,88 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div a\"=\"b\" c<d  e'f = g></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div a\"=\"b\" c<d  e'f = g></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div a\"=\"b\" c<d  e'f = g>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "a\"=\"b\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "a\"",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"b\"",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "c<d",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "c<d",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "e'f = g",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "e'f",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "g",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

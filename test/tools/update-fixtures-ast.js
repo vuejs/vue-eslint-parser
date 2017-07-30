@@ -11,7 +11,7 @@
 
 const fs = require("fs")
 const path = require("path")
-const parse = require("../..").parseForESLint
+const parser = require("../..")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -61,6 +61,38 @@ function getAllTokens(ast) {
     return Array.prototype.concat.apply([], tokenArrays)
 }
 
+/**
+ * Create simple tree.
+ * @param {string} source The source code.
+ * @param {ASTNode} ast The root node.
+ * @returns {object} Simple tree.
+ */
+function getTree(source, ast) {
+    if (ast.templateBody == null) {
+        return []
+    }
+
+    const stack = []
+    const root = {children: []}
+    let current = root
+
+    parser.AST.traverseNodes(ast.templateBody, {
+        enterNode(node) {
+            stack.push(current)
+            current.children.push(current = {
+                type: node.type,
+                text: source.slice(node.range[0], node.range[1]),
+                children: [],
+            })
+        },
+        leaveNode() {
+            current = stack.pop()
+        },
+    })
+
+    return root.children
+}
+
 //------------------------------------------------------------------------------
 // Main
 //------------------------------------------------------------------------------
@@ -69,10 +101,13 @@ for (const name of TARGETS) {
     const sourcePath = path.join(ROOT, `${name}/source.vue`)
     const astPath = path.join(ROOT, `${name}/ast.json`)
     const tokenRangesPath = path.join(ROOT, `${name}/token-ranges.json`)
+    const treePath = path.join(ROOT, `${name}/tree.json`)
     const source = fs.readFileSync(sourcePath, "utf8")
-    const actual = parse(source, Object.assign({filePath: sourcePath}, PARSER_OPTIONS))
-    const tokenRanges = getAllTokens(actual.ast).map(t => source.slice(t.range[0], t.range[1]))
+    const actual = parser.parse(source, Object.assign({filePath: sourcePath}, PARSER_OPTIONS))
+    const tokenRanges = getAllTokens(actual).map(t => source.slice(t.range[0], t.range[1]))
+    const tree = getTree(source, actual)
 
-    fs.writeFileSync(astPath, JSON.stringify(actual.ast, replacer, 4))
+    fs.writeFileSync(astPath, JSON.stringify(actual, replacer, 4))
     fs.writeFileSync(tokenRangesPath, JSON.stringify(tokenRanges, replacer, 4))
+    fs.writeFileSync(treePath, JSON.stringify(tree, replacer, 4))
 }
