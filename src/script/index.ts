@@ -271,6 +271,12 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
         right,
     }
 
+    // Modify parent.
+    for (const l of left) {
+        l.parent = expression
+    }
+    right.parent = expression
+
     // Remvoe `for` `(` `let` `)` `;`.
     tokens.shift()
     tokens.shift()
@@ -330,6 +336,11 @@ export function parseVOnExpression(code: string, locationCalculator: LocationCal
     }
     const tokens = ast.tokens || []
     const comments = ast.comments || []
+
+    // Modify parent.
+    for (const b of body) {
+        b.parent = expression
+    }
 
     // Remvoe braces.
     tokens.shift()

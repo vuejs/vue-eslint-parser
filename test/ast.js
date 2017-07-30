@@ -12,6 +12,7 @@
 const assert = require("assert")
 const fs = require("fs")
 const path = require("path")
+const lodash = require("lodash")
 const parser = require("..")
 const linter = require("./fixtures/eslint").linter
 
@@ -67,7 +68,6 @@ function getAllTokens(ast) {
 /**
  * Create simple tree.
  * @param {string} source The source code.
- * @param {ASTNode} ast The root node.
  * @returns {object} Simple tree.
  */
 function getTree(source) {
@@ -104,6 +104,41 @@ function getTree(source) {
     )
 
     return root.children
+}
+
+/**
+ * Validate the parent property of every node.
+ * @param {string} source The source code.
+ * @returns {void}
+ */
+function validateParent(source) {
+    const stack = []
+
+    linter.reset()
+    linter.defineRule("validateparent", (ruleContext) => {
+        ruleContext.parserServices.registerTemplateBodyVisitor(ruleContext, {
+            "*"(node) {
+                if (stack.length >= 1) {
+                    assert(node.parent === lodash.last(stack))
+                }
+                stack.push(node)
+            },
+            "*:exit"() {
+                stack.pop()
+            },
+        })
+        return {}
+    })
+    linter.verify(
+        source,
+        {
+            parser: PARSER,
+            parserOptions: {ecmaVersion: 2017},
+            rules: {validateparent: "error"},
+        },
+        undefined,
+        true
+    )
 }
 
 //------------------------------------------------------------------------------
@@ -173,6 +208,10 @@ describe("Template AST", () => {
                 const actualText = JSON.stringify(tokens, null, 4)
 
                 assert.strictEqual(actualText, expectedText)
+            })
+
+            it("should have correct parent properties.", () => {
+                validateParent(source)
             })
         })
     }

@@ -292,7 +292,7 @@ export function convertToDirective(code: string, parserOptions: any, locationCal
             expression: ret.expression,
             references: ret.references,
         }
-        directive.value.parent = directive
+        ret.expression.parent = directive.value
 
         for (const variable of ret.variables) {
             node.parent.parent.variables.push(variable)
@@ -367,6 +367,7 @@ export function processMustache(parserOptions: any, globalLocationCalculator: Lo
 
         node.expression = ret.expression
         node.references = ret.references
+        ret.expression.parent = node
 
         replaceTokens(document, {range}, ret.tokens)
         insertComments(document, ret.comments)
