@@ -68,6 +68,7 @@ export class IntermediateTokenizer {
     private tokenizer: Tokenizer
     private currentToken: IntermediateToken | null
     private attribute: VAttribute | null
+    private attributeNames: Set<string>
     private expressionStartToken: Token | null
     private expressionTokens: Token[]
 
@@ -126,6 +127,7 @@ export class IntermediateTokenizer {
         this.tokenizer = tokenizer
         this.currentToken = null
         this.attribute = null
+        this.attributeNames = new Set<string>()
         this.expressionStartToken = null
         this.expressionTokens = []
         this.tokens = []
@@ -339,6 +341,10 @@ export class IntermediateTokenizer {
             this.reportParseError(token, "end-tag-with-attributes")
             return null
         }
+        if (this.attributeNames.has(token.value)) {
+            this.reportParseError(token, "duplicate-attribute")
+        }
+        this.attributeNames.add(token.value)
 
         this.attribute = {
             type: "VAttribute",
@@ -470,6 +476,8 @@ export class IntermediateTokenizer {
             selfClosing: false,
             attributes: [],
         }
+        this.attribute = null
+        this.attributeNames.clear()
 
         return result
     }
