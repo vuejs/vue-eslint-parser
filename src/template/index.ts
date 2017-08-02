@@ -78,7 +78,7 @@ function createDirectiveKey(node: VIdentifier): VDirectiveKey {
         raw,
     }
     const id = node.name
-    const rawId = node.raw
+    const rawId = node.rawName
     let i = 0
 
     if (node.name.startsWith(":")) {

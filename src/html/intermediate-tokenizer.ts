@@ -359,7 +359,7 @@ export class IntermediateTokenizer {
                 loc: {start: token.loc.start, end: token.loc.end},
                 parent: DUMMY_PARENT,
                 name: token.value,
-                raw: this.text.slice(token.range[0], token.range[1]),
+                rawName: this.text.slice(token.range[0], token.range[1]),
             },
             value: null,
         }

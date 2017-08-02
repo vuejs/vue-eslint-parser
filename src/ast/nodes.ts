@@ -627,7 +627,7 @@ export interface VIdentifier extends HasLocation, HasParent {
     type: "VIdentifier"
     parent: VAttribute
     name: string
-    raw: string
+    rawName: string
 }
 
 export interface DirectiveKeyParts {
