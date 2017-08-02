@@ -37,6 +37,7 @@
             }
         },
         "name": "template",
+        "rawName": "template",
         "namespace": "http://www.w3.org/1999/xhtml",
         "startTag": {
             "type": "VStartTag",
@@ -92,6 +93,7 @@
                     }
                 },
                 "name": "div",
+                "rawName": "div",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -148,7 +150,14 @@
                                 "modifiers": [
                                     "b"
                                 ],
-                                "shorthand": true
+                                "shorthand": true,
+                                "raw": {
+                                    "name": "bind",
+                                    "argument": "a",
+                                    "modifiers": [
+                                        "b"
+                                    ]
+                                }
                             },
                             "value": null
                         }
@@ -209,6 +218,7 @@
                     }
                 },
                 "name": "div",
+                "rawName": "div",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -265,7 +275,14 @@
                                 "modifiers": [
                                     "b"
                                 ],
-                                "shorthand": true
+                                "shorthand": true,
+                                "raw": {
+                                    "name": "on",
+                                    "argument": "a",
+                                    "modifiers": [
+                                        "b"
+                                    ]
+                                }
                             },
                             "value": null
                         }

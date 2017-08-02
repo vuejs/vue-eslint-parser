@@ -4,7 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import * as lodash from "lodash"
-import {ParseError, Reference, Token, Variable, VAttribute, VDirective, VDirectiveKey, VDocumentFragment, VExpressionContainer, VIdentifier, VLiteral, VNode} from "../ast"
+import {DirectiveKeyParts, ParseError, Reference, Token, Variable, VAttribute, VDirective, VDirectiveKey, VDocumentFragment, VExpressionContainer, VIdentifier, VLiteral, VNode} from "../ast"
 import {debug} from "../common/debug"
 import {LocationCalculator} from "../common/location-calculator"
 import {ExpressionParseResult, parseExpression, parseVForExpression, parseVOnExpression} from "../script"
@@ -61,53 +61,64 @@ function createSimpleToken(type: string, start: number, end: number, value: stri
  * @returns The directive key node.
  */
 function createDirectiveKey(node: VIdentifier): VDirectiveKey {
-    let name = null
-    let argument = null
-    let modifiers = null
-    let shorthand = false
-    let remain = node.name
-
-    if (remain.startsWith(":")) {
-        name = "bind"
-        shorthand = true
-        remain = remain.slice(1)
+    const raw: DirectiveKeyParts = {
+        name: "",
+        argument: null,
+        modifiers: [],
     }
-    else if (remain.startsWith("@")) {
-        name = "on"
-        shorthand = true
-        remain = remain.slice(1)
-    }
-    else {
-        const colon = remain.indexOf(":")
-        if (colon !== -1) {
-            name = remain.slice(0, colon)
-            remain = remain.slice(colon + 1)
-        }
-    }
-
-    const dotSplit = remain.split(".")
-    if (name == null) {
-        name = dotSplit[0]
-    }
-    else {
-        argument = dotSplit[0]
-    }
-    modifiers = dotSplit.slice(1)
-
-    if (name.startsWith("v-")) {
-        name = name.slice(2)
-    }
-
-    return {
+    const ret: VDirectiveKey = {
         type: "VDirectiveKey",
         range: node.range,
         loc: node.loc,
         parent: node.parent,
-        name,
-        argument,
-        modifiers,
-        shorthand,
+        name: "",
+        argument: null,
+        modifiers: [],
+        shorthand: false,
+        raw,
     }
+    const id = node.name
+    const rawId = node.raw
+    let i = 0
+
+    if (node.name.startsWith(":")) {
+        ret.name = raw.name = "bind"
+        ret.shorthand = true
+        i = 1
+    }
+    else if (id.startsWith("@")) {
+        ret.name = raw.name = "on"
+        ret.shorthand = true
+        i = 1
+    }
+    else {
+        const colon = id.indexOf(":")
+        if (colon !== -1) {
+            ret.name = id.slice(0, colon)
+            raw.name = rawId.slice(0, colon)
+            i = colon + 1
+        }
+    }
+
+    const dotSplit = id.slice(i).split(".")
+    const dotSplitRaw = rawId.slice(i).split(".")
+    if (ret.name === "") {
+        ret.name = dotSplit[0]
+        raw.name = dotSplitRaw[0]
+    }
+    else {
+        ret.argument = dotSplit[0]
+        raw.argument = dotSplitRaw[0]
+    }
+    ret.modifiers = dotSplit.slice(1)
+    raw.modifiers = dotSplitRaw.slice(1)
+
+    if (ret.name.startsWith("v-")) {
+        ret.name = ret.name.slice(2)
+        raw.name = raw.name.slice(2)
+    }
+
+    return ret
 }
 
 /**

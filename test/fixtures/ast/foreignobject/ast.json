@@ -37,6 +37,7 @@
             }
         },
         "name": "template",
+        "rawName": "template",
         "namespace": "http://www.w3.org/1999/xhtml",
         "startTag": {
             "type": "VStartTag",
@@ -92,6 +93,7 @@
                     }
                 },
                 "name": "svg",
+                "rawName": "svg",
                 "namespace": "http://www.w3.org/2000/svg",
                 "startTag": {
                     "type": "VStartTag",
@@ -147,6 +149,7 @@
                             }
                         },
                         "name": "path",
+                        "rawName": "path",
                         "namespace": "http://www.w3.org/2000/svg",
                         "startTag": {
                             "type": "VStartTag",
@@ -198,7 +201,8 @@
                                                 "column": 15
                                             }
                                         },
-                                        "name": "d"
+                                        "name": "d",
+                                        "raw": "d"
                                     },
                                     "value": {
                                         "type": "VLiteral",
@@ -260,6 +264,7 @@
                             }
                         },
                         "name": "foreignObject",
+                        "rawName": "foreignobject",
                         "namespace": "http://www.w3.org/2000/svg",
                         "startTag": {
                             "type": "VStartTag",
@@ -315,6 +320,7 @@
                                     }
                                 },
                                 "name": "div",
+                                "rawName": "div",
                                 "namespace": "http://www.w3.org/1999/xhtml",
                                 "startTag": {
                                     "type": "VStartTag",

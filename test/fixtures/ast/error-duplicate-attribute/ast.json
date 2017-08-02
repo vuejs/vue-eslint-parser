@@ -37,6 +37,7 @@
             }
         },
         "name": "template",
+        "rawName": "template",
         "namespace": "http://www.w3.org/1999/xhtml",
         "startTag": {
             "type": "VStartTag",
@@ -92,6 +93,7 @@
                     }
                 },
                 "name": "div",
+                "rawName": "div",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -143,7 +145,8 @@
                                         "column": 11
                                     }
                                 },
-                                "name": "id"
+                                "name": "id",
+                                "raw": "id"
                             },
                             "value": {
                                 "type": "VLiteral",
@@ -197,7 +200,8 @@
                                         "column": 18
                                     }
                                 },
-                                "name": "id"
+                                "name": "id",
+                                "raw": "id"
                             },
                             "value": {
                                 "type": "VLiteral",

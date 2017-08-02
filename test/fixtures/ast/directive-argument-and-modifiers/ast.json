@@ -37,6 +37,7 @@
             }
         },
         "name": "template",
+        "rawName": "template",
         "namespace": "http://www.w3.org/1999/xhtml",
         "startTag": {
             "type": "VStartTag",
@@ -92,6 +93,7 @@
                     }
                 },
                 "name": "div",
+                "rawName": "div",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -148,7 +150,14 @@
                                 "modifiers": [
                                     "c"
                                 ],
-                                "shorthand": false
+                                "shorthand": false,
+                                "raw": {
+                                    "name": "a",
+                                    "argument": "b",
+                                    "modifiers": [
+                                        "c"
+                                    ]
+                                }
                             },
                             "value": null
                         }
@@ -209,6 +218,7 @@
                     }
                 },
                 "name": "div",
+                "rawName": "div",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -266,7 +276,15 @@
                                     "c",
                                     "d"
                                 ],
-                                "shorthand": false
+                                "shorthand": false,
+                                "raw": {
+                                    "name": "a",
+                                    "argument": "b",
+                                    "modifiers": [
+                                        "c",
+                                        "d"
+                                    ]
+                                }
                             },
                             "value": null
                         }

@@ -37,6 +37,7 @@
             }
         },
         "name": "template",
+        "rawName": "template",
         "namespace": "http://www.w3.org/1999/xhtml",
         "startTag": {
             "type": "VStartTag",
@@ -129,6 +130,7 @@
                     }
                 },
                 "name": "div",
+                "rawName": "div",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -183,7 +185,12 @@
                                 "name": "bind",
                                 "argument": "foo",
                                 "modifiers": [],
-                                "shorthand": true
+                                "shorthand": true,
+                                "raw": {
+                                    "name": "bind",
+                                    "argument": "foo",
+                                    "modifiers": []
+                                }
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -262,6 +269,7 @@
                     }
                 },
                 "name": "template",
+                "rawName": "template",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -313,7 +321,8 @@
                                         "column": 19
                                     }
                                 },
-                                "name": "scope"
+                                "name": "scope",
+                                "raw": "scope"
                             },
                             "value": {
                                 "type": "VLiteral",

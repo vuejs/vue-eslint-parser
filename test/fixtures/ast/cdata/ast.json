@@ -37,6 +37,7 @@
             }
         },
         "name": "template",
+        "rawName": "template",
         "namespace": "http://www.w3.org/1999/xhtml",
         "startTag": {
             "type": "VStartTag",
@@ -92,6 +93,7 @@
                     }
                 },
                 "name": "svg",
+                "rawName": "SVG",
                 "namespace": "http://www.w3.org/2000/svg",
                 "startTag": {
                     "type": "VStartTag",
@@ -143,7 +145,8 @@
                                         "column": 14
                                     }
                                 },
-                                "name": "width"
+                                "name": "width",
+                                "raw": "Width"
                             },
                             "value": {
                                 "type": "VLiteral",
@@ -197,7 +200,8 @@
                                         "column": 27
                                     }
                                 },
-                                "name": "height"
+                                "name": "height",
+                                "raw": "heiGht"
                             },
                             "value": {
                                 "type": "VLiteral",
@@ -251,7 +255,8 @@
                                         "column": 41
                                     }
                                 },
-                                "name": "viewBox"
+                                "name": "viewBox",
+                                "raw": "viewbox"
                             },
                             "value": {
                                 "type": "VLiteral",
@@ -310,6 +315,7 @@
                             }
                         },
                         "name": "style",
+                        "rawName": "style",
                         "namespace": "http://www.w3.org/2000/svg",
                         "startTag": {
                             "type": "VStartTag",
@@ -403,6 +409,7 @@
                             }
                         },
                         "name": "path",
+                        "rawName": "path",
                         "namespace": "http://www.w3.org/2000/svg",
                         "startTag": {
                             "type": "VStartTag",
@@ -454,7 +461,8 @@
                                                 "column": 15
                                             }
                                         },
-                                        "name": "d"
+                                        "name": "d",
+                                        "raw": "d"
                                     },
                                     "value": {
                                         "type": "VLiteral",

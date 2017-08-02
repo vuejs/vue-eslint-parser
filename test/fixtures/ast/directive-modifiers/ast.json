@@ -37,6 +37,7 @@
             }
         },
         "name": "template",
+        "rawName": "template",
         "namespace": "http://www.w3.org/1999/xhtml",
         "startTag": {
             "type": "VStartTag",
@@ -92,6 +93,7 @@
                     }
                 },
                 "name": "div",
+                "rawName": "div",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -148,7 +150,14 @@
                                 "modifiers": [
                                     "b"
                                 ],
-                                "shorthand": false
+                                "shorthand": false,
+                                "raw": {
+                                    "name": "a",
+                                    "argument": null,
+                                    "modifiers": [
+                                        "b"
+                                    ]
+                                }
                             },
                             "value": null
                         }
@@ -209,6 +218,7 @@
                     }
                 },
                 "name": "div",
+                "rawName": "div",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -265,7 +275,14 @@
                                 "modifiers": [
                                     "b"
                                 ],
-                                "shorthand": false
+                                "shorthand": false,
+                                "raw": {
+                                    "name": "a",
+                                    "argument": null,
+                                    "modifiers": [
+                                        "b"
+                                    ]
+                                }
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -387,6 +404,7 @@
                     }
                 },
                 "name": "div",
+                "rawName": "div",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -444,7 +462,15 @@
                                     "b",
                                     "c"
                                 ],
-                                "shorthand": false
+                                "shorthand": false,
+                                "raw": {
+                                    "name": "a",
+                                    "argument": null,
+                                    "modifiers": [
+                                        "b",
+                                        "c"
+                                    ]
+                                }
                             },
                             "value": {
                                 "type": "VExpressionContainer",

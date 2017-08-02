@@ -31,6 +31,7 @@ export type IntermediateToken = StartTag | EndTag | Text | Mustache
 export interface StartTag extends HasLocation {
     type: "StartTag"
     name: string
+    rawName: string
     selfClosing: boolean
     attributes: VAttribute[]
 }
@@ -358,6 +359,7 @@ export class IntermediateTokenizer {
                 loc: {start: token.loc.start, end: token.loc.end},
                 parent: DUMMY_PARENT,
                 name: token.value,
+                raw: this.text.slice(token.range[0], token.range[1]),
             },
             value: null,
         }
@@ -473,6 +475,7 @@ export class IntermediateTokenizer {
             range: [token.range[0], token.range[1]],
             loc: {start: token.loc.start, end: token.loc.end},
             name: token.value,
+            rawName: this.text.slice(token.range[0] + 1, token.range[1]),
             selfClosing: false,
             attributes: [],
         }

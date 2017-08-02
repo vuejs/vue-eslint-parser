@@ -37,6 +37,7 @@
             }
         },
         "name": "template",
+        "rawName": "template",
         "namespace": "http://www.w3.org/1999/xhtml",
         "startTag": {
             "type": "VStartTag",
@@ -92,6 +93,7 @@
                     }
                 },
                 "name": "a",
+                "rawName": "a",
                 "namespace": "http://www.w3.org/1999/xhtml",
                 "startTag": {
                     "type": "VStartTag",
@@ -148,7 +150,14 @@
                                 "modifiers": [
                                     "prevent"
                                 ],
-                                "shorthand": true
+                                "shorthand": true,
+                                "raw": {
+                                    "name": "on",
+                                    "argument": "click",
+                                    "modifiers": [
+                                        "prevent"
+                                    ]
+                                }
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -435,6 +444,7 @@
                             }
                         },
                         "name": "i",
+                        "rawName": "i",
                         "namespace": "http://www.w3.org/1999/xhtml",
                         "startTag": {
                             "type": "VStartTag",
@@ -486,7 +496,8 @@
                                                 "column": 16
                                             }
                                         },
-                                        "name": "class"
+                                        "name": "class",
+                                        "raw": "class"
                                     },
                                     "value": {
                                         "type": "VLiteral",
@@ -540,7 +551,8 @@
                                                 "column": 61
                                             }
                                         },
-                                        "name": "aria-hidden"
+                                        "name": "aria-hidden",
+                                        "raw": "aria-hidden"
                                     },
                                     "value": {
                                         "type": "VLiteral",

@@ -1,0 +1,78 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <DIV aTtrName v-bind:AttrName.AbC=\"def\"></DIV>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<DIV aTtrName v-bind:AttrName.AbC=\"def\"></DIV>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<DIV aTtrName v-bind:AttrName.AbC=\"def\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "aTtrName",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "aTtrName",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "v-bind:AttrName.AbC=\"def\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-bind:AttrName.AbC",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"def\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "def",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</DIV>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

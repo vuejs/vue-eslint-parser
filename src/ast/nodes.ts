@@ -627,18 +627,23 @@ export interface VIdentifier extends HasLocation, HasParent {
     type: "VIdentifier"
     parent: VAttribute
     name: string
+    raw: string
+}
+
+export interface DirectiveKeyParts {
+    name: string
+    argument: string | null
+    modifiers: string[]
 }
 
 /**
  * Attribute name nodes.
  */
-export interface VDirectiveKey extends HasLocation, HasParent {
+export interface VDirectiveKey extends HasLocation, HasParent, DirectiveKeyParts {
     type: "VDirectiveKey"
     parent: VAttribute
-    name: string
-    argument: string | null
-    modifiers: string[]
     shorthand: boolean
+    raw: DirectiveKeyParts
 }
 
 /**
@@ -706,6 +711,7 @@ export interface VElement extends HasLocation, HasParent {
     parent: VDocumentFragment | VElement
     namespace: Namespace
     name: string
+    rawName: string
     startTag: VStartTag
     children: (VElement | VText | VExpressionContainer)[]
     endTag: VEndTag | null

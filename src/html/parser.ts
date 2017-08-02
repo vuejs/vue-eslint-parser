@@ -344,6 +344,7 @@ export class Parser {
             loc: {start: token.loc.start, end: token.loc.end},
             parent,
             name: adjustElementName(token.name, namespace),
+            rawName: token.rawName,
             namespace,
             startTag: {
                 type: "VStartTag",
