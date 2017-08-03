@@ -683,6 +683,7 @@ export interface VDirective extends HasLocation, HasParent {
 export interface VStartTag extends HasLocation, HasParent {
     type: "VStartTag"
     parent: VElement
+    selfClosing: boolean
     attributes: (VAttribute | VDirective)[]
 }
 

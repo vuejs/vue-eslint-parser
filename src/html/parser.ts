@@ -351,6 +351,7 @@ export class Parser {
                 range: token.range,
                 loc: token.loc,
                 parent: DUMMY_PARENT,
+                selfClosing: token.selfClosing,
                 attributes: token.attributes,
             },
             children: [],
