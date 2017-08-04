@@ -13,6 +13,7 @@ const assert = require("assert")
 const path = require("path")
 const fs = require("fs-extra")
 const parse = require("..").parse
+const parseForESLint = require("..").parseForESLint
 const CLIEngine = require("./fixtures/eslint").CLIEngine
 
 //------------------------------------------------------------------------------
@@ -503,6 +504,16 @@ describe("Basic tests", () => {
 
             assert.equal(cdata.value, "\u0000")
             assert.equal(errors.length, 0)
+        })
+    })
+
+    describe("About parserServices", () => {
+        it("should exist if the source code is a Vue SFC file.", () => {
+            assert.notEqual(parseForESLint("test", {filePath: "test.vue"}).services, undefined)
+        })
+
+        it("should exist even if the source code is not Vue SFC file.", () => {
+            assert.notEqual(parseForESLint("test", {filePath: "test.js"}).services, undefined)
         })
     })
 })

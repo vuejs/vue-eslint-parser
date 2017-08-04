@@ -56,28 +56,30 @@ export function parseForESLint(code: string, options: any): AST.ESLintExtendedPr
         tokens: true,
     }, options || {})
 
+    let result: AST.ESLintExtendedProgram
     if (!isVueFile(code, options)) {
-        return parseScript(code, options)
+        result = parseScript(code, options)
+    }
+    else {
+        const tokenizer = new HTMLTokenizer(code)
+        const rootAST = new HTMLParser(tokenizer, options).parse()
+        const locationCalcurator = new LocationCalculator(tokenizer.gaps, tokenizer.lineTerminators)
+        const script = rootAST.children.find(isScriptElement) as AST.VElement | undefined // https://github.com/Microsoft/TypeScript/issues/7657
+        const template = rootAST.children.find(isTemplateElement) as AST.VElement | undefined
+        const concreteInfo: AST.HasConcreteInfo = {
+            tokens: rootAST.tokens,
+            comments: rootAST.comments,
+            errors: rootAST.errors,
+        }
+
+        result = (script != null)
+            ? parseScriptElement(script, locationCalcurator, options)
+            : parseScript("", options)
+        result.ast.templateBody = (template != null)
+            ? Object.assign(template, concreteInfo)
+            : undefined
     }
 
-    const tokenizer = new HTMLTokenizer(code)
-    const rootAST = new HTMLParser(tokenizer, options).parse()
-    const locationCalcurator = new LocationCalculator(tokenizer.gaps, tokenizer.lineTerminators)
-    const script = rootAST.children.find(isScriptElement) as AST.VElement | undefined // https://github.com/Microsoft/TypeScript/issues/7657
-    const template = rootAST.children.find(isTemplateElement) as AST.VElement | undefined
-    const result = (script != null)
-        ? parseScriptElement(script, locationCalcurator, options)
-        : parseScript("", options)
-    const concreteInfo: AST.HasConcreteInfo = {
-        tokens: rootAST.tokens,
-        comments: rootAST.comments,
-        errors: rootAST.errors,
-    }
-    const templateBody = (template != null)
-        ? Object.assign(template, concreteInfo)
-        : undefined
-
-    result.ast.templateBody = templateBody
     result.services = Object.assign(result.services || {}, services.define(result.ast))
 
     return result
