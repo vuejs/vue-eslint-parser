@@ -252,6 +252,43 @@ describe("Basic tests", () => {
         })
     })
 
+    describe("About fixtures/typed.js", () => {
+        it("should notify no error with 'babel-eslint'", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["es6", "node"],
+                parser: PARSER_PATH,
+                parserOptions: {
+                    parser: "babel-eslint",
+                    sourceType: "module",
+                },
+                rules: {semi: ["error", "never"]},
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles(["typed.js"])
+            const messages = report.results[0].messages
+
+            assert(messages.length === 0)
+        })
+
+        it("should notify no error with 'typescript-eslint-parser'", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["es6", "node"],
+                parser: PARSER_PATH,
+                parserOptions: { //
+                    parser: "typescript-eslint-parser",
+                },
+                rules: {semi: ["error", "never"]},
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles(["typed.js"])
+            const messages = report.results[0].messages
+
+            assert(messages.length === 0)
+        })
+    })
+
     describe("About fixtures/typed.vue", () => {
         it("should notify no error with 'babel-eslint'", () => {
             const cli = new CLIEngine({
