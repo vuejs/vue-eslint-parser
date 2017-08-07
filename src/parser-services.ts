@@ -29,8 +29,11 @@ function ensureEmitter(context: any): EventEmitter {
         emitter = new EventEmitter()
         emitters.set(ast, emitter)
 
+        // In eslint 4.4.0 name of this property has changed
+        const linter = context._linter || context.eslint
+
         // Traverse
-        context.eslint.on("Program:exit", (node: ESLintProgram) => {
+        linter.on("Program:exit", (node: ESLintProgram) => {
             if (node.templateBody != null) {
                 const generator = new NodeEventGenerator(emitter as EventEmitter)
                 traverseNodes(node.templateBody, generator)
