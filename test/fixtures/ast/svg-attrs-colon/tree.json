@@ -1,0 +1,87 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <svg>\n        <use xlink:href=\"#test\"></use>\n    </svg>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<svg>\n        <use xlink:href=\"#test\"></use>\n    </svg>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<svg>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<use xlink:href=\"#test\"></use>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<use xlink:href=\"#test\">",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "xlink:href=\"#test\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "xlink:href",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VLiteral",
+                                                "text": "\"#test\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</use>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</svg>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
