@@ -1,0 +1,61 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div class\n        =\n            \"value\"\n    ></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div class\n        =\n            \"value\"\n    ></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div class\n        =\n            \"value\"\n    >",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "class\n        =\n            \"value\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "class",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"value\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

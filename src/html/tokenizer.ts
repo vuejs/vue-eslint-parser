@@ -997,6 +997,8 @@ export class Tokenizer {
      * @returns The next state.
      */
     protected BEFORE_ATTRIBUTE_VALUE(cp: number): TokenizerState {
+        this.endToken()
+
         while (isWhitespace(cp)) {
             cp = this.consumeNextCodePoint()
         }
