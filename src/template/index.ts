@@ -4,7 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import * as lodash from "lodash"
-import {DirectiveKeyParts, ParseError, Reference, Token, Variable, VAttribute, VDirective, VDirectiveKey, VDocumentFragment, VExpressionContainer, VIdentifier, VLiteral, VNode} from "../ast"
+import {DirectiveKeyParts, ParseError, Reference, Token, Variable, VAttribute, VDirective, VDirectiveKey, VDocumentFragment, VElement, VExpressionContainer, VIdentifier, VLiteral, VNode} from "../ast"
 import {debug} from "../common/debug"
 import {LocationCalculator} from "../common/location-calculator"
 import {ExpressionParseResult, parseExpression, parseVForExpression, parseVOnExpression} from "../script"
@@ -18,7 +18,11 @@ function extractScopeVariables(references: Reference[], outVariables: Variable[]
     let reference: Reference | undefined
     while ((reference = references.shift()) != null) {
         reference.id.parent = null
-        outVariables.push({id: reference.id, kind: "scope"})
+        outVariables.push({
+            id: reference.id,
+            kind: "scope",
+            references: [],
+        })
     }
 }
 
@@ -39,7 +43,7 @@ function getOwnerDocument(leafNode: VNode): VDocumentFragment | null {
  * Create a simple token.
  * @param type The type of new token.
  * @param start The offset of the start position of new token.
- * @param end The offset of the end position of new token. 
+ * @param end The offset of the end position of new token.
  * @param value The value of new token.
  * @returns The new token.
  */
@@ -255,6 +259,28 @@ function parseAttributeValue(code: string, parserOptions: any, globalLocationCal
 }
 
 /**
+ * Resolve the variable of the given reference.
+ * @param referene The reference to resolve.
+ * @param element The belonging element of the reference.
+ */
+function resolveReference(referene: Reference, element: VElement): void {
+    let node: VNode | null = element
+
+    // Find the variable of this reference.
+    while (node != null && node.type === "VElement") {
+        for (const variable of node.variables) {
+            if (variable.id.name === referene.id.name) {
+                referene.variable = variable
+                variable.references.push(referene)
+                return
+            }
+        }
+
+        node = node.parent
+    }
+}
+
+/**
  * Information of a mustache.
  */
 export interface Mustache {
@@ -381,6 +407,26 @@ export function processMustache(parserOptions: any, globalLocationCalculator: Lo
         }
         else {
             throw err
+        }
+    }
+}
+
+/**
+ * Resolve all references of the given expression container.
+ * @param container The expression container to resolve references.
+ */
+export function resolveReferences(container: VExpressionContainer): void {
+    let element: VNode | null = container.parent
+
+    // Get the belonging element.
+    while (element != null && element.type !== "VElement") {
+        element = element.parent
+    }
+
+    // Resolve.
+    if (element != null) {
+        for (const reference of container.references) {
+            resolveReference(reference, element)
         }
     }
 }

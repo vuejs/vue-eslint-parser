@@ -8,7 +8,7 @@ import * as lodash from "lodash"
 import {ErrorCode, HasLocation, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement, VExpressionContainer} from "../ast"
 import {debug} from "../common/debug"
 import {LocationCalculator} from "../common/location-calculator"
-import {convertToDirective, defineScopeAttributeVariable, processMustache} from "../template"
+import {convertToDirective, defineScopeAttributeVariable, processMustache, resolveReferences} from "../template"
 import {MATHML_ATTRIBUTE_NAME_MAP, SVG_ATTRIBUTE_NAME_MAP} from "./util/attribute-names"
 import {HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_RAWTEXT_TAGS, HTML_RCDATA_TAGS, HTML_VOID_ELEMENT_TAGS, SVG_ELEMENT_NAME_MAP} from "./util/tag-names"
 import {IntermediateToken, IntermediateTokenizer, EndTag, Mustache, StartTag, Text} from "./intermediate-tokenizer"
@@ -331,7 +331,7 @@ export class Parser {
      * Handle the start tag token.
      * @param token The token to handle.
      */
-    protected StartTag(token: StartTag): void {
+    protected StartTag(token: StartTag): void { //eslint-disable-line complexity
         debug("[html] StartTag %j", token)
 
         this.closeCurrentElementIfNecessary(token.name)
@@ -365,6 +365,13 @@ export class Parser {
         for (const attribute of token.attributes) {
             attribute.parent = element.startTag
             this.processAttribute(attribute, namespace)
+        }
+
+        // Resolve references.
+        for (const attribute of element.startTag.attributes) {
+            if (attribute.directive && attribute.value != null) {
+                resolveReferences(attribute.value)
+            }
         }
 
         // Check whether the self-closing is valid.
@@ -463,6 +470,10 @@ export class Parser {
         }
         processMustache(this.parserOptions, this.locationCalculator, container, token)
 
+        // Set relationship.
         parent.children.push(container)
+
+        // Resolve references.
+        resolveReferences(container)
     }
 }

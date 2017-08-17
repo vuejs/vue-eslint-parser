@@ -555,6 +555,7 @@ export type Namespace =
 export interface Variable {
     id: ESLintIdentifier
     kind: "v-for" | "scope"
+    references: Reference[]
 }
 
 /**
@@ -563,6 +564,7 @@ export interface Variable {
 export interface Reference {
     id: ESLintIdentifier
     mode: "rw" | "r" | "w"
+    variable: Variable | null
 }
 
 /**

@@ -29,6 +29,7 @@ function transformReference(reference: eslintScope.Reference): Reference {
             reference.isWriteOnly() ? "w" :
             /* otherwise */ "rw"
         ),
+        variable: null,
     }
 }
 
@@ -41,6 +42,7 @@ function transformVariable(variable: eslintScope.Variable): Variable {
     return {
         id: variable.defs[0].name as ESLintIdentifier,
         kind: "v-for",
+        references: [],
     }
 }
 
@@ -57,9 +59,9 @@ function getForScope(scope: eslintScope.Scope): eslintScope.Scope {
 }
 
 /**
- * 
- * @param ast 
- * @param parserOptions 
+ *
+ * @param ast
+ * @param parserOptions
  */
 function analyze(ast: ESLintProgram, parserOptions: any): eslintScope.Scope {
     const ecmaVersion = parserOptions.ecmaVersion || 2017

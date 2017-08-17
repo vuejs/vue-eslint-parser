@@ -88,6 +88,7 @@ interface VExpressionContainer <: Node {
 interface Reference {
     id: Identifier
     mode: "rw" | "r" | "w"
+    variable: Variable | null
 }
 
 interface VForExpression <: Expression {
@@ -105,6 +106,7 @@ interface VOnExpression <: Expression {
 - This is mustaches or directive values.
 - If syntax errors exist, `VExpressionContainer#expression` is `null`.
 - `Reference` is objects but not `Node`. Those are external references which are in the expression.
+- `Reference#variable` is the variable which is defined by a `VElement`. If a reference uses a global variable or a member of VM, this is `null`.
 - `VForExpression` is an expression node like [ForInStatement] but it has an array as `left` property and does not have `body` property. This is the value of [`v-for` directives].
 - `VOnExpression` is an expression node like [BlockStatement] but it does not have braces. This is the value of [`v-on` directives].
 
@@ -192,10 +194,12 @@ interface VElement <: Node {
 interface Variable {
     id: Identifier
     kind: "v-for" | "scope"
+    references: [ Reference ]
 }
 ```
 
 - `Variable` is objects but not `Node`. Those are variable declarations that child elements can use. The elements which have [`v-for` directives] or a special attribute [scope] can declare variables.
+- `Variable#references` is an array of references which use this variable.
 
 ## Program
 
