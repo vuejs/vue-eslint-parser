@@ -148,3 +148,38 @@ describe("[variables] elements", () => {
         })
     })
 })
+
+describe("References and variables", () => {
+    const code = "<template><div v-for=\"x of xs\" :key=\"x\">{{x + y}}<div>{{x}}</div></div>{{x}}</template>"
+    let ast = null
+
+    before(() => {
+        ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+    })
+
+    it("should have relationship each other", () => {
+        const variables = ast.templateBody.children[0].variables
+        const vForReferences = ast.templateBody.children[0].startTag.attributes[0].value.references
+        const vBindKeyReferences = ast.templateBody.children[0].startTag.attributes[1].value.references
+        const mustacheReferences1 = ast.templateBody.children[0].children[0].references
+        const mustacheReferences2 = ast.templateBody.children[0].children[1].children[0].references
+        const mustacheReferences3 = ast.templateBody.children[1].references
+
+        assert(variables.length === 1)
+        assert(vForReferences.length === 1)
+        assert(vBindKeyReferences.length === 1)
+        assert(mustacheReferences1.length === 2)
+        assert(mustacheReferences2.length === 1)
+        assert(mustacheReferences3.length === 1)
+        assert(variables[0].references.length === 3)
+        assert(variables[0].references[0] === vBindKeyReferences[0])
+        assert(variables[0].references[1] === mustacheReferences1[0])
+        assert(variables[0].references[2] === mustacheReferences2[0])
+        assert(vForReferences[0].variable === null)
+        assert(vBindKeyReferences[0].variable === variables[0])
+        assert(mustacheReferences1[0].variable === variables[0])
+        assert(mustacheReferences1[1].variable === null)
+        assert(mustacheReferences2[0].variable === variables[0])
+        assert(mustacheReferences3[0].variable === null)
+    })
+})

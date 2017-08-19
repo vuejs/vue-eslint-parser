@@ -28,24 +28,6 @@ const PARSER_OPTIONS = {
 }
 
 /**
- * Clone the given object as excluding the specific property.
- * @param {object} x The object to copy.
- * @param {string} exceptKey The key to except in the copy.
- * @returns {object} The cloned object.
- */
-function cloneWithout(x, exceptKey) {
-    const y = {}
-
-    for (const key of Object.keys(x)) {
-        if (key !== exceptKey) {
-            y[key] = x[key]
-        }
-    }
-
-    return y
-}
-
-/**
  * Remove `parent` proeprties from the given AST.
  * @param {string} key The key.
  * @param {any} value The value of the key.
@@ -62,23 +44,6 @@ function replacer(key, value) {
             lineNumber: e.lineNumber,
             column: e.column,
         }))
-    }
-    if (key === "variables" && Array.isArray(value)) {
-        return value.map(v => {
-            const cloned = Object.assign({}, v)
-            cloned.references = cloned.references.map(r => cloneWithout(r, "variable"))
-            return cloned
-        })
-    }
-    if (key === "references" && Array.isArray(value)) {
-        return value.map(r => {
-            if (r.variable == null) {
-                return r
-            }
-            const cloned = Object.assign({}, r)
-            cloned.variable = cloneWithout(cloned.variable, "references")
-            return cloned
-        })
     }
     return value
 }

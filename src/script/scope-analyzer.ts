@@ -22,7 +22,7 @@ function isUnique(reference: eslintScope.Reference, index: number, references: e
  * @returns The transformed reference object.
  */
 function transformReference(reference: eslintScope.Reference): Reference {
-    return {
+    const ret: Reference = {
         id: reference.identifier as ESLintIdentifier,
         mode: (
             reference.isReadOnly() ? "r" :
@@ -31,6 +31,9 @@ function transformReference(reference: eslintScope.Reference): Reference {
         ),
         variable: null,
     }
+    Object.defineProperty(ret, "variable", {enumerable: false})
+
+    return ret
 }
 
 /**
@@ -39,11 +42,14 @@ function transformReference(reference: eslintScope.Reference): Reference {
  * @returns The transformed variable object.
  */
 function transformVariable(variable: eslintScope.Variable): Variable {
-    return {
+    const ret: Variable = {
         id: variable.defs[0].name as ESLintIdentifier,
         kind: "v-for",
         references: [],
     }
+    Object.defineProperty(ret, "references", {enumerable: false})
+
+    return ret
 }
 
 /**
