@@ -17,12 +17,15 @@ import {ExpressionParseResult, parseExpression, parseVForExpression, parseVOnExp
 function extractScopeVariables(references: Reference[], outVariables: Variable[]): void {
     let reference: Reference | undefined
     while ((reference = references.shift()) != null) {
-        reference.id.parent = null
-        outVariables.push({
+        const variable: Variable = {
             id: reference.id,
             kind: "scope",
             references: [],
-        })
+        }
+        Object.defineProperty(variable, "references", {enumerable: false})
+        reference.id.parent = null
+
+        outVariables.push(variable)
     }
 }
 

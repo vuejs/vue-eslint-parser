@@ -149,22 +149,26 @@ describe("[variables] elements", () => {
     })
 })
 
-describe("References and variables", () => {
+describe("Variables of v-for and references", () => {
     const code = "<template><div v-for=\"x of xs\" :key=\"x\">{{x + y}}<div>{{x}}</div></div>{{x}}</template>"
-    let ast = null
+    let variables = null
+    let vForReferences = null
+    let vBindKeyReferences = null
+    let mustacheReferences1 = null
+    let mustacheReferences2 = null
+    let mustacheReferences3 = null
 
     before(() => {
-        ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+        const ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+        variables = ast.templateBody.children[0].variables
+        vForReferences = ast.templateBody.children[0].startTag.attributes[0].value.references
+        vBindKeyReferences = ast.templateBody.children[0].startTag.attributes[1].value.references
+        mustacheReferences1 = ast.templateBody.children[0].children[0].references
+        mustacheReferences2 = ast.templateBody.children[0].children[1].children[0].references
+        mustacheReferences3 = ast.templateBody.children[1].references
     })
 
     it("should have relationship each other", () => {
-        const variables = ast.templateBody.children[0].variables
-        const vForReferences = ast.templateBody.children[0].startTag.attributes[0].value.references
-        const vBindKeyReferences = ast.templateBody.children[0].startTag.attributes[1].value.references
-        const mustacheReferences1 = ast.templateBody.children[0].children[0].references
-        const mustacheReferences2 = ast.templateBody.children[0].children[1].children[0].references
-        const mustacheReferences3 = ast.templateBody.children[1].references
-
         assert(variables.length === 1)
         assert(vForReferences.length === 1)
         assert(vBindKeyReferences.length === 1)
@@ -181,5 +185,64 @@ describe("References and variables", () => {
         assert(mustacheReferences1[1].variable === null)
         assert(mustacheReferences2[0].variable === variables[0])
         assert(mustacheReferences3[0].variable === null)
+    })
+
+    it("`Variable#references` should be non-enumerable", () => {
+        for (const variable of variables) {
+            assert(Object.getOwnPropertyDescriptor(variable, "references").enumerable === false)
+        }
+    })
+
+    it("`Reference#variable` should be non-enumerable", () => {
+        for (const reference of [].concat(vForReferences, vBindKeyReferences, mustacheReferences1, mustacheReferences2, mustacheReferences3)) {
+            assert(Object.getOwnPropertyDescriptor(reference, "variable").enumerable === false)
+        }
+    })
+})
+
+describe("Variables of template-scope and references", () => {
+    const code = "<template><template scope=\"x\" :key=\"x\">{{x + y}}<div>{{x}}</div></template>{{x}}</template>"
+    let variables = null
+    let vBindKeyReferences = null
+    let mustacheReferences1 = null
+    let mustacheReferences2 = null
+    let mustacheReferences3 = null
+
+    before(() => {
+        const ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+        variables = ast.templateBody.children[0].variables
+        vBindKeyReferences = ast.templateBody.children[0].startTag.attributes[1].value.references
+        mustacheReferences1 = ast.templateBody.children[0].children[0].references
+        mustacheReferences2 = ast.templateBody.children[0].children[1].children[0].references
+        mustacheReferences3 = ast.templateBody.children[1].references
+    })
+
+    it("should have relationship each other", () => {
+        assert(variables.length === 1)
+        assert(vBindKeyReferences.length === 1)
+        assert(mustacheReferences1.length === 2)
+        assert(mustacheReferences2.length === 1)
+        assert(mustacheReferences3.length === 1)
+        assert(variables[0].references.length === 3)
+        assert(variables[0].references[0] === vBindKeyReferences[0])
+        assert(variables[0].references[1] === mustacheReferences1[0])
+        assert(variables[0].references[2] === mustacheReferences2[0])
+        assert(vBindKeyReferences[0].variable === variables[0])
+        assert(mustacheReferences1[0].variable === variables[0])
+        assert(mustacheReferences1[1].variable === null)
+        assert(mustacheReferences2[0].variable === variables[0])
+        assert(mustacheReferences3[0].variable === null)
+    })
+
+    it("`Variable#references` should be non-enumerable", () => {
+        for (const variable of variables) {
+            assert(Object.getOwnPropertyDescriptor(variable, "references").enumerable === false)
+        }
+    })
+
+    it("`Reference#variable` should be non-enumerable", () => {
+        for (const reference of [].concat(vBindKeyReferences, mustacheReferences1, mustacheReferences2, mustacheReferences3)) {
+            assert(Object.getOwnPropertyDescriptor(reference, "variable").enumerable === false)
+        }
     })
 })
