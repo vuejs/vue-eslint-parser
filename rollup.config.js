@@ -10,10 +10,7 @@ const pkg = require("./package.json")
 const external = [
     "assert",
     "events",
-    "fs", //TODO: remove fs
     "path",
-    "eslint/lib/util/node-event-generator",
-    "eslint/lib/token-store",
 ].concat(Object.keys(pkg.dependencies))
 
 export default {

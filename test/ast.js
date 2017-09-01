@@ -76,8 +76,8 @@ function getTree(source) {
     let current = root
 
     linter.reset()
-    linter.defineRule("maketree", (ruleContext) => {
-        ruleContext.parserServices.registerTemplateBodyVisitor(ruleContext, {
+    linter.defineRule("maketree", (ruleContext) =>
+        ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
                 stack.push(current)
                 current.children.push(current = {
@@ -90,8 +90,7 @@ function getTree(source) {
                 current = stack.pop()
             },
         })
-        return {}
-    })
+    )
     linter.verify(
         source,
         {
@@ -115,8 +114,8 @@ function validateParent(source) {
     const stack = []
 
     linter.reset()
-    linter.defineRule("validateparent", (ruleContext) => {
-        ruleContext.parserServices.registerTemplateBodyVisitor(ruleContext, {
+    linter.defineRule("validateparent", (ruleContext) =>
+        ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
                 if (stack.length >= 1) {
                     assert(node.parent === lodash.last(stack))
@@ -127,8 +126,7 @@ function validateParent(source) {
                 stack.pop()
             },
         })
-        return {}
-    })
+    )
     linter.verify(
         source,
         {

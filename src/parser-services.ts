@@ -3,11 +3,10 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import assert from "assert"
 import EventEmitter from "events"
-import NodeEventGenerator from "eslint/lib/util/node-event-generator"
-import TokenStore from "eslint/lib/token-store"
-import {traverseNodes, ESLintProgram} from "./ast"
+import NodeEventGenerator from "./external/node-event-generator"
+import TokenStore from "./external/token-store"
+import {traverseNodes, ESLintProgram, VElement} from "./ast"
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -15,34 +14,6 @@ import {traverseNodes, ESLintProgram} from "./ast"
 
 const emitters = new WeakMap<object, EventEmitter>()
 const stores = new WeakMap<object, TokenStore>()
-
-/**
- * Get or create the event emitter to traverse.
- * @param context The rule context.
- * @returns The emitter for this context.
- */
-function ensureEmitter(context: any): EventEmitter {
-    const ast = context.getSourceCode().ast
-    let emitter = emitters.get(ast)
-
-    if (!emitter) {
-        emitter = new EventEmitter()
-        emitters.set(ast, emitter)
-
-        // In eslint 4.4.0 name of this property has changed
-        const linter = context._linter || context.eslint
-
-        // Traverse
-        linter.on("Program:exit", (node: ESLintProgram) => {
-            if (node.templateBody != null) {
-                const generator = new NodeEventGenerator(emitter as EventEmitter)
-                traverseNodes(node.templateBody, generator)
-            }
-        })
-    }
-
-    return emitter
-}
 
 //------------------------------------------------------------------------------
 // Exports
@@ -54,13 +25,43 @@ function ensureEmitter(context: any): EventEmitter {
  */
 export function define(rootAST: ESLintProgram) {
     return {
-        registerTemplateBodyVisitor(context: any, visitor: {[key: string]: Function}): void {
-            assert(context.getSourceCode().ast === rootAST)
-            const emitter = ensureEmitter(context)
-
-            for (const selector of Object.keys(visitor)) {
-                emitter.on(selector, visitor[selector])
+        /**
+         * Define handlers to traverse the template body.
+         * @param templateBodyVisitor The template body handlers.
+         * @param scriptVisitor The script handlers. This is optional.
+         */
+        defineTemplateBodyVisitor(templateBodyVisitor: { [key: string]: Function }, scriptVisitor?: { [key: string]: Function }): object {
+            if (scriptVisitor == null) {
+                scriptVisitor = {}
             }
+            if (rootAST.templateBody == null) {
+                return scriptVisitor
+            }
+
+            let emitter = emitters.get(rootAST)
+
+            // If this is the first time, initialize the intermediate event emitter.
+            if (emitter == null) {
+                emitters.set(rootAST, (emitter = new EventEmitter()))
+
+                const programExitHandler = scriptVisitor["Program:exit"]
+                scriptVisitor["Program:exit"] = function() {
+                    if (typeof programExitHandler === "function") {
+                        programExitHandler.apply(this, arguments) //eslint-disable-line prefer-rest-params
+                    }
+
+                    // Traverse template body.
+                    const generator = new NodeEventGenerator(emitter as EventEmitter)
+                    traverseNodes(rootAST.templateBody as VElement, generator)
+                }
+            }
+
+            // Register handlers into the intermediate event emitter.
+            for (const selector of Object.keys(templateBodyVisitor)) {
+                emitter.on(selector, templateBodyVisitor[selector])
+            }
+
+            return scriptVisitor
         },
 
         /**
