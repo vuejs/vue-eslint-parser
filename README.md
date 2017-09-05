@@ -117,9 +117,8 @@ Welcome contributing!
 
 Please use GitHub's Issues/PRs.
 
-If you want to write code, please execute `npm install && npm run setup` after you cloned this repository.
+If you want to write code, please execute `npm install` after you cloned this repository.
 The `npm install` command installs dependencies.
-The `npm run setup` command initializes ESLint as git submodules for tests.
 
 ### Development Tools
 
