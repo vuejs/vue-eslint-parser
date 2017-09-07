@@ -42,6 +42,15 @@ function isScriptElement(node: AST.VNode): node is AST.VElement {
 }
 
 /**
+ * Check whether the attribute node is a `lang` attribute.
+ * @param attribute The attribute node to check.
+ * @returns `true` if the attribute node is a `lang` attribute.
+ */
+function isLang(attribute: AST.VAttribute | AST.VDirective): attribute is AST.VAttribute {
+    return attribute.directive === false && attribute.key.name === "lang"
+}
+
+/**
  * Parse the given source code.
  * @param code The source code to parse.
  * @param options The parser options.
@@ -66,6 +75,8 @@ export function parseForESLint(code: string, options: any): AST.ESLintExtendedPr
         const locationCalcurator = new LocationCalculator(tokenizer.gaps, tokenizer.lineTerminators)
         const script = rootAST.children.find(isScriptElement) as AST.VElement | undefined // https://github.com/Microsoft/TypeScript/issues/7657
         const template = rootAST.children.find(isTemplateElement) as AST.VElement | undefined
+        const templateLangAttr = template && template.startTag.attributes.find(isLang) as AST.VAttribute | undefined
+        const templateLang = (templateLangAttr && templateLangAttr.value && templateLangAttr.value.value) || "html"
         const concreteInfo: AST.HasConcreteInfo = {
             tokens: rootAST.tokens,
             comments: rootAST.comments,
@@ -75,7 +86,7 @@ export function parseForESLint(code: string, options: any): AST.ESLintExtendedPr
         result = (script != null)
             ? parseScriptElement(script, locationCalcurator, options)
             : parseScript("", options)
-        result.ast.templateBody = (template != null)
+        result.ast.templateBody = (template != null && templateLang === "html")
             ? Object.assign(template, concreteInfo)
             : undefined
     }
