@@ -50,7 +50,7 @@
     "warun": "^1.0.0"
   },
   "scripts": {
-    "_mocha": "_mocha \"test/*.js\" --reporter dot --timeout 5000",
+    "_mocha": "_mocha \"test/*.js\" --reporter dot --timeout 10000",
     "prebuild": "npm run -s clean",
     "build": "tsc && rollup -c -o index.js && dts-bundle --name vue-eslint-parser --main .temp/index.d.ts --out ../index.d.ts",
     "clean": "rimraf .nyc_output .temp coverage index.*",

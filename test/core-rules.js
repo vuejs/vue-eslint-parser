@@ -17,7 +17,8 @@ const RuleTester = require("./fixtures/eslint/lib/testers/rule-tester")
 // Helpers
 //------------------------------------------------------------------------------
 
-const RULES_ROOT = path.join(__dirname, "fixtures/eslint/tests/lib/rules")
+const RULE_DEFS_ROOT = path.join(__dirname, "fixtures/eslint/lib/rules")
+const RULE_TESTS_ROOT = path.join(__dirname, "fixtures/eslint/tests/lib/rules")
 const PARSER_PATH = path.resolve(__dirname, "../index.js")
 const EXCEPTIONS = new Set([
     // Those rules check outside `<script>` tag as well.
@@ -34,9 +35,8 @@ const EXCEPTIONS = new Set([
     // are added.
     // It cannot test this rule correctly.
     "lines-around-comment",
-    "lines-around-directive",
-    "newline-after-var",
     "no-multiple-empty-lines",
+    "semi-style",
 
     // The inside of "<script>" tags is not related to Unicode BOM.
     "unicode-bom",
@@ -131,14 +131,18 @@ function overrideRun(ruleId, impl, patterns) {
 RuleTester.prototype.run = overrideRun
 try {
     describe("Tests of ESLint core rules", () => {
-        for (const fileName of fs.readdirSync(RULES_ROOT)) {
-            if (path.extname(fileName) !== ".js" ||
-                EXCEPTIONS.has(path.basename(fileName, ".js"))
-            ) {
+        for (const fileName of fs.readdirSync(RULE_TESTS_ROOT)) {
+            if (path.extname(fileName) !== ".js" || fileName.startsWith("_")) {
+                continue
+            }
+            if (require(path.join(RULE_DEFS_ROOT, fileName)).meta.deprecated) {
+                continue
+            }
+            if (EXCEPTIONS.has(path.basename(fileName, ".js"))) {
                 continue
             }
 
-            require(path.join(RULES_ROOT, fileName))
+            require(path.join(RULE_TESTS_ROOT, fileName))
         }
     })
 }

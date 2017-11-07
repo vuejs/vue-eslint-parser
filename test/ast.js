@@ -14,7 +14,7 @@ const fs = require("fs")
 const path = require("path")
 const lodash = require("lodash")
 const parser = require("..")
-const linter = require("./fixtures/eslint").linter
+const Linter = require("./fixtures/eslint").Linter
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -71,11 +71,11 @@ function getAllTokens(ast) {
  * @returns {object} Simple tree.
  */
 function getTree(source) {
+    const linter = new Linter()
     const stack = []
     const root = {children: []}
     let current = root
 
-    linter.reset()
     linter.defineRule("maketree", (ruleContext) =>
         ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
@@ -111,9 +111,9 @@ function getTree(source) {
  * @returns {void}
  */
 function validateParent(source) {
+    const linter = new Linter()
     const stack = []
 
-    linter.reset()
     linter.defineRule("validateparent", (ruleContext) =>
         ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
