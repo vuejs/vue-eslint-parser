@@ -5,9 +5,9 @@
  */
 import * as path from "path"
 import * as AST from "./ast"
-import {LocationCalculator} from "./common/location-calculator"
-import {HTMLParser, HTMLTokenizer} from "./html"
-import {parseScript, parseScriptElement} from "./script"
+import { LocationCalculator } from "./common/location-calculator"
+import { HTMLParser, HTMLTokenizer } from "./html"
+import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
 
 const STARTS_WITH_LT = /^\s*</
@@ -106,4 +106,4 @@ export function parse(code: string, options: any): AST.ESLintProgram {
     return parseForESLint(code, options).ast
 }
 
-export {AST}
+export { AST }

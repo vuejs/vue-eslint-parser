@@ -3,7 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import {Node} from "./nodes"
+import { Node } from "./nodes"
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -196,4 +196,4 @@ export function traverseNodes(node: Node, visitor: Visitor) {
     traverse(node, null, visitor)
 }
 
-export {getFallbackKeys}
+export { getFallbackKeys }

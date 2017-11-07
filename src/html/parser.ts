@@ -5,14 +5,14 @@
  */
 import assert from "assert"
 import * as lodash from "lodash"
-import {ErrorCode, HasLocation, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement, VExpressionContainer} from "../ast"
-import {debug} from "../common/debug"
-import {LocationCalculator} from "../common/location-calculator"
-import {convertToDirective, defineScopeAttributeVariable, processMustache, resolveReferences} from "../template"
-import {MATHML_ATTRIBUTE_NAME_MAP, SVG_ATTRIBUTE_NAME_MAP} from "./util/attribute-names"
-import {HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_RAWTEXT_TAGS, HTML_RCDATA_TAGS, HTML_VOID_ELEMENT_TAGS, SVG_ELEMENT_NAME_MAP} from "./util/tag-names"
-import {IntermediateToken, IntermediateTokenizer, EndTag, Mustache, StartTag, Text} from "./intermediate-tokenizer"
-import {Tokenizer} from "./tokenizer"
+import { ErrorCode, HasLocation, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement, VExpressionContainer } from "../ast"
+import { debug } from "../common/debug"
+import { LocationCalculator } from "../common/location-calculator"
+import { convertToDirective, defineScopeAttributeVariable, processMustache, resolveReferences } from "../template"
+import { MATHML_ATTRIBUTE_NAME_MAP, SVG_ATTRIBUTE_NAME_MAP } from "./util/attribute-names"
+import { HTML_CAN_BE_LEFT_OPEN_TAGS, HTML_NON_FHRASING_TAGS, HTML_RAWTEXT_TAGS, HTML_RCDATA_TAGS, HTML_VOID_ELEMENT_TAGS, SVG_ELEMENT_NAME_MAP } from "./util/tag-names"
+import { IntermediateToken, IntermediateTokenizer, EndTag, Mustache, StartTag, Text } from "./intermediate-tokenizer"
+import { Tokenizer } from "./tokenizer"
 
 const DIRECTIVE_NAME = /^(?:v-|[:@]).*[^.:@]$/
 const DT_DD = /^d[dt]$/
@@ -181,8 +181,8 @@ export class Parser {
             type: "VDocumentFragment",
             range: [0, 0],
             loc: {
-                start: {line: 1, column: 0},
-                end: {line: 1, column: 0},
+                start: { line: 1, column: 0 },
+                end: { line: 1, column: 0 },
             },
             parent: null,
             children: [],
@@ -341,7 +341,7 @@ export class Parser {
         const element: VElement = {
             type: "VElement",
             range: [token.range[0], token.range[1]],
-            loc: {start: token.loc.start, end: token.loc.end},
+            loc: { start: token.loc.start, end: token.loc.end },
             parent,
             name: adjustElementName(token.name, namespace),
             rawName: token.rawName,

@@ -4,7 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import * as eslintScope from "eslint-scope"
-import {ESLintIdentifier, ESLintProgram, Reference, Variable, getFallbackKeys} from "../ast"
+import { ESLintIdentifier, ESLintProgram, Reference, Variable, getFallbackKeys } from "../ast"
 
 /**
  * Check whether the given reference is unique in the belonging array.
@@ -31,7 +31,7 @@ function transformReference(reference: eslintScope.Reference): Reference {
         ),
         variable: null,
     }
-    Object.defineProperty(ret, "variable", {enumerable: false})
+    Object.defineProperty(ret, "variable", { enumerable: false })
 
     return ret
 }
@@ -47,7 +47,7 @@ function transformVariable(variable: eslintScope.Variable): Variable {
         kind: "v-for",
         references: [],
     }
-    Object.defineProperty(ret, "references", {enumerable: false})
+    Object.defineProperty(ret, "references", { enumerable: false })
 
     return ret
 }

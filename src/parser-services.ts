@@ -6,7 +6,7 @@
 import EventEmitter from "events"
 import NodeEventGenerator from "./external/node-event-generator"
 import TokenStore from "./external/token-store"
-import {traverseNodes, ESLintProgram, VElement} from "./ast"
+import { traverseNodes, ESLintProgram, VElement } from "./ast"
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -21,7 +21,7 @@ const stores = new WeakMap<object, TokenStore>()
 
 /**
  * Define the parser service
- * @param rootAST 
+ * @param rootAST
  */
 export function define(rootAST: ESLintProgram) {
     return {

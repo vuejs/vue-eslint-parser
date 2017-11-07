@@ -4,17 +4,17 @@
  * See LICENSE file in root directory for full license.
  */
 import * as lodash from "lodash"
-import {HasLocation, Location, ParseError} from "../ast"
+import { HasLocation, Location, ParseError } from "../ast"
 
 /**
  * Location calculators.
- * 
+ *
  * HTML tokenizers remove several characters to handle HTML entities and line terminators.
  * Tokens have the processed text as their value, but tokens have offsets and locations in the original text.
  * This calculator calculates the original locations from the processed texts.
- * 
+ *
  * This calculator will be used for:
- * 
+ *
  * - Adjusts the locations of script ASTs.
  * - Creates expression containers in postprocess.
  */
@@ -60,7 +60,7 @@ export class LocationCalculator {
     private _getLocation(offset: number): Location {
         const line = lodash.sortedLastIndex(this.ltOffsets, offset) + 1
         const column = offset - (line === 1 ? 0 : this.ltOffsets[line - 2])
-        return {line, column}
+        return { line, column }
     }
 
     /**

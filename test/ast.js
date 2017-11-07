@@ -73,7 +73,7 @@ function getAllTokens(ast) {
 function getTree(source) {
     const linter = new Linter()
     const stack = []
-    const root = {children: []}
+    const root = { children: [] }
     let current = root
 
     linter.defineRule("maketree", (ruleContext) =>
@@ -95,8 +95,8 @@ function getTree(source) {
         source,
         {
             parser: PARSER,
-            parserOptions: {ecmaVersion: 2017},
-            rules: {maketree: "error"},
+            parserOptions: { ecmaVersion: 2017 },
+            rules: { maketree: "error" },
         },
         undefined,
         true
@@ -131,8 +131,8 @@ function validateParent(source) {
         source,
         {
             parser: PARSER,
-            parserOptions: {ecmaVersion: 2017},
-            rules: {validateparent: "error"},
+            parserOptions: { ecmaVersion: 2017 },
+            rules: { validateparent: "error" },
         },
         undefined,
         true
@@ -147,7 +147,7 @@ describe("Template AST", () => {
     for (const name of TARGETS) {
         const sourcePath = path.join(ROOT, `${name}/source.vue`)
         const source = fs.readFileSync(sourcePath, "utf8")
-        const actual = parser.parseForESLint(source, Object.assign({filePath: sourcePath}, PARSER_OPTIONS))
+        const actual = parser.parseForESLint(source, Object.assign({ filePath: sourcePath }, PARSER_OPTIONS))
 
         describe(`'test/fixtures/ast/${name}/source.vue'`, () => {
             it("should be parsed to valid AST.", () => {

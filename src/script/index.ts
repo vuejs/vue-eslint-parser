@@ -4,10 +4,10 @@
  * See LICENSE file in root directory for full license.
  */
 import * as lodash from "lodash"
-import {traverseNodes, ESLintArrayPattern, ESLintBlockStatement, ESLintExpression, ESLintExpressionStatement, ESLintExtendedProgram, ESLintForInStatement, ESLintForOfStatement, ESLintPattern, ESLintProgram, ESLintVariableDeclaration, Node, ParseError, Reference, Token, Variable, VElement, VForExpression, VOnExpression} from "../ast"
-import {debug} from "../common/debug"
-import {LocationCalculator} from "../common/location-calculator"
-import {analyzeExternalReferences, analyzeVariablesAndExternalReferences} from "./scope-analyzer"
+import { traverseNodes, ESLintArrayPattern, ESLintBlockStatement, ESLintExpression, ESLintExpressionStatement, ESLintExtendedProgram, ESLintForInStatement, ESLintForOfStatement, ESLintPattern, ESLintProgram, ESLintVariableDeclaration, Node, ParseError, Reference, Token, Variable, VElement, VForExpression, VOnExpression } from "../ast"
+import { debug } from "../common/debug"
+import { LocationCalculator } from "../common/location-calculator"
+import { analyzeExternalReferences, analyzeVariablesAndExternalReferences } from "./scope-analyzer"
 
 // [1] = spacing before the aliases.
 // [2] = aliases.
@@ -196,7 +196,7 @@ export function parseScript(code: string, parserOptions: any): ESLintExtendedPro
     if (result.ast != null) {
         return result
     }
-    return {ast: result}
+    return { ast: result }
 }
 
 /**
@@ -269,7 +269,7 @@ export function parseExpression(code: string, locationCalculator: LocationCalcul
         tokens.shift()
         tokens.pop()
 
-        return {expression, tokens, comments, references, variables: []}
+        return { expression, tokens, comments, references, variables: [] }
     }
     catch (err) {
         return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
@@ -311,7 +311,7 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
         const expression: VForExpression = {
             type: "VForExpression",
             range: [firstToken.range[0], lastToken.range[1]],
-            loc: {start: firstToken.loc.start, end: lastToken.loc.end},
+            loc: { start: firstToken.loc.start, end: lastToken.loc.end },
             parent: DUMMY_PARENT,
             left,
             right,
@@ -346,7 +346,7 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
             }
         }
 
-        return {expression, tokens, comments, references, variables}
+        return { expression, tokens, comments, references, variables }
     }
     catch (err) {
         return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
@@ -406,7 +406,7 @@ export function parseVOnExpression(code: string, locationCalculator: LocationCal
         // Remove $event: https://vuejs.org/v2/api/#v-on
         removeByName(references, "$event")
 
-        return {expression, tokens, comments, references, variables: []}
+        return { expression, tokens, comments, references, variables: [] }
     }
     catch (err) {
         return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)

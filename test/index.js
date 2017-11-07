@@ -50,7 +50,7 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
-                rules: {semi: "error"},
+                rules: { semi: "error" },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["hello.vue"])
@@ -73,7 +73,7 @@ describe("Basic tests", () => {
                 envs: ["es6", "node"],
                 fix: true,
                 parser: PARSER_PATH,
-                rules: {semi: "error"},
+                rules: { semi: "error" },
                 useEslintrc: false,
             })
             CLIEngine.outputFixes(cli.executeOnFiles(["hello.vue"]))
@@ -91,7 +91,7 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
-                rules: {semi: "error"},
+                rules: { semi: "error" },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["empty.vue"])
@@ -107,7 +107,7 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
-                rules: {semi: "error"},
+                rules: { semi: "error" },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["no-script.vue"])
@@ -123,7 +123,7 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
-                rules: {semi: "error"},
+                rules: { semi: "error" },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["empty-script.vue"])
@@ -139,7 +139,7 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
-                rules: {semi: "error"},
+                rules: { semi: "error" },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["no-end-script-tag.vue"])
@@ -155,7 +155,7 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
-                rules: {semi: "error"},
+                rules: { semi: "error" },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["notvue.js"])
@@ -174,7 +174,7 @@ describe("Basic tests", () => {
                 envs: ["es6", "node"],
                 fix: true,
                 parser: PARSER_PATH,
-                rules: {semi: "error"},
+                rules: { semi: "error" },
                 useEslintrc: false,
             })
             CLIEngine.outputFixes(cli.executeOnFiles(["notvue.js"]))
@@ -192,7 +192,7 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
-                rules: {indent: "error"},
+                rules: { indent: "error" },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["crlf.vue"])
@@ -212,7 +212,7 @@ describe("Basic tests", () => {
                     parser: "babel-eslint",
                     sourceType: "module",
                 },
-                rules: {semi: ["error", "never"]},
+                rules: { semi: ["error", "never"] },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["typed.js"])
@@ -229,7 +229,7 @@ describe("Basic tests", () => {
                 parserOptions: { //
                     parser: "typescript-eslint-parser",
                 },
-                rules: {semi: ["error", "never"]},
+                rules: { semi: ["error", "never"] },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["typed.js"])
@@ -249,7 +249,7 @@ describe("Basic tests", () => {
                     parser: "babel-eslint",
                     sourceType: "module",
                 },
-                rules: {semi: ["error", "never"]},
+                rules: { semi: ["error", "never"] },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["typed.vue"])
@@ -266,7 +266,7 @@ describe("Basic tests", () => {
                 parserOptions: { //
                     parser: "typescript-eslint-parser",
                 },
-                rules: {semi: ["error", "never"]},
+                rules: { semi: ["error", "never"] },
                 useEslintrc: false,
             })
             const report = cli.executeOnFiles(["typed.vue"])
@@ -285,7 +285,7 @@ describe("Basic tests", () => {
                     parser: "babel-eslint",
                     sourceType: "module",
                 },
-                rules: {semi: ["error", "always"]},
+                rules: { semi: ["error", "always"] },
                 useEslintrc: false,
             })
             CLIEngine.outputFixes(cli.executeOnFiles(["typed.vue"]))
@@ -305,7 +305,7 @@ describe("Basic tests", () => {
                 parserOptions: { //
                     parser: "typescript-eslint-parser",
                 },
-                rules: {semi: ["error", "always"]},
+                rules: { semi: ["error", "always"] },
                 useEslintrc: false,
             })
             CLIEngine.outputFixes(cli.executeOnFiles(["typed.vue"]))
@@ -458,11 +458,11 @@ describe("Basic tests", () => {
 
     describe("About parserServices", () => {
         it("should exist if the source code is a Vue SFC file.", () => {
-            assert.notEqual(parseForESLint("test", {filePath: "test.vue"}).services, undefined)
+            assert.notEqual(parseForESLint("test", { filePath: "test.vue" }).services, undefined)
         })
 
         it("should exist even if the source code is not Vue SFC file.", () => {
-            assert.notEqual(parseForESLint("test", {filePath: "test.js"}).services, undefined)
+            assert.notEqual(parseForESLint("test", { filePath: "test.js" }).services, undefined)
         })
     })
 })

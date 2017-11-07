@@ -3,9 +3,9 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import {ParseError} from "./errors"
-import {HasLocation} from "./locations"
-import {Token} from "./tokens"
+import { ParseError } from "./errors"
+import { HasLocation } from "./locations"
+import { Token } from "./tokens"
 
 //------------------------------------------------------------------------------
 // Common

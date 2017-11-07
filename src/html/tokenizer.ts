@@ -4,10 +4,10 @@
  * See LICENSE file in root directory for full license.
  */
 import assert from "assert"
-import {debug} from "../common/debug"
-import {ErrorCode, Namespace, NS, ParseError, Token} from "../ast"
-import {alternativeCR} from "./util/alternative-cr"
-import {entitySets} from "./util/entities"
+import { debug } from "../common/debug"
+import { ErrorCode, Namespace, NS, ParseError, Token } from "../ast"
+import { alternativeCR } from "./util/alternative-cr"
+import { entitySets } from "./util/entities"
 import {
     AMPERSAND, APOSTROPHE, CARRIAGE_RETURN, EOF, EQUALS_SIGN, EXCLAMATION_MARK,
     GRAVE_ACCENT, GREATER_THAN_SIGN, HYPHEN_MINUS, isControl, isDigit,
@@ -383,8 +383,8 @@ export class Tokenizer {
             type,
             range: [offset, -1],
             loc: {
-                start: {line, column},
-                end: {line: -1, column: -1},
+                start: { line, column },
+                end: { line: -1, column: -1 },
             },
             value: "",
         }

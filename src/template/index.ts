@@ -4,10 +4,10 @@
  * See LICENSE file in root directory for full license.
  */
 import * as lodash from "lodash"
-import {DirectiveKeyParts, ParseError, Reference, Token, Variable, VAttribute, VDirective, VDirectiveKey, VDocumentFragment, VElement, VExpressionContainer, VIdentifier, VLiteral, VNode} from "../ast"
-import {debug} from "../common/debug"
-import {LocationCalculator} from "../common/location-calculator"
-import {ExpressionParseResult, parseExpression, parseVForExpression, parseVOnExpression} from "../script"
+import { DirectiveKeyParts, ParseError, Reference, Token, Variable, VAttribute, VDirective, VDirectiveKey, VDocumentFragment, VElement, VExpressionContainer, VIdentifier, VLiteral, VNode } from "../ast"
+import { debug } from "../common/debug"
+import { LocationCalculator } from "../common/location-calculator"
+import { ExpressionParseResult, parseExpression, parseVForExpression, parseVOnExpression } from "../script"
 
 /**
  * Extract the variable declarations of scope attributes.
@@ -22,7 +22,7 @@ function extractScopeVariables(references: Reference[], outVariables: Variable[]
             kind: "scope",
             references: [],
         }
-        Object.defineProperty(variable, "references", {enumerable: false})
+        Object.defineProperty(variable, "references", { enumerable: false })
         reference.id.parent = null
 
         outVariables.push(variable)
@@ -399,7 +399,7 @@ export function processMustache(parserOptions: any, globalLocationCalculator: Lo
         node.references = ret.references
         ret.expression.parent = node
 
-        replaceTokens(document, {range}, ret.tokens)
+        replaceTokens(document, { range }, ret.tokens)
         insertComments(document, ret.comments)
     }
     catch (err) {

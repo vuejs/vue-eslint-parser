@@ -52,7 +52,7 @@ describe("services.getTemplateBodyTokenStore", () => {
     let tokens = null
 
     before(() => {
-        const result = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS))
+        const result = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS))
         ast = result.ast
         tokens = result.services.getTemplateBodyTokenStore()
     })
@@ -68,7 +68,7 @@ describe("services.getTemplateBodyTokenStore", () => {
         })
 
         it("should return all tokens (include comments) in the template if you give {includeComments: true} option.", () => {
-            const actual = tokens.getTokens(ast.templateBody, {includeComments: true}).map(toValue)
+            const actual = tokens.getTokens(ast.templateBody, { includeComments: true }).map(toValue)
 
             assert.deepStrictEqual(
                 actual,

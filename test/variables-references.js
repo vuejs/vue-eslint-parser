@@ -34,7 +34,7 @@ describe("[references] expression containers", () => {
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
         })
 
         it("should have references", () => {
@@ -52,7 +52,7 @@ describe("[references] expression containers", () => {
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
         })
 
         it("should have references", () => {
@@ -70,7 +70,7 @@ describe("[references] expression containers", () => {
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
         })
 
         it("should not include $event references.", () => {
@@ -90,7 +90,7 @@ describe("[variables] elements", () => {
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
         })
 
         it("should have references", () => {
@@ -110,7 +110,7 @@ describe("[variables] elements", () => {
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
         })
 
         it("should have references", () => {
@@ -131,7 +131,7 @@ describe("[variables] elements", () => {
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
         })
 
         it("should have variables", () => {
@@ -159,7 +159,7 @@ describe("Variables of v-for and references", () => {
     let mustacheReferences3 = null
 
     before(() => {
-        const ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+        const ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
         variables = ast.templateBody.children[0].variables
         vForReferences = ast.templateBody.children[0].startTag.attributes[0].value.references
         vBindKeyReferences = ast.templateBody.children[0].startTag.attributes[1].value.references
@@ -209,7 +209,7 @@ describe("Variables of template-scope and references", () => {
     let mustacheReferences3 = null
 
     before(() => {
-        const ast = parse(code, Object.assign({filePath: "test.vue"}, PARSER_OPTIONS)).ast
+        const ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
         variables = ast.templateBody.children[0].variables
         vBindKeyReferences = ast.templateBody.children[0].startTag.attributes[1].value.references
         mustacheReferences1 = ast.templateBody.children[0].children[0].references

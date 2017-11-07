@@ -5,9 +5,9 @@
  */
 import assert from "assert"
 import * as lodash from "lodash"
-import {ErrorCode, HasLocation, Namespace, ParseError, Token, VAttribute} from "../ast"
-import {debug} from "../common/debug"
-import {Tokenizer, TokenizerState, TokenType} from "./tokenizer"
+import { ErrorCode, HasLocation, Namespace, ParseError, Token, VAttribute } from "../ast"
+import { debug } from "../common/debug"
+import { Tokenizer, TokenizerState, TokenType } from "./tokenizer"
 
 const DUMMY_PARENT: any = Object.freeze({})
 
@@ -177,7 +177,7 @@ export class IntermediateTokenizer {
                 token = {
                     type: "Text",
                     range: [start.range[0], end.range[1]],
-                    loc: {start: start.loc.start, end: end.loc.end},
+                    loc: { start: start.loc.start, end: end.loc.end },
                     value,
                 }
             }
@@ -253,7 +253,7 @@ export class IntermediateTokenizer {
         this.currentToken = {
             type: "Text",
             range: [token.range[0], token.range[1]],
-            loc: {start: token.loc.start, end: token.loc.end},
+            loc: { start: token.loc.start, end: token.loc.end },
             value: token.value,
         }
 
@@ -321,7 +321,7 @@ export class IntermediateTokenizer {
         this.currentToken = {
             type: "EndTag",
             range: [token.range[0], token.range[1]],
-            loc: {start: token.loc.start, end: token.loc.end},
+            loc: { start: token.loc.start, end: token.loc.end },
             name: token.value,
         }
 
@@ -350,13 +350,13 @@ export class IntermediateTokenizer {
         this.attribute = {
             type: "VAttribute",
             range: [token.range[0], token.range[1]],
-            loc: {start: token.loc.start, end: token.loc.end},
+            loc: { start: token.loc.start, end: token.loc.end },
             parent: DUMMY_PARENT,
             directive: false,
             key: {
                 type: "VIdentifier",
                 range: [token.range[0], token.range[1]],
-                loc: {start: token.loc.start, end: token.loc.end},
+                loc: { start: token.loc.start, end: token.loc.end },
                 parent: DUMMY_PARENT,
                 name: token.value,
                 rawName: this.text.slice(token.range[0], token.range[1]),
@@ -385,7 +385,7 @@ export class IntermediateTokenizer {
             this.attribute.value = {
                 type: "VLiteral",
                 range: [token.range[0], token.range[1]],
-                loc: {start: token.loc.start, end: token.loc.end},
+                loc: { start: token.loc.start, end: token.loc.end },
                 parent: this.attribute,
                 value: token.value,
             }
@@ -473,7 +473,7 @@ export class IntermediateTokenizer {
         this.currentToken = {
             type: "StartTag",
             range: [token.range[0], token.range[1]],
-            loc: {start: token.loc.start, end: token.loc.end},
+            loc: { start: token.loc.start, end: token.loc.end },
             name: token.value,
             rawName: this.text.slice(token.range[0] + 1, token.range[1]),
             selfClosing: false,
@@ -548,7 +548,7 @@ export class IntermediateTokenizer {
         this.currentToken = {
             type: "Mustache",
             range: [start.range[0], token.range[1]],
-            loc: {start: start.loc.start, end: token.loc.end},
+            loc: { start: start.loc.start, end: token.loc.end },
             value,
             startToken: start,
             endToken: token,

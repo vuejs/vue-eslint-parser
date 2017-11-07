@@ -44,7 +44,7 @@ export type Offset = number
  * Range information in offsets.
  * The 1st element is the start offset.
  * The 2nd element is the end offset.
- * 
+ *
  * This is 0-based.
  */
 export type OffsetRange = [Offset, Offset]
