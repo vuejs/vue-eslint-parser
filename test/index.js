@@ -345,6 +345,29 @@ describe("Basic tests", () => {
         })
     })
 
+    describe("About fixtures/location-issue-with-babel-eslint.vue", () => {
+        it("Identifiers in import declarations should has correct location.", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["browser", "node"],
+                parser: PARSER_PATH,
+                parserOptions: {
+                    parser: "babel-eslint",
+                    sourceType: "module",
+                    ecmaVersion: 2017,
+                },
+                rules: {
+                    "no-use-before-define": "error",
+                },
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles(["location-issue-with-babel-eslint.vue"])
+            const messages = report.results[0].messages
+
+            assert(messages.length === 0)
+        })
+    })
+
     describe("About unexpected-null-character errors", () => {
         it("should keep NULL in DATA state.", () => {
             const ast = parse("<template>\u0000</template>")

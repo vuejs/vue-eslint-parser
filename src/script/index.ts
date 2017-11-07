@@ -35,14 +35,20 @@ interface ESLintCustomParser {
 function postprocess(ast: ESLintProgram, locationCalculator: LocationCalculator): void {
     // There are cases which the same node instance appears twice in the tree.
     // E.g. `let {a} = {}` // This `a` appears twice at `Property#key` and `Property#value`.
-    const traversed = new Set<Node>()
+    const traversed = new Set<Node|number[]>()
 
     traverseNodes(ast, {
         enterNode(node, parent) {
             if (!traversed.has(node)) {
                 traversed.add(node)
                 node.parent = parent
-                locationCalculator.fixLocation(node)
+
+                // `babel-eslint@8` has shared `Node#range` with multiple nodes.
+                // See also: https://github.com/vuejs/eslint-plugin-vue/issues/208
+                if (!traversed.has(node.range)) {
+                    traversed.add(node.range)
+                    locationCalculator.fixLocation(node)
+                }
             }
         },
         leaveNode() {
