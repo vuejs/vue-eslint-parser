@@ -3,7 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import * as lodash from "lodash"
+import sortedLastIndex from "lodash/sortedLastIndex"
 import { HasLocation, Location, ParseError } from "../ast"
 
 /**
@@ -36,7 +36,7 @@ export class LocationCalculator {
         this.baseOffset = baseOffset || 0
         this.baseIndexOfGap = (this.baseOffset === 0)
             ? 0
-            : lodash.sortedLastIndex(gapOffsets, this.baseOffset)
+            : sortedLastIndex(gapOffsets, this.baseOffset)
     }
 
     /**
@@ -58,7 +58,7 @@ export class LocationCalculator {
      * @returns The location of the offset.
      */
     private _getLocation(offset: number): Location {
-        const line = lodash.sortedLastIndex(this.ltOffsets, offset) + 1
+        const line = sortedLastIndex(this.ltOffsets, offset) + 1
         const column = offset - (line === 1 ? 0 : this.ltOffsets[line - 2])
         return { line, column }
     }
@@ -69,7 +69,7 @@ export class LocationCalculator {
      */
     private _getGap(index: number): number {
         const offsets = this.gapOffsets
-        let g0 = lodash.sortedLastIndex(offsets, index + this.baseOffset)
+        let g0 = sortedLastIndex(offsets, index + this.baseOffset)
         let pos = index + this.baseOffset + g0 - this.baseIndexOfGap
 
         while (g0 < offsets.length && offsets[g0] <= pos) {

@@ -3,7 +3,9 @@
  */
 import EventEmitter from "events"
 import * as esquery from "esquery"
-import * as lodash from "lodash"
+import union from "lodash/union"
+import intersection from "lodash/intersection"
+import memoize from "lodash/memoize"
 import {Node} from "../ast"
 
 interface Selector {
@@ -29,7 +31,7 @@ function getPossibleTypes(parsedSelector: esquery.Selector): string[] | null {
             const typesForComponents = parsedSelector.selectors.map(getPossibleTypes)
 
             if (typesForComponents.every(Boolean)) {
-                return lodash.union.apply(null, typesForComponents)
+                return union.apply(null, typesForComponents)
             }
             return null
         }
@@ -46,7 +48,7 @@ function getPossibleTypes(parsedSelector: esquery.Selector): string[] | null {
              * If at least one of the components could only match a particular type, the compound could only match
              * the intersection of those types.
              */
-            return lodash.intersection.apply(null, typesForComponents)
+            return intersection.apply(null, typesForComponents)
         }
 
         case "child":
@@ -154,7 +156,7 @@ function tryParseSelector(rawSelector: string): esquery.Selector {
  * @param {string} rawSelector A raw AST selector
  * @returns {ASTSelector} A selector descriptor
  */
-const parseSelector = lodash.memoize<(rawSelector: string) => Selector>(rawSelector => {
+const parseSelector = memoize<(rawSelector: string) => Selector>(rawSelector => {
     const parsedSelector = tryParseSelector(rawSelector)
 
     return {

@@ -4,7 +4,8 @@
  * See LICENSE file in root directory for full license.
  */
 import assert from "assert"
-import * as lodash from "lodash"
+import last from "lodash/last"
+import findLastIndex from "lodash/findLastIndex"
 import { ErrorCode, HasLocation, Namespace, NS, ParseError, Token, VAttribute, VDocumentFragment, VElement, VExpressionContainer } from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
@@ -95,7 +96,7 @@ function adjustAttributeName(name: string, namespace: Namespace): string {
  * @param node The node to commit the end location.
  */
 function propagateEndLocation(node: VDocumentFragment | VElement): void {
-    const lastChild = (node.type === "VElement" ? node.endTag : null) || lodash.last(node.children)
+    const lastChild = (node.type === "VElement" ? node.endTag : null) || last(node.children)
     if (lastChild != null) {
         node.range[1] = lastChild.range[1]
         node.loc.end = lastChild.loc.end
@@ -165,7 +166,7 @@ export class Parser {
      * Get the current node.
      */
     private get currentNode(): VDocumentFragment | VElement {
-        return lodash.last(this.elementStack) || this.document
+        return last(this.elementStack) || this.document
     }
 
     /**
@@ -416,7 +417,7 @@ export class Parser {
     protected EndTag(token: EndTag): void {
         debug("[html] EndTag %j", token)
 
-        const i = lodash.findLastIndex(this.elementStack, (el) =>
+        const i = findLastIndex(this.elementStack, (el) =>
             el.name.toLowerCase() === token.name
         )
         if (i === -1) {

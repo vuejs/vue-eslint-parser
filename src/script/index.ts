@@ -3,7 +3,8 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import * as lodash from "lodash"
+import first from "lodash/first"
+import last from "lodash/last"
 import { traverseNodes, ESLintArrayPattern, ESLintBlockStatement, ESLintExpression, ESLintExpressionStatement, ESLintExtendedProgram, ESLintForInStatement, ESLintForOfStatement, ESLintPattern, ESLintProgram, ESLintVariableDeclaration, Node, ParseError, Reference, Token, Variable, VElement, VForExpression, VOnExpression } from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
@@ -382,17 +383,17 @@ export function parseVOnExpression(code: string, locationCalculator: LocationCal
         const references = analyzeExternalReferences(ast, parserOptions)
         const block = ast.body[0] as ESLintBlockStatement
         const body = block.body
-        const first = lodash.first(body)
-        const last = lodash.last(body)
+        const firstStatement = first(body)
+        const lastStatement = last(body)
         const expression: VOnExpression = {
             type: "VOnExpression",
             range: [
-                (first != null) ? first.range[0] : block.range[0] + 1,
-                (last != null) ? last.range[1] : block.range[1] - 1,
+                (firstStatement != null) ? firstStatement.range[0] : block.range[0] + 1,
+                (lastStatement != null) ? lastStatement.range[1] : block.range[1] - 1,
             ],
             loc: {
-                start: (first != null) ? first.loc.start : locationCalculator.getLocation(1),
-                end: (last != null) ? last.loc.end : locationCalculator.getLocation(code.length + 1),
+                start: (firstStatement != null) ? firstStatement.loc.start : locationCalculator.getLocation(1),
+                end: (lastStatement != null) ? lastStatement.loc.end : locationCalculator.getLocation(code.length + 1),
             },
             parent: DUMMY_PARENT,
             body,

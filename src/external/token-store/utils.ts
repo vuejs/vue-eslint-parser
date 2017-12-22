@@ -2,7 +2,7 @@
  * @fileoverview Define utilify functions for token store.
  * @author Toru Nagashima
  */
-import * as lodash from "lodash"
+import sortedIndexBy from "lodash/sortedIndexBy"
 import {HasLocation} from "../../ast"
 
 /**
@@ -25,7 +25,7 @@ function getStartLocation(token: { range: number[] }): number {
  * @returns The found index or `tokens.length`.
  */
 export function search(tokens: HasLocation[], location: number): number {
-    return lodash.sortedIndexBy(
+    return sortedIndexBy(
         tokens,
         {range: [location]},
         getStartLocation

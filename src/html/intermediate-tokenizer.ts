@@ -4,7 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import assert from "assert"
-import * as lodash from "lodash"
+import last from "lodash/last"
 import { ErrorCode, HasLocation, Namespace, ParseError, Token, VAttribute } from "../ast"
 import { debug } from "../common/debug"
 import { Tokenizer, TokenizerState, TokenType } from "./tokenizer"
@@ -168,7 +168,7 @@ export class IntermediateTokenizer {
             // VExpressionEnd was not found.
             // Concatenate the deferred tokens to the committed token.
             const start = this.expressionStartToken
-            const end = lodash.last(this.expressionTokens) || start
+            const end = last(this.expressionTokens) || start
             const value = this.expressionTokens.reduce(concat, start.value)
             this.expressionStartToken = null
             this.expressionTokens = []
@@ -229,7 +229,7 @@ export class IntermediateTokenizer {
 
         if (this.expressionStartToken != null) {
             // Defer this token until a VExpressionEnd token or a non-text token appear.
-            const lastToken = lodash.last(this.expressionTokens) || this.expressionStartToken
+            const lastToken = last(this.expressionTokens) || this.expressionStartToken
             if (lastToken.range[1] === token.range[0]) {
                 this.expressionTokens.push(token)
                 return null
@@ -528,7 +528,7 @@ export class IntermediateTokenizer {
         }
 
         const start = this.expressionStartToken
-        const end = lodash.last(this.expressionTokens) || start
+        const end = last(this.expressionTokens) || start
 
         // If invalid notation `</>` exists directly before this token, separate it.
         if (end.range[1] !== token.range[0]) {

@@ -3,7 +3,8 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import * as lodash from "lodash"
+import sortedIndexBy from "lodash/sortedIndexBy"
+import sortedLastIndexBy from "lodash/sortedLastIndexBy"
 import { DirectiveKeyParts, ParseError, Reference, Token, Variable, VAttribute, VDirective, VDirectiveKey, VDocumentFragment, VElement, VExpressionContainer, VIdentifier, VLiteral, VNode } from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
@@ -197,8 +198,8 @@ function replaceTokens(document: VDocumentFragment | null, node: HasRange, newTo
         return
     }
 
-    const index = lodash.sortedIndexBy(document.tokens, node, byRange0)
-    const count = lodash.sortedLastIndexBy(document.tokens, node, byRange1) - index
+    const index = sortedIndexBy(document.tokens, node, byRange0)
+    const count = sortedLastIndexBy(document.tokens, node, byRange1) - index
     splice(document.tokens, index, count, newTokens)
 }
 
@@ -212,7 +213,7 @@ function insertComments(document: VDocumentFragment | null, newComments: Token[]
         return
     }
 
-    const index = lodash.sortedIndexBy(document.comments, newComments[0], byRange0)
+    const index = sortedIndexBy(document.comments, newComments[0], byRange0)
     splice(document.comments, index, 0, newComments)
 }
 
@@ -226,7 +227,7 @@ function insertError(document: VDocumentFragment | null, error: ParseError): voi
         return
     }
 
-    const index = lodash.sortedIndexBy(document.errors, error, byIndex)
+    const index = sortedIndexBy(document.errors, error, byIndex)
     document.errors.splice(index, 0, error)
 }
 
