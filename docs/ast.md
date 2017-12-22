@@ -13,20 +13,23 @@ Some types are featured from [ESTree].
 You can use the type definition of this AST:
 
 ```ts
-import {AST} from "vue-eslint-parser"
+import { AST } from "vue-eslint-parser"
 
 export function create(context) {
-    context.parserServices.registerTemplateBodyVisitor(context, {
-        VElement(node: AST.VElement): void {
-            //...
+    return context.parserServices.defineTemplateBodyVisitor(
+        // Event handlers for <template>.
+        {
+            VElement(node: AST.VElement): void {
+                //...
+            }
+        },
+        // Event handlers for <script>. (optional)
+        {
+            Program(node: AST.ESLintProgram): void {
+                //...
+            }
         }
-    })
-
-    return {
-        Program(node: AST.ESLintProgram): void {
-            //...
-        }
-    }
+    )
 }
 ```
 
