@@ -12,7 +12,7 @@ import {HasLocation} from "../../ast"
  * @returns The start location.
  * @private
  */
-function getStartLocation(token: HasLocation): number {
+function getStartLocation(token: { range: number[] }): number {
     return token.range[0]
 }
 
