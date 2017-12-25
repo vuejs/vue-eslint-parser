@@ -6,6 +6,7 @@
     ],
     "parser": "typescript-eslint-parser",
     "rules": {
+        "complexity": "off",
         "indent": "off",
         "indent-legacy": ["error", 4, {"SwitchCase": 1}],
         "init-declarations": "off",
