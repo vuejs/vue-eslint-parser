@@ -86,6 +86,9 @@ For example:
 }
 ```
 
+- If you use with `babel-eslint`, it has additional requirements. Use `eslint@>=4.14.0` and `babel-eslint@>=8.1.1`.
+- If you use `typescript-eslint-parser`, the location of original nodes can be wrong. Waiting for `typescript-eslint-parser` to support [parseResult.visitorKeys](https://eslint.org/docs/developer-guide/working-with-plugins#working-with-custom-parsers).
+
 ## 🎇 Usage for custom rules / plugins
 
 This parser provides `parserServices` to traverse `<template>`.
