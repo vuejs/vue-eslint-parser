@@ -332,7 +332,7 @@ export class Parser {
      * Handle the start tag token.
      * @param token The token to handle.
      */
-    protected StartTag(token: StartTag): void { //eslint-disable-line complexity
+    protected StartTag(token: StartTag): void {
         debug("[html] StartTag %j", token)
 
         this.closeCurrentElementIfNecessary(token.name)
