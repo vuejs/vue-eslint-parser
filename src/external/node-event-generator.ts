@@ -2,16 +2,16 @@
  * This file is copied from `eslint/lib/util/node-event-generator.js`
  */
 import EventEmitter from "events"
-import * as esquery from "esquery"
+import esquery, {Selector} from "esquery"
 import union from "lodash/union"
 import intersection from "lodash/intersection"
 import memoize from "lodash/memoize"
 import {Node} from "../ast"
 
-interface Selector {
+interface NodeSelector {
     rawSelector: string
     isExit: boolean
-    parsedSelector: esquery.Selector
+    parsedSelector: Selector
     listenerTypes: string[] | null
     attributeCount: number
     identifierCount: number
@@ -22,7 +22,7 @@ interface Selector {
 * @param parsedSelector An object (from esquery) describing the matching behavior of the selector
 * @returns The node types that could possibly trigger this selector, or `null` if all node types could trigger it
 */
-function getPossibleTypes(parsedSelector: esquery.Selector): string[] | null {
+function getPossibleTypes(parsedSelector: Selector): string[] | null {
     switch (parsedSelector.type) {
         case "identifier":
             return [parsedSelector.value]
@@ -67,7 +67,7 @@ function getPossibleTypes(parsedSelector: esquery.Selector): string[] | null {
  * @param parsedSelector An object (from esquery) describing the selector's matching behavior
  * @returns The number of class, pseudo-class, and attribute queries in this selector
  */
-function countClassAttributes(parsedSelector: esquery.Selector): number {
+function countClassAttributes(parsedSelector: Selector): number {
     switch (parsedSelector.type) {
         case "child":
         case "descendant":
@@ -96,7 +96,7 @@ function countClassAttributes(parsedSelector: esquery.Selector): number {
  * @param parsedSelector An object (from esquery) describing the selector's matching behavior
  * @returns The number of identifier queries
  */
-function countIdentifiers(parsedSelector: esquery.Selector): number {
+function countIdentifiers(parsedSelector: Selector): number {
     switch (parsedSelector.type) {
         case "child":
         case "descendant":
@@ -127,7 +127,7 @@ function countIdentifiers(parsedSelector: esquery.Selector): number {
  * a value less than 0 if selectorA and selectorB have the same specificity, and selectorA <= selectorB alphabetically
  * a value greater than 0 if selectorA and selectorB have the same specificity, and selectorA > selectorB alphabetically
  */
-function compareSpecificity(selectorA: Selector, selectorB: Selector): number {
+function compareSpecificity(selectorA: NodeSelector, selectorB: NodeSelector): number {
     return selectorA.attributeCount - selectorB.attributeCount ||
         selectorA.identifierCount - selectorB.identifierCount ||
         (selectorA.rawSelector <= selectorB.rawSelector ? -1 : 1)
@@ -139,7 +139,7 @@ function compareSpecificity(selectorA: Selector, selectorB: Selector): number {
  * @returns An object (from esquery) describing the matching behavior of this selector
  * @throws An error if the selector is invalid
  */
-function tryParseSelector(rawSelector: string): esquery.Selector {
+function tryParseSelector(rawSelector: string): Selector {
     try {
         return esquery.parse(rawSelector.replace(/:exit$/, ""))
     }
@@ -156,7 +156,7 @@ function tryParseSelector(rawSelector: string): esquery.Selector {
  * @param {string} rawSelector A raw AST selector
  * @returns {ASTSelector} A selector descriptor
  */
-const parseSelector = memoize<(rawSelector: string) => Selector>(rawSelector => {
+const parseSelector = memoize<(rawSelector: string) => NodeSelector>(rawSelector => {
     const parsedSelector = tryParseSelector(rawSelector)
 
     return {
@@ -189,10 +189,10 @@ export default class NodeEventGenerator {
     emitter: EventEmitter
 
     private currentAncestry: Node[]
-    private enterSelectorsByNodeType: Map<string, Selector[]>
-    private exitSelectorsByNodeType: Map<string, Selector[]>
-    private anyTypeEnterSelectors: Selector[]
-    private anyTypeExitSelectors: Selector[]
+    private enterSelectorsByNodeType: Map<string, NodeSelector[]>
+    private exitSelectorsByNodeType: Map<string, NodeSelector[]>
+    private anyTypeEnterSelectors: NodeSelector[]
+    private anyTypeExitSelectors: NodeSelector[]
 
     /**
     * @param emitter - An event emitter which is the destination of events. This emitter must already
@@ -259,7 +259,7 @@ export default class NodeEventGenerator {
      * @param node The node to check
      * @param selector An AST selector descriptor
      */
-    private applySelector(node: Node, selector: Selector): void {
+    private applySelector(node: Node, selector: NodeSelector): void {
         if (esquery.matches(node, selector.parsedSelector, this.currentAncestry)) {
             this.emitter.emit(selector.rawSelector, node)
         }

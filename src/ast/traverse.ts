@@ -3,105 +3,14 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
+import Evk, { VisitorKeys } from "eslint-visitor-keys"
 import { Node } from "./nodes"
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 
-type KeyMap = { [key: string]: string[] | undefined }
-
-const KEYS: KeyMap = {
-    AssignmentExpression: ["left", "right"],
-    AssignmentPattern: ["left", "right"],
-    ArrayExpression: ["elements"],
-    ArrayPattern: ["elements"],
-    ArrowFunctionExpression: ["params", "body"],
-    AwaitExpression: ["argument"],
-    BlockStatement: ["body"],
-    BinaryExpression: ["left", "right"],
-    BreakStatement: ["label"],
-    CallExpression: ["callee", "arguments"],
-    CatchClause: ["param", "body"],
-    ClassBody: ["body"],
-    ClassDeclaration: ["id", "superClass", "body"],
-    ClassExpression: ["id", "superClass", "body"],
-    ConditionalExpression: ["test", "consequent", "alternate"],
-    ContinueStatement: ["label"],
-    DebuggerStatement: [],
-    DirectiveStatement: [],
-    DoWhileStatement: ["body", "test"],
-    EmptyStatement: [],
-    ExportAllDeclaration: ["source"],
-    ExportDefaultDeclaration: ["declaration"],
-    ExportNamedDeclaration: ["declaration", "specifiers", "source"],
-    ExportSpecifier: ["exported", "local"],
-    ExpressionStatement: ["expression"],
-    ForStatement: ["init", "test", "update", "body"],
-    ForInStatement: ["left", "right", "body"],
-    ForOfStatement: ["left", "right", "body"],
-    FunctionDeclaration: ["id", "params", "body"],
-    FunctionExpression: ["id", "params", "body"],
-    Identifier: [],
-    IfStatement: ["test", "consequent", "alternate"],
-    ImportDeclaration: ["specifiers", "source"],
-    ImportDefaultSpecifier: ["local"],
-    ImportNamespaceSpecifier: ["local"],
-    ImportSpecifier: ["imported", "local"],
-    Literal: [],
-    LabeledStatement: ["label", "body"],
-    LogicalExpression: ["left", "right"],
-    MemberExpression: ["object", "property"],
-    MetaProperty: ["meta", "property"],
-    MethodDefinition: ["key", "value"],
-    ModuleSpecifier: [],
-    NewExpression: ["callee", "arguments"],
-    ObjectExpression: ["properties"],
-    ObjectPattern: ["properties"],
-    Program: ["body"],
-    Property: ["key", "value"],
-    RestElement: ["argument"],
-    ReturnStatement: ["argument"],
-    SequenceExpression: ["expressions"],
-    SpreadElement: ["argument"],
-    Super: [],
-    SwitchStatement: ["discriminant", "cases"],
-    SwitchCase: ["test", "consequent"],
-    TaggedTemplateExpression: ["tag", "quasi"],
-    TemplateElement: [],
-    TemplateLiteral: ["quasis", "expressions"],
-    ThisExpression: [],
-    ThrowStatement: ["argument"],
-    TryStatement: ["block", "handler", "finalizer"],
-    UnaryExpression: ["argument"],
-    UpdateExpression: ["argument"],
-    VariableDeclaration: ["declarations"],
-    VariableDeclarator: ["id", "init"],
-    WhileStatement: ["test", "body"],
-    WithStatement: ["object", "body"],
-    YieldExpression: ["argument"],
-
-    // Legacy
-    RestProperty: ["argument"],
-    ExperimentalRestProperty: ["argument"],
-    SpreadProperty: ["argument"],
-    ExperimentalSpreadProperty: ["argument"],
-
-    // JSX
-    JSXIdentifier: [],
-    JSXMemberExpression: ["object", "property"],
-    JSXNamespacedName: ["namespace", "name"],
-    JSXEmptyExpression: [],
-    JSXExpressionContainer: ["expression"],
-    JSXSpreadChild: ["expression"],
-    JSXOpeningElement: ["name", "attributes"],
-    JSXClosingElement: ["name"],
-    JSXAttribute: ["name", "value"],
-    JSXSpreadAttribute: ["argument"],
-    JSXText: [],
-    JSXElement: ["openingElement", "children", "closingElement"],
-
-    // Vue.js
+const KEYS = Evk.unionWith({
     VAttribute: ["key", "value"],
     VDirectiveKey: [],
     VDocumentFragment: ["children"],
@@ -114,7 +23,7 @@ const KEYS: KeyMap = {
     VOnExpression: ["body"],
     VStartTag: ["attributes"],
     VText: [],
-}
+})
 
 /**
  * Check that the given key should be traversed or not.
@@ -159,7 +68,7 @@ function traverse(node: Node, parent: Node | null, visitor: Visitor) {
 
     visitor.enterNode(node, parent)
 
-    const keys = KEYS[node.type] || getFallbackKeys(node)
+    const keys = (visitor.visitorKeys || KEYS)[node.type] || getFallbackKeys(node)
     for (i = 0; i < keys.length; ++i) {
         const child = (node as any)[keys[i]]
 
@@ -183,6 +92,7 @@ function traverse(node: Node, parent: Node | null, visitor: Visitor) {
 //------------------------------------------------------------------------------
 
 export interface Visitor {
+    visitorKeys?: VisitorKeys
     enterNode(node: Node, parent: Node | null): void
     leaveNode(node: Node, parent: Node | null): void
 }

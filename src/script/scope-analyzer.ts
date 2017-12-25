@@ -3,7 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import * as eslintScope from "eslint-scope"
+import escope, * as escopeTypes from "eslint-scope"
 import { ESLintIdentifier, ESLintProgram, Reference, Variable, getFallbackKeys } from "../ast"
 
 /**
@@ -12,7 +12,7 @@ import { ESLintIdentifier, ESLintProgram, Reference, Variable, getFallbackKeys }
  * @param index The index of the reference.
  * @param references The belonging array of the reference.
  */
-function isUnique(reference: eslintScope.Reference, index: number, references: eslintScope.Reference[]): boolean {
+function isUnique(reference: escopeTypes.Reference, index: number, references: escopeTypes.Reference[]): boolean {
     return (index === 0) || (reference.identifier !== references[index - 1].identifier)
 }
 
@@ -21,7 +21,7 @@ function isUnique(reference: eslintScope.Reference, index: number, references: e
  * @param reference The source reference object.
  * @returns The transformed reference object.
  */
-function transformReference(reference: eslintScope.Reference): Reference {
+function transformReference(reference: escopeTypes.Reference): Reference {
     const ret: Reference = {
         id: reference.identifier as ESLintIdentifier,
         mode: (
@@ -41,7 +41,7 @@ function transformReference(reference: eslintScope.Reference): Reference {
  * @param variable The source variable object.
  * @returns The transformed variable object.
  */
-function transformVariable(variable: eslintScope.Variable): Variable {
+function transformVariable(variable: escopeTypes.Variable): Variable {
     const ret: Variable = {
         id: variable.defs[0].name as ESLintIdentifier,
         kind: "v-for",
@@ -57,7 +57,7 @@ function transformVariable(variable: eslintScope.Variable): Variable {
  * @param scope The global scope.
  * @returns The `for` statement scope.
  */
-function getForScope(scope: eslintScope.Scope): eslintScope.Scope {
+function getForScope(scope: escopeTypes.Scope): escopeTypes.Scope {
     if (scope.childScopes[0].type === "module") {
         scope = scope.childScopes[0]
     }
@@ -69,11 +69,11 @@ function getForScope(scope: eslintScope.Scope): eslintScope.Scope {
  * @param ast
  * @param parserOptions
  */
-function analyze(ast: ESLintProgram, parserOptions: any): eslintScope.Scope {
+function analyze(ast: ESLintProgram, parserOptions: any): escopeTypes.Scope {
     const ecmaVersion = parserOptions.ecmaVersion || 2017
     const ecmaFeatures = parserOptions.ecmaFeatures || {}
     const sourceType = parserOptions.sourceType || "script"
-    const result = eslintScope.analyze(ast, {
+    const result = escope.analyze(ast, {
         ignoreEval: true,
         nodejsScope: false,
         impliedStrict: ecmaFeatures.impliedStrict,

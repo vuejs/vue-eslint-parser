@@ -3,6 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
+import { ScopeManager } from "eslint-scope"
 import { ParseError } from "./errors"
 import { HasLocation } from "./locations"
 import { Token } from "./tokens"
@@ -43,9 +44,9 @@ export type ESLintNode =
  */
 export interface ESLintExtendedProgram {
     ast: ESLintProgram
-    services?: any
-    visitorKeys?: any
-    scope?: any
+    services?: {}
+    visitorKeys?: { [type: string]: string[] }
+    scopeManager?: ScopeManager
 }
 
 export interface ESLintProgram extends HasLocation, HasParent {

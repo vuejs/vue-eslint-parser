@@ -30,15 +30,17 @@ interface ESLintCustomParser {
  * 1. Set `node.parent`.
  * 2. Fix `node.range` and `node.loc` for HTML entities.
  *
- * @param ast The AST root node to modify.
+ * @param result The parsing result to modify.
  * @param locationCalculator The location calculator to modify.
  */
-function postprocess(ast: ESLintProgram, locationCalculator: LocationCalculator): void {
+function postprocess(result: ESLintExtendedProgram, locationCalculator: LocationCalculator): void {
     // There are cases which the same node instance appears twice in the tree.
     // E.g. `let {a} = {}` // This `a` appears twice at `Property#key` and `Property#value`.
     const traversed = new Set<Node|number[]>()
 
-    traverseNodes(ast, {
+    traverseNodes(result.ast, {
+        visitorKeys: result.visitorKeys,
+
         enterNode(node, parent) {
             if (!traversed.has(node)) {
                 traversed.add(node)
@@ -52,15 +54,16 @@ function postprocess(ast: ESLintProgram, locationCalculator: LocationCalculator)
                 }
             }
         },
+
         leaveNode() {
             // Do nothing.
         },
     })
 
-    for (const token of ast.tokens || []) {
+    for (const token of result.ast.tokens || []) {
         locationCalculator.fixLocation(token)
     }
-    for (const comment of ast.comments || []) {
+    for (const comment of result.ast.comments || []) {
         locationCalculator.fixLocation(comment)
     }
 }
@@ -158,7 +161,7 @@ function throwErrorAsAdjustingOutsideOfCode(err: any, code: string, locationCalc
 function parseScriptFragment(code: string, locationCalculator: LocationCalculator, parserOptions: any): ESLintExtendedProgram {
     try {
         const result = parseScript(code, parserOptions)
-        postprocess(result.ast, locationCalculator)
+        postprocess(result, locationCalculator)
         return result
     }
     catch (err) {

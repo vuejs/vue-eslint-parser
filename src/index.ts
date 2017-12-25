@@ -73,9 +73,9 @@ export function parseForESLint(code: string, options: any): AST.ESLintExtendedPr
         const tokenizer = new HTMLTokenizer(code)
         const rootAST = new HTMLParser(tokenizer, options).parse()
         const locationCalcurator = new LocationCalculator(tokenizer.gaps, tokenizer.lineTerminators)
-        const script = rootAST.children.find(isScriptElement) as AST.VElement | undefined // https://github.com/Microsoft/TypeScript/issues/7657
-        const template = rootAST.children.find(isTemplateElement) as AST.VElement | undefined
-        const templateLangAttr = template && template.startTag.attributes.find(isLang) as AST.VAttribute | undefined
+        const script = rootAST.children.find(isScriptElement)
+        const template = rootAST.children.find(isTemplateElement)
+        const templateLangAttr = template && template.startTag.attributes.find(isLang)
         const templateLang = (templateLangAttr && templateLangAttr.value && templateLangAttr.value.value) || "html"
         const concreteInfo: AST.HasConcreteInfo = {
             tokens: rootAST.tokens,

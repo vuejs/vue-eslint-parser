@@ -87,5 +87,8 @@ export interface WildcardSelector {
     type: "wildcard"
 }
 
-export declare function parse(query: string): Selector
-export declare function matches(node: object, selector: Selector, ancestry: object[]): boolean
+declare const esquery: {
+    parse(query: string): Selector
+    matches(node: object, selector: Selector, ancestry: object[]): boolean
+}
+export default esquery

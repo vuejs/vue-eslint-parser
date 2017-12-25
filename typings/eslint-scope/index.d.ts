@@ -5,8 +5,6 @@
  */
 import * as estree from "estree"
 
-export declare function analyze(ast: object, options?: AnalysisOptions): ScopeManager
-
 export interface AnalysisOptions {
     optimistic?: boolean
     directive?: boolean
@@ -16,7 +14,6 @@ export interface AnalysisOptions {
     fallback?: string | Function
     sourceType?: "script" | "module"
     ecmaVersion?: number
-
 }
 
 export interface ScopeManager {
@@ -75,3 +72,8 @@ export interface Reference {
     isWrite(): boolean
     isWriteOnly(): boolean
 }
+
+declare const eslintScope: {
+    analyze(ast: object, options?: AnalysisOptions): ScopeManager
+}
+export default eslintScope

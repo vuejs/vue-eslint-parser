@@ -7,23 +7,28 @@ import resolve from "rollup-plugin-node-resolve"
 import sourcemaps from "rollup-plugin-sourcemaps"
 
 const pkg = require("./package.json")
-const external = [
-    "assert",
-    "events",
-    "path",
-].concat(Object.keys(pkg.dependencies))
+const deps = new Set(
+    [
+        "assert",
+        "events",
+        "path",
+    ].concat(Object.keys(pkg.dependencies))
+)
 
 export default {
-    entry: ".temp/index.js",
-    external,
-    dest: "index.js",
-    format: "cjs",
-    sourceMap: true,
-    sourceMapFile: "index.js.map",
+    input: ".temp/index.js",
+    output: {
+        file: "index.js",
+        format: "cjs",
+        sourcemap: true,
+        sourcemapFile: "index.js.map",
+        strict: true,
+    },
     plugins: [
         sourcemaps(),
-        resolve({external}),
+        resolve(),
     ],
+    external: (id) => deps.has(id) || id.startsWith("lodash"),
     banner: `/**
  * @author Toru Nagashima <https://github.com/mysticatea>
  * @copyright 2017 Toru Nagashima. All rights reserved.

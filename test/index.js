@@ -488,4 +488,29 @@ describe("Basic tests", () => {
             assert.notEqual(parseForESLint("test", { filePath: "test.js" }).services, undefined)
         })
     })
+
+    describe("https://github.com/mysticatea/vue-eslint-parser/issues/21", () => {
+        it("should make the correct location of decorators", () => {
+            const code = fs.readFileSync(path.join(FIXTURE_DIR, "issue21.vue"), "utf8")
+            const indexOfDecorator = code.indexOf("@Component")
+            const ast = parse(code, {
+                parser: "babel-eslint",
+                ecmaVersion: 2017,
+                sourceType: "module",
+
+                // Implicit parserOptions to detect whether the current ESLint supports `result.scopeManager` and `result.visitorKeys`.
+                eslintScopeManager: true,
+                eslintVisitorKeys: true,
+            })
+
+            assert.equal(
+                ast.body[2].declaration.range[0],
+                indexOfDecorator
+            )
+            assert.equal(
+                ast.body[2].declaration.decorators[0].range[0],
+                indexOfDecorator
+            )
+        })
+    })
 })
