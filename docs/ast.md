@@ -204,11 +204,34 @@ interface Variable {
 - `Variable` is objects but not `Node`. Those are variable declarations that child elements can use. The elements which have [`v-for` directives] or a special attribute [scope] can declare variables.
 - `Variable#references` is an array of references which use this variable.
 
+## VRootElement
+
+```js
+interface VRootElement <: VElement {
+    tokens: [ Token ]
+    comments: [ Token ]
+    errors: [ ParseError ]
+}
+
+interface Token <: Node {
+    type: string
+    value: string
+}
+
+interface ParseError <: Error {
+    code?: string
+    message: string
+    index: number
+    lineNumber: number
+    column: number
+}
+```
+
 ## Program
 
 ```js
 extend interface Program {
-    templateBody: VElement | null
+    templateBody: VRootElement | null
 }
 ```
 

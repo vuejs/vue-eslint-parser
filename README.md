@@ -10,10 +10,7 @@ The ESLint custom parser for `.vue` files.
 
 ## ⤴️ Motivation
 
-- **This parser allows us to lint the `<template>` of `.vue` files.**
-  We can make mistakes easily on `<template>` if we use complex directives and expressions in the template. This parser and the rules of [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue) would catch some of the mistakes.
-- **This parser allows us to fix our mistakes automatically.**
-  ESLint supports autofix on custom parsers but does not support autofix on plugins which have processors ([eslint/eslint#7510](https://github.com/eslint/eslint/issues/7510)). This parser supports autofix on `.vue` files.
+This parser allows us to lint the `<template>` of `.vue` files. We can make mistakes easily on `<template>` if we use complex directives and expressions in the template. This parser and the rules of [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue) would catch some of the mistakes.
 
 ## 💿 Installation
 
