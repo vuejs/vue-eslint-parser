@@ -10,9 +10,9 @@ The ESLint custom parser for `.vue` files.
 
 ## ⤴️ Motivation
 
-- **This parser allows us to lint the `<template>` of `.vue` files.**  
+- **This parser allows us to lint the `<template>` of `.vue` files.**
   We can make mistakes easily on `<template>` if we use complex directives and expressions in the template. This parser and the rules of [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue) would catch some of the mistakes.
-- **This parser allows us to fix our mistakes automatically.**  
+- **This parser allows us to fix our mistakes automatically.**
   ESLint supports autofix on custom parsers but does not support autofix on plugins which have processors ([eslint/eslint#7510](https://github.com/eslint/eslint/issues/7510)). This parser supports autofix on `.vue` files.
 
 ## 💿 Installation
@@ -43,7 +43,7 @@ $ eslint src --ext .vue
 
 ## 🔧 Options
 
-`parserOptions` has the same properties as what [espree](https://github.com/eslint/espree#usage), the default parser of ESLint, is supporting.  
+`parserOptions` has the same properties as what [espree](https://github.com/eslint/espree#usage), the default parser of ESLint, is supporting.
 For example:
 
 ```json
@@ -63,7 +63,7 @@ For example:
 ```
 
 Also, you can use `parser` property to specify a custom parser to parse `<script>` tags.
-Other properties than parser would be given to the specified parser.  
+Other properties than parser would be given to the specified parser.
 For example:
 
 ```json
@@ -91,11 +91,11 @@ For example:
 
 ## 🎇 Usage for custom rules / plugins
 
-This parser provides `parserServices` to traverse `<template>`.
-
-The spec of `<template>` AST is [here](./docs/ast.md).
-
-TODO: write examples.
+- This parser provides `parserServices` to traverse `<template>`.
+    - `defineTemplateBodyVisitor(templateVisitor, scriptVisitor)` ... returns ESLint visitor to traverse `<template>`.
+    - `getTemplateBodyTokenStore()` ... returns ESLint `TokenStore` to get the tokens of `<template>`.
+- [ast.md](./docs/ast.md) is `<template>` AST specification.
+- [mustache-interpolation-spacing.js](https://github.com/vuejs/eslint-plugin-vue/blob/b434ff99d37f35570fa351681e43ba2cf5746db3/lib/rules/mustache-interpolation-spacing.js) is an example.
 
 ## ⚠️ Known Limitations
 
