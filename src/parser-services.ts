@@ -46,13 +46,20 @@ export function define(rootAST: ESLintProgram) {
 
                 const programExitHandler = scriptVisitor["Program:exit"]
                 scriptVisitor["Program:exit"] = function() {
-                    if (typeof programExitHandler === "function") {
-                        programExitHandler.apply(this, arguments) //eslint-disable-line prefer-rest-params
-                    }
+                    try {
+                        if (typeof programExitHandler === "function") {
+                            programExitHandler.apply(this, arguments) //eslint-disable-line prefer-rest-params
+                        }
 
-                    // Traverse template body.
-                    const generator = new NodeEventGenerator(emitter as EventEmitter)
-                    traverseNodes(rootAST.templateBody as VElement, generator)
+                        // Traverse template body.
+                        const generator = new NodeEventGenerator(emitter as EventEmitter)
+                        traverseNodes(rootAST.templateBody as VElement, generator)
+                    }
+                    finally {
+                        // @ts-ignore
+                        scriptVisitor["Program:exit"] = programExitHandler
+                        emitters.delete(rootAST)
+                    }
                 }
             }
 

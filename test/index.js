@@ -14,7 +14,9 @@ const path = require("path")
 const fs = require("fs-extra")
 const parse = require("..").parse
 const parseForESLint = require("..").parseForESLint
-const CLIEngine = require("./fixtures/eslint").CLIEngine
+const eslint = require("./fixtures/eslint")
+const CLIEngine = eslint.CLIEngine
+const Linter = eslint.Linter
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -511,6 +513,34 @@ describe("Basic tests", () => {
                 ast.body[2].declaration.decorators[0].range[0],
                 indexOfDecorator
             )
+        })
+    })
+
+    describe("parserServices.defineTemplateBodyVisitor", () => {
+        it("should work even if AST object was reused.", () => {
+            const code = "<template><div/></template>"
+            const config = {
+                parser: PARSER_PATH,
+                rules: {
+                    "test-rule": "error",
+                },
+            }
+            const linter = new Linter()
+
+            //eslint-disable-next-line no-shadow
+            linter.defineRule("test-rule", (context) => context.parserServices.defineTemplateBodyVisitor({
+                "VElement[name='div']"(node) {
+                    context.report({ node, message: "OK" })
+                },
+            }))
+
+            const messages1 = linter.verify(code, config)
+            const messages2 = linter.verify(linter.getSourceCode(), config)
+
+            assert.equal(messages1.length, 1)
+            assert.equal(messages1[0].message, "OK")
+            assert.equal(messages2.length, 1)
+            assert.equal(messages1[0].message, "OK")
         })
     })
 })
