@@ -2023,10 +2023,10 @@
                 "value": ""
             },
             {
-                "type": "HTMLLiteral",
+                "type": "Punctuator",
                 "range": [
                     135,
-                    137
+                    136
                 ],
                 "loc": {
                     "start": {
@@ -2035,10 +2035,28 @@
                     },
                     "end": {
                         "line": 7,
+                        "column": 14
+                    }
+                },
+                "value": "\""
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    136,
+                    137
+                ],
+                "loc": {
+                    "start": {
+                        "line": 7,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 7,
                         "column": 15
                     }
                 },
-                "value": ""
+                "value": "\""
             },
             {
                 "type": "HTMLTagClose",
@@ -2167,10 +2185,10 @@
                 "value": ""
             },
             {
-                "type": "HTMLLiteral",
+                "type": "Punctuator",
                 "range": [
                     158,
-                    160
+                    159
                 ],
                 "loc": {
                     "start": {
@@ -2179,10 +2197,28 @@
                     },
                     "end": {
                         "line": 8,
+                        "column": 14
+                    }
+                },
+                "value": "'"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    159,
+                    160
+                ],
+                "loc": {
+                    "start": {
+                        "line": 8,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 8,
                         "column": 15
                     }
                 },
-                "value": ""
+                "value": "'"
             },
             {
                 "type": "HTMLTagClose",
@@ -2318,18 +2354,6 @@
                 "index": 44,
                 "lineNumber": 3,
                 "column": 13
-            },
-            {
-                "message": "Expected to be an expression, but got empty.",
-                "index": 136,
-                "lineNumber": 7,
-                "column": 14
-            },
-            {
-                "message": "Expected to be an expression, but got empty.",
-                "index": 159,
-                "lineNumber": 8,
-                "column": 14
             }
         ]
     }

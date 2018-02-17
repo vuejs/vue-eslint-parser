@@ -178,7 +178,7 @@ function parseScriptFragment(code: string, locationCalculator: LocationCalculato
  * The result of parsing expressions.
  */
 export interface ExpressionParseResult {
-    expression: ESLintExpression | VForExpression | VOnExpression
+    expression: ESLintExpression | VForExpression | VOnExpression | null
     tokens: Token[]
     comments: Token[]
     references: Reference[]
