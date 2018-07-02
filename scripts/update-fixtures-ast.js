@@ -11,13 +11,13 @@
 
 const fs = require("fs")
 const path = require("path")
-const parser = require("../..")
+const parser = require("../")
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 
-const ROOT = path.join(__dirname, "../fixtures/ast")
+const ROOT = path.join(__dirname, "../test/fixtures/ast")
 const TARGETS = fs.readdirSync(ROOT)
 const PARSER_OPTIONS = {
     comment: true,
@@ -79,11 +79,13 @@ function getTree(source, ast) {
     parser.AST.traverseNodes(ast.templateBody, {
         enterNode(node) {
             stack.push(current)
-            current.children.push(current = {
-                type: node.type,
-                text: source.slice(node.range[0], node.range[1]),
-                children: [],
-            })
+            current.children.push(
+                (current = {
+                    type: node.type,
+                    text: source.slice(node.range[0], node.range[1]),
+                    children: [],
+                })
+            )
         },
         leaveNode() {
             current = stack.pop()
@@ -103,8 +105,13 @@ for (const name of TARGETS) {
     const tokenRangesPath = path.join(ROOT, `${name}/token-ranges.json`)
     const treePath = path.join(ROOT, `${name}/tree.json`)
     const source = fs.readFileSync(sourcePath, "utf8")
-    const actual = parser.parse(source, Object.assign({ filePath: sourcePath }, PARSER_OPTIONS))
-    const tokenRanges = getAllTokens(actual).map(t => source.slice(t.range[0], t.range[1]))
+    const actual = parser.parse(
+        source,
+        Object.assign({ filePath: sourcePath }, PARSER_OPTIONS)
+    )
+    const tokenRanges = getAllTokens(actual).map(t =>
+        source.slice(t.range[0], t.range[1])
+    )
     const tree = getTree(source, actual)
 
     console.log("Update:", name)

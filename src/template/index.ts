@@ -5,17 +5,40 @@
  */
 import sortedIndexBy from "lodash/sortedIndexBy"
 import sortedLastIndexBy from "lodash/sortedLastIndexBy"
-import { DirectiveKeyParts, ParseError, Reference, Token, Variable, VAttribute, VDirective, VDirectiveKey, VDocumentFragment, VElement, VExpressionContainer, VIdentifier, VLiteral, VNode } from "../ast"
+import {
+    DirectiveKeyParts,
+    ParseError,
+    Reference,
+    Token,
+    Variable,
+    VAttribute,
+    VDirective,
+    VDirectiveKey,
+    VDocumentFragment,
+    VElement,
+    VExpressionContainer,
+    VIdentifier,
+    VLiteral,
+    VNode,
+} from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
-import { ExpressionParseResult, parseExpression, parseVForExpression, parseVOnExpression } from "../script"
+import {
+    ExpressionParseResult,
+    parseExpression,
+    parseVForExpression,
+    parseVOnExpression,
+} from "../script"
 
 /**
  * Extract the variable declarations of scope attributes.
  * @param references The references which are variable declarations.
  * @param outVariables The variable declarations. This is output.
  */
-function extractScopeVariables(references: Reference[], outVariables: Variable[]): void {
+function extractScopeVariables(
+    references: Reference[],
+    outVariables: Variable[],
+): void {
     let reference: Reference | undefined
     while ((reference = references.shift()) != null) {
         const variable: Variable = {
@@ -51,7 +74,13 @@ function getOwnerDocument(leafNode: VNode): VDocumentFragment | null {
  * @param value The value of new token.
  * @returns The new token.
  */
-function createSimpleToken(type: string, start: number, end: number, value: string, globalLocationCalculator: LocationCalculator): Token {
+function createSimpleToken(
+    type: string,
+    start: number,
+    end: number,
+    value: string,
+    globalLocationCalculator: LocationCalculator,
+): Token {
     return {
         type,
         range: [start, end],
@@ -93,13 +122,11 @@ function createDirectiveKey(node: VIdentifier): VDirectiveKey {
         ret.name = raw.name = "bind"
         ret.shorthand = true
         i = 1
-    }
-    else if (id.startsWith("@")) {
+    } else if (id.startsWith("@")) {
         ret.name = raw.name = "on"
         ret.shorthand = true
         i = 1
-    }
-    else {
+    } else {
         const colon = id.indexOf(":")
         if (colon !== -1) {
             ret.name = id.slice(0, colon)
@@ -113,8 +140,7 @@ function createDirectiveKey(node: VIdentifier): VDirectiveKey {
     if (ret.name === "") {
         ret.name = dotSplit[0]
         raw.name = dotSplitRaw[0]
-    }
-    else {
+    } else {
         ret.argument = dotSplit[0]
         raw.argument = dotSplitRaw[0]
     }
@@ -136,7 +162,12 @@ function createDirectiveKey(node: VIdentifier): VDirectiveKey {
  * @param deleteCount The count of items to delete.
  * @param newItems The array of items to insert.
  */
-function splice<T>(items: T[], start: number, deleteCount: number, newItems: T[]): void {
+function splice<T>(
+    items: T[],
+    start: number,
+    deleteCount: number,
+    newItems: T[],
+): void {
     switch (newItems.length) {
         case 0:
             items.splice(start, deleteCount)
@@ -150,7 +181,7 @@ function splice<T>(items: T[], start: number, deleteCount: number, newItems: T[]
         default:
             Array.prototype.splice.apply(
                 items,
-                ([start, deleteCount] as any[]).concat(newItems)
+                ([start, deleteCount] as any[]).concat(newItems),
             )
             break
     }
@@ -193,7 +224,11 @@ function byIndex(x: ParseError): number {
  * @param node The node to specify the range of replacement.
  * @param newTokens The new tokens.
  */
-function replaceTokens(document: VDocumentFragment | null, node: HasRange, newTokens: Token[]): void {
+function replaceTokens(
+    document: VDocumentFragment | null,
+    node: HasRange,
+    newTokens: Token[],
+): void {
     if (document == null) {
         return
     }
@@ -208,7 +243,10 @@ function replaceTokens(document: VDocumentFragment | null, node: HasRange, newTo
  * @param document The document that the node is belonging to.
  * @param newComments The comments to insert.
  */
-function insertComments(document: VDocumentFragment | null, newComments: Token[]): void {
+function insertComments(
+    document: VDocumentFragment | null,
+    newComments: Token[],
+): void {
     if (document == null || newComments.length === 0) {
         return
     }
@@ -222,7 +260,10 @@ function insertComments(document: VDocumentFragment | null, newComments: Token[]
  * @param document The document that the node is belonging to.
  * @param error The error to insert.
  */
-function insertError(document: VDocumentFragment | null, error: ParseError): void {
+function insertError(
+    document: VDocumentFragment | null,
+    error: ParseError,
+): void {
     if (document == null) {
         return
     }
@@ -239,24 +280,64 @@ function insertError(document: VDocumentFragment | null, error: ParseError): voi
  * @param node The attribute node to replace. This function modifies this node directly.
  * @param directiveName The name of this directive.
  */
-function parseAttributeValue(code: string, parserOptions: any, globalLocationCalculator: LocationCalculator, node: VLiteral, directiveName: string): ExpressionParseResult {
+function parseAttributeValue(
+    code: string,
+    parserOptions: any,
+    globalLocationCalculator: LocationCalculator,
+    node: VLiteral,
+    directiveName: string,
+): ExpressionParseResult {
     const firstChar = code[node.range[0]]
-    const quoted = (firstChar === "\"" || firstChar === "'")
-    const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(node.range[0] + (quoted ? 1 : 0))
-    const result = (
-        quoted && node.value === "" ? { expression: null, tokens: [], comments: [], variables: [], references: [] } :
-        directiveName === "for" ? parseVForExpression(node.value, locationCalculator, parserOptions) :
-        directiveName === "on" ? parseVOnExpression(node.value, locationCalculator, parserOptions) :
-        /* otherwise */ parseExpression(node.value, locationCalculator, parserOptions)
+    const quoted = firstChar === '"' || firstChar === "'"
+    const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
+        node.range[0] + (quoted ? 1 : 0),
     )
+    const result =
+        quoted && node.value === ""
+            ? {
+                  expression: null,
+                  tokens: [],
+                  comments: [],
+                  variables: [],
+                  references: [],
+              }
+            : directiveName === "for"
+                ? parseVForExpression(
+                      node.value,
+                      locationCalculator,
+                      parserOptions,
+                  )
+                : directiveName === "on"
+                    ? parseVOnExpression(
+                          node.value,
+                          locationCalculator,
+                          parserOptions,
+                      )
+                    : /* otherwise */ parseExpression(
+                          node.value,
+                          locationCalculator,
+                          parserOptions,
+                      )
 
     // Add the tokens of quotes.
     if (quoted) {
         result.tokens.unshift(
-            createSimpleToken("Punctuator", node.range[0], node.range[0] + 1, firstChar, globalLocationCalculator)
+            createSimpleToken(
+                "Punctuator",
+                node.range[0],
+                node.range[0] + 1,
+                firstChar,
+                globalLocationCalculator,
+            ),
         )
         result.tokens.push(
-            createSimpleToken("Punctuator", node.range[1] - 1, node.range[1], firstChar, globalLocationCalculator)
+            createSimpleToken(
+                "Punctuator",
+                node.range[1] - 1,
+                node.range[1],
+                firstChar,
+                globalLocationCalculator,
+            ),
         )
     }
 
@@ -301,8 +382,18 @@ export interface Mustache {
  * @param locationCalculator The location calculator to adjust the locations of nodes.
  * @param node The attribute node to replace. This function modifies this node directly.
  */
-export function convertToDirective(code: string, parserOptions: any, locationCalculator: LocationCalculator, node: VAttribute): void {
-    debug("[template] convert to directive: %s=\"%s\" %j", node.key.name, node.value && node.value.value, node.range)
+export function convertToDirective(
+    code: string,
+    parserOptions: any,
+    locationCalculator: LocationCalculator,
+    node: VAttribute,
+): void {
+    debug(
+        '[template] convert to directive: %s="%s" %j',
+        node.key.name,
+        node.value && node.value.value,
+        node.range,
+    )
 
     const directive: VDirective = node as any
     directive.directive = true
@@ -314,7 +405,13 @@ export function convertToDirective(code: string, parserOptions: any, locationCal
     const document = getOwnerDocument(node)
 
     try {
-        const ret = parseAttributeValue(code, parserOptions, locationCalculator, node.value, directive.key.name)
+        const ret = parseAttributeValue(
+            code,
+            parserOptions,
+            locationCalculator,
+            node.value,
+            directive.key.name,
+        )
 
         directive.value = {
             type: "VExpressionContainer",
@@ -334,8 +431,7 @@ export function convertToDirective(code: string, parserOptions: any, locationCal
 
         replaceTokens(document, node.value, ret.tokens)
         insertComments(document, ret.comments)
-    }
-    catch (err) {
+    } catch (err) {
         debug("[template] Parse error: %s", err)
 
         if (ParseError.isParseError(err)) {
@@ -348,8 +444,7 @@ export function convertToDirective(code: string, parserOptions: any, locationCal
                 references: [],
             }
             insertError(document, err)
-        }
-        else {
+        } else {
             throw err
         }
     }
@@ -360,24 +455,38 @@ export function convertToDirective(code: string, parserOptions: any, locationCal
  * @param node The attribute node to define the scope variable.
  * @param outVariables The array of variables. This is output.
  */
-export function defineScopeAttributeVariable(code: string, parserOptions: any, locationCalculator: LocationCalculator, node: VAttribute): void {
-    debug("[template] define variable: %s=\"%s\" %j", node.key.name, node.value && node.value.value, node.range)
+export function defineScopeAttributeVariable(
+    code: string,
+    parserOptions: any,
+    locationCalculator: LocationCalculator,
+    node: VAttribute,
+): void {
+    debug(
+        '[template] define variable: %s="%s" %j',
+        node.key.name,
+        node.value && node.value.value,
+        node.range,
+    )
 
     if (node.value == null) {
         return
     }
 
     try {
-        const ret = parseAttributeValue(code, parserOptions, locationCalculator, node.value, "scope")
+        const ret = parseAttributeValue(
+            code,
+            parserOptions,
+            locationCalculator,
+            node.value,
+            "scope",
+        )
         extractScopeVariables(ret.references, node.parent.parent.variables)
-    }
-    catch (err) {
+    } catch (err) {
         debug("[template] Parse error: %s", err)
 
         if (ParseError.isParseError(err)) {
             insertError(getOwnerDocument(node), err)
-        }
-        else {
+        } else {
             throw err
         }
     }
@@ -390,14 +499,28 @@ export function defineScopeAttributeVariable(code: string, parserOptions: any, l
  * @param node The expression container node. This function modifies the `expression` and `references` properties of this node.
  * @param mustache The information of mustache to parse.
  */
-export function processMustache(parserOptions: any, globalLocationCalculator: LocationCalculator, node: VExpressionContainer, mustache: Mustache): void {
-    const range: [number, number] = [mustache.startToken.range[1], mustache.endToken.range[0]]
+export function processMustache(
+    parserOptions: any,
+    globalLocationCalculator: LocationCalculator,
+    node: VExpressionContainer,
+    mustache: Mustache,
+): void {
+    const range: [number, number] = [
+        mustache.startToken.range[1],
+        mustache.endToken.range[0],
+    ]
     debug("[template] convert mustache {{%s}} %j", mustache.value, range)
 
     const document = getOwnerDocument(node)
     try {
-        const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(range[0])
-        const ret = parseExpression(mustache.value, locationCalculator, parserOptions)
+        const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
+            range[0],
+        )
+        const ret = parseExpression(
+            mustache.value,
+            locationCalculator,
+            parserOptions,
+        )
 
         node.expression = ret.expression
         node.references = ret.references
@@ -407,14 +530,12 @@ export function processMustache(parserOptions: any, globalLocationCalculator: Lo
 
         replaceTokens(document, { range }, ret.tokens)
         insertComments(document, ret.comments)
-    }
-    catch (err) {
+    } catch (err) {
         debug("[template] Parse error: %s", err)
 
         if (ParseError.isParseError(err)) {
             insertError(document, err)
-        }
-        else {
+        } else {
             throw err
         }
     }

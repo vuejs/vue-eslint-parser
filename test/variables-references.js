@@ -30,20 +30,30 @@ const PARSER_OPTIONS = {
 
 describe("[references] expression containers", () => {
     describe("in directives", () => {
-        const code = "<template><div v-foo=\"a + b\"></div></template>"
+        const code = '<template><div v-foo="a + b"></div></template>'
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
+            ast = parse(
+                code,
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+            ).ast
         })
 
         it("should have references", () => {
-            const directive = ast.templateBody.children[0].startTag.attributes[0]
+            const directive =
+                ast.templateBody.children[0].startTag.attributes[0]
 
             assert(directive.key.type === "VDirectiveKey")
             assert(directive.value.references != null)
-            assert(directive.value.references[0].id === directive.value.expression.left)
-            assert(directive.value.references[1].id === directive.value.expression.right)
+            assert(
+                directive.value.references[0].id ===
+                    directive.value.expression.left
+            )
+            assert(
+                directive.value.references[1].id ===
+                    directive.value.expression.right
+            )
         })
     })
 
@@ -52,7 +62,10 @@ describe("[references] expression containers", () => {
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
+            ast = parse(
+                code,
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+            ).ast
         })
 
         it("should have references", () => {
@@ -66,31 +79,41 @@ describe("[references] expression containers", () => {
     })
 
     describe("in v-on directive", () => {
-        const code = "<template><div @foo=\"foo($event)\"></div></template>"
+        const code = '<template><div @foo="foo($event)"></div></template>'
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
+            ast = parse(
+                code,
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+            ).ast
         })
 
         it("should not include $event references.", () => {
-            const directive = ast.templateBody.children[0].startTag.attributes[0]
+            const directive =
+                ast.templateBody.children[0].startTag.attributes[0]
 
             assert(directive.key.type === "VDirectiveKey")
             assert(directive.key.name === "on")
             assert(directive.value.references.length === 1)
-            assert(directive.value.references[0].id === directive.value.expression.body[0].expression.callee)
+            assert(
+                directive.value.references[0].id ===
+                    directive.value.expression.body[0].expression.callee
+            )
         })
     })
 })
 
 describe("[variables] elements", () => {
     describe("which have v-for directive", () => {
-        const code = "<template><div v-for=\"a in b\"></div></template>"
+        const code = '<template><div v-for="a in b"></div></template>'
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
+            ast = parse(
+                code,
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+            ).ast
         })
 
         it("should have references", () => {
@@ -99,18 +122,26 @@ describe("[variables] elements", () => {
 
             assert(element.type === "VElement")
             assert(element.variables.length === 1)
-            assert(element.variables[0].id === directive.value.expression.left[0])
+            assert(
+                element.variables[0].id === directive.value.expression.left[0]
+            )
             assert(directive.value.references.length === 1)
-            assert(directive.value.references[0].id === directive.value.expression.right)
+            assert(
+                directive.value.references[0].id ===
+                    directive.value.expression.right
+            )
         })
     })
 
     describe("which have v-for directive (with index)", () => {
-        const code = "<template><div v-for=\"(a, i) in b\"></div></template>"
+        const code = '<template><div v-for="(a, i) in b"></div></template>'
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
+            ast = parse(
+                code,
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+            ).ast
         })
 
         it("should have references", () => {
@@ -119,19 +150,29 @@ describe("[variables] elements", () => {
 
             assert(element.type === "VElement")
             assert(element.variables.length === 2)
-            assert(element.variables[0].id === directive.value.expression.left[0])
-            assert(element.variables[1].id === directive.value.expression.left[1])
+            assert(
+                element.variables[0].id === directive.value.expression.left[0]
+            )
+            assert(
+                element.variables[1].id === directive.value.expression.left[1]
+            )
             assert(directive.value.references.length === 1)
-            assert(directive.value.references[0].id === directive.value.expression.right)
+            assert(
+                directive.value.references[0].id ===
+                    directive.value.expression.right
+            )
         })
     })
 
     describe("which have scope attribute", () => {
-        const code = "<template><template scope=\"a\"></template></template>"
+        const code = '<template><template scope="a"></template></template>'
         let ast = null
 
         before(() => {
-            ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
+            ast = parse(
+                code,
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+            ).ast
         })
 
         it("should have variables", () => {
@@ -150,7 +191,8 @@ describe("[variables] elements", () => {
 })
 
 describe("Variables of v-for and references", () => {
-    const code = "<template><div v-for=\"x of xs\" :key=\"x\">{{x + y}}<div>{{x}}</div></div>{{x}}</template>"
+    const code =
+        '<template><div v-for="x of xs" :key="x">{{x + y}}<div>{{x}}</div></div>{{x}}</template>'
     let variables = null
     let vForReferences = null
     let vBindKeyReferences = null
@@ -159,12 +201,19 @@ describe("Variables of v-for and references", () => {
     let mustacheReferences3 = null
 
     before(() => {
-        const ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
+        const ast = parse(
+            code,
+            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+        ).ast
         variables = ast.templateBody.children[0].variables
-        vForReferences = ast.templateBody.children[0].startTag.attributes[0].value.references
-        vBindKeyReferences = ast.templateBody.children[0].startTag.attributes[1].value.references
-        mustacheReferences1 = ast.templateBody.children[0].children[0].references
-        mustacheReferences2 = ast.templateBody.children[0].children[1].children[0].references
+        vForReferences =
+            ast.templateBody.children[0].startTag.attributes[0].value.references
+        vBindKeyReferences =
+            ast.templateBody.children[0].startTag.attributes[1].value.references
+        mustacheReferences1 =
+            ast.templateBody.children[0].children[0].references
+        mustacheReferences2 =
+            ast.templateBody.children[0].children[1].children[0].references
         mustacheReferences3 = ast.templateBody.children[1].references
     })
 
@@ -189,19 +238,32 @@ describe("Variables of v-for and references", () => {
 
     it("`Variable#references` should be non-enumerable", () => {
         for (const variable of variables) {
-            assert(Object.getOwnPropertyDescriptor(variable, "references").enumerable === false)
+            assert(
+                Object.getOwnPropertyDescriptor(variable, "references")
+                    .enumerable === false
+            )
         }
     })
 
     it("`Reference#variable` should be non-enumerable", () => {
-        for (const reference of [].concat(vForReferences, vBindKeyReferences, mustacheReferences1, mustacheReferences2, mustacheReferences3)) {
-            assert(Object.getOwnPropertyDescriptor(reference, "variable").enumerable === false)
+        for (const reference of [].concat(
+            vForReferences,
+            vBindKeyReferences,
+            mustacheReferences1,
+            mustacheReferences2,
+            mustacheReferences3
+        )) {
+            assert(
+                Object.getOwnPropertyDescriptor(reference, "variable")
+                    .enumerable === false
+            )
         }
     })
 })
 
 describe("Variables of template-scope and references", () => {
-    const code = "<template><template scope=\"x\" :key=\"x\">{{x + y}}<div>{{x}}</div></template>{{x}}</template>"
+    const code =
+        '<template><template scope="x" :key="x">{{x + y}}<div>{{x}}</div></template>{{x}}</template>'
     let variables = null
     let vBindKeyReferences = null
     let mustacheReferences1 = null
@@ -209,11 +271,17 @@ describe("Variables of template-scope and references", () => {
     let mustacheReferences3 = null
 
     before(() => {
-        const ast = parse(code, Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)).ast
+        const ast = parse(
+            code,
+            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+        ).ast
         variables = ast.templateBody.children[0].variables
-        vBindKeyReferences = ast.templateBody.children[0].startTag.attributes[1].value.references
-        mustacheReferences1 = ast.templateBody.children[0].children[0].references
-        mustacheReferences2 = ast.templateBody.children[0].children[1].children[0].references
+        vBindKeyReferences =
+            ast.templateBody.children[0].startTag.attributes[1].value.references
+        mustacheReferences1 =
+            ast.templateBody.children[0].children[0].references
+        mustacheReferences2 =
+            ast.templateBody.children[0].children[1].children[0].references
         mustacheReferences3 = ast.templateBody.children[1].references
     })
 
@@ -236,13 +304,24 @@ describe("Variables of template-scope and references", () => {
 
     it("`Variable#references` should be non-enumerable", () => {
         for (const variable of variables) {
-            assert(Object.getOwnPropertyDescriptor(variable, "references").enumerable === false)
+            assert(
+                Object.getOwnPropertyDescriptor(variable, "references")
+                    .enumerable === false
+            )
         }
     })
 
     it("`Reference#variable` should be non-enumerable", () => {
-        for (const reference of [].concat(vBindKeyReferences, mustacheReferences1, mustacheReferences2, mustacheReferences3)) {
-            assert(Object.getOwnPropertyDescriptor(reference, "variable").enumerable === false)
+        for (const reference of [].concat(
+            vBindKeyReferences,
+            mustacheReferences1,
+            mustacheReferences2,
+            mustacheReferences3
+        )) {
+            assert(
+                Object.getOwnPropertyDescriptor(reference, "variable")
+                    .enumerable === false
+            )
         }
     })
 })

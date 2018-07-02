@@ -3,127 +3,159 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
+
+/*eslint-disable no-constant-condition, no-param-reassign */
+
 import assert from "assert"
 import { debug } from "../common/debug"
 import { ErrorCode, Namespace, NS, ParseError, Token } from "../ast"
 import { alternativeCR } from "./util/alternative-cr"
 import { entitySets } from "./util/entities"
 import {
-    AMPERSAND, APOSTROPHE, CARRIAGE_RETURN, EOF, EQUALS_SIGN, EXCLAMATION_MARK,
-    GRAVE_ACCENT, GREATER_THAN_SIGN, HYPHEN_MINUS, isControl, isDigit,
-    isHexDigit, isLetter, isLowerHexDigit, isNonCharacter, isSurrogate,
-    isSurrogatePair, isUpperHexDigit, isUpperLetter, isWhitespace,
-    LATIN_CAPITAL_D, LATIN_CAPITAL_X, LATIN_SMALL_X, LEFT_CURLY_BRACKET,
-    LEFT_SQUARE_BRACKET, LESS_THAN_SIGN, LINE_FEED, NULL, NULL_REPLACEMENT,
-    NUMBER_SIGN, QUESTION_MARK, QUOTATION_MARK, RIGHT_CURLY_BRACKET,
-    RIGHT_SQUARE_BRACKET, SEMICOLON, SOLIDUS, toLowerCodePoint,
+    AMPERSAND,
+    APOSTROPHE,
+    CARRIAGE_RETURN,
+    EOF,
+    EQUALS_SIGN,
+    EXCLAMATION_MARK,
+    GRAVE_ACCENT,
+    GREATER_THAN_SIGN,
+    HYPHEN_MINUS,
+    isControl,
+    isDigit,
+    isHexDigit,
+    isLetter,
+    isLowerHexDigit,
+    isNonCharacter,
+    isSurrogate,
+    isSurrogatePair,
+    isUpperHexDigit,
+    isUpperLetter,
+    isWhitespace,
+    LATIN_CAPITAL_D,
+    LATIN_CAPITAL_X,
+    LATIN_SMALL_X,
+    LEFT_CURLY_BRACKET,
+    LEFT_SQUARE_BRACKET,
+    LESS_THAN_SIGN,
+    LINE_FEED,
+    NULL,
+    NULL_REPLACEMENT,
+    NUMBER_SIGN,
+    QUESTION_MARK,
+    QUOTATION_MARK,
+    RIGHT_CURLY_BRACKET,
+    RIGHT_SQUARE_BRACKET,
+    SEMICOLON,
+    SOLIDUS,
+    toLowerCodePoint,
 } from "./util/unicode"
 
 /**
  * Enumeration of token types.
  */
 export type TokenType =
-    "HTMLAssociation" |
-    "HTMLBogusComment" |
-    "HTMLCDataText" |
-    "HTMLComment" |
-    "HTMLEndTagOpen" |
-    "HTMLIdentifier" |
-    "HTMLLiteral" |
-    "HTMLRCDataText" |
-    "HTMLRawText" |
-    "HTMLSelfClosingTagClose" |
-    "HTMLTagClose" |
-    "HTMLTagOpen" |
-    "HTMLText" |
-    "HTMLWhitespace" |
-    "VExpressionStart" |
-    "VExpressionEnd"
+    | "HTMLAssociation"
+    | "HTMLBogusComment"
+    | "HTMLCDataText"
+    | "HTMLComment"
+    | "HTMLEndTagOpen"
+    | "HTMLIdentifier"
+    | "HTMLLiteral"
+    | "HTMLRCDataText"
+    | "HTMLRawText"
+    | "HTMLSelfClosingTagClose"
+    | "HTMLTagClose"
+    | "HTMLTagOpen"
+    | "HTMLText"
+    | "HTMLWhitespace"
+    | "VExpressionStart"
+    | "VExpressionEnd"
 
 /**
  * Enumeration of tokenizer's state types.
  */
 export type TokenizerState =
-    "DATA" |
-    "TAG_OPEN" |
-    "END_TAG_OPEN" |
-    "TAG_NAME" |
-    "RCDATA" |
-    "RCDATA_LESS_THAN_SIGN" |
-    "RCDATA_END_TAG_OPEN" |
-    "RCDATA_END_TAG_NAME" |
-    "RAWTEXT" |
-    "RAWTEXT_LESS_THAN_SIGN" |
-    "RAWTEXT_END_TAG_OPEN" |
-    "RAWTEXT_END_TAG_NAME" |
-    "BEFORE_ATTRIBUTE_NAME" |
-    "ATTRIBUTE_NAME" |
-    "AFTER_ATTRIBUTE_NAME" |
-    "BEFORE_ATTRIBUTE_VALUE" |
-    "ATTRIBUTE_VALUE_DOUBLE_QUOTED" |
-    "ATTRIBUTE_VALUE_SINGLE_QUOTED" |
-    "ATTRIBUTE_VALUE_UNQUOTED" |
-    "AFTER_ATTRIBUTE_VALUE_QUOTED" |
-    "SELF_CLOSING_START_TAG" |
-    "BOGUS_COMMENT" |
-    "MARKUP_DECLARATION_OPEN" |
-    "COMMENT_START" |
-    "COMMENT_START_DASH" |
-    "COMMENT" |
-    "COMMENT_LESS_THAN_SIGN" |
-    "COMMENT_LESS_THAN_SIGN_BANG" |
-    "COMMENT_LESS_THAN_SIGN_BANG_DASH" |
-    "COMMENT_LESS_THAN_SIGN_BANG_DASH_DASH" |
-    "COMMENT_END_DASH" |
-    "COMMENT_END" |
-    "COMMENT_END_BANG" |
-    "CDATA_SECTION" |
-    "CDATA_SECTION_BRACKET" |
-    "CDATA_SECTION_END" |
-    "CHARACTER_REFERENCE" |
-    "NAMED_CHARACTER_REFERENCE" |
-    "AMBIGUOUS_AMPERSAND" |
-    "NUMERIC_CHARACTER_REFERENCE" |
-    "HEXADEMICAL_CHARACTER_REFERENCE_START" |
-    "DECIMAL_CHARACTER_REFERENCE_START" |
-    "HEXADEMICAL_CHARACTER_REFERENCE" |
-    "DECIMAL_CHARACTER_REFERENCE" |
-    "NUMERIC_CHARACTER_REFERENCE_END" |
-    "CHARACTER_REFERENCE_END" |
-    "V_EXPRESSION_START" |
-    "V_EXPRESSION_END"
-    // ---- Use RAWTEXT state for <script> elements instead ----
-    // "SCRIPT_DATA" |
-    // "SCRIPT_DATA_LESS_THAN_SIGN" |
-    // "SCRIPT_DATA_END_TAG_OPEN" |
-    // "SCRIPT_DATA_END_TAG_NAME" |
-    // "SCRIPT_DATA_ESCAPE_START" |
-    // "SCRIPT_DATA_ESCAPE_START_DASH" |
-    // "SCRIPT_DATA_ESCAPED" |
-    // "SCRIPT_DATA_ESCAPED_DASH" |
-    // "SCRIPT_DATA_ESCAPED_DASH_DASH" |
-    // "SCRIPT_DATA_ESCAPED_LESS_THAN_SIGN" |
-    // "SCRIPT_DATA_ESCAPED_END_TAG_OPEN" |
-    // "SCRIPT_DATA_ESCAPED_END_TAG_NAME" |
-    // "SCRIPT_DATA_DOUBLE_ESCAPE_START" |
-    // "SCRIPT_DATA_DOUBLE_ESCAPED" |
-    // "SCRIPT_DATA_DOUBLE_ESCAPED_DASH" |
-    // "SCRIPT_DATA_DOUBLE_ESCAPED_DASH_DASH" |
-    // "SCRIPT_DATA_DOUBLE_ESCAPED_LESS_THAN_SIGN" |
-    // "SCRIPT_DATA_DOUBLE_ESCAPE_END" |
-    // ---- Use BOGUS_COMMENT state for DOCTYPEs instead ----
-    // "DOCTYPE" |
-    // "DOCTYPE_NAME" |
-    // "AFTER_DOCTYPE_NAME" |
-    // "BEFORE_DOCTYPE_PUBLIC_IDENTIFIER" |
-    // "DOCTYPE_PUBLIC_IDENTIFIER_DOUBLE_QUOTED" |
-    // "DOCTYPE_PUBLIC_IDENTIFIER_SINGLE_QUOTED" |
-    // "BETWEEN_DOCTYPE_PUBLIC_AND_SYSTEM_IDENTIFIERS" |
-    // "BEFORE_DOCTYPE_SYSTEM_IDENTIFIER" |
-    // "DOCTYPE_SYSTEM_IDENTIFIER_DOUBLE_QUOTED" |
-    // "DOCTYPE_SYSTEM_IDENTIFIER_SINGLE_QUOTED" |
-    // "AFTER_DOCTYPE_SYSTEM_IDENTIFIER" |
-    // "BOGUS_DOCTYPE"
+    | "DATA"
+    | "TAG_OPEN"
+    | "END_TAG_OPEN"
+    | "TAG_NAME"
+    | "RCDATA"
+    | "RCDATA_LESS_THAN_SIGN"
+    | "RCDATA_END_TAG_OPEN"
+    | "RCDATA_END_TAG_NAME"
+    | "RAWTEXT"
+    | "RAWTEXT_LESS_THAN_SIGN"
+    | "RAWTEXT_END_TAG_OPEN"
+    | "RAWTEXT_END_TAG_NAME"
+    | "BEFORE_ATTRIBUTE_NAME"
+    | "ATTRIBUTE_NAME"
+    | "AFTER_ATTRIBUTE_NAME"
+    | "BEFORE_ATTRIBUTE_VALUE"
+    | "ATTRIBUTE_VALUE_DOUBLE_QUOTED"
+    | "ATTRIBUTE_VALUE_SINGLE_QUOTED"
+    | "ATTRIBUTE_VALUE_UNQUOTED"
+    | "AFTER_ATTRIBUTE_VALUE_QUOTED"
+    | "SELF_CLOSING_START_TAG"
+    | "BOGUS_COMMENT"
+    | "MARKUP_DECLARATION_OPEN"
+    | "COMMENT_START"
+    | "COMMENT_START_DASH"
+    | "COMMENT"
+    | "COMMENT_LESS_THAN_SIGN"
+    | "COMMENT_LESS_THAN_SIGN_BANG"
+    | "COMMENT_LESS_THAN_SIGN_BANG_DASH"
+    | "COMMENT_LESS_THAN_SIGN_BANG_DASH_DASH"
+    | "COMMENT_END_DASH"
+    | "COMMENT_END"
+    | "COMMENT_END_BANG"
+    | "CDATA_SECTION"
+    | "CDATA_SECTION_BRACKET"
+    | "CDATA_SECTION_END"
+    | "CHARACTER_REFERENCE"
+    | "NAMED_CHARACTER_REFERENCE"
+    | "AMBIGUOUS_AMPERSAND"
+    | "NUMERIC_CHARACTER_REFERENCE"
+    | "HEXADEMICAL_CHARACTER_REFERENCE_START"
+    | "DECIMAL_CHARACTER_REFERENCE_START"
+    | "HEXADEMICAL_CHARACTER_REFERENCE"
+    | "DECIMAL_CHARACTER_REFERENCE"
+    | "NUMERIC_CHARACTER_REFERENCE_END"
+    | "CHARACTER_REFERENCE_END"
+    | "V_EXPRESSION_START"
+    | "V_EXPRESSION_END"
+// ---- Use RAWTEXT state for <script> elements instead ----
+// "SCRIPT_DATA" |
+// "SCRIPT_DATA_LESS_THAN_SIGN" |
+// "SCRIPT_DATA_END_TAG_OPEN" |
+// "SCRIPT_DATA_END_TAG_NAME" |
+// "SCRIPT_DATA_ESCAPE_START" |
+// "SCRIPT_DATA_ESCAPE_START_DASH" |
+// "SCRIPT_DATA_ESCAPED" |
+// "SCRIPT_DATA_ESCAPED_DASH" |
+// "SCRIPT_DATA_ESCAPED_DASH_DASH" |
+// "SCRIPT_DATA_ESCAPED_LESS_THAN_SIGN" |
+// "SCRIPT_DATA_ESCAPED_END_TAG_OPEN" |
+// "SCRIPT_DATA_ESCAPED_END_TAG_NAME" |
+// "SCRIPT_DATA_DOUBLE_ESCAPE_START" |
+// "SCRIPT_DATA_DOUBLE_ESCAPED" |
+// "SCRIPT_DATA_DOUBLE_ESCAPED_DASH" |
+// "SCRIPT_DATA_DOUBLE_ESCAPED_DASH_DASH" |
+// "SCRIPT_DATA_DOUBLE_ESCAPED_LESS_THAN_SIGN" |
+// "SCRIPT_DATA_DOUBLE_ESCAPE_END" |
+// ---- Use BOGUS_COMMENT state for DOCTYPEs instead ----
+// "DOCTYPE" |
+// "DOCTYPE_NAME" |
+// "AFTER_DOCTYPE_NAME" |
+// "BEFORE_DOCTYPE_PUBLIC_IDENTIFIER" |
+// "DOCTYPE_PUBLIC_IDENTIFIER_DOUBLE_QUOTED" |
+// "DOCTYPE_PUBLIC_IDENTIFIER_SINGLE_QUOTED" |
+// "BETWEEN_DOCTYPE_PUBLIC_AND_SYSTEM_IDENTIFIERS" |
+// "BEFORE_DOCTYPE_SYSTEM_IDENTIFIER" |
+// "DOCTYPE_SYSTEM_IDENTIFIER_DOUBLE_QUOTED" |
+// "DOCTYPE_SYSTEM_IDENTIFIER_SINGLE_QUOTED" |
+// "AFTER_DOCTYPE_SYSTEM_IDENTIFIER" |
+// "BOGUS_DOCTYPE"
 
 /**
  * Tokenizer for HTML.
@@ -177,7 +209,7 @@ export class Tokenizer {
      * Initialize this tokenizer.
      * @param text The source code to tokenize.
      */
-    constructor(text: string) {
+    public constructor(text: string) {
         debug("[html] the source code length: %d", text.length)
         this.text = text
         this.gaps = []
@@ -210,7 +242,10 @@ export class Tokenizer {
      */
     public nextToken(): Token | null {
         let cp = this.lastCodePoint
-        while (this.committedToken == null && (cp !== EOF || this.reconsuming)) {
+        while (
+            this.committedToken == null &&
+            (cp !== EOF || this.reconsuming)
+        ) {
             if (this.provisionalToken != null && !this.isProvisionalState()) {
                 this.commitProvisionalToken()
                 if (this.committedToken != null) {
@@ -221,8 +256,7 @@ export class Tokenizer {
             if (this.reconsuming) {
                 this.reconsuming = false
                 cp = this.lastCodePoint
-            }
-            else {
+            } else {
                 cp = this.consumeNextCodePoint()
             }
 
@@ -270,7 +304,7 @@ export class Tokenizer {
             return EOF
         }
 
-        this.offset += (this.lastCodePoint >= 0x10000 ? 2 : 1)
+        this.offset += this.lastCodePoint >= 0x10000 ? 2 : 1
         if (this.offset >= this.text.length) {
             this.advanceLocation()
             this.lastCodePoint = EOF
@@ -279,7 +313,8 @@ export class Tokenizer {
 
         const cp = this.text.codePointAt(this.offset) as number
 
-        if (isSurrogate(this.text.charCodeAt(this.offset)) &&
+        if (
+            isSurrogate(this.text.charCodeAt(this.offset)) &&
             !isSurrogatePair(this.text.charCodeAt(this.offset + 1))
         ) {
             this.reportParseError("surrogate-in-input-stream")
@@ -318,9 +353,8 @@ export class Tokenizer {
             this.lineTerminators.push(this.offset)
             this.line += 1
             this.column = 0
-        }
-        else {
-            this.column += (this.lastCodePoint >= 0x10000 ? 2 : 1)
+        } else {
+            this.column += this.lastCodePoint >= 0x10000 ? 2 : 1
         }
     }
 
@@ -339,7 +373,12 @@ export class Tokenizer {
      * @param code The error code.
      */
     private reportParseError(code: ErrorCode): void {
-        const error = ParseError.fromCode(code, this.offset, this.line, this.column)
+        const error = ParseError.fromCode(
+            code,
+            this.offset,
+            this.line,
+            this.column,
+        )
         this.errors.push(error)
 
         debug("[html] syntax error:", error.message)
@@ -379,7 +418,7 @@ export class Tokenizer {
         }
         this.tokenStartOffset = -1
 
-        const token = this.currentToken = {
+        const token = (this.currentToken = {
             type,
             range: [offset, -1],
             loc: {
@@ -387,7 +426,7 @@ export class Tokenizer {
                 end: { line: -1, column: -1 },
             },
             value: "",
-        }
+        })
 
         debug("[html] start token: %d %s", offset, token.type)
         return this.currentToken
@@ -418,7 +457,12 @@ export class Tokenizer {
         token.loc.end.column = column
 
         if (token.range[0] === offset && !provisional) {
-            debug("[html] abandon token: %j %s %j", token.range, token.type, token.value)
+            debug(
+                "[html] abandon token: %j %s %j",
+                token.range,
+                token.type,
+                token.value,
+            )
             return null
         }
 
@@ -427,9 +471,13 @@ export class Tokenizer {
                 this.commitProvisionalToken()
             }
             this.provisionalToken = token
-            debug("[html] provisional-commit token: %j %s %j", token.range, token.type, token.value)
-        }
-        else {
+            debug(
+                "[html] provisional-commit token: %j %s %j",
+                token.range,
+                token.type,
+                token.value,
+            )
+        } else {
             this.commitToken(token)
         }
 
@@ -441,8 +489,17 @@ export class Tokenizer {
      * @param token The token to commit.
      */
     private commitToken(token: Token): void {
-        assert(this.committedToken == null, "Invalid state: the commited token existed already.")
-        debug("[html] commit token: %j %j %s %j", token.range, token.loc, token.type, token.value)
+        assert(
+            this.committedToken == null,
+            "Invalid state: the commited token existed already.",
+        )
+        debug(
+            "[html] commit token: %j %j %s %j",
+            token.range,
+            token.loc,
+            token.type,
+            token.value,
+        )
 
         this.committedToken = token
         if (token.type === "HTMLTagOpen") {
@@ -455,14 +512,20 @@ export class Tokenizer {
      * @returns `true` if this is provisional state.
      */
     private isProvisionalState(): boolean {
-        return this.state.startsWith("RCDATA_") || this.state.startsWith("RAWTEXT_")
+        return (
+            this.state.startsWith("RCDATA_") ||
+            this.state.startsWith("RAWTEXT_")
+        )
     }
 
     /**
      * Commit the last provisional committed token.
      */
     private commitProvisionalToken(): void {
-        assert(this.provisionalToken != null, "Invalid state: the provisional token was not found.")
+        assert(
+            this.provisionalToken != null,
+            "Invalid state: the provisional token was not found.",
+        )
 
         const token = this.provisionalToken as Token
         this.provisionalToken = null
@@ -494,10 +557,12 @@ export class Tokenizer {
     private appendTokenValue(cp: number, expected: TokenType | null): void {
         const token = this.currentToken
         if (token == null || (expected != null && token.type !== expected)) {
-            const msg1 = (expected ? `"${expected}" type` : "any token")
-            const msg2 = (token ? `"${token.type}" type` : "no token")
+            const msg1 = expected ? `"${expected}" type` : "any token"
+            const msg2 = token ? `"${token.type}" type` : "no token"
 
-            throw new Error(`Tokenizer: Invalid state. Expected ${msg1}, but got ${msg2}.`)
+            throw new Error(
+                `Tokenizer: Invalid state. Expected ${msg1}, but got ${msg2}.`,
+            )
         }
 
         token.value += String.fromCodePoint(cp)
@@ -678,7 +743,9 @@ export class Tokenizer {
             return this.reconsumeAs("TAG_NAME")
         }
         if (cp === QUESTION_MARK) {
-            this.reportParseError("unexpected-question-mark-instead-of-tag-name")
+            this.reportParseError(
+                "unexpected-question-mark-instead-of-tag-name",
+            )
             this.startToken("HTMLBogusComment")
             return this.reconsumeAs("BOGUS_COMMENT")
         }
@@ -753,7 +820,7 @@ export class Tokenizer {
 
             this.appendTokenValue(
                 isUpperLetter(cp) ? toLowerCodePoint(cp) : cp,
-                null
+                null,
             )
 
             cp = this.consumeNextCodePoint()
@@ -823,7 +890,7 @@ export class Tokenizer {
 
             this.appendTokenValue(
                 isUpperLetter(cp) ? toLowerCodePoint(cp) : cp,
-                "HTMLEndTagOpen"
+                "HTMLEndTagOpen",
             )
             this.buffer.push(cp)
 
@@ -894,7 +961,7 @@ export class Tokenizer {
 
             this.appendTokenValue(
                 isUpperLetter(cp) ? toLowerCodePoint(cp) : cp,
-                "HTMLEndTagOpen"
+                "HTMLEndTagOpen",
             )
             this.buffer.push(cp)
 
@@ -917,7 +984,9 @@ export class Tokenizer {
         }
 
         if (cp === EQUALS_SIGN) {
-            this.reportParseError("unexpected-equals-sign-before-attribute-name")
+            this.reportParseError(
+                "unexpected-equals-sign-before-attribute-name",
+            )
             this.startToken("HTMLIdentifier")
             this.appendTokenValue(cp, "HTMLIdentifier")
             return "ATTRIBUTE_NAME"
@@ -934,7 +1003,12 @@ export class Tokenizer {
      */
     protected ATTRIBUTE_NAME(cp: number): TokenizerState {
         while (true) {
-            if (isWhitespace(cp) || cp === SOLIDUS || cp === GREATER_THAN_SIGN || cp === EOF) {
+            if (
+                isWhitespace(cp) ||
+                cp === SOLIDUS ||
+                cp === GREATER_THAN_SIGN ||
+                cp === EOF
+            ) {
                 this.endToken()
                 return this.reconsumeAs("AFTER_ATTRIBUTE_NAME")
             }
@@ -947,13 +1021,17 @@ export class Tokenizer {
                 this.reportParseError("unexpected-null-character")
                 cp = NULL_REPLACEMENT
             }
-            if (cp === QUOTATION_MARK || cp === APOSTROPHE || cp === LESS_THAN_SIGN) {
+            if (
+                cp === QUOTATION_MARK ||
+                cp === APOSTROPHE ||
+                cp === LESS_THAN_SIGN
+            ) {
                 this.reportParseError("unexpected-character-in-attribute-name")
             }
 
             this.appendTokenValue(
                 isUpperLetter(cp) ? toLowerCodePoint(cp) : cp,
-                "HTMLIdentifier"
+                "HTMLIdentifier",
             )
             cp = this.consumeNextCodePoint()
         }
@@ -1101,8 +1179,16 @@ export class Tokenizer {
                 this.reportParseError("unexpected-null-character")
                 cp = NULL_REPLACEMENT
             }
-            if (cp === QUOTATION_MARK || cp === APOSTROPHE || cp === LESS_THAN_SIGN || cp === EQUALS_SIGN || cp === GRAVE_ACCENT) {
-                this.reportParseError("unexpected-character-in-unquoted-attribute-value")
+            if (
+                cp === QUOTATION_MARK ||
+                cp === APOSTROPHE ||
+                cp === LESS_THAN_SIGN ||
+                cp === EQUALS_SIGN ||
+                cp === GRAVE_ACCENT
+            ) {
+                this.reportParseError(
+                    "unexpected-character-in-unquoted-attribute-value",
+                )
             }
             if (cp === EOF) {
                 this.reportParseError("eof-in-tag")
@@ -1203,7 +1289,10 @@ export class Tokenizer {
             this.startToken("HTMLComment")
             return "COMMENT_START"
         }
-        if (cp === LATIN_CAPITAL_D && this.text.slice(this.offset + 1, this.offset + 7) === "OCTYPE") {
+        if (
+            cp === LATIN_CAPITAL_D &&
+            this.text.slice(this.offset + 1, this.offset + 7) === "OCTYPE"
+        ) {
             // It does not support DOCTYPE.
             // this.offset += 6
             // this.column += 6
@@ -1214,7 +1303,10 @@ export class Tokenizer {
             this.appendTokenValue(cp, "HTMLBogusComment")
             return "BOGUS_COMMENT"
         }
-        if (cp === LEFT_SQUARE_BRACKET && this.text.slice(this.offset + 1, this.offset + 7) === "CDATA[") {
+        if (
+            cp === LEFT_SQUARE_BRACKET &&
+            this.text.slice(this.offset + 1, this.offset + 7) === "CDATA["
+        ) {
             this.offset += 6
             this.column += 6
 
@@ -1351,7 +1443,9 @@ export class Tokenizer {
      * @param cp The current code point.
      * @returns The next state.
      */
-    protected COMMENT_LESS_THAN_SIGN_BANG_DASH_DASH(cp: number): TokenizerState {
+    protected COMMENT_LESS_THAN_SIGN_BANG_DASH_DASH(
+        cp: number,
+    ): TokenizerState {
         if (cp !== GREATER_THAN_SIGN && cp !== EOF) {
             this.reportParseError("nested-comment")
         }
@@ -1528,7 +1622,8 @@ export class Tokenizer {
             this.offset += length - 1
             this.column += length - 1
 
-            if (this.returnState.startsWith("ATTR") &&
+            if (
+                this.returnState.startsWith("ATTR") &&
                 !semi &&
                 next != null &&
                 (next === EQUALS_SIGN || isLetter(next) || isDigit(next))
@@ -1536,10 +1631,11 @@ export class Tokenizer {
                 for (const cp1 of text) {
                     this.buffer.push(cp1.codePointAt(0) as number)
                 }
-            }
-            else {
+            } else {
                 if (!semi) {
-                    this.reportParseError("missing-semicolon-after-character-reference")
+                    this.reportParseError(
+                        "missing-semicolon-after-character-reference",
+                    )
                 }
                 this.buffer = codepoints
             }
@@ -1592,12 +1688,16 @@ export class Tokenizer {
      * @param cp The current code point.
      * @returns The next state.
      */
-    protected HEXADEMICAL_CHARACTER_REFERENCE_START(cp: number): TokenizerState {
+    protected HEXADEMICAL_CHARACTER_REFERENCE_START(
+        cp: number,
+    ): TokenizerState {
         if (isHexDigit(cp)) {
             return this.reconsumeAs("HEXADEMICAL_CHARACTER_REFERENCE")
         }
 
-        this.reportParseError("absence-of-digits-in-numeric-character-reference")
+        this.reportParseError(
+            "absence-of-digits-in-numeric-character-reference",
+        )
         return this.reconsumeAs("CHARACTER_REFERENCE_END")
     }
 
@@ -1611,7 +1711,9 @@ export class Tokenizer {
             return this.reconsumeAs("DECIMAL_CHARACTER_REFERENCE")
         }
 
-        this.reportParseError("absence-of-digits-in-numeric-character-reference")
+        this.reportParseError(
+            "absence-of-digits-in-numeric-character-reference",
+        )
         return this.reconsumeAs("CHARACTER_REFERENCE_END")
     }
 
@@ -1624,19 +1726,18 @@ export class Tokenizer {
         while (true) {
             if (isDigit(cp)) {
                 this.crCode = 16 * this.crCode + (cp - 0x30)
-            }
-            else if (isUpperHexDigit(cp)) {
+            } else if (isUpperHexDigit(cp)) {
                 this.crCode = 16 * this.crCode + (cp - 0x37)
-            }
-            else if (isLowerHexDigit(cp)) {
+            } else if (isLowerHexDigit(cp)) {
                 this.crCode = 16 * this.crCode + (cp - 0x57)
-            }
-            else {
+            } else {
                 if (cp === SEMICOLON) {
                     return "NUMERIC_CHARACTER_REFERENCE_END"
                 }
 
-                this.reportParseError("missing-semicolon-after-character-reference")
+                this.reportParseError(
+                    "missing-semicolon-after-character-reference",
+                )
                 return this.reconsumeAs("NUMERIC_CHARACTER_REFERENCE_END")
             }
 
@@ -1653,13 +1754,14 @@ export class Tokenizer {
         while (true) {
             if (isDigit(cp)) {
                 this.crCode = 10 * this.crCode + (cp - 0x30)
-            }
-            else {
+            } else {
                 if (cp === SEMICOLON) {
                     return "NUMERIC_CHARACTER_REFERENCE_END"
                 }
 
-                this.reportParseError("missing-semicolon-after-character-reference")
+                this.reportParseError(
+                    "missing-semicolon-after-character-reference",
+                )
                 return this.reconsumeAs("NUMERIC_CHARACTER_REFERENCE_END")
             }
 
@@ -1678,19 +1780,15 @@ export class Tokenizer {
         if (code === 0) {
             this.reportParseError("null-character-reference")
             code = NULL_REPLACEMENT
-        }
-        else if (code > 0x10FFFF) {
+        } else if (code > 0x10ffff) {
             this.reportParseError("character-reference-outside-unicode-range")
             code = NULL_REPLACEMENT
-        }
-        else if (isSurrogate(code)) {
+        } else if (isSurrogate(code)) {
             this.reportParseError("surrogate-character-reference")
             code = NULL_REPLACEMENT
-        }
-        else if (isNonCharacter(code)) {
+        } else if (isNonCharacter(code)) {
             this.reportParseError("noncharacter-character-reference")
-        }
-        else if (code === 0x0D || (isControl(code) && !isWhitespace(code))) {
+        } else if (code === 0x0d || (isControl(code) && !isWhitespace(code))) {
             this.reportParseError("control-character-reference")
             code = alternativeCR.get(code) || code
         }
@@ -1759,3 +1857,5 @@ export class Tokenizer {
         return this.reconsumeAs(this.returnState)
     }
 }
+
+/*eslint-enable no-constant-condition, no-param-reassign */

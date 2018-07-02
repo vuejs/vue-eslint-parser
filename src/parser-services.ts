@@ -19,20 +19,41 @@ const stores = new WeakMap<object, TokenStore>()
 // Exports
 //------------------------------------------------------------------------------
 
+export interface ParserServices {
+    /**
+     * Define handlers to traverse the template body.
+     * @param templateBodyVisitor The template body handlers.
+     * @param scriptVisitor The script handlers. This is optional.
+     */
+    defineTemplateBodyVisitor(
+        templateBodyVisitor: { [key: string]: Function },
+        scriptVisitor?: { [key: string]: Function },
+    ): object
+
+    /**
+     * Get the token store of the template body.
+     * @returns The token store of template body.
+     */
+    getTemplateBodyTokenStore(): TokenStore
+}
+
 /**
  * Define the parser service
  * @param rootAST
  */
-export function define(rootAST: ESLintProgram) {
+export function define(rootAST: ESLintProgram): ParserServices {
     return {
         /**
          * Define handlers to traverse the template body.
          * @param templateBodyVisitor The template body handlers.
          * @param scriptVisitor The script handlers. This is optional.
          */
-        defineTemplateBodyVisitor(templateBodyVisitor: { [key: string]: Function }, scriptVisitor?: { [key: string]: Function }): object {
+        defineTemplateBodyVisitor(
+            templateBodyVisitor: { [key: string]: Function },
+            scriptVisitor?: { [key: string]: Function },
+        ): object {
             if (scriptVisitor == null) {
-                scriptVisitor = {}
+                scriptVisitor = {} //eslint-disable-line no-param-reassign
             }
             if (rootAST.templateBody == null) {
                 return scriptVisitor
@@ -52,10 +73,14 @@ export function define(rootAST: ESLintProgram) {
                         }
 
                         // Traverse template body.
-                        const generator = new NodeEventGenerator(emitter as EventEmitter)
-                        traverseNodes(rootAST.templateBody as VElement, generator)
-                    }
-                    finally {
+                        const generator = new NodeEventGenerator(
+                            emitter as EventEmitter,
+                        )
+                        traverseNodes(
+                            rootAST.templateBody as VElement,
+                            generator,
+                        )
+                    } finally {
                         // @ts-ignore
                         scriptVisitor["Program:exit"] = programExitHandler
                         emitters.delete(rootAST)
@@ -81,9 +106,10 @@ export function define(rootAST: ESLintProgram) {
             let store = stores.get(key)
 
             if (!store) {
-                store = (ast != null)
-                    ? new TokenStore(ast.tokens, ast.comments)
-                    : new TokenStore([], [])
+                store =
+                    ast != null
+                        ? new TokenStore(ast.tokens, ast.comments)
+                        : new TokenStore([], [])
                 stores.set(key, store)
             }
 

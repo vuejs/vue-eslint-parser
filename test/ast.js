@@ -76,15 +76,17 @@ function getTree(source) {
     const root = { children: [] }
     let current = root
 
-    linter.defineRule("maketree", (ruleContext) =>
+    linter.defineRule("maketree", ruleContext =>
         ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
                 stack.push(current)
-                current.children.push(current = {
-                    type: node.type,
-                    text: source.slice(node.range[0], node.range[1]),
-                    children: [],
-                })
+                current.children.push(
+                    (current = {
+                        type: node.type,
+                        text: source.slice(node.range[0], node.range[1]),
+                        children: [],
+                    })
+                )
             },
             "*:exit"() {
                 current = stack.pop()
@@ -114,7 +116,7 @@ function validateParent(source) {
     const linter = new Linter()
     const stack = []
 
-    linter.defineRule("validateparent", (ruleContext) =>
+    linter.defineRule("validateparent", ruleContext =>
         ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
                 if (stack.length >= 1) {
@@ -147,7 +149,10 @@ describe("Template AST", () => {
     for (const name of TARGETS) {
         const sourcePath = path.join(ROOT, `${name}/source.vue`)
         const source = fs.readFileSync(sourcePath, "utf8")
-        const actual = parser.parseForESLint(source, Object.assign({ filePath: sourcePath }, PARSER_OPTIONS))
+        const actual = parser.parseForESLint(
+            source,
+            Object.assign({ filePath: sourcePath }, PARSER_OPTIONS)
+        )
 
         describe(`'test/fixtures/ast/${name}/source.vue'`, () => {
             it("should be parsed to valid AST.", () => {
@@ -163,7 +168,9 @@ describe("Template AST", () => {
             it("should have correct range.", () => {
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
                 const expectedText = fs.readFileSync(resultPath, "utf8")
-                const tokens = getAllTokens(actual.ast).map(t => source.slice(t.range[0], t.range[1]))
+                const tokens = getAllTokens(actual.ast).map(t =>
+                    source.slice(t.range[0], t.range[1])
+                )
                 const actualText = JSON.stringify(tokens, null, 4)
 
                 assert.strictEqual(actualText, expectedText)
@@ -177,13 +184,15 @@ describe("Template AST", () => {
                     const line1 = token.loc.end.line - 1
                     const column0 = token.loc.start.column
                     const column1 = token.loc.end.column
-                    const expected = source.slice(token.range[0], token.range[1])
+                    const expected = source.slice(
+                        token.range[0],
+                        token.range[1]
+                    )
 
                     let text = ""
                     if (line0 === line1) {
                         text = lines[line0].slice(column0, column1)
-                    }
-                    else {
+                    } else {
                         text = lines[line0].slice(column0)
                         for (let i = line0 + 1; i < line1; ++i) {
                             text += lines[i]
@@ -194,7 +203,13 @@ describe("Template AST", () => {
                     assert.strictEqual(
                         text,
                         expected,
-                        `${JSON.stringify(token, null, 4)} expected ${JSON.stringify(expected)}, but got ${JSON.stringify(text)}`
+                        `${JSON.stringify(
+                            token,
+                            null,
+                            4
+                        )} expected ${JSON.stringify(
+                            expected
+                        )}, but got ${JSON.stringify(text)}`
                     )
                 }
             })

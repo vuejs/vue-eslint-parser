@@ -53,7 +53,7 @@ const processed = new Set()
 function wrapCode(code) {
     const eol = "\n"
 
-    if (code.charCodeAt(0) === 0xFEFF) {
+    if (code.charCodeAt(0) === 0xfeff) {
         return `\uFEFF<script>${eol}${code.slice(1)}${eol}</script>`
     }
     return `<script>${eol}${code}${eol}</script>`
@@ -76,7 +76,8 @@ function modifyPattern(pattern) {
             parser: PARSER_PATH,
         }
     }
-    if (pattern.parser != null ||
+    if (
+        pattern.parser != null ||
         pattern.filename != null ||
         pattern.code.startsWith("#!")
     ) {
@@ -145,8 +146,7 @@ try {
             require(path.join(RULE_TESTS_ROOT, fileName))
         }
     })
-}
-finally {
+} finally {
     RuleTester.prototype.run = originalRun
     processed.clear()
 }

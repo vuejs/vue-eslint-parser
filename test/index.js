@@ -62,11 +62,9 @@ describe("Basic tests", () => {
             assert(messages[0].ruleId === "semi")
             assert(messages[0].line === 8)
             assert(messages[0].column === 35)
-            assert(messages[0].source === "        return {greeting: \"Hello\"}")
             assert(messages[1].ruleId === "semi")
             assert(messages[1].line === 10)
             assert(messages[1].column === 2)
-            assert(messages[1].source === "}")
         })
 
         it("should fix 2 'semi' errors with --fix option", () => {
@@ -80,8 +78,14 @@ describe("Basic tests", () => {
             })
             CLIEngine.outputFixes(cli.executeOnFiles(["hello.vue"]))
 
-            const actual = fs.readFileSync(path.join(FIXTURE_DIR, "hello.vue"), "utf8")
-            const expected = fs.readFileSync(path.join(FIXTURE_DIR, "hello.vue.fixed"), "utf8")
+            const actual = fs.readFileSync(
+                path.join(FIXTURE_DIR, "hello.vue"),
+                "utf8"
+            )
+            const expected = fs.readFileSync(
+                path.join(FIXTURE_DIR, "hello.vue.fixed"),
+                "utf8"
+            )
 
             assert(actual === expected)
         })
@@ -167,7 +171,6 @@ describe("Basic tests", () => {
             assert(messages[0].ruleId === "semi")
             assert(messages[0].line === 1)
             assert(messages[0].column === 21)
-            assert(messages[0].source === "console.log(\"hello\")")
         })
 
         it("should fix a 'semi' error with --fix option", () => {
@@ -181,8 +184,14 @@ describe("Basic tests", () => {
             })
             CLIEngine.outputFixes(cli.executeOnFiles(["notvue.js"]))
 
-            const actual = fs.readFileSync(path.join(FIXTURE_DIR, "notvue.js"), "utf8")
-            const expected = fs.readFileSync(path.join(FIXTURE_DIR, "notvue.js.fixed"), "utf8")
+            const actual = fs.readFileSync(
+                path.join(FIXTURE_DIR, "notvue.js"),
+                "utf8"
+            )
+            const expected = fs.readFileSync(
+                path.join(FIXTURE_DIR, "notvue.js.fixed"),
+                "utf8"
+            )
 
             assert(actual === expected)
         })
@@ -228,7 +237,8 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
-                parserOptions: { //
+                parserOptions: {
+                    //
                     parser: "typescript-eslint-parser",
                 },
                 rules: { semi: ["error", "never"] },
@@ -265,7 +275,8 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
-                parserOptions: { //
+                parserOptions: {
+                    //
                     parser: "typescript-eslint-parser",
                 },
                 rules: { semi: ["error", "never"] },
@@ -292,8 +303,14 @@ describe("Basic tests", () => {
             })
             CLIEngine.outputFixes(cli.executeOnFiles(["typed.vue"]))
 
-            const actual = fs.readFileSync(path.join(FIXTURE_DIR, "typed.vue"), "utf8")
-            const expected = fs.readFileSync(path.join(FIXTURE_DIR, "typed.vue.fixed"), "utf8")
+            const actual = fs.readFileSync(
+                path.join(FIXTURE_DIR, "typed.vue"),
+                "utf8"
+            )
+            const expected = fs.readFileSync(
+                path.join(FIXTURE_DIR, "typed.vue.fixed"),
+                "utf8"
+            )
 
             assert(actual === expected)
         })
@@ -304,7 +321,8 @@ describe("Basic tests", () => {
                 envs: ["es6", "node"],
                 fix: true,
                 parser: PARSER_PATH,
-                parserOptions: { //
+                parserOptions: {
+                    //
                     parser: "typescript-eslint-parser",
                 },
                 rules: { semi: ["error", "always"] },
@@ -312,8 +330,14 @@ describe("Basic tests", () => {
             })
             CLIEngine.outputFixes(cli.executeOnFiles(["typed.vue"]))
 
-            const actual = fs.readFileSync(path.join(FIXTURE_DIR, "typed.vue"), "utf8")
-            const expected = fs.readFileSync(path.join(FIXTURE_DIR, "typed.vue.fixed"), "utf8")
+            const actual = fs.readFileSync(
+                path.join(FIXTURE_DIR, "typed.vue"),
+                "utf8"
+            )
+            const expected = fs.readFileSync(
+                path.join(FIXTURE_DIR, "typed.vue.fixed"),
+                "utf8"
+            )
 
             assert(actual === expected)
         })
@@ -363,7 +387,9 @@ describe("Basic tests", () => {
                 },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["location-issue-with-babel-eslint.vue"])
+            const report = cli.executeOnFiles([
+                "location-issue-with-babel-eslint.vue",
+            ])
             const messages = report.results[0].messages
 
             assert(messages.length === 0)
@@ -382,7 +408,9 @@ describe("Basic tests", () => {
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in RCDATA state.", () => {
-            const ast = parse("<template><textarea>\u0000</textarea></template>")
+            const ast = parse(
+                "<template><textarea>\u0000</textarea></template>"
+            )
             const text = ast.templateBody.children[0].children[0]
             const errors = ast.templateBody.errors
 
@@ -413,7 +441,8 @@ describe("Basic tests", () => {
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_NAME state.", () => {
             const ast = parse("<template><div a\u0000></div></template>")
-            const attribute = ast.templateBody.children[0].startTag.attributes[0]
+            const attribute =
+                ast.templateBody.children[0].startTag.attributes[0]
             const errors = ast.templateBody.errors
 
             assert.equal(attribute.key.name, "a\uFFFD")
@@ -422,8 +451,9 @@ describe("Basic tests", () => {
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_DOUBLE_QUOTED state.", () => {
-            const ast = parse("<template><div a=\"\u0000\"></div></template>")
-            const attribute = ast.templateBody.children[0].startTag.attributes[0]
+            const ast = parse('<template><div a="\u0000"></div></template>')
+            const attribute =
+                ast.templateBody.children[0].startTag.attributes[0]
             const errors = ast.templateBody.errors
 
             assert.equal(attribute.value.value, "\uFFFD")
@@ -433,7 +463,8 @@ describe("Basic tests", () => {
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_SINGLE_QUOTED state.", () => {
             const ast = parse("<template><div a='\u0000'></div></template>")
-            const attribute = ast.templateBody.children[0].startTag.attributes[0]
+            const attribute =
+                ast.templateBody.children[0].startTag.attributes[0]
             const errors = ast.templateBody.errors
 
             assert.equal(attribute.value.value, "\uFFFD")
@@ -443,7 +474,8 @@ describe("Basic tests", () => {
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_UNQUOTED state.", () => {
             const ast = parse("<template><div a=\u0000></div></template>")
-            const attribute = ast.templateBody.children[0].startTag.attributes[0]
+            const attribute =
+                ast.templateBody.children[0].startTag.attributes[0]
             const errors = ast.templateBody.errors
 
             assert.equal(attribute.value.value, "\uFFFD")
@@ -468,7 +500,10 @@ describe("Basic tests", () => {
 
             assert.equal(comment.value, "? \uFFFD ?")
             assert.equal(errors.length, 1)
-            assert.equal(errors[0].code, "unexpected-question-mark-instead-of-tag-name")
+            assert.equal(
+                errors[0].code,
+                "unexpected-question-mark-instead-of-tag-name"
+            )
         })
 
         it("should not error in CDATA section state.", () => {
@@ -483,17 +518,26 @@ describe("Basic tests", () => {
 
     describe("About parserServices", () => {
         it("should exist if the source code is a Vue SFC file.", () => {
-            assert.notEqual(parseForESLint("test", { filePath: "test.vue" }).services, undefined)
+            assert.notEqual(
+                parseForESLint("test", { filePath: "test.vue" }).services,
+                undefined
+            )
         })
 
         it("should exist even if the source code is not Vue SFC file.", () => {
-            assert.notEqual(parseForESLint("test", { filePath: "test.js" }).services, undefined)
+            assert.notEqual(
+                parseForESLint("test", { filePath: "test.js" }).services,
+                undefined
+            )
         })
     })
 
     describe("https://github.com/mysticatea/vue-eslint-parser/issues/21", () => {
         it("should make the correct location of decorators", () => {
-            const code = fs.readFileSync(path.join(FIXTURE_DIR, "issue21.vue"), "utf8")
+            const code = fs.readFileSync(
+                path.join(FIXTURE_DIR, "issue21.vue"),
+                "utf8"
+            )
             const indexOfDecorator = code.indexOf("@Component")
             const ast = parse(code, {
                 parser: "babel-eslint",
@@ -505,10 +549,7 @@ describe("Basic tests", () => {
                 eslintVisitorKeys: true,
             })
 
-            assert.equal(
-                ast.body[2].declaration.range[0],
-                indexOfDecorator
-            )
+            assert.equal(ast.body[2].declaration.range[0], indexOfDecorator)
             assert.equal(
                 ast.body[2].declaration.decorators[0].range[0],
                 indexOfDecorator
@@ -528,11 +569,13 @@ describe("Basic tests", () => {
             const linter = new Linter()
 
             //eslint-disable-next-line no-shadow
-            linter.defineRule("test-rule", (context) => context.parserServices.defineTemplateBodyVisitor({
-                "VElement[name='div']"(node) {
-                    context.report({ node, message: "OK" })
-                },
-            }))
+            linter.defineRule("test-rule", context =>
+                context.parserServices.defineTemplateBodyVisitor({
+                    "VElement[name='div']"(node) {
+                        context.report({ node, message: "OK" })
+                    },
+                })
+            )
 
             const messages1 = linter.verify(code, config)
             const messages2 = linter.verify(linter.getSourceCode(), config)

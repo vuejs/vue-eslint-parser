@@ -5,10 +5,33 @@
  */
 import first from "lodash/first"
 import last from "lodash/last"
-import { traverseNodes, ESLintArrayPattern, ESLintBlockStatement, ESLintExpression, ESLintExpressionStatement, ESLintExtendedProgram, ESLintForInStatement, ESLintForOfStatement, ESLintPattern, ESLintProgram, ESLintVariableDeclaration, Node, ParseError, Reference, Token, Variable, VElement, VForExpression, VOnExpression } from "../ast"
+import {
+    traverseNodes,
+    ESLintArrayPattern,
+    ESLintBlockStatement,
+    ESLintExpression,
+    ESLintExpressionStatement,
+    ESLintExtendedProgram,
+    ESLintForInStatement,
+    ESLintForOfStatement,
+    ESLintPattern,
+    ESLintProgram,
+    ESLintVariableDeclaration,
+    Node,
+    ParseError,
+    Reference,
+    Token,
+    Variable,
+    VElement,
+    VForExpression,
+    VOnExpression,
+} from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
-import { analyzeExternalReferences, analyzeVariablesAndExternalReferences } from "./scope-analyzer"
+import {
+    analyzeExternalReferences,
+    analyzeVariablesAndExternalReferences,
+} from "./scope-analyzer"
 
 // [1] = spacing before the aliases.
 // [2] = aliases.
@@ -33,10 +56,13 @@ interface ESLintCustomParser {
  * @param result The parsing result to modify.
  * @param locationCalculator The location calculator to modify.
  */
-function postprocess(result: ESLintExtendedProgram, locationCalculator: LocationCalculator): void {
+function postprocess(
+    result: ESLintExtendedProgram,
+    locationCalculator: LocationCalculator,
+): void {
     // There are cases which the same node instance appears twice in the tree.
     // E.g. `let {a} = {}` // This `a` appears twice at `Property#key` and `Property#value`.
-    const traversed = new Set<Node|number[]>()
+    const traversed = new Set<Node | number[]>()
 
     traverseNodes(result.ast, {
         visitorKeys: result.visitorKeys,
@@ -86,7 +112,10 @@ function replaceAliasParens(code: string): string {
  * @param left The `ForXStatement#left` node to normalize.
  * @param replaced The flag to indicate that the alias parentheses were replaced.
  */
-function normalizeLeft(left: ESLintVariableDeclaration | ESLintPattern, replaced: boolean): ESLintPattern[] {
+function normalizeLeft(
+    left: ESLintVariableDeclaration | ESLintPattern,
+    replaced: boolean,
+): ESLintPattern[] {
     if (left.type !== "VariableDeclaration") {
         throw new Error("unreachable")
     }
@@ -110,8 +139,7 @@ function removeByName(references: Reference[], name: string): void {
 
         if (reference.id.name === name) {
             references.splice(i, 1)
-        }
-        else {
+        } else {
             i += 1
         }
     }
@@ -121,14 +149,17 @@ function removeByName(references: Reference[], name: string): void {
  * Throw syntax error for empty.
  * @param locationCalculator The location calculator to get line/column.
  */
-function throwEmptyError(locationCalculator: LocationCalculator, expected: string): never {
+function throwEmptyError(
+    locationCalculator: LocationCalculator,
+    expected: string,
+): never {
     const loc = locationCalculator.getLocation(0)
     const err = new ParseError(
         `Expected to be ${expected}, but got empty.`,
         undefined,
         0,
         loc.line,
-        loc.column
+        loc.column,
     )
     locationCalculator.fixErrorLocation(err)
 
@@ -139,7 +170,11 @@ function throwEmptyError(locationCalculator: LocationCalculator, expected: strin
  * Throw syntax error of outside of code.
  * @param locationCalculator The location calculator to get line/column.
  */
-function throwErrorAsAdjustingOutsideOfCode(err: any, code: string, locationCalculator: LocationCalculator): never {
+function throwErrorAsAdjustingOutsideOfCode(
+    err: any,
+    code: string,
+    locationCalculator: LocationCalculator,
+): never {
     if (ParseError.isParseError(err)) {
         const endOffset = locationCalculator.getOffsetWithGap(code.length)
         if (err.index >= endOffset) {
@@ -158,13 +193,16 @@ function throwErrorAsAdjustingOutsideOfCode(err: any, code: string, locationCalc
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
-function parseScriptFragment(code: string, locationCalculator: LocationCalculator, parserOptions: any): ESLintExtendedProgram {
+function parseScriptFragment(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: any,
+): ESLintExtendedProgram {
     try {
         const result = parseScript(code, parserOptions)
         postprocess(result, locationCalculator)
         return result
-    }
-    catch (err) {
+    } catch (err) {
         const perr = ParseError.normalize(err)
         if (perr) {
             locationCalculator.fixErrorLocation(perr)
@@ -197,11 +235,15 @@ export type ESLintCustomParserResult = ESLintProgram | ESLintExtendedProgram
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
-export function parseScript(code: string, parserOptions: any): ESLintExtendedProgram {
-    const parser: ESLintCustomParser = require(parserOptions.parser || "espree") //eslint-disable-line no-restricted-globals
-    const result: any = (typeof parser.parseForESLint === "function")
-        ? parser.parseForESLint(code, parserOptions)
-        : parser.parse(code, parserOptions)
+export function parseScript(
+    code: string,
+    parserOptions: any,
+): ESLintExtendedProgram {
+    const parser: ESLintCustomParser = require(parserOptions.parser || "espree") //eslint-disable-line @mysticatea/ts/no-var-requires
+    const result: any =
+        typeof parser.parseForESLint === "function"
+            ? parser.parseForESLint(code, parserOptions)
+            : parser.parse(code, parserOptions)
 
     if (result.ast != null) {
         return result
@@ -216,11 +258,20 @@ export function parseScript(code: string, parserOptions: any): ESLintExtendedPro
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
-export function parseScriptElement(node: VElement, globalLocationCalculator: LocationCalculator, parserOptions: any): ESLintExtendedProgram {
+export function parseScriptElement(
+    node: VElement,
+    globalLocationCalculator: LocationCalculator,
+    parserOptions: any,
+): ESLintExtendedProgram {
     const text = node.children[0]
-    const offset = (text != null && text.type === "VText") ? text.range[0] : node.startTag.range[1]
-    const code = (text != null && text.type === "VText") ? text.value : ""
-    const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(offset)
+    const offset =
+        text != null && text.type === "VText"
+            ? text.range[0]
+            : node.startTag.range[1]
+    const code = text != null && text.type === "VText" ? text.value : ""
+    const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
+        offset,
+    )
     const result = parseScriptFragment(code, locationCalculator, parserOptions)
 
     // Needs the tokens of start/end tags for `lines-around-*` rules to work
@@ -257,8 +308,12 @@ export function parseScriptElement(node: VElement, globalLocationCalculator: Loc
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
-export function parseExpression(code: string, locationCalculator: LocationCalculator, parserOptions: any): ExpressionParseResult {
-    debug("[script] parse expression: \"(%s)\"", code)
+export function parseExpression(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: any,
+): ExpressionParseResult {
+    debug('[script] parse expression: "(%s)"', code)
 
     if (code.trim() === "") {
         return throwEmptyError(locationCalculator, "an expression")
@@ -268,7 +323,7 @@ export function parseExpression(code: string, locationCalculator: LocationCalcul
         const ast = parseScriptFragment(
             `(${code})`,
             locationCalculator.getSubCalculatorAfter(-1),
-            parserOptions
+            parserOptions,
         ).ast
         const references = analyzeExternalReferences(ast, parserOptions)
         const expression = (ast.body[0] as ESLintExpressionStatement).expression
@@ -280,8 +335,7 @@ export function parseExpression(code: string, locationCalculator: LocationCalcul
         tokens.pop()
 
         return { expression, tokens, comments, references, variables: [] }
-    }
-    catch (err) {
+    } catch (err) {
         return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
     }
 }
@@ -293,9 +347,13 @@ export function parseExpression(code: string, locationCalculator: LocationCalcul
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
-export function parseVForExpression(code: string, locationCalculator: LocationCalculator, parserOptions: any): ExpressionParseResult {
+export function parseVForExpression(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: any,
+): ExpressionParseResult {
     const processedCode = replaceAliasParens(code)
-    debug("[script] parse v-for expression: \"for(%s);\"", processedCode)
+    debug('[script] parse v-for expression: "for(%s);"', processedCode)
 
     if (code.trim() === "") {
         throwEmptyError(locationCalculator, "'<alias> in <expression>'")
@@ -306,14 +364,16 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
         const ast = parseScriptFragment(
             `for(let ${processedCode});`,
             locationCalculator.getSubCalculatorAfter(-8),
-            parserOptions
+            parserOptions,
         ).ast
         const tokens = ast.tokens || []
         const comments = ast.comments || []
         const scope = analyzeVariablesAndExternalReferences(ast, parserOptions)
         const references = scope.references
         const variables = scope.variables
-        const statement = ast.body[0] as (ESLintForInStatement | ESLintForOfStatement)
+        const statement = ast.body[0] as
+            | ESLintForInStatement
+            | ESLintForOfStatement
         const left = normalizeLeft(statement.left, replaced)
         const right = statement.right
         const firstToken = tokens[3] || statement.left
@@ -357,8 +417,7 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
         }
 
         return { expression, tokens, comments, references, variables }
-    }
-    catch (err) {
+    } catch (err) {
         return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
     }
 }
@@ -370,8 +429,12 @@ export function parseVForExpression(code: string, locationCalculator: LocationCa
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
-export function parseVOnExpression(code: string, locationCalculator: LocationCalculator, parserOptions: any): ExpressionParseResult {
-    debug("[script] parse v-on expression: \"{%s}\"", code)
+export function parseVOnExpression(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: any,
+): ExpressionParseResult {
+    debug('[script] parse v-on expression: "{%s}"', code)
 
     if (code.trim() === "") {
         throwEmptyError(locationCalculator, "statements")
@@ -381,7 +444,7 @@ export function parseVOnExpression(code: string, locationCalculator: LocationCal
         const ast = parseScriptFragment(
             `{${code}}`,
             locationCalculator.getSubCalculatorAfter(-1),
-            parserOptions
+            parserOptions,
         ).ast
         const references = analyzeExternalReferences(ast, parserOptions)
         const block = ast.body[0] as ESLintBlockStatement
@@ -391,12 +454,22 @@ export function parseVOnExpression(code: string, locationCalculator: LocationCal
         const expression: VOnExpression = {
             type: "VOnExpression",
             range: [
-                (firstStatement != null) ? firstStatement.range[0] : block.range[0] + 1,
-                (lastStatement != null) ? lastStatement.range[1] : block.range[1] - 1,
+                firstStatement != null
+                    ? firstStatement.range[0]
+                    : block.range[0] + 1,
+                lastStatement != null
+                    ? lastStatement.range[1]
+                    : block.range[1] - 1,
             ],
             loc: {
-                start: (firstStatement != null) ? firstStatement.loc.start : locationCalculator.getLocation(1),
-                end: (lastStatement != null) ? lastStatement.loc.end : locationCalculator.getLocation(code.length + 1),
+                start:
+                    firstStatement != null
+                        ? firstStatement.loc.start
+                        : locationCalculator.getLocation(1),
+                end:
+                    lastStatement != null
+                        ? lastStatement.loc.end
+                        : locationCalculator.getLocation(code.length + 1),
             },
             parent: DUMMY_PARENT,
             body,
@@ -417,8 +490,7 @@ export function parseVOnExpression(code: string, locationCalculator: LocationCal
         removeByName(references, "$event")
 
         return { expression, tokens, comments, references, variables: [] }
-    }
-    catch (err) {
+    } catch (err) {
         return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
     }
 }

@@ -30,13 +30,18 @@ export class LocationCalculator {
      * @param ltOffsets The list of the offset of line terminators.
      * @param baseOffset The base offset to calculate locations.
      */
-    constructor(gapOffsets: number[], ltOffsets: number[], baseOffset?: number) {
+    public constructor(
+        gapOffsets: number[],
+        ltOffsets: number[],
+        baseOffset?: number,
+    ) {
         this.gapOffsets = gapOffsets
         this.ltOffsets = ltOffsets
         this.baseOffset = baseOffset || 0
-        this.baseIndexOfGap = (this.baseOffset === 0)
-            ? 0
-            : sortedLastIndex(gapOffsets, this.baseOffset)
+        this.baseIndexOfGap =
+            this.baseOffset === 0
+                ? 0
+                : sortedLastIndex(gapOffsets, this.baseOffset)
     }
 
     /**
@@ -44,11 +49,11 @@ export class LocationCalculator {
      * @param offset The base offset of new sub calculator.
      * @returns Sub calculator.
      */
-    getSubCalculatorAfter(offset: number): LocationCalculator {
+    public getSubCalculatorAfter(offset: number): LocationCalculator {
         return new LocationCalculator(
             this.gapOffsets,
             this.ltOffsets,
-            this.baseOffset + offset
+            this.baseOffset + offset,
         )
     }
 
@@ -85,7 +90,7 @@ export class LocationCalculator {
      * @param index The index to calculate their location.
      * @returns The location of the index.
      */
-    getLocation(index: number): Location {
+    public getLocation(index: number): Location {
         return this._getLocation(this.baseOffset + index)
     }
 
@@ -94,7 +99,7 @@ export class LocationCalculator {
      * @param index The index to calculate their location.
      * @returns The offset of the index.
      */
-    getOffsetWithGap(index: number): number {
+    public getOffsetWithGap(index: number): number {
         return this.baseOffset + index + this._getGap(index)
     }
 
@@ -102,7 +107,7 @@ export class LocationCalculator {
      * Modify the location information of the given node with using the base offset and gaps of this calculator.
      * @param node The node to modify their location.
      */
-    fixLocation(node: HasLocation): void {
+    public fixLocation(node: HasLocation): void {
         const range = node.range
         const loc = node.loc
         const gap0 = this._getGap(range[0])
@@ -130,7 +135,7 @@ export class LocationCalculator {
      * Modify the location information of the given error with using the base offset and gaps of this calculator.
      * @param error The error to modify their location.
      */
-    fixErrorLocation(error: ParseError) {
+    public fixErrorLocation(error: ParseError) {
         const gap = this._getGap(error.index)
         const diff = this.baseOffset + Math.max(0, gap)
 

@@ -4,7 +4,13 @@
  * See LICENSE file in root directory for full license.
  */
 import escope, * as escopeTypes from "eslint-scope"
-import { ESLintIdentifier, ESLintProgram, Reference, Variable, getFallbackKeys } from "../ast"
+import {
+    ESLintIdentifier,
+    ESLintProgram,
+    Reference,
+    Variable,
+    getFallbackKeys,
+} from "../ast"
 
 /**
  * Check whether the given reference is unique in the belonging array.
@@ -12,8 +18,14 @@ import { ESLintIdentifier, ESLintProgram, Reference, Variable, getFallbackKeys }
  * @param index The index of the reference.
  * @param references The belonging array of the reference.
  */
-function isUnique(reference: escopeTypes.Reference, index: number, references: escopeTypes.Reference[]): boolean {
-    return (index === 0) || (reference.identifier !== references[index - 1].identifier)
+function isUnique(
+    reference: escopeTypes.Reference,
+    index: number,
+    references: escopeTypes.Reference[],
+): boolean {
+    return (
+        index === 0 || reference.identifier !== references[index - 1].identifier
+    )
 }
 
 /**
@@ -24,11 +36,11 @@ function isUnique(reference: escopeTypes.Reference, index: number, references: e
 function transformReference(reference: escopeTypes.Reference): Reference {
     const ret: Reference = {
         id: reference.identifier as ESLintIdentifier,
-        mode: (
-            reference.isReadOnly() ? "r" :
-            reference.isWriteOnly() ? "w" :
-            /* otherwise */ "rw"
-        ),
+        mode: reference.isReadOnly()
+            ? "r"
+            : reference.isWriteOnly()
+                ? "w"
+                : /* otherwise */ "rw",
         variable: null,
     }
     Object.defineProperty(ret, "variable", { enumerable: false })
@@ -59,7 +71,7 @@ function transformVariable(variable: escopeTypes.Variable): Variable {
  */
 function getForScope(scope: escopeTypes.Scope): escopeTypes.Scope {
     if (scope.childScopes[0].type === "module") {
-        scope = scope.childScopes[0]
+        scope = scope.childScopes[0] //eslint-disable-line no-param-reassign
     }
     return scope.childScopes[0]
 }
@@ -90,7 +102,10 @@ function analyze(ast: ESLintProgram, parserOptions: any): escopeTypes.Scope {
  * @param {ASTNode} ast The root node to analyze.
  * @returns {Reference[]} The reference objects of external references.
  */
-export function analyzeExternalReferences(ast: ESLintProgram, parserOptions: any): Reference[] {
+export function analyzeExternalReferences(
+    ast: ESLintProgram,
+    parserOptions: any,
+): Reference[] {
     const scope = analyze(ast, parserOptions)
     return scope.through.filter(isUnique).map(transformReference)
 }
@@ -100,7 +115,10 @@ export function analyzeExternalReferences(ast: ESLintProgram, parserOptions: any
  * @param {ASTNode} ast The root node to analyze.
  * @returns {Reference[]} The reference objects of external references.
  */
-export function analyzeVariablesAndExternalReferences(ast: ESLintProgram, parserOptions: any): {variables: Variable[], references: Reference[]} {
+export function analyzeVariablesAndExternalReferences(
+    ast: ESLintProgram,
+    parserOptions: any,
+): { variables: Variable[]; references: Reference[] } {
     const scope = analyze(ast, parserOptions)
     return {
         variables: getForScope(scope).variables.map(transformVariable),

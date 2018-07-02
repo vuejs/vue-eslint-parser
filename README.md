@@ -19,7 +19,7 @@ $ npm install --save-dev eslint vue-eslint-parser
 ```
 
 - Requires Node.js 6.5.0 or later.
-- Requires ESLint 3.9.0 or later.
+- Requires ESLint 5.0.0 or later.
 
 ## 📖 Usage
 

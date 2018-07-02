@@ -46,7 +46,9 @@ function isScriptElement(node: AST.VNode): node is AST.VElement {
  * @param attribute The attribute node to check.
  * @returns `true` if the attribute node is a `lang` attribute.
  */
-function isLang(attribute: AST.VAttribute | AST.VDirective): attribute is AST.VAttribute {
+function isLang(
+    attribute: AST.VAttribute | AST.VDirective,
+): attribute is AST.VAttribute {
     return attribute.directive === false && attribute.key.name === "lang"
 }
 
@@ -56,42 +58,61 @@ function isLang(attribute: AST.VAttribute | AST.VDirective): attribute is AST.VA
  * @param options The parser options.
  * @returns The parsing result.
  */
-export function parseForESLint(code: string, options: any): AST.ESLintExtendedProgram {
-    options = Object.assign({
-        comment: true,
-        ecmaVersion: 2015,
-        loc: true,
-        range: true,
-        tokens: true,
-    }, options || {})
+export function parseForESLint(
+    code: string,
+    options: any,
+): AST.ESLintExtendedProgram {
+    //eslint-disable-next-line no-param-reassign
+    options = Object.assign(
+        {
+            comment: true,
+            ecmaVersion: 2015,
+            loc: true,
+            range: true,
+            tokens: true,
+        },
+        options || {},
+    )
 
     let result: AST.ESLintExtendedProgram
     if (!isVueFile(code, options)) {
         result = parseScript(code, options)
-    }
-    else {
+    } else {
         const tokenizer = new HTMLTokenizer(code)
         const rootAST = new HTMLParser(tokenizer, options).parse()
-        const locationCalcurator = new LocationCalculator(tokenizer.gaps, tokenizer.lineTerminators)
+        const locationCalcurator = new LocationCalculator(
+            tokenizer.gaps,
+            tokenizer.lineTerminators,
+        )
         const script = rootAST.children.find(isScriptElement)
         const template = rootAST.children.find(isTemplateElement)
-        const templateLangAttr = template && template.startTag.attributes.find(isLang)
-        const templateLang = (templateLangAttr && templateLangAttr.value && templateLangAttr.value.value) || "html"
+        const templateLangAttr =
+            template && template.startTag.attributes.find(isLang)
+        const templateLang =
+            (templateLangAttr &&
+                templateLangAttr.value &&
+                templateLangAttr.value.value) ||
+            "html"
         const concreteInfo: AST.HasConcreteInfo = {
             tokens: rootAST.tokens,
             comments: rootAST.comments,
             errors: rootAST.errors,
         }
 
-        result = (script != null)
-            ? parseScriptElement(script, locationCalcurator, options)
-            : parseScript("", options)
-        result.ast.templateBody = (template != null && templateLang === "html")
-            ? Object.assign(template, concreteInfo)
-            : undefined
+        result =
+            script != null
+                ? parseScriptElement(script, locationCalcurator, options)
+                : parseScript("", options)
+        result.ast.templateBody =
+            template != null && templateLang === "html"
+                ? Object.assign(template, concreteInfo)
+                : undefined
     }
 
-    result.services = Object.assign(result.services || {}, services.define(result.ast))
+    result.services = Object.assign(
+        result.services || {},
+        services.define(result.ast),
+    )
 
     return result
 }
