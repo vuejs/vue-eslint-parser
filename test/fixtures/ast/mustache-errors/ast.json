@@ -307,9 +307,9 @@
                                     "column": 25
                                 }
                             },
-                            "directive": false,
+                            "directive": true,
                             "key": {
-                                "type": "VIdentifier",
+                                "type": "VDirectiveKey",
                                 "range": [
                                     64,
                                     69
@@ -325,10 +325,17 @@
                                     }
                                 },
                                 "name": "scope",
-                                "rawName": "scope"
+                                "argument": null,
+                                "modifiers": [],
+                                "shorthand": false,
+                                "raw": {
+                                    "name": "scope",
+                                    "argument": null,
+                                    "modifiers": []
+                                }
                             },
                             "value": {
-                                "type": "VLiteral",
+                                "type": "VExpressionContainer",
                                 "range": [
                                     70,
                                     75
@@ -343,7 +350,8 @@
                                         "column": 25
                                     }
                                 },
-                                "value": "e f"
+                                "expression": null,
+                                "references": []
                             }
                         }
                     ]

@@ -21,6 +21,7 @@ const KEYS = Evk.unionWith({
     VIdentifier: [],
     VLiteral: [],
     VOnExpression: ["body"],
+    VSlotScopeExpression: ["id"],
     VStartTag: ["attributes"],
     VText: [],
 })

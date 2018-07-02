@@ -29,6 +29,15 @@ function isUnique(
 }
 
 /**
+ * Check whether a given variable has that definition.
+ * @param variable The variable to check.
+ * @returns `true` if the variable has that definition.
+ */
+function hasDefinition(variable: escopeTypes.Variable): boolean {
+    return variable.defs.length >= 1
+}
+
+/**
  * Transform the given reference object.
  * @param reference The source reference object.
  * @returns The transformed reference object.
@@ -56,7 +65,7 @@ function transformReference(reference: escopeTypes.Reference): Reference {
 function transformVariable(variable: escopeTypes.Variable): Variable {
     const ret: Variable = {
         id: variable.defs[0].name as ESLintIdentifier,
-        kind: "v-for",
+        kind: variable.scope.type === "for" ? "v-for" : "scope",
         references: [],
     }
     Object.defineProperty(ret, "references", { enumerable: false })
@@ -70,10 +79,8 @@ function transformVariable(variable: escopeTypes.Variable): Variable {
  * @returns The `for` statement scope.
  */
 function getForScope(scope: escopeTypes.Scope): escopeTypes.Scope {
-    if (scope.childScopes[0].type === "module") {
-        scope = scope.childScopes[0] //eslint-disable-line no-param-reassign
-    }
-    return scope.childScopes[0]
+    const child = scope.childScopes[0]
+    return child.block === scope.block ? child.childScopes[0] : child
 }
 
 /**
@@ -121,7 +128,9 @@ export function analyzeVariablesAndExternalReferences(
 ): { variables: Variable[]; references: Reference[] } {
     const scope = analyze(ast, parserOptions)
     return {
-        variables: getForScope(scope).variables.map(transformVariable),
+        variables: getForScope(scope)
+            .variables.filter(hasDefinition)
+            .map(transformVariable),
         references: scope.through.filter(isUnique).map(transformReference),
     }
 }

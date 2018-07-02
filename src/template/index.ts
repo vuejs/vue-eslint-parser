@@ -10,7 +10,6 @@ import {
     ParseError,
     Reference,
     Token,
-    Variable,
     VAttribute,
     VDirective,
     VDirectiveKey,
@@ -28,30 +27,8 @@ import {
     parseExpression,
     parseVForExpression,
     parseVOnExpression,
+    parseSlotScopeExpression,
 } from "../script"
-
-/**
- * Extract the variable declarations of scope attributes.
- * @param references The references which are variable declarations.
- * @param outVariables The variable declarations. This is output.
- */
-function extractScopeVariables(
-    references: Reference[],
-    outVariables: Variable[],
-): void {
-    let reference: Reference | undefined
-    while ((reference = references.shift()) != null) {
-        const variable: Variable = {
-            id: reference.id,
-            kind: "scope",
-            references: [],
-        }
-        Object.defineProperty(variable, "references", { enumerable: false })
-        reference.id.parent = null
-
-        outVariables.push(variable)
-    }
-}
 
 /**
  * Get the belonging document of the given node.
@@ -278,6 +255,7 @@ function insertError(
  * @param parserOptions The parser options to parse expressions.
  * @param globalLocationCalculator The location calculator to adjust the locations of nodes.
  * @param node The attribute node to replace. This function modifies this node directly.
+ * @param tagName The name of this tag.
  * @param directiveName The name of this directive.
  */
 function parseAttributeValue(
@@ -285,6 +263,7 @@ function parseAttributeValue(
     parserOptions: any,
     globalLocationCalculator: LocationCalculator,
     node: VLiteral,
+    tagName: string,
     directiveName: string,
 ): ExpressionParseResult {
     const firstChar = code[node.range[0]]
@@ -292,32 +271,40 @@ function parseAttributeValue(
     const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
         node.range[0] + (quoted ? 1 : 0),
     )
-    const result =
-        quoted && node.value === ""
-            ? {
-                  expression: null,
-                  tokens: [],
-                  comments: [],
-                  variables: [],
-                  references: [],
-              }
-            : directiveName === "for"
-                ? parseVForExpression(
-                      node.value,
-                      locationCalculator,
-                      parserOptions,
-                  )
-                : directiveName === "on"
-                    ? parseVOnExpression(
-                          node.value,
-                          locationCalculator,
-                          parserOptions,
-                      )
-                    : /* otherwise */ parseExpression(
-                          node.value,
-                          locationCalculator,
-                          parserOptions,
-                      )
+
+    let result: ExpressionParseResult
+    if (quoted && node.value === "") {
+        result = {
+            expression: null,
+            tokens: [],
+            comments: [],
+            variables: [],
+            references: [],
+        }
+    } else if (directiveName === "for") {
+        result = parseVForExpression(
+            node.value,
+            locationCalculator,
+            parserOptions,
+        )
+    } else if (directiveName === "on") {
+        result = parseVOnExpression(
+            node.value,
+            locationCalculator,
+            parserOptions,
+        )
+    } else if (
+        directiveName === "slot-scope" ||
+        (tagName === "template" && directiveName === "scope")
+    ) {
+        result = parseSlotScopeExpression(
+            node.value,
+            locationCalculator,
+            parserOptions,
+        )
+    } else {
+        result = parseExpression(node.value, locationCalculator, parserOptions)
+    }
 
     // Add the tokens of quotes.
     if (quoted) {
@@ -410,6 +397,7 @@ export function convertToDirective(
             parserOptions,
             locationCalculator,
             node.value,
+            node.parent.parent.name,
             directive.key.name,
         )
 
@@ -444,48 +432,6 @@ export function convertToDirective(
                 references: [],
             }
             insertError(document, err)
-        } else {
-            throw err
-        }
-    }
-}
-
-/**
- * Define the scope variable.
- * @param node The attribute node to define the scope variable.
- * @param outVariables The array of variables. This is output.
- */
-export function defineScopeAttributeVariable(
-    code: string,
-    parserOptions: any,
-    locationCalculator: LocationCalculator,
-    node: VAttribute,
-): void {
-    debug(
-        '[template] define variable: %s="%s" %j',
-        node.key.name,
-        node.value && node.value.value,
-        node.range,
-    )
-
-    if (node.value == null) {
-        return
-    }
-
-    try {
-        const ret = parseAttributeValue(
-            code,
-            parserOptions,
-            locationCalculator,
-            node.value,
-            "scope",
-        )
-        extractScopeVariables(ret.references, node.parent.parent.variables)
-    } catch (err) {
-        debug("[template] Parse error: %s", err)
-
-        if (ParseError.isParseError(err)) {
-            insertError(getOwnerDocument(node), err)
         } else {
             throw err
         }

@@ -1,0 +1,187 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <test-component>\n        <div slot-scope=\"{a, b, ...c}\">{{a + b + c.d}}</div>\n    </test-component>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<test-component>\n        <div slot-scope=\"{a, b, ...c}\">{{a + b + c.d}}</div>\n    </test-component>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<test-component>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<div slot-scope=\"{a, b, ...c}\">{{a + b + c.d}}</div>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<div slot-scope=\"{a, b, ...c}\">",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "slot-scope=\"{a, b, ...c}\"",
+                                        "children": [
+                                            {
+                                                "type": "VDirectiveKey",
+                                                "text": "slot-scope",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "\"{a, b, ...c}\"",
+                                                "children": [
+                                                    {
+                                                        "type": "VSlotScopeExpression",
+                                                        "text": "{a, b, ...c}",
+                                                        "children": [
+                                                            {
+                                                                "type": "ObjectPattern",
+                                                                "text": "{a, b, ...c}",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Property",
+                                                                        "text": "a",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "Identifier",
+                                                                                "text": "a",
+                                                                                "children": []
+                                                                            },
+                                                                            {
+                                                                                "type": "Identifier",
+                                                                                "text": "a",
+                                                                                "children": []
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "type": "Property",
+                                                                        "text": "b",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "Identifier",
+                                                                                "text": "b",
+                                                                                "children": []
+                                                                            },
+                                                                            {
+                                                                                "type": "Identifier",
+                                                                                "text": "b",
+                                                                                "children": []
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "type": "RestElement",
+                                                                        "text": "...c",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "Identifier",
+                                                                                "text": "c",
+                                                                                "children": []
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VExpressionContainer",
+                                "text": "{{a + b + c.d}}",
+                                "children": [
+                                    {
+                                        "type": "BinaryExpression",
+                                        "text": "a + b + c.d",
+                                        "children": [
+                                            {
+                                                "type": "BinaryExpression",
+                                                "text": "a + b",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "MemberExpression",
+                                                "text": "c.d",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "c",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "d",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</div>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</test-component>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

@@ -14,9 +14,11 @@ import {
     ESLintExtendedProgram,
     ESLintForInStatement,
     ESLintForOfStatement,
+    ESLintFunctionExpression,
     ESLintPattern,
     ESLintProgram,
     ESLintVariableDeclaration,
+    ESLintUnaryExpression,
     Node,
     ParseError,
     Reference,
@@ -25,6 +27,7 @@ import {
     VElement,
     VForExpression,
     VOnExpression,
+    VSlotScopeExpression,
 } from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
@@ -216,7 +219,12 @@ function parseScriptFragment(
  * The result of parsing expressions.
  */
 export interface ExpressionParseResult {
-    expression: ESLintExpression | VForExpression | VOnExpression | null
+    expression:
+        | ESLintExpression
+        | VForExpression
+        | VOnExpression
+        | VSlotScopeExpression
+        | null
     tokens: Token[]
     comments: Token[]
     references: Reference[]
@@ -490,6 +498,67 @@ export function parseVOnExpression(
         removeByName(references, "$event")
 
         return { expression, tokens, comments, references, variables: [] }
+    } catch (err) {
+        return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
+    }
+}
+
+/**
+ * Parse the source code of `slot-scope` directive.
+ * @param code The source code of `slot-scope` directive.
+ * @param locationCalculator The location calculator for the inline script.
+ * @param parserOptions The parser options.
+ * @returns The result of parsing.
+ */
+export function parseSlotScopeExpression(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: any,
+): ExpressionParseResult {
+    debug('[script] parse slot-scope expression: "void function(%s) {}"', code)
+
+    if (code.trim() === "") {
+        throwEmptyError(
+            locationCalculator,
+            "an identifier or an array/object pattern",
+        )
+    }
+
+    try {
+        const ast = parseScriptFragment(
+            `void function(${code}) {}`,
+            locationCalculator.getSubCalculatorAfter(-14),
+            parserOptions,
+        ).ast
+        const tokens = ast.tokens || []
+        const comments = ast.comments || []
+        const scope = analyzeVariablesAndExternalReferences(ast, parserOptions)
+        const references = scope.references
+        const variables = scope.variables
+        const statement = ast.body[0] as ESLintExpressionStatement
+        const rawExpression = statement.expression as ESLintUnaryExpression
+        const functionDecl = rawExpression.argument as ESLintFunctionExpression
+        const id = functionDecl.params[0]
+        const expression: VSlotScopeExpression = {
+            type: "VSlotScopeExpression",
+            range: [id.range[0], id.range[1]],
+            loc: { start: id.loc.start, end: id.loc.end },
+            parent: DUMMY_PARENT,
+            id,
+        }
+
+        // Modify parent.
+        id.parent = expression
+
+        // Remvoe `void` `function` `(` `)` `{` `}`.
+        tokens.shift()
+        tokens.shift()
+        tokens.shift()
+        tokens.pop()
+        tokens.pop()
+        tokens.pop()
+
+        return { expression, tokens, comments, references, variables }
     } catch (err) {
         return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
     }

@@ -24,7 +24,12 @@ export interface HasParent {
 /**
  * The union type for all nodes.
  */
-export type Node = ESLintNode | VNode | VForExpression | VOnExpression
+export type Node =
+    | ESLintNode
+    | VNode
+    | VForExpression
+    | VOnExpression
+    | VSlotScopeExpression
 
 //------------------------------------------------------------------------------
 // Script
@@ -677,6 +682,15 @@ export interface VOnExpression extends HasLocation, HasParent {
 }
 
 /**
+ * The node of `slot-scope` directives.
+ */
+export interface VSlotScopeExpression extends HasLocation, HasParent {
+    type: "VSlotScopeExpression"
+    parent: VExpressionContainer
+    id: ESLintPattern
+}
+
+/**
  * The union type of any nodes.
  */
 export type VNode =
@@ -708,7 +722,12 @@ export interface VText extends HasLocation, HasParent {
 export interface VExpressionContainer extends HasLocation, HasParent {
     type: "VExpressionContainer"
     parent: VDocumentFragment | VElement | VDirective
-    expression: ESLintExpression | VForExpression | VOnExpression | null
+    expression:
+        | ESLintExpression
+        | VForExpression
+        | VOnExpression
+        | VSlotScopeExpression
+        | null
     references: Reference[]
 }
 

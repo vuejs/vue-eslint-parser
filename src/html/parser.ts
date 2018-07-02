@@ -22,7 +22,6 @@ import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
 import {
     convertToDirective,
-    defineScopeAttributeVariable,
     processMustache,
     resolveReferences,
 } from "../template"
@@ -370,7 +369,14 @@ export class Parser {
      * @param namespace The current namespace.
      */
     private processAttribute(node: VAttribute, namespace: Namespace): void {
-        if (DIRECTIVE_NAME.test(node.key.name)) {
+        const tagName = node.parent.parent.name
+        const attrName = node.key.name
+
+        if (
+            DIRECTIVE_NAME.test(attrName) ||
+            attrName === "slot-scope" ||
+            (tagName === "template" && attrName === "scope")
+        ) {
             convertToDirective(
                 this.text,
                 this.parserOptions,
@@ -386,14 +392,7 @@ export class Parser {
         ))
         const value = node.value && node.value.value
 
-        if (key === "scope" && node.parent.parent.name === "template") {
-            defineScopeAttributeVariable(
-                this.text,
-                this.parserOptions,
-                this.locationCalculator,
-                node,
-            )
-        } else if (key === "xmlns" && value !== namespace) {
+        if (key === "xmlns" && value !== namespace) {
             this.reportParseError(node, "x-invalid-namespace")
         } else if (key === "xmlns:xlink" && value !== NS.XLink) {
             this.reportParseError(node, "x-invalid-namespace")
