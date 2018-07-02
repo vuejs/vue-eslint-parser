@@ -18,7 +18,8 @@ This parser allows us to lint the `<template>` of `.vue` files. We can make mist
 $ npm install --save-dev eslint vue-eslint-parser
 ```
 
-- `vue-eslint-parser` requires ESLint 3.9.0 or later.
+- Requires Node.js 6.5.0 or later.
+- Requires ESLint 3.9.0 or later.
 
 ## 📖 Usage
 
@@ -83,7 +84,7 @@ For example:
 }
 ```
 
-- If you use with `babel-eslint`, it has additional requirements. Use `eslint@>=4.14.0` and `babel-eslint@>=8.1.1`.
+- If you use with `babel-eslint`, use `babel-eslint@>=8.1.1`.
 - If you use `typescript-eslint-parser`, the location of original nodes can be wrong. Waiting for `typescript-eslint-parser` to support [parseResult.visitorKeys](https://eslint.org/docs/developer-guide/working-with-plugins#working-with-custom-parsers).
 
 ## 🎇 Usage for custom rules / plugins

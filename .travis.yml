@@ -1,11 +1,13 @@
 sudo: false
+
 language: node_js
 node_js:
-  - "4"
-  - "6"
+  - "6.5"
   - "8"
-  - "9"
+  - "10"
+
 before_script:
   - npm run setup
+
 after_success:
   - npm run codecov
