@@ -18,12 +18,11 @@ export default {
         format: "cjs",
         sourcemap: true,
         sourcemapFile: "index.js.map",
+        banner: `/**
+ * @author Toru Nagashima <https://github.com/mysticatea>
+ * See LICENSE file in root directory for full license.
+ */`,
     },
     plugins: [sourcemaps(), resolve()],
     external: id => deps.has(id) || id.startsWith("lodash"),
-    banner: `/**
- * @author Toru Nagashima <https://github.com/mysticatea>
- * @copyright 2017 Toru Nagashima. All rights reserved.
- * See LICENSE file in root directory for full license.
- */`,
 }
