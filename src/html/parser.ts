@@ -303,10 +303,12 @@ export class Parser {
 
     /**
      * Detect the namespace of the new element.
-     * @param name The value of a HTMLTagOpen token.
+     * @param token The StartTag token to detect.
      * @returns The namespace of the new element.
      */
-    private detectNamespace(name: string): Namespace {
+    //eslint-disable-next-line complexity, require-jsdoc
+    private detectNamespace(token: StartTag): Namespace {
+        const name = token.name
         let ns = this.namespace
 
         if (ns === NS.MathML || ns === NS.SVG) {
@@ -336,6 +338,15 @@ export class Parser {
             }
             if (name === "math") {
                 return NS.MathML
+            }
+        }
+
+        if (name === "template") {
+            const xmlns = token.attributes.find(a => a.key.name === "xmlns")
+            const value = xmlns && xmlns.value && xmlns.value.value
+
+            if (value === NS.HTML || value === NS.MathML || value === NS.SVG) {
+                return value
             }
         }
 
@@ -410,22 +421,7 @@ export class Parser {
         this.closeCurrentElementIfNecessary(token.name)
 
         const parent = this.currentNode
-        let namespace = this.detectNamespace(token.name)
-        if (token.name === "template") {
-            for (const attribute of token.attributes) {
-                if (attribute.key.name !== "xmlns") {
-                    continue
-                }
-                const value = attribute.value && attribute.value.value
-                if (
-                    value === NS.HTML ||
-                    value === NS.MathML ||
-                    value === NS.SVG
-                ) {
-                    namespace = value
-                }
-            }
-        }
+        const namespace = this.detectNamespace(token)
         const element: VElement = {
             type: "VElement",
             range: [token.range[0], token.range[1]],
