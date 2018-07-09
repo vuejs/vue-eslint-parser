@@ -410,7 +410,22 @@ export class Parser {
         this.closeCurrentElementIfNecessary(token.name)
 
         const parent = this.currentNode
-        const namespace = this.detectNamespace(token.name)
+        let namespace = this.detectNamespace(token.name)
+        if (token.name === "template") {
+            for (const attribute of token.attributes) {
+                if (attribute.key.name !== "xmlns") {
+                    continue
+                }
+                const value = attribute.value && attribute.value.value
+                if (
+                    value === NS.HTML ||
+                    value === NS.MathML ||
+                    value === NS.SVG
+                ) {
+                    namespace = value
+                }
+            }
+        }
         const element: VElement = {
             type: "VElement",
             range: [token.range[0], token.range[1]],
