@@ -568,7 +568,6 @@ describe("Basic tests", () => {
             }
             const linter = new Linter()
 
-            //eslint-disable-next-line no-shadow
             linter.defineRule("test-rule", context =>
                 context.parserServices.defineTemplateBodyVisitor({
                     "VElement[name='div']"(node) {

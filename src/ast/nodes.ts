@@ -8,8 +8,6 @@ import { ParseError } from "./errors"
 import { HasLocation } from "./locations"
 import { Token } from "./tokens"
 
-/*eslint-disable @mysticatea/ts/no-use-before-define */
-
 //------------------------------------------------------------------------------
 // Common
 //------------------------------------------------------------------------------
@@ -844,5 +842,3 @@ export interface VDocumentFragment
     parent: null
     children: (VElement | VText | VExpressionContainer)[]
 }
-
-/*eslint-enable @mysticatea/ts/no-use-before-define */
