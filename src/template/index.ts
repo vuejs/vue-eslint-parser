@@ -256,7 +256,7 @@ function insertError(
  * @param globalLocationCalculator The location calculator to adjust the locations of nodes.
  * @param node The attribute node to replace. This function modifies this node directly.
  * @param tagName The name of this tag.
- * @param directiveName The name of this directive.
+ * @param directiveKey The key of this directive.
  */
 function parseAttributeValue(
     code: string,
@@ -264,7 +264,7 @@ function parseAttributeValue(
     globalLocationCalculator: LocationCalculator,
     node: VLiteral,
     tagName: string,
-    directiveName: string,
+    directiveKey: VDirectiveKey,
 ): ExpressionParseResult {
     const firstChar = code[node.range[0]]
     const quoted = firstChar === '"' || firstChar === "'"
@@ -281,21 +281,21 @@ function parseAttributeValue(
             variables: [],
             references: [],
         }
-    } else if (directiveName === "for") {
+    } else if (directiveKey.name === "for") {
         result = parseVForExpression(
             node.value,
             locationCalculator,
             parserOptions,
         )
-    } else if (directiveName === "on") {
+    } else if (directiveKey.name === "on" && directiveKey.argument != null) {
         result = parseVOnExpression(
             node.value,
             locationCalculator,
             parserOptions,
         )
     } else if (
-        directiveName === "slot-scope" ||
-        (tagName === "template" && directiveName === "scope")
+        directiveKey.name === "slot-scope" ||
+        (tagName === "template" && directiveKey.name === "scope")
     ) {
         result = parseSlotScopeExpression(
             node.value,
@@ -398,7 +398,7 @@ export function convertToDirective(
             locationCalculator,
             node.value,
             node.parent.parent.name,
-            directive.key.name,
+            directive.key,
         )
 
         directive.value = {

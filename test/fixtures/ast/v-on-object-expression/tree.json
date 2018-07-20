@@ -1,0 +1,100 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <button v-on=\"{mousedown: down, mouseup: up}\"></button>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button v-on=\"{mousedown: down, mouseup: up}\"></button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button v-on=\"{mousedown: down, mouseup: up}\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-on=\"{mousedown: down, mouseup: up}\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-on",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"{mousedown: down, mouseup: up}\"",
+                                        "children": [
+                                            {
+                                                "type": "ObjectExpression",
+                                                "text": "{mousedown: down, mouseup: up}",
+                                                "children": [
+                                                    {
+                                                        "type": "Property",
+                                                        "text": "mousedown: down",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "mousedown",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "down",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "Property",
+                                                        "text": "mouseup: up",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "mouseup",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "up",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
