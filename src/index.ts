@@ -93,6 +93,7 @@ export function parseForESLint(
     if (!isVueFile(code, options)) {
         result = parseScript(code, options)
     } else {
+        const skipParsingScript = options.parser === false
         const tokenizer = new HTMLTokenizer(code)
         const rootAST = new HTMLParser(tokenizer, options).parse()
         const locationCalcurator = new LocationCalculator(
@@ -112,10 +113,11 @@ export function parseForESLint(
                 ? Object.assign(template, concreteInfo)
                 : undefined
 
-        result =
-            script != null
-                ? parseScriptElement(script, locationCalcurator, options)
-                : parseScript("", options)
+        if (skipParsingScript || script == null) {
+            result = parseScript("", options)
+        } else {
+            result = parseScriptElement(script, locationCalcurator, options)
+        }
 
         result.ast.templateBody = templateBody
     }
