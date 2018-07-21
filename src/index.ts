@@ -53,6 +53,21 @@ function isLang(
 }
 
 /**
+ * Get the `lang` attribute value from a given element.
+ * @param element The element to get.
+ * @param defaultLang The default value of the `lang` attribute.
+ * @returns The `lang` attribute value.
+ */
+function getLang(
+    element: AST.VElement | undefined,
+    defaultLang: string,
+): string {
+    const langAttr = element && element.startTag.attributes.find(isLang)
+    const lang = langAttr && langAttr.value && langAttr.value.value
+    return lang || defaultLang
+}
+
+/**
  * Parse the given source code.
  * @param code The source code to parse.
  * @param options The parser options.
@@ -86,27 +101,23 @@ export function parseForESLint(
         )
         const script = rootAST.children.find(isScriptElement)
         const template = rootAST.children.find(isTemplateElement)
-        const templateLangAttr =
-            template && template.startTag.attributes.find(isLang)
-        const templateLang =
-            (templateLangAttr &&
-                templateLangAttr.value &&
-                templateLangAttr.value.value) ||
-            "html"
+        const templateLang = getLang(template, "html")
         const concreteInfo: AST.HasConcreteInfo = {
             tokens: rootAST.tokens,
             comments: rootAST.comments,
             errors: rootAST.errors,
         }
+        const templateBody =
+            template != null && templateLang === "html"
+                ? Object.assign(template, concreteInfo)
+                : undefined
 
         result =
             script != null
                 ? parseScriptElement(script, locationCalcurator, options)
                 : parseScript("", options)
-        result.ast.templateBody =
-            template != null && templateLang === "html"
-                ? Object.assign(template, concreteInfo)
-                : undefined
+
+        result.ast.templateBody = templateBody
     }
 
     result.services = Object.assign(
