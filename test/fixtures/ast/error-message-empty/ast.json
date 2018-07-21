@@ -63,7 +63,7 @@
                 "type": "VText",
                 "range": [
                     10,
-                    15
+                    24
                 ],
                 "loc": {
                     "start": {
@@ -71,48 +71,11 @@
                         "column": 10
                     },
                     "end": {
-                        "line": 2,
-                        "column": 4
-                    }
-                },
-                "value": "\n    "
-            },
-            {
-                "type": "VExpressionContainer",
-                "range": [
-                    15,
-                    19
-                ],
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 4
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 8
-                    }
-                },
-                "expression": null,
-                "references": []
-            },
-            {
-                "type": "VText",
-                "range": [
-                    19,
-                    24
-                ],
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 8
-                    },
-                    "end": {
                         "line": 3,
                         "column": 4
                     }
                 },
-                "value": "\n    "
+                "value": "\n    {{}}\n    "
             },
             {
                 "type": "VExpressionContainer",
@@ -2166,12 +2129,6 @@
         ],
         "comments": [],
         "errors": [
-            {
-                "message": "Expected to be an expression, but got empty.",
-                "index": 17,
-                "lineNumber": 2,
-                "column": 6
-            },
             {
                 "message": "Expected to be an expression, but got empty.",
                 "index": 26,

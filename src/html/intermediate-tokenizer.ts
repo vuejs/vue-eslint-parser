@@ -557,6 +557,15 @@ export class IntermediateTokenizer {
         const start = this.expressionStartToken
         const end = last(this.expressionTokens) || start
 
+        // If it's '{{}}', it's handled as a text.
+        if (token.range[0] === start.range[1]) {
+            this.tokens.pop()
+            this.expressionStartToken = null
+            const result = this.processText(start)
+            this.processText(token)
+            return result
+        }
+
         // If invalid notation `</>` exists directly before this token, separate it.
         if (end.range[1] !== token.range[0]) {
             const result = this.commit()
