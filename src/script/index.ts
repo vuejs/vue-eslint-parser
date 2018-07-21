@@ -9,6 +9,7 @@ import {
     traverseNodes,
     ESLintArrayPattern,
     ESLintBlockStatement,
+    ESLintCallExpression,
     ESLintExpression,
     ESLintExpressionStatement,
     ESLintExtendedProgram,
@@ -17,6 +18,7 @@ import {
     ESLintFunctionExpression,
     ESLintPattern,
     ESLintProgram,
+    ESLintSpreadElement,
     ESLintVariableDeclaration,
     ESLintUnaryExpression,
     Node,
@@ -159,6 +161,27 @@ function throwEmptyError(
     const loc = locationCalculator.getLocation(0)
     const err = new ParseError(
         `Expected to be ${expected}, but got empty.`,
+        undefined,
+        0,
+        loc.line,
+        loc.column,
+    )
+    locationCalculator.fixErrorLocation(err)
+
+    throw err
+}
+
+/**
+ * Throw syntax error for empty.
+ * @param locationCalculator The location calculator to get line/column.
+ */
+function throwUnexpectedSpreadElementError(
+    locationCalculator: LocationCalculator,
+    node: ESLintSpreadElement,
+): never {
+    const loc = locationCalculator.getLocation(node.start || 0)
+    const err = new ParseError(
+        "Unexpected spread element.",
         undefined,
         0,
         loc.line,
@@ -320,25 +343,35 @@ export function parseExpression(
     code: string,
     locationCalculator: LocationCalculator,
     parserOptions: any,
+    allowEmpty = false,
 ): ExpressionParseResult {
-    debug('[script] parse expression: "(%s)"', code)
-
-    if (code.trim() === "") {
-        return throwEmptyError(locationCalculator, "an expression")
-    }
+    debug('[script] parse expression: "0(%s)"', code)
 
     try {
         const ast = parseScriptFragment(
-            `(${code})`,
-            locationCalculator.getSubCalculatorAfter(-1),
+            `0(${code})`,
+            locationCalculator.getSubCalculatorAfter(-2),
             parserOptions,
         ).ast
-        const references = analyzeExternalReferences(ast, parserOptions)
-        const expression = (ast.body[0] as ESLintExpressionStatement).expression
         const tokens = ast.tokens || []
         const comments = ast.comments || []
+        const references = analyzeExternalReferences(ast, parserOptions)
+        const statement = ast.body[0] as ESLintExpressionStatement
+        const callExpression = statement.expression as ESLintCallExpression
+        const expression = callExpression.arguments[0]
+
+        if (!allowEmpty && !expression) {
+            return throwEmptyError(locationCalculator, "an expression")
+        }
+        if (expression && expression.type === "SpreadElement") {
+            return throwUnexpectedSpreadElementError(
+                locationCalculator.getSubCalculatorAfter(-2),
+                expression,
+            )
+        }
 
         // Remvoe parens.
+        tokens.shift()
         tokens.shift()
         tokens.pop()
 

@@ -113,6 +113,7 @@ interface VSlotScopeExpression <: Expression {
 
 - This is mustaches or directive values.
 - If syntax errors exist, `VExpressionContainer#expression` is `null`.
+- If it's an empty mustache, `VExpressionContainer#expression` is `null`. (e.g., `{{ /* a comment */ }}`)
 - `Reference` is objects but not `Node`. Those are external references which are in the expression.
 - `Reference#variable` is the variable which is defined by a `VElement`. If a reference uses a global variable or a member of VM, this is `null`.
 - `VForExpression` is an expression node like [ForInStatement] but it has an array as `left` property and does not have `body` property. This is the value of [`v-for` directives].

@@ -466,9 +466,10 @@ export function processMustache(
             mustache.value,
             locationCalculator,
             parserOptions,
+            true,
         )
 
-        node.expression = ret.expression
+        node.expression = ret.expression || null
         node.references = ret.references
         if (ret.expression != null) {
             ret.expression.parent = node
