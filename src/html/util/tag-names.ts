@@ -32,9 +32,8 @@ export const HTML_TAGS = new Set([
  * HTML tag names of void elements.
  */
 export const HTML_VOID_ELEMENT_TAGS = new Set([
-    "area", "base", "basefont", "bgsound", "br", "col", "command", "embed", 
-    "frame", "hr", "image", "img", "input", "isindex", "keygen", "link", 
-    "menuitem", "meta", "nextid", "param", "source", "track", "wbr",
+    "area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta",
+    "param", "source", "track", "wbr",
 ])
 
 /**
