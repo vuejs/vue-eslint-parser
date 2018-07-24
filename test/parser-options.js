@@ -10,7 +10,7 @@ const parseForESLint = require("..").parseForESLint
 const eslint = require("./fixtures/eslint")
 const Linter = eslint.Linter
 
-describe.only("parserOptions", () => {
+describe("parserOptions", () => {
     describe("parser", () => {
         const linter = new Linter()
         linter.defineParser("vue-eslint-parser", { parseForESLint })
