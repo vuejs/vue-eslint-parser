@@ -9,7 +9,6 @@ import sortedIndexBy from "lodash/sortedIndexBy"
 import {
     traverseNodes,
     ESLintArrayPattern,
-    ESLintBlockStatement,
     ESLintCallExpression,
     ESLintExpression,
     ESLintExpressionStatement,
@@ -130,24 +129,6 @@ function normalizeLeft(
         return (id as ESLintArrayPattern).elements
     }
     return [id]
-}
-
-/**
- * Remove references by name.
- * @param references The array of references to remove.
- * @param name The name of target references.
- */
-function removeByName(references: Reference[], name: string): void {
-    let i = 0
-    while (i < references.length) {
-        const reference = references[i]
-
-        if (reference.id.name === name) {
-            references.splice(i, 1)
-        } else {
-            i += 1
-        }
-    }
 }
 
 /**
@@ -500,7 +481,7 @@ export function parseVOnExpression(
     locationCalculator: LocationCalculator,
     parserOptions: any,
 ): ExpressionParseResult {
-    debug('[script] parse v-on expression: "{%s}"', code)
+    debug('[script] parse v-on expression: "void function($event){%s}"', code)
 
     if (code.trim() === "") {
         throwEmptyError(locationCalculator, "statements")
@@ -508,12 +489,15 @@ export function parseVOnExpression(
 
     try {
         const ast = parseScriptFragment(
-            `{${code}}`,
-            locationCalculator.getSubCalculatorAfter(-1),
+            `void function($event){${code}}`,
+            locationCalculator.getSubCalculatorAfter(-22),
             parserOptions,
         ).ast
         const references = analyzeExternalReferences(ast, parserOptions)
-        const block = ast.body[0] as ESLintBlockStatement
+        const outermostStatement = ast.body[0] as ESLintExpressionStatement
+        const functionDecl = (outermostStatement.expression as ESLintUnaryExpression)
+            .argument as ESLintFunctionExpression
+        const block = functionDecl.body
         const body = block.body
         const firstStatement = first(body)
         const lastStatement = last(body)
@@ -548,12 +532,9 @@ export function parseVOnExpression(
             b.parent = expression
         }
 
-        // Remvoe braces.
-        tokens.shift()
+        // Remove braces.
+        tokens.splice(0, 6)
         tokens.pop()
-
-        // Remove $event: https://vuejs.org/v2/api/#v-on
-        removeByName(references, "$event")
 
         return { expression, tokens, comments, references, variables: [] }
     } catch (err) {
