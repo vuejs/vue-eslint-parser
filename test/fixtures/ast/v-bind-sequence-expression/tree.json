@@ -1,0 +1,94 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div :a=\"a1,a2\"\n         :b=\"(b1,b2)\"\n    ></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div :a=\"a1,a2\"\n         :b=\"(b1,b2)\"\n    ></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div :a=\"a1,a2\"\n         :b=\"(b1,b2)\"\n    >",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":a=\"a1,a2\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"a1,a2\"",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": ":b=\"(b1,b2)\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":b",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"(b1,b2)\"",
+                                        "children": [
+                                            {
+                                                "type": "SequenceExpression",
+                                                "text": "b1,b2",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b1",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b2",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

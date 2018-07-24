@@ -5,6 +5,7 @@
  */
 import first from "lodash/first"
 import last from "lodash/last"
+import sortedIndexBy from "lodash/sortedIndexBy"
 import {
     traverseNodes,
     ESLintArrayPattern,
@@ -18,7 +19,6 @@ import {
     ESLintFunctionExpression,
     ESLintPattern,
     ESLintProgram,
-    ESLintSpreadElement,
     ESLintVariableDeclaration,
     ESLintUnaryExpression,
     Node,
@@ -151,6 +151,30 @@ function removeByName(references: Reference[], name: string): void {
 }
 
 /**
+ * Get the comma token before a given node.
+ * @param tokens The token list.
+ * @param node The node to get the comma before this node.
+ * @returns The comma token.
+ */
+function getCommaTokenBeforeNode(tokens: Token[], node: Node): Token | null {
+    let tokenIndex = sortedIndexBy(
+        tokens,
+        { range: node.range },
+        t => t.range[0],
+    )
+
+    while (tokenIndex >= 0) {
+        const token = tokens[tokenIndex]
+        if (token.type === "Punctuator" && token.value === ",") {
+            return token
+        }
+        tokenIndex -= 1
+    }
+
+    return null
+}
+
+/**
  * Throw syntax error for empty.
  * @param locationCalculator The location calculator to get line/column.
  */
@@ -172,22 +196,19 @@ function throwEmptyError(
 }
 
 /**
- * Throw syntax error for empty.
+ * Throw syntax error for unexpected token.
  * @param locationCalculator The location calculator to get line/column.
+ * @param name The token name.
+ * @param token The token object to get that location.
  */
-function throwUnexpectedSpreadElementError(
-    locationCalculator: LocationCalculator,
-    node: ESLintSpreadElement,
-): never {
-    const loc = locationCalculator.getLocation(node.start || 0)
+function throwUnexpectedTokenError(name: string, token: Node | Token): never {
     const err = new ParseError(
-        "Unexpected spread element.",
+        `Unexpected token '${name}'.`,
         undefined,
-        0,
-        loc.line,
-        loc.column,
+        token.range[0],
+        token.loc.start.line,
+        token.loc.start.column,
     )
-    locationCalculator.fixErrorLocation(err)
 
     throw err
 }
@@ -364,13 +385,17 @@ export function parseExpression(
             return throwEmptyError(locationCalculator, "an expression")
         }
         if (expression && expression.type === "SpreadElement") {
-            return throwUnexpectedSpreadElementError(
-                locationCalculator.getSubCalculatorAfter(-2),
-                expression,
+            return throwUnexpectedTokenError("...", expression)
+        }
+        if (callExpression.arguments[1]) {
+            const node = callExpression.arguments[1]
+            return throwUnexpectedTokenError(
+                ",",
+                getCommaTokenBeforeNode(tokens, node) || node,
             )
         }
 
-        // Remvoe parens.
+        // Remove parens.
         tokens.shift()
         tokens.shift()
         tokens.pop()
