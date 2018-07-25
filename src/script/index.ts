@@ -272,7 +272,10 @@ export function parseScript(
     code: string,
     parserOptions: any,
 ): ESLintExtendedProgram {
-    const parser: ESLintCustomParser = require(parserOptions.parser || "espree") //eslint-disable-line @mysticatea/ts/no-var-requires
+    const parser: ESLintCustomParser =
+        typeof parserOptions.parser === "string"
+            ? require(parserOptions.parser)
+            : require("espree")
     const result: any =
         typeof parser.parseForESLint === "function"
             ? parser.parseForESLint(code, parserOptions)
