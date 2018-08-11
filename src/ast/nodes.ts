@@ -24,6 +24,7 @@ export interface HasParent {
  */
 export type Node =
     | ESLintNode
+    | TypeAnnotation
     | VNode
     | VForExpression
     | VOnExpression
@@ -348,6 +349,7 @@ export type ESLintExpression =
 export interface ESLintIdentifier extends HasLocation, HasParent {
     type: "Identifier"
     name: string
+    typeAnnotation?: TypeAnnotation | null
 }
 
 export interface ESLintLiteral extends HasLocation, HasParent {
@@ -612,6 +614,13 @@ export interface ESLintLegacyRestProperty extends HasLocation, HasParent {
 export interface ESLintLegacySpreadProperty extends HasLocation, HasParent {
     type: "SpreadProperty" | "ExperimentalSpreadProperty"
     argument: ESLintExpression
+}
+
+/**
+ * Top-level type annotation from `typescript-eslint-parser` and `babel-eslint`
+ */
+export interface TypeAnnotation extends HasLocation, HasParent {
+    type: "TSTypeAnnotation" | "TypeAnnotation"
 }
 
 //------------------------------------------------------------------------------
