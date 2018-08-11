@@ -396,6 +396,31 @@ describe("Basic tests", () => {
         })
     })
 
+    describe("About fixtures/location-issue-type-annotation.vue", () => {
+        it("typeAnnotation node in Identifier should have correct location.", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["browser", "node"],
+                parser: PARSER_PATH,
+                parserOptions: {
+                    parser: "typescript-eslint-parser",
+                    sourceType: "module",
+                    ecmaVersion: 2017,
+                },
+                rules: {
+                    "space-infix-ops": "error",
+                },
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles([
+                "location-issue-type-annotation.vue",
+            ])
+            const messages = report.results[0].messages
+
+            assert(messages.length === 0)
+        })
+    })
+
     describe("About unexpected-null-character errors", () => {
         it("should keep NULL in DATA state.", () => {
             const ast = parse("<template>\u0000</template>")
