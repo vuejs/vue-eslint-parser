@@ -82,6 +82,15 @@ function postprocess(
                     traversed.add(node.range)
                     locationCalculator.fixLocation(node)
                 }
+
+                if (
+                    node.type === "Identifier" &&
+                    node.typeAnnotation &&
+                    !traversed.has(node.typeAnnotation)
+                ) {
+                    traversed.add(node.typeAnnotation)
+                    locationCalculator.fixLocation(node.typeAnnotation)
+                }
             }
         },
 
