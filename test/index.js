@@ -549,12 +549,9 @@ describe("Basic tests", () => {
                 eslintVisitorKeys: true,
             })
 
+            assert.strictEqual(ast.body[2].range[0], indexOfDecorator)
             assert.strictEqual(
-                ast.body[2].declaration.range[0],
-                indexOfDecorator
-            )
-            assert.strictEqual(
-                ast.body[2].declaration.decorators[0].range[0],
+                ast.body[2].decorators[0].range[0],
                 indexOfDecorator
             )
         })
