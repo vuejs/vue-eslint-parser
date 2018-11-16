@@ -402,9 +402,9 @@ describe("Basic tests", () => {
             const text = ast.templateBody.children[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(text.value, "\u0000")
-            assert.equal(errors.length, 1)
-            assert.equal(errors[0].code, "unexpected-null-character")
+            assert.strictEqual(text.value, "\u0000")
+            assert.strictEqual(errors.length, 1)
+            assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in RCDATA state.", () => {
@@ -414,9 +414,9 @@ describe("Basic tests", () => {
             const text = ast.templateBody.children[0].children[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(text.value, "\uFFFD")
-            assert.equal(errors.length, 1)
-            assert.equal(errors[0].code, "unexpected-null-character")
+            assert.strictEqual(text.value, "\uFFFD")
+            assert.strictEqual(errors.length, 1)
+            assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in RAWTEXT state.", () => {
@@ -424,9 +424,9 @@ describe("Basic tests", () => {
             const text = ast.templateBody.children[0].children[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(text.value, "\uFFFD")
-            assert.equal(errors.length, 1)
-            assert.equal(errors[0].code, "unexpected-null-character")
+            assert.strictEqual(text.value, "\uFFFD")
+            assert.strictEqual(errors.length, 1)
+            assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in TAG_NAME state.", () => {
@@ -434,9 +434,9 @@ describe("Basic tests", () => {
             const element = ast.templateBody.children[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(element.name, "test\uFFFD")
-            assert.equal(errors.length, 1)
-            assert.equal(errors[0].code, "unexpected-null-character")
+            assert.strictEqual(element.name, "test\uFFFD")
+            assert.strictEqual(errors.length, 1)
+            assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_NAME state.", () => {
@@ -445,9 +445,9 @@ describe("Basic tests", () => {
                 ast.templateBody.children[0].startTag.attributes[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(attribute.key.name, "a\uFFFD")
-            assert.equal(errors.length, 1)
-            assert.equal(errors[0].code, "unexpected-null-character")
+            assert.strictEqual(attribute.key.name, "a\uFFFD")
+            assert.strictEqual(errors.length, 1)
+            assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_DOUBLE_QUOTED state.", () => {
@@ -456,9 +456,9 @@ describe("Basic tests", () => {
                 ast.templateBody.children[0].startTag.attributes[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(attribute.value.value, "\uFFFD")
-            assert.equal(errors.length, 1)
-            assert.equal(errors[0].code, "unexpected-null-character")
+            assert.strictEqual(attribute.value.value, "\uFFFD")
+            assert.strictEqual(errors.length, 1)
+            assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_SINGLE_QUOTED state.", () => {
@@ -467,9 +467,9 @@ describe("Basic tests", () => {
                 ast.templateBody.children[0].startTag.attributes[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(attribute.value.value, "\uFFFD")
-            assert.equal(errors.length, 1)
-            assert.equal(errors[0].code, "unexpected-null-character")
+            assert.strictEqual(attribute.value.value, "\uFFFD")
+            assert.strictEqual(errors.length, 1)
+            assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_UNQUOTED state.", () => {
@@ -478,9 +478,9 @@ describe("Basic tests", () => {
                 ast.templateBody.children[0].startTag.attributes[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(attribute.value.value, "\uFFFD")
-            assert.equal(errors.length, 1)
-            assert.equal(errors[0].code, "unexpected-null-character")
+            assert.strictEqual(attribute.value.value, "\uFFFD")
+            assert.strictEqual(errors.length, 1)
+            assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in COMMENT state.", () => {
@@ -488,9 +488,9 @@ describe("Basic tests", () => {
             const comment = ast.templateBody.comments[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(comment.value, " \uFFFD ")
-            assert.equal(errors.length, 1)
-            assert.equal(errors[0].code, "unexpected-null-character")
+            assert.strictEqual(comment.value, " \uFFFD ")
+            assert.strictEqual(errors.length, 1)
+            assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in BOGUS_COMMENT state.", () => {
@@ -498,9 +498,9 @@ describe("Basic tests", () => {
             const comment = ast.templateBody.comments[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(comment.value, "? \uFFFD ?")
-            assert.equal(errors.length, 1)
-            assert.equal(
+            assert.strictEqual(comment.value, "? \uFFFD ?")
+            assert.strictEqual(errors.length, 1)
+            assert.strictEqual(
                 errors[0].code,
                 "unexpected-question-mark-instead-of-tag-name"
             )
@@ -511,21 +511,21 @@ describe("Basic tests", () => {
             const cdata = ast.templateBody.children[0].children[0]
             const errors = ast.templateBody.errors
 
-            assert.equal(cdata.value, "\u0000")
-            assert.equal(errors.length, 0)
+            assert.strictEqual(cdata.value, "\u0000")
+            assert.strictEqual(errors.length, 0)
         })
     })
 
     describe("About parserServices", () => {
         it("should exist if the source code is a Vue SFC file.", () => {
-            assert.notEqual(
+            assert.notStrictEqual(
                 parseForESLint("test", { filePath: "test.vue" }).services,
                 undefined
             )
         })
 
         it("should exist even if the source code is not Vue SFC file.", () => {
-            assert.notEqual(
+            assert.notStrictEqual(
                 parseForESLint("test", { filePath: "test.js" }).services,
                 undefined
             )
@@ -549,8 +549,11 @@ describe("Basic tests", () => {
                 eslintVisitorKeys: true,
             })
 
-            assert.equal(ast.body[2].declaration.range[0], indexOfDecorator)
-            assert.equal(
+            assert.strictEqual(
+                ast.body[2].declaration.range[0],
+                indexOfDecorator
+            )
+            assert.strictEqual(
                 ast.body[2].declaration.decorators[0].range[0],
                 indexOfDecorator
             )
@@ -579,10 +582,10 @@ describe("Basic tests", () => {
             const messages1 = linter.verify(code, config)
             const messages2 = linter.verify(linter.getSourceCode(), config)
 
-            assert.equal(messages1.length, 1)
-            assert.equal(messages1[0].message, "OK")
-            assert.equal(messages2.length, 1)
-            assert.equal(messages1[0].message, "OK")
+            assert.strictEqual(messages1.length, 1)
+            assert.strictEqual(messages1[0].message, "OK")
+            assert.strictEqual(messages2.length, 1)
+            assert.strictEqual(messages1[0].message, "OK")
         })
     })
 })

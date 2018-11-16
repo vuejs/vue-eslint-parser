@@ -26,8 +26,8 @@ export interface ParserServices {
      * @param scriptVisitor The script handlers. This is optional.
      */
     defineTemplateBodyVisitor(
-        templateBodyVisitor: { [key: string]: Function },
-        scriptVisitor?: { [key: string]: Function },
+        templateBodyVisitor: { [key: string]: (...args: any) => void },
+        scriptVisitor?: { [key: string]: (...args: any) => void },
     ): object
 
     /**
@@ -49,8 +49,8 @@ export function define(rootAST: ESLintProgram): ParserServices {
          * @param scriptVisitor The script handlers. This is optional.
          */
         defineTemplateBodyVisitor(
-            templateBodyVisitor: { [key: string]: Function },
-            scriptVisitor?: { [key: string]: Function },
+            templateBodyVisitor: { [key: string]: (...args: any) => void },
+            scriptVisitor?: { [key: string]: (...args: any) => void },
         ): object {
             if (scriptVisitor == null) {
                 scriptVisitor = {} //eslint-disable-line no-param-reassign

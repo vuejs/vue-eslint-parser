@@ -40,7 +40,7 @@ import {
 // [1] = spacing before the aliases.
 // [2] = aliases.
 // [3] = all after the aliases.
-const ALIAS_PARENS = /^(\s*)\(([\s\S]+)\)(\s*(?:in|of)\b[\s\S]+)$/
+const ALIAS_PARENS = /^(\s*)\(([\s\S]+)\)(\s*(?:in|of)\b[\s\S]+)$/u
 const DUMMY_PARENT: any = {}
 
 /**

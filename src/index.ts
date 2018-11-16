@@ -10,7 +10,7 @@ import { HTMLParser, HTMLTokenizer } from "./html"
 import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
 
-const STARTS_WITH_LT = /^\s*</
+const STARTS_WITH_LT = /^\s*</u
 
 /**
  * Check whether the code is a Vue.js component.

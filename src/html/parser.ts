@@ -47,8 +47,8 @@ import {
 } from "./intermediate-tokenizer"
 import { Tokenizer } from "./tokenizer"
 
-const DIRECTIVE_NAME = /^(?:v-|[:@]).*[^.:@]$/
-const DT_DD = /^d[dt]$/
+const DIRECTIVE_NAME = /^(?:v-|[:@]).*[^.:@]$/u
+const DT_DD = /^d[dt]$/u
 const DUMMY_PARENT: any = Object.freeze({})
 
 /**
