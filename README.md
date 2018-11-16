@@ -20,6 +20,8 @@ $ npm install --save-dev eslint vue-eslint-parser
 
 - Requires Node.js 6.5.0 or later.
 - Requires ESLint 5.0.0 or later.
+- Requires `babel-eslint` 8.1.1 or later if you want it. (optional)
+- Requires `typescript-eslint-parser` 21.0.0 or later if you want it. (optional)
 
 ## 📖 Usage
 
@@ -84,9 +86,6 @@ For example:
     }
 }
 ```
-
-- If you use with `babel-eslint`, use `babel-eslint@>=8.1.1`.
-- If you use `typescript-eslint-parser`, the location of original nodes can be wrong. Waiting for `typescript-eslint-parser` to support [parseResult.visitorKeys](https://eslint.org/docs/developer-guide/working-with-plugins#working-with-custom-parsers).
 
 If the `parserOptions.parser` is `false`, the `vue-eslint-parser` skips parsing `<script>` tags completely.
 This is useful for people who use the language ESLint community doesn't provide custom parser implementation.
