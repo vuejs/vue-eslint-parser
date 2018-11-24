@@ -1,0 +1,121 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <test-component>\n        <div slot-scope=\"foo = 1\">{{foo}}</div>\n    </test-component>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<test-component>\n        <div slot-scope=\"foo = 1\">{{foo}}</div>\n    </test-component>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<test-component>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<div slot-scope=\"foo = 1\">{{foo}}</div>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<div slot-scope=\"foo = 1\">",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "slot-scope=\"foo = 1\"",
+                                        "children": [
+                                            {
+                                                "type": "VDirectiveKey",
+                                                "text": "slot-scope",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "\"foo = 1\"",
+                                                "children": [
+                                                    {
+                                                        "type": "VSlotScopeExpression",
+                                                        "text": "foo = 1",
+                                                        "children": [
+                                                            {
+                                                                "type": "AssignmentPattern",
+                                                                "text": "foo = 1",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "foo",
+                                                                        "children": []
+                                                                    },
+                                                                    {
+                                                                        "type": "Literal",
+                                                                        "text": "1",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VExpressionContainer",
+                                "text": "{{foo}}",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "foo",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</div>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</test-component>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,82 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <my-component slot-scope=\"a, b\">\n        {{a}}\n    </my-component>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<my-component slot-scope=\"a, b\">\n        {{a}}\n    </my-component>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<my-component slot-scope=\"a, b\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "slot-scope=\"a, b\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "slot-scope",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"a, b\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{a}}",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "a",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</my-component>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

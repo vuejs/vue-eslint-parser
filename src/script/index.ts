@@ -600,6 +600,15 @@ export function parseSlotScopeExpression(
         tokens.pop()
         tokens.pop()
 
+        // Verify syntax.
+        const extraToken = tokens.find(t => t.range[0] >= id.range[1])
+        if (extraToken) {
+            throwUnexpectedTokenError(extraToken.value, extraToken)
+        }
+        if (id.type === "RestElement") {
+            throwUnexpectedTokenError("...", id)
+        }
+
         return { expression, tokens, comments, references, variables }
     } catch (err) {
         return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
