@@ -680,7 +680,7 @@ export function parseExpression(
             ret.references.push(...retF.references)
         }
 
-        prevLoc += 1 + filterCodes.length
+        prevLoc += 1 + filterCode.length
     }
 
     // Update range.

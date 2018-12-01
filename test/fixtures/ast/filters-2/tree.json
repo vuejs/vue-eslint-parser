@@ -28,7 +28,7 @@
                         "children": [
                             {
                                 "type": "VFilterSequenceExpression",
-                                "text": "value | f1 | f2() | f3(",
+                                "text": "value | f1 | f2() | f3(ref)",
                                 "children": [
                                     {
                                         "type": "Identifier",
@@ -48,27 +48,27 @@
                                     },
                                     {
                                         "type": "VFilter",
-                                        "text": " f2(",
+                                        "text": "f2()",
                                         "children": [
                                             {
                                                 "type": "Identifier",
-                                                "text": " f",
+                                                "text": "f2",
                                                 "children": []
                                             }
                                         ]
                                     },
                                     {
                                         "type": "VFilter",
-                                        "text": ") | f3(",
+                                        "text": "f3(ref)",
                                         "children": [
                                             {
                                                 "type": "Identifier",
-                                                "text": ") ",
+                                                "text": "f3",
                                                 "children": []
                                             },
                                             {
                                                 "type": "Identifier",
-                                                "text": " f3",
+                                                "text": "ref",
                                                 "children": []
                                             }
                                         ]

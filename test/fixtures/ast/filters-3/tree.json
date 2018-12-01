@@ -1,0 +1,111 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div :attr=\"value | f1 | f2() | f3(ref)\"></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div :attr=\"value | f1 | f2() | f3(ref)\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div :attr=\"value | f1 | f2() | f3(ref)\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":attr=\"value | f1 | f2() | f3(ref)\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":attr",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"value | f1 | f2() | f3(ref)\"",
+                                        "children": [
+                                            {
+                                                "type": "VFilterSequenceExpression",
+                                                "text": "value | f1 | f2() | f3(ref)",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "value",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VFilter",
+                                                        "text": "f1",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "f1",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "VFilter",
+                                                        "text": "f2()",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "f2",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "VFilter",
+                                                        "text": "f3(ref)",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "f3",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "ref",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
