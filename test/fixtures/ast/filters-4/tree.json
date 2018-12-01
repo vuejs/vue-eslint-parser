@@ -1,0 +1,84 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div :attr=\"\n        value\n            | filter\n    \"></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div :attr=\"\n        value\n            | filter\n    \"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div :attr=\"\n        value\n            | filter\n    \">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":attr=\"\n        value\n            | filter\n    \"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":attr",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"\n        value\n            | filter\n    \"",
+                                        "children": [
+                                            {
+                                                "type": "VFilterSequenceExpression",
+                                                "text": "value\n            | filter",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "value",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VFilter",
+                                                        "text": "filter",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "filter",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

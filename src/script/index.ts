@@ -461,16 +461,15 @@ function parseFilter(
                 range: [callee.range[0], callee.range[1] - 2],
                 loc: {
                     start: callee.loc.start,
-                    end: {
-                        line: callee.loc.end.line,
-                        column: callee.loc.end.column - 2,
-                    },
+                    end: locationCalculator.getLocation(
+                        callee.range[1] - callee.range[0] - 1,
+                    ),
                 },
                 name: String(callee.value),
             }
             tokens.push({
                 type: "Identifier",
-                value: calleeCode,
+                value: calleeCode.trim(),
                 range: expression.callee.range,
                 loc: expression.callee.loc,
             })
