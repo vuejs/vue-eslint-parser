@@ -1,0 +1,88 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div>{{ user.create_time | luxon:locale('short') }}</div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>{{ user.create_time | luxon:locale('short') }}</div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{ user.create_time | luxon:locale('short') }}",
+                        "children": [
+                            {
+                                "type": "VFilterSequenceExpression",
+                                "text": "user.create_time | luxon:locale('short')",
+                                "children": [
+                                    {
+                                        "type": "MemberExpression",
+                                        "text": "user.create_time",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "user",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "Identifier",
+                                                "text": "create_time",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VFilter",
+                                        "text": "luxon:locale('short')",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "luxon:locale",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "Literal",
+                                                "text": "'short'",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

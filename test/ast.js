@@ -108,6 +108,16 @@ function getTree(source) {
 }
 
 /**
+ * Convert a given node to string.
+ * @param {Node} node The node to make string expression.
+ * @param {string} source The source code.
+ * @returns {string} The string expression of the node.
+ */
+function nodeToString(node, source) {
+    return node ? `${node.type}[${source.slice(...node.range)}]` : "undefined"
+}
+
+/**
  * Validate the parent property of every node.
  * @param {string} source The source code.
  * @returns {void}
@@ -120,7 +130,17 @@ function validateParent(source) {
         ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
                 if (stack.length >= 1) {
-                    assert(node.parent === lodash.last(stack))
+                    const parent = lodash.last(stack)
+                    assert(
+                        node.parent === parent,
+                        `The parent of ${nodeToString(
+                            node,
+                            source
+                        )} should be ${nodeToString(
+                            parent,
+                            source
+                        )}, but got ${nodeToString(node.parent, source)}`
+                    )
                 }
                 stack.push(node)
             },

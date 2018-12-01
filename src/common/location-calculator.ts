@@ -107,7 +107,7 @@ export class LocationCalculator {
      * Modify the location information of the given node with using the base offset and gaps of this calculator.
      * @param node The node to modify their location.
      */
-    public fixLocation(node: HasLocation): void {
+    public fixLocation<T extends HasLocation>(node: T): T {
         const range = node.range
         const loc = node.loc
         const gap0 = this._getGap(range[0])
@@ -129,6 +129,8 @@ export class LocationCalculator {
             }
             loc.end = this._getLocation(range[1])
         }
+
+        return node
     }
 
     /**

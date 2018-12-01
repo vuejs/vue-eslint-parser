@@ -7,6 +7,7 @@ import sortedIndexBy from "lodash/sortedIndexBy"
 import sortedLastIndexBy from "lodash/sortedLastIndexBy"
 import {
     DirectiveKeyParts,
+    ESLintExpression,
     ParseError,
     Reference,
     Token,
@@ -16,9 +17,13 @@ import {
     VDocumentFragment,
     VElement,
     VExpressionContainer,
+    VFilterSequenceExpression,
+    VForExpression,
     VIdentifier,
     VLiteral,
     VNode,
+    VOnExpression,
+    VSlotScopeExpression,
 } from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
@@ -265,14 +270,26 @@ function parseAttributeValue(
     node: VLiteral,
     tagName: string,
     directiveKey: VDirectiveKey,
-): ExpressionParseResult {
+): ExpressionParseResult<
+    | ESLintExpression
+    | VFilterSequenceExpression
+    | VForExpression
+    | VOnExpression
+    | VSlotScopeExpression
+> {
     const firstChar = code[node.range[0]]
     const quoted = firstChar === '"' || firstChar === "'"
     const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
         node.range[0] + (quoted ? 1 : 0),
     )
 
-    let result: ExpressionParseResult
+    let result: ExpressionParseResult<
+        | ESLintExpression
+        | VFilterSequenceExpression
+        | VForExpression
+        | VOnExpression
+        | VSlotScopeExpression
+    >
     if (quoted && node.value === "") {
         result = {
             expression: null,

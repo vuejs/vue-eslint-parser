@@ -17,6 +17,8 @@ const KEYS = Evk.unionWith({
     VElement: ["startTag", "children", "endTag"],
     VEndTag: [],
     VExpressionContainer: ["expression"],
+    VFilter: ["callee", "arguments"],
+    VFilterSequenceExpression: ["expression", "filters"],
     VForExpression: ["left", "right"],
     VIdentifier: [],
     VLiteral: [],

@@ -20,12 +20,15 @@ import {
     ESLintProgram,
     ESLintVariableDeclaration,
     ESLintUnaryExpression,
+    HasLocation,
     Node,
     ParseError,
     Reference,
     Token,
     Variable,
     VElement,
+    VFilter,
+    VFilterSequenceExpression,
     VForExpression,
     VOnExpression,
     VSlotScopeExpression,
@@ -182,7 +185,7 @@ function throwEmptyError(
  * @param name The token name.
  * @param token The token object to get that location.
  */
-function throwUnexpectedTokenError(name: string, token: Node | Token): never {
+function throwUnexpectedTokenError(name: string, token: HasLocation): never {
     const err = new ParseError(
         `Unexpected token '${name}'.`,
         undefined,
@@ -240,16 +243,279 @@ function parseScriptFragment(
     }
 }
 
+const validDivisionCharRE = /[\w).+\-_$\]]/u
+
+/**
+ * This is a fork of https://github.com/vuejs/vue/blob/2686818beb5728e3b7aa22f47a3b3f0d39d90c8e/src/compiler/parser/filter-parser.js
+ * @param exp the expression to process filters.
+ */
+//eslint-disable-next-line complexity, require-jsdoc
+function splitFilters(exp: string): string[] {
+    const result: string[] = []
+    let inSingle = false
+    let inDouble = false
+    let inTemplateString = false
+    let inRegex = false
+    let curly = 0
+    let square = 0
+    let paren = 0
+    let lastFilterIndex = 0
+    let c = 0
+    let prev = 0
+
+    for (let i = 0; i < exp.length; i++) {
+        prev = c
+        c = exp.charCodeAt(i)
+        if (inSingle) {
+            if (c === 0x27 && prev !== 0x5c) {
+                inSingle = false
+            }
+        } else if (inDouble) {
+            if (c === 0x22 && prev !== 0x5c) {
+                inDouble = false
+            }
+        } else if (inTemplateString) {
+            if (c === 0x60 && prev !== 0x5c) {
+                inTemplateString = false
+            }
+        } else if (inRegex) {
+            if (c === 0x2f && prev !== 0x5c) {
+                inRegex = false
+            }
+        } else if (
+            c === 0x7c && // pipe
+            exp.charCodeAt(i + 1) !== 0x7c &&
+            exp.charCodeAt(i - 1) !== 0x7c &&
+            !curly &&
+            !square &&
+            !paren
+        ) {
+            result.push(exp.slice(lastFilterIndex, i))
+            lastFilterIndex = i + 1
+        } else {
+            switch (c) {
+                case 0x22: // "
+                    inDouble = true
+                    break
+                case 0x27: // '
+                    inSingle = true
+                    break
+                case 0x60: // `
+                    inTemplateString = true
+                    break
+                case 0x28: // (
+                    paren++
+                    break
+                case 0x29: // )
+                    paren--
+                    break
+                case 0x5b: // [
+                    square++
+                    break
+                case 0x5d: // ]
+                    square--
+                    break
+                case 0x7b: // {
+                    curly++
+                    break
+                case 0x7d: // }
+                    curly--
+                    break
+                // no default
+            }
+            if (c === 0x2f) {
+                // /
+                let j = i - 1
+                let p
+                // find first non-whitespace prev char
+                for (; j >= 0; j--) {
+                    p = exp.charAt(j)
+                    if (p !== " ") {
+                        break
+                    }
+                }
+                if (!p || !validDivisionCharRE.test(p)) {
+                    inRegex = true
+                }
+            }
+        }
+    }
+
+    result.push(exp.slice(lastFilterIndex))
+
+    return result
+}
+
+/**
+ * Parse the source code of inline scripts.
+ * @param code The source code of inline scripts.
+ * @param locationCalculator The location calculator for the inline script.
+ * @param parserOptions The parser options.
+ * @returns The result of parsing.
+ */
+function parseExpressionBody(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: any,
+    allowEmpty = false,
+): ExpressionParseResult<ESLintExpression> {
+    debug('[script] parse expression: "0(%s)"', code)
+
+    try {
+        const ast = parseScriptFragment(
+            `0(${code})`,
+            locationCalculator.getSubCalculatorAfter(-2),
+            parserOptions,
+        ).ast
+        const tokens = ast.tokens || []
+        const comments = ast.comments || []
+        const references = analyzeExternalReferences(ast, parserOptions)
+        const statement = ast.body[0] as ESLintExpressionStatement
+        const callExpression = statement.expression as ESLintCallExpression
+        const expression = callExpression.arguments[0]
+
+        if (!allowEmpty && !expression) {
+            return throwEmptyError(locationCalculator, "an expression")
+        }
+        if (expression && expression.type === "SpreadElement") {
+            return throwUnexpectedTokenError("...", expression)
+        }
+        if (callExpression.arguments[1]) {
+            const node = callExpression.arguments[1]
+            return throwUnexpectedTokenError(
+                ",",
+                getCommaTokenBeforeNode(tokens, node) || node,
+            )
+        }
+
+        // Remove parens.
+        tokens.shift()
+        tokens.shift()
+        tokens.pop()
+
+        return { expression, tokens, comments, references, variables: [] }
+    } catch (err) {
+        return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
+    }
+}
+
+/**
+ * Parse the source code of inline scripts.
+ * @param code The source code of inline scripts.
+ * @param locationCalculator The location calculator for the inline script.
+ * @param parserOptions The parser options.
+ * @returns The result of parsing.
+ */
+function parseFilter(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: any,
+): ExpressionParseResult<VFilter> | null {
+    debug('[script] parse filter: "%s"', code)
+
+    try {
+        const expression: VFilter = {
+            type: "VFilter",
+            parent: null as any,
+            range: [0, 0],
+            loc: {} as any,
+            callee: null as any,
+            arguments: [],
+        }
+        const tokens: Token[] = []
+        const comments: Token[] = []
+        const references: Reference[] = []
+
+        // Parse the callee.
+        const paren = code.indexOf("(")
+        const calleeCode = paren === -1 ? code : code.slice(0, paren)
+        const argsCode = paren === -1 ? null : code.slice(paren)
+
+        // Parse the callee.
+        if (calleeCode.trim()) {
+            const spaces = /^\s*/u.exec(calleeCode)![0]
+            const { ast } = parseScriptFragment(
+                `${spaces}"${calleeCode.trim()}"`,
+                locationCalculator,
+                parserOptions,
+            )
+            const statement = ast.body[0] as ESLintExpressionStatement
+            const callee = statement.expression
+            if (callee.type !== "Literal") {
+                const { loc, range } = ast.tokens![0]
+                return throwUnexpectedTokenError('"', {
+                    range: [range[1] - 1, range[1]],
+                    loc: {
+                        start: {
+                            line: loc.end.line,
+                            column: loc.end.column - 1,
+                        },
+                        end: loc.end,
+                    },
+                })
+            }
+
+            expression.callee = {
+                type: "Identifier",
+                parent: expression,
+                range: [callee.range[0], callee.range[1] - 2],
+                loc: {
+                    start: callee.loc.start,
+                    end: {
+                        line: callee.loc.end.line,
+                        column: callee.loc.end.column - 2,
+                    },
+                },
+                name: String(callee.value),
+            }
+            tokens.push({
+                type: "Identifier",
+                value: calleeCode,
+                range: expression.callee.range,
+                loc: expression.callee.loc,
+            })
+        } else {
+            return throwEmptyError(locationCalculator, "a filter name")
+        }
+
+        // Parse the arguments.
+        if (argsCode != null) {
+            const { ast } = parseScriptFragment(
+                `0${argsCode}`,
+                locationCalculator.getSubCalculatorAfter(paren - 1),
+                parserOptions,
+            )
+            const statement = ast.body[0] as ESLintExpressionStatement
+            const callExpression = statement.expression as ESLintCallExpression
+
+            ast.tokens!.shift()
+
+            for (const argument of callExpression.arguments) {
+                argument.parent = expression
+                expression.arguments.push(argument)
+            }
+            tokens.push(...ast.tokens!)
+            comments.push(...ast.comments!)
+            references.push(...analyzeExternalReferences(ast, parserOptions))
+        }
+
+        // Update range.
+        const firstToken = tokens[0]
+        const lastToken = last(tokens)!
+        expression.range = [firstToken.range[0], lastToken.range[1]]
+        expression.loc = { start: firstToken.loc.start, end: lastToken.loc.end }
+
+        return { expression, tokens, comments, references, variables: [] }
+    } catch (err) {
+        return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
+    }
+}
+
 /**
  * The result of parsing expressions.
  */
-export interface ExpressionParseResult {
-    expression:
-        | ESLintExpression
-        | VForExpression
-        | VOnExpression
-        | VSlotScopeExpression
-        | null
+export interface ExpressionParseResult<T extends Node> {
+    expression: T | null
     tokens: Token[]
     comments: Token[]
     references: Reference[]
@@ -349,45 +615,80 @@ export function parseExpression(
     locationCalculator: LocationCalculator,
     parserOptions: any,
     allowEmpty = false,
-): ExpressionParseResult {
-    debug('[script] parse expression: "0(%s)"', code)
+): ExpressionParseResult<ESLintExpression | VFilterSequenceExpression> {
+    debug('[script] parse expression: "%s"', code)
 
-    try {
-        const ast = parseScriptFragment(
-            `0(${code})`,
-            locationCalculator.getSubCalculatorAfter(-2),
+    const [mainCode, ...filterCodes] = splitFilters(code)
+    if (filterCodes.length === 0) {
+        return parseExpressionBody(
+            code,
+            locationCalculator,
             parserOptions,
-        ).ast
-        const tokens = ast.tokens || []
-        const comments = ast.comments || []
-        const references = analyzeExternalReferences(ast, parserOptions)
-        const statement = ast.body[0] as ESLintExpressionStatement
-        const callExpression = statement.expression as ESLintCallExpression
-        const expression = callExpression.arguments[0]
-
-        if (!allowEmpty && !expression) {
-            return throwEmptyError(locationCalculator, "an expression")
-        }
-        if (expression && expression.type === "SpreadElement") {
-            return throwUnexpectedTokenError("...", expression)
-        }
-        if (callExpression.arguments[1]) {
-            const node = callExpression.arguments[1]
-            return throwUnexpectedTokenError(
-                ",",
-                getCommaTokenBeforeNode(tokens, node) || node,
-            )
-        }
-
-        // Remove parens.
-        tokens.shift()
-        tokens.shift()
-        tokens.pop()
-
-        return { expression, tokens, comments, references, variables: [] }
-    } catch (err) {
-        return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
+            allowEmpty,
+        )
     }
+
+    // Parse expression
+    const retB = parseExpressionBody(
+        mainCode,
+        locationCalculator,
+        parserOptions,
+    )
+    if (!retB.expression) {
+        return retB
+    }
+    const ret = (retB as unknown) as ExpressionParseResult<
+        VFilterSequenceExpression
+    >
+
+    ret.expression = {
+        type: "VFilterSequenceExpression",
+        parent: null as any,
+        expression: retB.expression,
+        filters: [],
+        range: retB.expression.range.slice(0) as [number, number],
+        loc: Object.assign({}, retB.expression.loc),
+    }
+    ret.expression.expression.parent = ret.expression
+
+    // Parse filters
+    let prevLoc = mainCode.length
+    for (const filterCode of filterCodes) {
+        // Pipe token.
+        ret.tokens.push(
+            locationCalculator.fixLocation({
+                type: "Punctuator",
+                value: "|",
+                range: [prevLoc, prevLoc + 1],
+                loc: {} as any,
+            }),
+        )
+
+        // Parse a filter
+        const retF = parseFilter(
+            filterCode,
+            locationCalculator.getSubCalculatorAfter(prevLoc + 1),
+            parserOptions,
+        )
+        if (retF) {
+            if (retF.expression) {
+                ret.expression.filters.push(retF.expression)
+                retF.expression.parent = ret.expression
+            }
+            ret.tokens.push(...retF.tokens)
+            ret.comments.push(...retF.comments)
+            ret.references.push(...retF.references)
+        }
+
+        prevLoc += 1 + filterCodes.length
+    }
+
+    // Update range.
+    const lastToken = last(ret.tokens)!
+    ret.expression.range[1] = lastToken.range[1]
+    ret.expression.loc.end = lastToken.loc.end
+
+    return ret
 }
 
 /**
@@ -401,7 +702,7 @@ export function parseVForExpression(
     code: string,
     locationCalculator: LocationCalculator,
     parserOptions: any,
-): ExpressionParseResult {
+): ExpressionParseResult<VForExpression> {
     const processedCode = replaceAliasParens(code)
     debug('[script] parse v-for expression: "for(%s);"', processedCode)
 
@@ -483,7 +784,7 @@ export function parseVOnExpression(
     code: string,
     locationCalculator: LocationCalculator,
     parserOptions: any,
-): ExpressionParseResult {
+): ExpressionParseResult<VOnExpression> {
     debug('[script] parse v-on expression: "void function($event){%s}"', code)
 
     if (code.trim() === "") {
@@ -556,7 +857,7 @@ export function parseSlotScopeExpression(
     code: string,
     locationCalculator: LocationCalculator,
     parserOptions: any,
-): ExpressionParseResult {
+): ExpressionParseResult<VSlotScopeExpression> {
     debug('[script] parse slot-scope expression: "void function(%s) {}"', code)
 
     if (code.trim() === "") {
