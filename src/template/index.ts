@@ -319,6 +319,13 @@ function parseAttributeValue(
             locationCalculator,
             parserOptions,
         )
+    } else if (directiveKey.name === "bind") {
+        result = parseExpression(
+            node.value,
+            locationCalculator,
+            parserOptions,
+            { allowFilters: true },
+        )
     } else {
         result = parseExpression(node.value, locationCalculator, parserOptions)
     }
@@ -483,7 +490,7 @@ export function processMustache(
             mustache.value,
             locationCalculator,
             parserOptions,
-            true,
+            { allowEmpty: true, allowFilters: true },
         )
 
         node.expression = ret.expression || null

@@ -613,11 +613,13 @@ export function parseExpression(
     code: string,
     locationCalculator: LocationCalculator,
     parserOptions: any,
-    allowEmpty = false,
+    { allowEmpty = false, allowFilters = false } = {},
 ): ExpressionParseResult<ESLintExpression | VFilterSequenceExpression> {
     debug('[script] parse expression: "%s"', code)
 
-    const [mainCode, ...filterCodes] = splitFilters(code)
+    const [mainCode, ...filterCodes] = allowFilters
+        ? splitFilters(code)
+        : [code]
     if (filterCodes.length === 0) {
         return parseExpressionBody(
             code,
