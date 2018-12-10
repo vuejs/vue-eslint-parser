@@ -1,0 +1,860 @@
+{
+    "type": "Program",
+    "start": 0,
+    "end": 0,
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 1,
+            "column": 0
+        }
+    },
+    "range": [
+        0,
+        0
+    ],
+    "body": [],
+    "sourceType": "script",
+    "comments": [],
+    "tokens": [],
+    "templateBody": {
+        "type": "VElement",
+        "range": [
+            0,
+            74
+        ],
+        "loc": {
+            "start": {
+                "line": 1,
+                "column": 0
+            },
+            "end": {
+                "line": 3,
+                "column": 11
+            }
+        },
+        "name": "template",
+        "rawName": "template",
+        "namespace": "http://www.w3.org/1999/xhtml",
+        "startTag": {
+            "type": "VStartTag",
+            "range": [
+                0,
+                10
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 10
+                }
+            },
+            "selfClosing": false,
+            "attributes": []
+        },
+        "children": [
+            {
+                "type": "VText",
+                "range": [
+                    10,
+                    15
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "VElement",
+                "range": [
+                    15,
+                    62
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 51
+                    }
+                },
+                "name": "button",
+                "rawName": "button",
+                "namespace": "http://www.w3.org/1999/xhtml",
+                "startTag": {
+                    "type": "VStartTag",
+                    "range": [
+                        15,
+                        53
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 2,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 2,
+                            "column": 42
+                        }
+                    },
+                    "selfClosing": false,
+                    "attributes": [
+                        {
+                            "type": "VAttribute",
+                            "range": [
+                                23,
+                                52
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 12
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 41
+                                }
+                            },
+                            "directive": true,
+                            "key": {
+                                "type": "VDirectiveKey",
+                                "range": [
+                                    23,
+                                    29
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 12
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 18
+                                    }
+                                },
+                                "name": "on",
+                                "argument": "click",
+                                "modifiers": [],
+                                "shorthand": true,
+                                "raw": {
+                                    "name": "on",
+                                    "argument": "click",
+                                    "modifiers": []
+                                }
+                            },
+                            "value": {
+                                "type": "VExpressionContainer",
+                                "range": [
+                                    30,
+                                    52
+                                ],
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 19
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 41
+                                    }
+                                },
+                                "expression": {
+                                    "type": "VOnExpression",
+                                    "range": [
+                                        31,
+                                        51
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "line": 2,
+                                            "column": 20
+                                        },
+                                        "end": {
+                                            "line": 2,
+                                            "column": 40
+                                        }
+                                    },
+                                    "body": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionExpression",
+                                                "start": 31,
+                                                "end": 51,
+                                                "loc": {
+                                                    "start": {
+                                                        "line": 2,
+                                                        "column": 20
+                                                    },
+                                                    "end": {
+                                                        "line": 2,
+                                                        "column": 40
+                                                    }
+                                                },
+                                                "range": [
+                                                    31,
+                                                    51
+                                                ],
+                                                "id": null,
+                                                "expression": false,
+                                                "generator": false,
+                                                "async": false,
+                                                "params": [],
+                                                "body": {
+                                                    "type": "BlockStatement",
+                                                    "start": 42,
+                                                    "end": 51,
+                                                    "loc": {
+                                                        "start": {
+                                                            "line": 2,
+                                                            "column": 31
+                                                        },
+                                                        "end": {
+                                                            "line": 2,
+                                                            "column": 40
+                                                        }
+                                                    },
+                                                    "range": [
+                                                        42,
+                                                        51
+                                                    ],
+                                                    "body": [
+                                                        {
+                                                            "type": "ExpressionStatement",
+                                                            "start": 44,
+                                                            "end": 49,
+                                                            "loc": {
+                                                                "start": {
+                                                                    "line": 2,
+                                                                    "column": 33
+                                                                },
+                                                                "end": {
+                                                                    "line": 2,
+                                                                    "column": 38
+                                                                }
+                                                            },
+                                                            "range": [
+                                                                44,
+                                                                49
+                                                            ],
+                                                            "expression": {
+                                                                "type": "CallExpression",
+                                                                "start": 44,
+                                                                "end": 49,
+                                                                "loc": {
+                                                                    "start": {
+                                                                        "line": 2,
+                                                                        "column": 33
+                                                                    },
+                                                                    "end": {
+                                                                        "line": 2,
+                                                                        "column": 38
+                                                                    }
+                                                                },
+                                                                "range": [
+                                                                    44,
+                                                                    49
+                                                                ],
+                                                                "callee": {
+                                                                    "type": "Identifier",
+                                                                    "start": 44,
+                                                                    "end": 47,
+                                                                    "loc": {
+                                                                        "start": {
+                                                                            "line": 2,
+                                                                            "column": 33
+                                                                        },
+                                                                        "end": {
+                                                                            "line": 2,
+                                                                            "column": 36
+                                                                        }
+                                                                    },
+                                                                    "range": [
+                                                                        44,
+                                                                        47
+                                                                    ],
+                                                                    "name": "act"
+                                                                },
+                                                                "arguments": []
+                                                            }
+                                                        }
+                                                    ]
+                                                }
+                                            },
+                                            "range": [
+                                                31,
+                                                51
+                                            ],
+                                            "loc": {
+                                                "start": {
+                                                    "line": 2,
+                                                    "column": 20
+                                                },
+                                                "end": {
+                                                    "line": 2,
+                                                    "column": 40
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "references": [
+                                    {
+                                        "id": {
+                                            "type": "Identifier",
+                                            "start": 44,
+                                            "end": 47,
+                                            "loc": {
+                                                "start": {
+                                                    "line": 2,
+                                                    "column": 33
+                                                },
+                                                "end": {
+                                                    "line": 2,
+                                                    "column": 36
+                                                }
+                                            },
+                                            "range": [
+                                                44,
+                                                47
+                                            ],
+                                            "name": "act"
+                                        },
+                                        "mode": "r"
+                                    },
+                                    {
+                                        "id": {
+                                            "type": "Identifier",
+                                            "start": 53,
+                                            "end": 59,
+                                            "loc": {
+                                                "start": {
+                                                    "line": 2,
+                                                    "column": 42
+                                                },
+                                                "end": {
+                                                    "line": 2,
+                                                    "column": 48
+                                                }
+                                            },
+                                            "range": [
+                                                53,
+                                                59
+                                            ],
+                                            "name": "$event"
+                                        },
+                                        "mode": "r"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "children": [],
+                "endTag": {
+                    "type": "VEndTag",
+                    "range": [
+                        53,
+                        62
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 2,
+                            "column": 42
+                        },
+                        "end": {
+                            "line": 2,
+                            "column": 51
+                        }
+                    }
+                },
+                "variables": []
+            },
+            {
+                "type": "VText",
+                "range": [
+                    62,
+                    63
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 51
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 0
+                    }
+                },
+                "value": "\n"
+            }
+        ],
+        "endTag": {
+            "type": "VEndTag",
+            "range": [
+                63,
+                74
+            ],
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 0
+                },
+                "end": {
+                    "line": 3,
+                    "column": 11
+                }
+            }
+        },
+        "variables": [],
+        "tokens": [
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    0,
+                    9
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 9
+                    }
+                },
+                "value": "template"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    9,
+                    10
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 9
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 10
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    10,
+                    15
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 4
+                    }
+                },
+                "value": "\n    "
+            },
+            {
+                "type": "HTMLTagOpen",
+                "range": [
+                    15,
+                    22
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 11
+                    }
+                },
+                "value": "button"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    23,
+                    29
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 18
+                    }
+                },
+                "value": "@click"
+            },
+            {
+                "type": "HTMLAssociation",
+                "range": [
+                    29,
+                    30
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 18
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 19
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    30,
+                    31
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 19
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 20
+                    }
+                },
+                "value": "\""
+            },
+            {
+                "type": "Keyword",
+                "value": "function",
+                "start": 31,
+                "end": 39,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 28
+                    }
+                },
+                "range": [
+                    31,
+                    39
+                ]
+            },
+            {
+                "type": "Punctuator",
+                "value": "(",
+                "start": 39,
+                "end": 40,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 28
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 29
+                    }
+                },
+                "range": [
+                    39,
+                    40
+                ]
+            },
+            {
+                "type": "Punctuator",
+                "value": ")",
+                "start": 40,
+                "end": 41,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 29
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 30
+                    }
+                },
+                "range": [
+                    40,
+                    41
+                ]
+            },
+            {
+                "type": "Punctuator",
+                "value": "{",
+                "start": 42,
+                "end": 43,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 31
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 32
+                    }
+                },
+                "range": [
+                    42,
+                    43
+                ]
+            },
+            {
+                "type": "Identifier",
+                "value": "act",
+                "start": 44,
+                "end": 47,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 33
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 36
+                    }
+                },
+                "range": [
+                    44,
+                    47
+                ]
+            },
+            {
+                "type": "Punctuator",
+                "value": "(",
+                "start": 47,
+                "end": 48,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 36
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 37
+                    }
+                },
+                "range": [
+                    47,
+                    48
+                ]
+            },
+            {
+                "type": "Punctuator",
+                "value": ")",
+                "start": 48,
+                "end": 49,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 37
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 38
+                    }
+                },
+                "range": [
+                    48,
+                    49
+                ]
+            },
+            {
+                "type": "Punctuator",
+                "value": "}",
+                "start": 50,
+                "end": 51,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 39
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 40
+                    }
+                },
+                "range": [
+                    50,
+                    51
+                ]
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    51,
+                    52
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 40
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 41
+                    }
+                },
+                "value": "\""
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    52,
+                    53
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 41
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 42
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    53,
+                    61
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 42
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 50
+                    }
+                },
+                "value": "button"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    61,
+                    62
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 50
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 51
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    62,
+                    63
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 51
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 0
+                    }
+                },
+                "value": "\n"
+            },
+            {
+                "type": "HTMLEndTagOpen",
+                "range": [
+                    63,
+                    73
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 10
+                    }
+                },
+                "value": "template"
+            },
+            {
+                "type": "HTMLTagClose",
+                "range": [
+                    73,
+                    74
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 11
+                    }
+                },
+                "value": ""
+            },
+            {
+                "type": "HTMLWhitespace",
+                "range": [
+                    74,
+                    75
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 11
+                    },
+                    "end": {
+                        "line": 4,
+                        "column": 0
+                    }
+                },
+                "value": "\n"
+            }
+        ],
+        "comments": [],
+        "errors": []
+    }
+}

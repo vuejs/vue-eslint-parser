@@ -46,6 +46,10 @@ import {
 const ALIAS_PARENS = /^(\s*)\(([\s\S]+)\)(\s*(?:in|of)\b[\s\S]+)$/u
 const DUMMY_PARENT: any = {}
 
+// Like Vue, it judges whether it is a function expression or not.
+// https://github.com/vuejs/vue/blob/0948d999f2fddf9f90991956493f976273c5da1f/src/compiler/codegen/events.js#L3
+const IS_FUNCTION_EXPRESSION = /^\s*([\w$_]+|\([^)]*?\))\s*=>|^function\s*\(/u
+
 /**
  * The interface of ESLint custom parsers.
  */
@@ -786,6 +790,33 @@ export function parseVOnExpression(
     locationCalculator: LocationCalculator,
     parserOptions: any,
 ): ExpressionParseResult<VOnExpression> {
+    const isFunctionExpression = IS_FUNCTION_EXPRESSION.test(code)
+    if (isFunctionExpression) {
+        return parseVOnExpressionForFunction(
+            code,
+            locationCalculator,
+            parserOptions,
+        )
+    }
+    return parseVOnExpressionForStatement(
+        code,
+        locationCalculator,
+        parserOptions,
+    )
+}
+
+/**
+ * Parse the source code of inline scripts.
+ * @param code The source code of inline scripts.
+ * @param locationCalculator The location calculator for the inline script.
+ * @param parserOptions The parser options.
+ * @returns The result of parsing.
+ */
+export function parseVOnExpressionForStatement(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: any,
+): ExpressionParseResult<VOnExpression> {
     debug('[script] parse v-on expression: "void function($event){%s}"', code)
 
     if (code.trim() === "") {
@@ -839,6 +870,76 @@ export function parseVOnExpression(
 
         // Remove braces.
         tokens.splice(0, 6)
+        tokens.pop()
+
+        return { expression, tokens, comments, references, variables: [] }
+    } catch (err) {
+        return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
+    }
+}
+
+/**
+ * Parse the source code of the function expression on `v-on`.
+ * @param code The source code of the function expression on `v-on`.
+ * @param locationCalculator The location calculator for the inline script.
+ * @param parserOptions The parser options.
+ * @returns The result of parsing.
+ */
+export function parseVOnExpressionForFunction(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: any,
+): ExpressionParseResult<VOnExpression> {
+    debug('[script] parse v-on expression: "(%s)($event)"', code)
+
+    if (code.trim() === "") {
+        throwEmptyError(locationCalculator, "statements")
+    }
+
+    try {
+        const ast = parseScriptFragment(
+            `(${code})($event)`,
+            locationCalculator.getSubCalculatorAfter(-1),
+            parserOptions,
+        ).ast
+        const references = analyzeExternalReferences(ast, parserOptions)
+        const outermostStatement = ast.body[0] as ESLintExpressionStatement
+        const functionDecl = (outermostStatement.expression as ESLintCallExpression)
+            .callee as ESLintFunctionExpression
+
+        const body: ESLintExpressionStatement = {
+            type: "ExpressionStatement",
+            expression: functionDecl,
+            range: [functionDecl.range[0], functionDecl.range[1]],
+            loc: {
+                start: functionDecl.loc.start,
+                end: functionDecl.loc.end,
+            },
+        }
+        const expression: VOnExpression = {
+            type: "VOnExpression",
+            range: [body.range[0], body.range[1]],
+            loc: {
+                start: body.loc.start,
+                end: body.loc.end,
+            },
+            parent: DUMMY_PARENT,
+            body: [body],
+        }
+        const tokens = ast.tokens || []
+        const comments = ast.comments || []
+
+        // Modify parent.
+        functionDecl.parent = body
+        body.parent = expression
+
+        // Remove braces.
+        // `(`
+        tokens.splice(0, 1)
+        // `)($event)`
+        tokens.pop()
+        tokens.pop()
+        tokens.pop()
         tokens.pop()
 
         return { expression, tokens, comments, references, variables: [] }
