@@ -892,9 +892,10 @@ export function parseVOnExpressionForFunction(
 ): ExpressionParseResult<VOnExpression> {
     debug('[script] parse v-on expression: "(%s)()"', code)
 
-    if (code.trim() === "") {
-        throwEmptyError(locationCalculator, "statements")
-    }
+    // already checked
+    // if (code.trim() === "") {
+    //     throwEmptyError(locationCalculator, "statements")
+    // }
 
     try {
         const ast = parseScriptFragment(
