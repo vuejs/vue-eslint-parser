@@ -909,12 +909,14 @@ export function parseVOnExpressionForFunction(
 
         const body: ESLintExpressionStatement = {
             type: "ExpressionStatement",
-            expression: functionDecl,
-            range: [functionDecl.range[0], functionDecl.range[1]],
+            start: functionDecl.start,
+            end: functionDecl.end,
             loc: {
                 start: functionDecl.loc.start,
                 end: functionDecl.loc.end,
             },
+            range: [functionDecl.range[0], functionDecl.range[1]],
+            expression: functionDecl,
         }
         const expression: VOnExpression = {
             type: "VOnExpression",
