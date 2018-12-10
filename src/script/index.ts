@@ -890,7 +890,7 @@ export function parseVOnExpressionForFunction(
     locationCalculator: LocationCalculator,
     parserOptions: any,
 ): ExpressionParseResult<VOnExpression> {
-    debug('[script] parse v-on expression: "(%s)($event)"', code)
+    debug('[script] parse v-on expression: "(%s)()"', code)
 
     if (code.trim() === "") {
         throwEmptyError(locationCalculator, "statements")
@@ -898,7 +898,7 @@ export function parseVOnExpressionForFunction(
 
     try {
         const ast = parseScriptFragment(
-            `(${code})($event)`,
+            `(${code})()`,
             locationCalculator.getSubCalculatorAfter(-1),
             parserOptions,
         ).ast
@@ -938,8 +938,7 @@ export function parseVOnExpressionForFunction(
         // Remove braces.
         // `(`
         tokens.splice(0, 1)
-        // `)($event)`
-        tokens.pop()
+        // `)()`
         tokens.pop()
         tokens.pop()
         tokens.pop()
