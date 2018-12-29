@@ -174,11 +174,9 @@
                                     }
                                 },
                                 "expression": {
-                                    "type": "VOnExpression",
-                                    "range": [
-                                        31,
-                                        41
-                                    ],
+                                    "type": "ArrowFunctionExpression",
+                                    "start": 31,
+                                    "end": 41,
                                     "loc": {
                                         "start": {
                                             "line": 2,
@@ -189,11 +187,19 @@
                                             "column": 30
                                         }
                                     },
-                                    "body": [
+                                    "range": [
+                                        31,
+                                        41
+                                    ],
+                                    "id": null,
+                                    "expression": true,
+                                    "generator": false,
+                                    "async": false,
+                                    "params": [
                                         {
-                                            "type": "ExpressionStatement",
+                                            "type": "Identifier",
                                             "start": 31,
-                                            "end": 41,
+                                            "end": 32,
                                             "loc": {
                                                 "start": {
                                                     "line": 2,
@@ -201,100 +207,56 @@
                                                 },
                                                 "end": {
                                                     "line": 2,
-                                                    "column": 30
+                                                    "column": 21
                                                 }
                                             },
                                             "range": [
                                                 31,
-                                                41
+                                                32
                                             ],
-                                            "expression": {
-                                                "type": "ArrowFunctionExpression",
-                                                "start": 31,
-                                                "end": 41,
-                                                "loc": {
-                                                    "start": {
-                                                        "line": 2,
-                                                        "column": 20
-                                                    },
-                                                    "end": {
-                                                        "line": 2,
-                                                        "column": 30
-                                                    }
-                                                },
-                                                "range": [
-                                                    31,
-                                                    41
-                                                ],
-                                                "id": null,
-                                                "expression": true,
-                                                "generator": false,
-                                                "async": false,
-                                                "params": [
-                                                    {
-                                                        "type": "Identifier",
-                                                        "start": 31,
-                                                        "end": 32,
-                                                        "loc": {
-                                                            "start": {
-                                                                "line": 2,
-                                                                "column": 20
-                                                            },
-                                                            "end": {
-                                                                "line": 2,
-                                                                "column": 21
-                                                            }
-                                                        },
-                                                        "range": [
-                                                            31,
-                                                            32
-                                                        ],
-                                                        "name": "e"
-                                                    }
-                                                ],
-                                                "body": {
-                                                    "type": "CallExpression",
-                                                    "start": 36,
-                                                    "end": 41,
-                                                    "loc": {
-                                                        "start": {
-                                                            "line": 2,
-                                                            "column": 25
-                                                        },
-                                                        "end": {
-                                                            "line": 2,
-                                                            "column": 30
-                                                        }
-                                                    },
-                                                    "range": [
-                                                        36,
-                                                        41
-                                                    ],
-                                                    "callee": {
-                                                        "type": "Identifier",
-                                                        "start": 36,
-                                                        "end": 39,
-                                                        "loc": {
-                                                            "start": {
-                                                                "line": 2,
-                                                                "column": 25
-                                                            },
-                                                            "end": {
-                                                                "line": 2,
-                                                                "column": 28
-                                                            }
-                                                        },
-                                                        "range": [
-                                                            36,
-                                                            39
-                                                        ],
-                                                        "name": "act"
-                                                    },
-                                                    "arguments": []
-                                                }
-                                            }
+                                            "name": "e"
                                         }
-                                    ]
+                                    ],
+                                    "body": {
+                                        "type": "CallExpression",
+                                        "start": 36,
+                                        "end": 41,
+                                        "loc": {
+                                            "start": {
+                                                "line": 2,
+                                                "column": 25
+                                            },
+                                            "end": {
+                                                "line": 2,
+                                                "column": 30
+                                            }
+                                        },
+                                        "range": [
+                                            36,
+                                            41
+                                        ],
+                                        "callee": {
+                                            "type": "Identifier",
+                                            "start": 36,
+                                            "end": 39,
+                                            "loc": {
+                                                "start": {
+                                                    "line": 2,
+                                                    "column": 25
+                                                },
+                                                "end": {
+                                                    "line": 2,
+                                                    "column": 28
+                                                }
+                                            },
+                                            "range": [
+                                                36,
+                                                39
+                                            ],
+                                            "name": "act"
+                                        },
+                                        "arguments": []
+                                    }
                                 },
                                 "references": [
                                     {

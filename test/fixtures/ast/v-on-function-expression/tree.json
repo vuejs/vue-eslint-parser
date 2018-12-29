@@ -35,37 +35,25 @@
                                         "text": "\"function() { act() }\"",
                                         "children": [
                                             {
-                                                "type": "VOnExpression",
+                                                "type": "FunctionExpression",
                                                 "text": "function() { act() }",
                                                 "children": [
                                                     {
-                                                        "type": "ExpressionStatement",
-                                                        "text": "function() { act() }",
+                                                        "type": "BlockStatement",
+                                                        "text": "{ act() }",
                                                         "children": [
                                                             {
-                                                                "type": "FunctionExpression",
-                                                                "text": "function() { act() }",
+                                                                "type": "ExpressionStatement",
+                                                                "text": "act()",
                                                                 "children": [
                                                                     {
-                                                                        "type": "BlockStatement",
-                                                                        "text": "{ act() }",
+                                                                        "type": "CallExpression",
+                                                                        "text": "act()",
                                                                         "children": [
                                                                             {
-                                                                                "type": "ExpressionStatement",
-                                                                                "text": "act()",
-                                                                                "children": [
-                                                                                    {
-                                                                                        "type": "CallExpression",
-                                                                                        "text": "act()",
-                                                                                        "children": [
-                                                                                            {
-                                                                                                "type": "Identifier",
-                                                                                                "text": "act",
-                                                                                                "children": []
-                                                                                            }
-                                                                                        ]
-                                                                                    }
-                                                                                ]
+                                                                                "type": "Identifier",
+                                                                                "text": "act",
+                                                                                "children": []
                                                                             }
                                                                         ]
                                                                     }

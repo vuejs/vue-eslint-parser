@@ -35,29 +35,17 @@
                                         "text": "\"() => act()\"",
                                         "children": [
                                             {
-                                                "type": "VOnExpression",
+                                                "type": "ArrowFunctionExpression",
                                                 "text": "() => act()",
                                                 "children": [
                                                     {
-                                                        "type": "ExpressionStatement",
-                                                        "text": "() => act()",
+                                                        "type": "CallExpression",
+                                                        "text": "act()",
                                                         "children": [
                                                             {
-                                                                "type": "ArrowFunctionExpression",
-                                                                "text": "() => act()",
-                                                                "children": [
-                                                                    {
-                                                                        "type": "CallExpression",
-                                                                        "text": "act()",
-                                                                        "children": [
-                                                                            {
-                                                                                "type": "Identifier",
-                                                                                "text": "act",
-                                                                                "children": []
-                                                                            }
-                                                                        ]
-                                                                    }
-                                                                ]
+                                                                "type": "Identifier",
+                                                                "text": "act",
+                                                                "children": []
                                                             }
                                                         ]
                                                     }

@@ -1,0 +1,111 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <button\n        @click=\"foo['bar']\"\n        @keydown=\"foo[0]\"\n    ></button>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button\n        @click=\"foo['bar']\"\n        @keydown=\"foo[0]\"\n    ></button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button\n        @click=\"foo['bar']\"\n        @keydown=\"foo[0]\"\n    >",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "@click=\"foo['bar']\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "@click",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"foo['bar']\"",
+                                        "children": [
+                                            {
+                                                "type": "MemberExpression",
+                                                "text": "foo['bar']",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "foo",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Literal",
+                                                        "text": "'bar'",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "@keydown=\"foo[0]\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "@keydown",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"foo[0]\"",
+                                        "children": [
+                                            {
+                                                "type": "MemberExpression",
+                                                "text": "foo[0]",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "foo",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Literal",
+                                                        "text": "0",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

@@ -24,7 +24,7 @@
         "type": "VElement",
         "range": [
             0,
-            65
+            62
         ],
         "loc": {
             "start": {
@@ -81,7 +81,7 @@
                 "type": "VElement",
                 "range": [
                     15,
-                    53
+                    50
                 ],
                 "loc": {
                     "start": {
@@ -90,7 +90,7 @@
                     },
                     "end": {
                         "line": 2,
-                        "column": 42
+                        "column": 39
                     }
                 },
                 "name": "button",
@@ -100,7 +100,7 @@
                     "type": "VStartTag",
                     "range": [
                         15,
-                        44
+                        41
                     ],
                     "loc": {
                         "start": {
@@ -109,7 +109,7 @@
                         },
                         "end": {
                             "line": 2,
-                            "column": 33
+                            "column": 30
                         }
                     },
                     "selfClosing": false,
@@ -118,7 +118,7 @@
                             "type": "VAttribute",
                             "range": [
                                 23,
-                                43
+                                40
                             ],
                             "loc": {
                                 "start": {
@@ -127,7 +127,7 @@
                                 },
                                 "end": {
                                     "line": 2,
-                                    "column": 32
+                                    "column": 29
                                 }
                             },
                             "directive": true,
@@ -161,7 +161,7 @@
                                 "type": "VExpressionContainer",
                                 "range": [
                                     30,
-                                    43
+                                    40
                                 ],
                                 "loc": {
                                     "start": {
@@ -170,13 +170,13 @@
                                     },
                                     "end": {
                                         "line": 2,
-                                        "column": 32
+                                        "column": 29
                                     }
                                 },
                                 "expression": {
-                                    "type": "ArrowFunctionExpression",
+                                    "type": "MemberExpression",
                                     "start": 31,
-                                    "end": 42,
+                                    "end": 39,
                                     "loc": {
                                         "start": {
                                             "line": 2,
@@ -184,80 +184,99 @@
                                         },
                                         "end": {
                                             "line": 2,
-                                            "column": 31
+                                            "column": 28
                                         }
                                     },
                                     "range": [
                                         31,
-                                        42
+                                        39
                                     ],
-                                    "id": null,
-                                    "expression": true,
-                                    "generator": false,
-                                    "async": false,
-                                    "params": [],
-                                    "body": {
-                                        "type": "CallExpression",
-                                        "start": 37,
-                                        "end": 42,
+                                    "object": {
+                                        "type": "Identifier",
+                                        "start": 31,
+                                        "end": 34,
                                         "loc": {
                                             "start": {
                                                 "line": 2,
-                                                "column": 26
+                                                "column": 20
                                             },
                                             "end": {
                                                 "line": 2,
-                                                "column": 31
+                                                "column": 23
                                             }
                                         },
                                         "range": [
-                                            37,
-                                            42
+                                            31,
+                                            34
                                         ],
-                                        "callee": {
-                                            "type": "Identifier",
-                                            "start": 37,
-                                            "end": 40,
-                                            "loc": {
-                                                "start": {
-                                                    "line": 2,
-                                                    "column": 26
-                                                },
-                                                "end": {
-                                                    "line": 2,
-                                                    "column": 29
-                                                }
+                                        "name": "foo"
+                                    },
+                                    "property": {
+                                        "type": "Identifier",
+                                        "start": 35,
+                                        "end": 38,
+                                        "loc": {
+                                            "start": {
+                                                "line": 2,
+                                                "column": 24
                                             },
-                                            "range": [
-                                                37,
-                                                40
-                                            ],
-                                            "name": "act"
+                                            "end": {
+                                                "line": 2,
+                                                "column": 27
+                                            }
                                         },
-                                        "arguments": []
-                                    }
+                                        "range": [
+                                            35,
+                                            38
+                                        ],
+                                        "name": "bar"
+                                    },
+                                    "computed": true
                                 },
                                 "references": [
                                     {
                                         "id": {
                                             "type": "Identifier",
-                                            "start": 37,
-                                            "end": 40,
+                                            "start": 31,
+                                            "end": 34,
                                             "loc": {
                                                 "start": {
                                                     "line": 2,
-                                                    "column": 26
+                                                    "column": 20
                                                 },
                                                 "end": {
                                                     "line": 2,
-                                                    "column": 29
+                                                    "column": 23
                                                 }
                                             },
                                             "range": [
-                                                37,
-                                                40
+                                                31,
+                                                34
                                             ],
-                                            "name": "act"
+                                            "name": "foo"
+                                        },
+                                        "mode": "r"
+                                    },
+                                    {
+                                        "id": {
+                                            "type": "Identifier",
+                                            "start": 35,
+                                            "end": 38,
+                                            "loc": {
+                                                "start": {
+                                                    "line": 2,
+                                                    "column": 24
+                                                },
+                                                "end": {
+                                                    "line": 2,
+                                                    "column": 27
+                                                }
+                                            },
+                                            "range": [
+                                                35,
+                                                38
+                                            ],
+                                            "name": "bar"
                                         },
                                         "mode": "r"
                                     }
@@ -270,17 +289,17 @@
                 "endTag": {
                     "type": "VEndTag",
                     "range": [
-                        44,
-                        53
+                        41,
+                        50
                     ],
                     "loc": {
                         "start": {
                             "line": 2,
-                            "column": 33
+                            "column": 30
                         },
                         "end": {
                             "line": 2,
-                            "column": 42
+                            "column": 39
                         }
                     }
                 },
@@ -289,13 +308,13 @@
             {
                 "type": "VText",
                 "range": [
-                    53,
-                    54
+                    50,
+                    51
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 42
+                        "column": 39
                     },
                     "end": {
                         "line": 3,
@@ -308,8 +327,8 @@
         "endTag": {
             "type": "VEndTag",
             "range": [
-                54,
-                65
+                51,
+                62
             ],
             "loc": {
                 "start": {
@@ -451,10 +470,10 @@
                 "value": "\""
             },
             {
-                "type": "Punctuator",
-                "value": "(",
+                "type": "Identifier",
+                "value": "foo",
                 "start": 31,
-                "end": 32,
+                "end": 34,
                 "loc": {
                     "start": {
                         "line": 2,
@@ -462,39 +481,19 @@
                     },
                     "end": {
                         "line": 2,
-                        "column": 21
+                        "column": 23
                     }
                 },
                 "range": [
                     31,
-                    32
+                    34
                 ]
             },
             {
                 "type": "Punctuator",
-                "value": ")",
-                "start": 32,
-                "end": 33,
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 21
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 22
-                    }
-                },
-                "range": [
-                    32,
-                    33
-                ]
-            },
-            {
-                "type": "Punctuator",
-                "value": "=>",
+                "value": "[",
                 "start": 34,
-                "end": 36,
+                "end": 35,
                 "loc": {
                     "start": {
                         "line": 2,
@@ -502,88 +501,68 @@
                     },
                     "end": {
                         "line": 2,
-                        "column": 25
+                        "column": 24
                     }
                 },
                 "range": [
                     34,
-                    36
+                    35
                 ]
             },
             {
                 "type": "Identifier",
-                "value": "act",
-                "start": 37,
-                "end": 40,
+                "value": "bar",
+                "start": 35,
+                "end": 38,
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 26
+                        "column": 24
                     },
                     "end": {
                         "line": 2,
-                        "column": 29
+                        "column": 27
                     }
                 },
                 "range": [
-                    37,
+                    35,
+                    38
+                ]
+            },
+            {
+                "type": "Punctuator",
+                "value": "]",
+                "start": 38,
+                "end": 39,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 27
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 28
+                    }
+                },
+                "range": [
+                    38,
+                    39
+                ]
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    39,
                     40
-                ]
-            },
-            {
-                "type": "Punctuator",
-                "value": "(",
-                "start": 40,
-                "end": 41,
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 29
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 30
-                    }
-                },
-                "range": [
-                    40,
-                    41
-                ]
-            },
-            {
-                "type": "Punctuator",
-                "value": ")",
-                "start": 41,
-                "end": 42,
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 30
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 31
-                    }
-                },
-                "range": [
-                    41,
-                    42
-                ]
-            },
-            {
-                "type": "Punctuator",
-                "range": [
-                    42,
-                    43
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 31
+                        "column": 28
                     },
                     "end": {
                         "line": 2,
-                        "column": 32
+                        "column": 29
                     }
                 },
                 "value": "\""
@@ -591,17 +570,17 @@
             {
                 "type": "HTMLTagClose",
                 "range": [
-                    43,
-                    44
+                    40,
+                    41
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 32
+                        "column": 29
                     },
                     "end": {
                         "line": 2,
-                        "column": 33
+                        "column": 30
                     }
                 },
                 "value": ""
@@ -609,17 +588,17 @@
             {
                 "type": "HTMLEndTagOpen",
                 "range": [
-                    44,
-                    52
+                    41,
+                    49
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 33
+                        "column": 30
                     },
                     "end": {
                         "line": 2,
-                        "column": 41
+                        "column": 38
                     }
                 },
                 "value": "button"
@@ -627,17 +606,17 @@
             {
                 "type": "HTMLTagClose",
                 "range": [
-                    52,
-                    53
+                    49,
+                    50
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 41
+                        "column": 38
                     },
                     "end": {
                         "line": 2,
-                        "column": 42
+                        "column": 39
                     }
                 },
                 "value": ""
@@ -645,13 +624,13 @@
             {
                 "type": "HTMLWhitespace",
                 "range": [
-                    53,
-                    54
+                    50,
+                    51
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 42
+                        "column": 39
                     },
                     "end": {
                         "line": 3,
@@ -663,8 +642,8 @@
             {
                 "type": "HTMLEndTagOpen",
                 "range": [
-                    54,
-                    64
+                    51,
+                    61
                 ],
                 "loc": {
                     "start": {
@@ -681,8 +660,8 @@
             {
                 "type": "HTMLTagClose",
                 "range": [
-                    64,
-                    65
+                    61,
+                    62
                 ],
                 "loc": {
                     "start": {
@@ -699,8 +678,8 @@
             {
                 "type": "HTMLWhitespace",
                 "range": [
-                    65,
-                    66
+                    62,
+                    63
                 ],
                 "loc": {
                     "start": {
