@@ -1,0 +1,53 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    {{ value | foo() || 1 }}\n    {{ value | foo().a }}\n    {{ value | foo()() }}\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{ value | foo() || 1 }}",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{ value | foo().a }}",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{ value | foo()() }}",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

@@ -485,9 +485,31 @@ function parseFilter(
                 parserOptions,
             )
             const statement = ast.body[0] as ESLintExpressionStatement
-            const callExpression = statement.expression as ESLintCallExpression
+            const callExpression = statement.expression
 
             ast.tokens!.shift()
+
+            if (
+                callExpression.type !== "CallExpression" ||
+                callExpression.callee.type !== "Literal"
+            ) {
+                // Report the next token of `)`.
+                let nestCount = 1
+                for (const token of ast.tokens!.slice(1)) {
+                    if (nestCount === 0) {
+                        return throwUnexpectedTokenError(token.value, token)
+                    }
+                    if (token.type === "Punctuator" && token.value === "(") {
+                        nestCount += 1
+                    }
+                    if (token.type === "Punctuator" && token.value === ")") {
+                        nestCount -= 1
+                    }
+                }
+
+                const token = last(ast.tokens)!
+                return throwUnexpectedTokenError(token.value, token)
+            }
 
             for (const argument of callExpression.arguments) {
                 argument.parent = expression
