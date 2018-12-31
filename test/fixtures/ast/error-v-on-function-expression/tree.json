@@ -1,0 +1,61 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <button @click=\"function() { err( }\"></button>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button @click=\"function() { err( }\"></button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button @click=\"function() { err( }\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "@click=\"function() { err( }\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "@click",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"function() { err( }\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

@@ -46,6 +46,11 @@ import {
 const ALIAS_PARENS = /^(\s*)\(([\s\S]+)\)(\s*(?:in|of)\b[\s\S]+)$/u
 const DUMMY_PARENT: any = {}
 
+// Like Vue, it judges whether it is a function expression or not.
+// https://github.com/vuejs/vue/blob/0948d999f2fddf9f90991956493f976273c5da1f/src/compiler/codegen/events.js#L3
+const IS_FUNCTION_EXPRESSION = /^\s*([\w$_]+|\([^)]*?\))\s*=>|^function\s*\(/u
+const IS_SIMPLE_PATH = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['[^']*?'\]|\["[^"]*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/u
+
 /**
  * The interface of ESLint custom parsers.
  */
@@ -804,6 +809,24 @@ export function parseVForExpression(
  * @returns The result of parsing.
  */
 export function parseVOnExpression(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: any,
+): ExpressionParseResult<ESLintExpression | VOnExpression> {
+    if (IS_FUNCTION_EXPRESSION.test(code) || IS_SIMPLE_PATH.test(code)) {
+        return parseExpressionBody(code, locationCalculator, parserOptions)
+    }
+    return parseVOnExpressionBody(code, locationCalculator, parserOptions)
+}
+
+/**
+ * Parse the source code of inline scripts.
+ * @param code The source code of inline scripts.
+ * @param locationCalculator The location calculator for the inline script.
+ * @param parserOptions The parser options.
+ * @returns The result of parsing.
+ */
+function parseVOnExpressionBody(
     code: string,
     locationCalculator: LocationCalculator,
     parserOptions: any,
