@@ -687,7 +687,7 @@ export interface VOnExpression extends HasLocation, HasParent {
 export interface VSlotScopeExpression extends HasLocation, HasParent {
     type: "VSlotScopeExpression"
     parent: VExpressionContainer
-    id: ESLintPattern
+    params: ESLintPattern[]
 }
 
 /**

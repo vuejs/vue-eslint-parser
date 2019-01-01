@@ -33,7 +33,25 @@
                                     {
                                         "type": "VExpressionContainer",
                                         "text": "\"...rest\"",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VSlotScopeExpression",
+                                                "text": "...rest",
+                                                "children": [
+                                                    {
+                                                        "type": "RestElement",
+                                                        "text": "...rest",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "rest",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     }
                                 ]
                             }

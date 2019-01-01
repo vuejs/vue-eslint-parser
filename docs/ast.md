@@ -107,7 +107,7 @@ interface VOnExpression <: Expression {
 
 interface VSlotScopeExpression <: Expression {
     type: "VSlotScopeExpression"
-    id: Pattern
+    params: [ Pattern | RestElement ]
 }
 
 interface VFilterSequenceExpression <: Expression {

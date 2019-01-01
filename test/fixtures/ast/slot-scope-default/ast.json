@@ -246,28 +246,11 @@
                                                     "column": 32
                                                 }
                                             },
-                                            "id": {
-                                                "type": "AssignmentPattern",
-                                                "start": 57,
-                                                "end": 64,
-                                                "loc": {
-                                                    "start": {
-                                                        "line": 3,
-                                                        "column": 25
-                                                    },
-                                                    "end": {
-                                                        "line": 3,
-                                                        "column": 32
-                                                    }
-                                                },
-                                                "range": [
-                                                    57,
-                                                    64
-                                                ],
-                                                "left": {
-                                                    "type": "Identifier",
+                                            "params": [
+                                                {
+                                                    "type": "AssignmentPattern",
                                                     "start": 57,
-                                                    "end": 60,
+                                                    "end": 64,
                                                     "loc": {
                                                         "start": {
                                                             "line": 3,
@@ -275,37 +258,56 @@
                                                         },
                                                         "end": {
                                                             "line": 3,
-                                                            "column": 28
-                                                        }
-                                                    },
-                                                    "range": [
-                                                        57,
-                                                        60
-                                                    ],
-                                                    "name": "foo"
-                                                },
-                                                "right": {
-                                                    "type": "Literal",
-                                                    "start": 63,
-                                                    "end": 64,
-                                                    "loc": {
-                                                        "start": {
-                                                            "line": 3,
-                                                            "column": 31
-                                                        },
-                                                        "end": {
-                                                            "line": 3,
                                                             "column": 32
                                                         }
                                                     },
                                                     "range": [
-                                                        63,
+                                                        57,
                                                         64
                                                     ],
-                                                    "value": 1,
-                                                    "raw": "1"
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "start": 57,
+                                                        "end": 60,
+                                                        "loc": {
+                                                            "start": {
+                                                                "line": 3,
+                                                                "column": 25
+                                                            },
+                                                            "end": {
+                                                                "line": 3,
+                                                                "column": 28
+                                                            }
+                                                        },
+                                                        "range": [
+                                                            57,
+                                                            60
+                                                        ],
+                                                        "name": "foo"
+                                                    },
+                                                    "right": {
+                                                        "type": "Literal",
+                                                        "start": 63,
+                                                        "end": 64,
+                                                        "loc": {
+                                                            "start": {
+                                                                "line": 3,
+                                                                "column": 31
+                                                            },
+                                                            "end": {
+                                                                "line": 3,
+                                                                "column": 32
+                                                            }
+                                                        },
+                                                        "range": [
+                                                            63,
+                                                            64
+                                                        ],
+                                                        "value": 1,
+                                                        "raw": "1"
+                                                    }
                                                 }
-                                            }
+                                            ]
                                         },
                                         "references": []
                                     }

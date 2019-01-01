@@ -919,25 +919,40 @@ export function parseSlotScopeExpression(
             locationCalculator.getSubCalculatorAfter(-14),
             parserOptions,
         ).ast
+        const statement = ast.body[0] as ESLintExpressionStatement
+        const rawExpression = statement.expression as ESLintUnaryExpression
+        const functionDecl = rawExpression.argument as ESLintFunctionExpression
+        const params = functionDecl.params
+
+        if (params.length === 0) {
+            return {
+                expression: null,
+                tokens: [],
+                comments: [],
+                references: [],
+                variables: [],
+            }
+        }
+
         const tokens = ast.tokens || []
         const comments = ast.comments || []
         const scope = analyzeVariablesAndExternalReferences(ast, parserOptions)
         const references = scope.references
         const variables = scope.variables
-        const statement = ast.body[0] as ESLintExpressionStatement
-        const rawExpression = statement.expression as ESLintUnaryExpression
-        const functionDecl = rawExpression.argument as ESLintFunctionExpression
-        const id = functionDecl.params[0]
+        const firstParam = first(params)!
+        const lastParam = last(params)!
         const expression: VSlotScopeExpression = {
             type: "VSlotScopeExpression",
-            range: [id.range[0], id.range[1]],
-            loc: { start: id.loc.start, end: id.loc.end },
+            range: [firstParam.range[0], lastParam.range[1]],
+            loc: { start: firstParam.loc.start, end: lastParam.loc.end },
             parent: DUMMY_PARENT,
-            id,
+            params: functionDecl.params,
         }
 
         // Modify parent.
-        id.parent = expression
+        for (const param of params) {
+            param.parent = expression
+        }
 
         // Remvoe `void` `function` `(` `)` `{` `}`.
         tokens.shift()
@@ -946,15 +961,6 @@ export function parseSlotScopeExpression(
         tokens.pop()
         tokens.pop()
         tokens.pop()
-
-        // Verify syntax.
-        const extraToken = tokens.find(t => t.range[0] >= id.range[1])
-        if (extraToken) {
-            throwUnexpectedTokenError(extraToken.value, extraToken)
-        }
-        if (id.type === "RestElement") {
-            throwUnexpectedTokenError("...", id)
-        }
 
         return { expression, tokens, comments, references, variables }
     } catch (err) {

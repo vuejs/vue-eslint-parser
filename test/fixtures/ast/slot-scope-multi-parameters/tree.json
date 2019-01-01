@@ -33,7 +33,24 @@
                                     {
                                         "type": "VExpressionContainer",
                                         "text": "\"a, b\"",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VSlotScopeExpression",
+                                                "text": "a, b",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     }
                                 ]
                             }

@@ -246,26 +246,28 @@
                                                     "column": 28
                                                 }
                                             },
-                                            "id": {
-                                                "type": "Identifier",
-                                                "start": 57,
-                                                "end": 60,
-                                                "loc": {
-                                                    "start": {
-                                                        "line": 3,
-                                                        "column": 25
+                                            "params": [
+                                                {
+                                                    "type": "Identifier",
+                                                    "start": 57,
+                                                    "end": 60,
+                                                    "loc": {
+                                                        "start": {
+                                                            "line": 3,
+                                                            "column": 25
+                                                        },
+                                                        "end": {
+                                                            "line": 3,
+                                                            "column": 28
+                                                        }
                                                     },
-                                                    "end": {
-                                                        "line": 3,
-                                                        "column": 28
-                                                    }
-                                                },
-                                                "range": [
-                                                    57,
-                                                    60
-                                                ],
-                                                "name": "foo"
-                                            }
+                                                    "range": [
+                                                        57,
+                                                        60
+                                                    ],
+                                                    "name": "foo"
+                                                }
+                                            ]
                                         },
                                         "references": []
                                     }
