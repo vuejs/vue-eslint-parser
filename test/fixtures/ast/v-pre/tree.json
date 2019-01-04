@@ -1,0 +1,152 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    {{a}}\n    <div :attr=\"a\" v-pre>\n        {{a}}\n        <div :attr=\"a\">{{a}}</div>\n    </div>\n    {{a}}\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{a}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "a",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div :attr=\"a\" v-pre>\n        {{a}}\n        <div :attr=\"a\">{{a}}</div>\n    </div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div :attr=\"a\" v-pre>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":attr=\"a\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": ":attr",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"a\"",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "v-pre",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-pre",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        {{a}}\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<div :attr=\"a\">{{a}}</div>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<div :attr=\"a\">",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": ":attr=\"a\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":attr",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VLiteral",
+                                                "text": "\"a\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VText",
+                                "text": "{{a}}",
+                                "children": []
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</div>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{a}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "a",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

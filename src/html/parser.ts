@@ -151,6 +151,7 @@ export class Parser {
     private parserOptions: any
     private document: VDocumentFragment
     private elementStack: VElement[]
+    private vPreElement: VElement | null
 
     /**
      * The source code text.
@@ -212,6 +213,13 @@ export class Parser {
     }
 
     /**
+     * Check if the current location is in a v-pre element.
+     */
+    private get isInVPreElement(): boolean {
+        return this.vPreElement != null
+    }
+
+    /**
      * Initialize this parser.
      * @param tokenizer The tokenizer to parse.
      * @param parserOptions The parser options to parse inline expressions.
@@ -237,6 +245,7 @@ export class Parser {
             errors: this.errors,
         }
         this.elementStack = []
+        this.vPreElement = null
     }
 
     /**
@@ -277,13 +286,19 @@ export class Parser {
     private popElementStack(): void {
         assert(this.elementStack.length >= 1)
 
-        const element = this.elementStack.pop() as VElement
+        const element = this.elementStack.pop()!
         propagateEndLocation(element)
 
         // Update the current namespace.
         const current = this.currentNode
         this.namespace =
             current.type === "VElement" ? current.namespace : NS.HTML
+
+        // Update v-pre state.
+        if (this.vPreElement === element) {
+            this.vPreElement = null
+            this.expressionEnabled = true
+        }
 
         // Update expression flag.
         if (this.elementStack.length === 0) {
@@ -384,9 +399,11 @@ export class Parser {
         const attrName = node.key.name
 
         if (
-            DIRECTIVE_NAME.test(attrName) ||
-            attrName === "slot-scope" ||
-            (tagName === "template" && attrName === "scope")
+            (this.expressionEnabled ||
+                (attrName === "v-pre" && !this.isInVPreElement)) &&
+            (DIRECTIVE_NAME.test(attrName) ||
+                attrName === "slot-scope" ||
+                (tagName === "template" && attrName === "scope"))
         ) {
             convertToDirective(
                 this.text,
@@ -442,6 +459,14 @@ export class Parser {
             endTag: null,
             variables: [],
         }
+        const hasVPre =
+            !this.isInVPreElement &&
+            token.attributes.some(a => a.key.name === "v-pre")
+
+        // Disable expression if v-pre
+        if (hasVPre) {
+            this.expressionEnabled = false
+        }
 
         // Setup relations.
         parent.children.push(element)
@@ -470,11 +495,16 @@ export class Parser {
 
         // Vue.js supports self-closing elements even if it's not one of void elements.
         if (token.selfClosing || isVoid) {
+            this.expressionEnabled = !this.isInVPreElement
             return
         }
 
         // Push to stack.
         this.elementStack.push(element)
+        if (hasVPre) {
+            assert(this.vPreElement === null)
+            this.vPreElement = element
+        }
         this.namespace = namespace
 
         // Update the content type of this element.
