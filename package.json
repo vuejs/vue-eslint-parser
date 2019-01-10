@@ -62,7 +62,7 @@
     "pretest": "run-s build lint",
     "test": "nyc npm run _mocha",
     "preupdate-fixtures": "npm run -s build",
-    "update-fixtures": "node scripts/update-fixtures-ast.js",
+    "update-fixtures": "node scripts/update-fixtures-ast.js && node scripts/update-fixtures-document-fragment.js",
     "preversion": "npm test",
     "version": "npm run -s build",
     "postversion": "git push && git push --tags",

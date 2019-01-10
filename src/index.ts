@@ -90,8 +90,10 @@ export function parseForESLint(
     )
 
     let result: AST.ESLintExtendedProgram
+    let document: AST.VDocumentFragment | null
     if (!isVueFile(code, options)) {
         result = parseScript(code, options)
+        document = null
     } else {
         const skipParsingScript = options.parser === false
         const tokenizer = new HTMLTokenizer(code)
@@ -120,11 +122,12 @@ export function parseForESLint(
         }
 
         result.ast.templateBody = templateBody
+        document = rootAST
     }
 
     result.services = Object.assign(
         result.services || {},
-        services.define(result.ast),
+        services.define(result.ast, document),
     )
 
     return result

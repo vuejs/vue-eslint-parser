@@ -6,7 +6,12 @@
 import EventEmitter from "events"
 import NodeEventGenerator from "./external/node-event-generator"
 import TokenStore from "./external/token-store"
-import { traverseNodes, ESLintProgram, VElement } from "./ast"
+import {
+    traverseNodes,
+    ESLintProgram,
+    VElement,
+    VDocumentFragment,
+} from "./ast"
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -35,13 +40,22 @@ export interface ParserServices {
      * @returns The token store of template body.
      */
     getTemplateBodyTokenStore(): TokenStore
+
+    /**
+     * Get the root document fragment.
+     * @returns The root document fragment.
+     */
+    getDocumentFragment(): VDocumentFragment | null
 }
 
 /**
  * Define the parser service
  * @param rootAST
  */
-export function define(rootAST: ESLintProgram): ParserServices {
+export function define(
+    rootAST: ESLintProgram,
+    document: VDocumentFragment | null,
+): ParserServices {
     return {
         /**
          * Define handlers to traverse the template body.
@@ -114,6 +128,14 @@ export function define(rootAST: ESLintProgram): ParserServices {
             }
 
             return store
+        },
+
+        /**
+         * Get the root document fragment.
+         * @returns The root document fragment.
+         */
+        getDocumentFragment(): VDocumentFragment | null {
+            return document
         },
     }
 }
