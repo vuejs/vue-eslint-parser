@@ -279,9 +279,13 @@ function parseAttributeValue(
             parserOptions,
         )
     } else if (
+        directiveKey.name === "slot" ||
         directiveKey.name === "slot-scope" ||
         (tagName === "template" && directiveKey.name === "scope")
     ) {
+        if (directiveKey.name === "slot" && directiveKey.argument == null) {
+            directiveKey.argument = "default"
+        }
         result = parseSlotScopeExpression(
             node.value,
             locationCalculator,
