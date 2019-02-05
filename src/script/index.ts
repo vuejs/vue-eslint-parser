@@ -254,7 +254,7 @@ const validDivisionCharRE = /[\w).+\-_$\]]/u
  * This is a fork of https://github.com/vuejs/vue/blob/2686818beb5728e3b7aa22f47a3b3f0d39d90c8e/src/compiler/parser/filter-parser.js
  * @param exp the expression to process filters.
  */
-//eslint-disable-next-line complexity, require-jsdoc
+//eslint-disable-next-line complexity
 function splitFilters(exp: string): string[] {
     const result: string[] = []
     let inSingle = false

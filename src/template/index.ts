@@ -137,38 +137,6 @@ function createDirectiveKey(node: VIdentifier): VDirectiveKey {
     return ret
 }
 
-/**
- * Do splice.
- * @param items The array to operate.
- * @param start The start index.
- * @param deleteCount The count of items to delete.
- * @param newItems The array of items to insert.
- */
-function splice<T>(
-    items: T[],
-    start: number,
-    deleteCount: number,
-    newItems: T[],
-): void {
-    switch (newItems.length) {
-        case 0:
-            items.splice(start, deleteCount)
-            break
-        case 1:
-            items.splice(start, deleteCount, newItems[0])
-            break
-        case 2:
-            items.splice(start, deleteCount, newItems[0], newItems[1])
-            break
-        default:
-            Array.prototype.splice.apply(
-                items,
-                ([start, deleteCount] as any[]).concat(newItems),
-            )
-            break
-    }
-}
-
 interface HasRange {
     range: [number, number]
 }
@@ -217,7 +185,7 @@ function replaceTokens(
 
     const index = sortedIndexBy(document.tokens, node, byRange0)
     const count = sortedLastIndexBy(document.tokens, node, byRange1) - index
-    splice(document.tokens, index, count, newTokens)
+    document.tokens.splice(index, count, ...newTokens)
 }
 
 /**
@@ -234,7 +202,7 @@ function insertComments(
     }
 
     const index = sortedIndexBy(document.comments, newComments[0], byRange0)
-    splice(document.comments, index, 0, newComments)
+    document.comments.splice(index, 0, ...newComments)
 }
 
 /**

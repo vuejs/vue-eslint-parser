@@ -1,14 +1,11 @@
 extends:
   - plugin:@mysticatea/es2015
   - plugin:@mysticatea/+node
-  - plugin:@mysticatea/+modules
+
 overrides:
-  - files: "*.ts"
-    rules:
-      "@mysticatea/ts/no-use-before-define": "off"
   - files: "typings/**"
     rules:
-      node/no-missing-import: 
+      node/no-missing-import:
         - error
-        - allowModules: 
+        - allowModules:
           - estree

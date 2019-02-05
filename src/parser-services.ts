@@ -66,10 +66,10 @@ export function define(rootAST: ESLintProgram): ParserServices {
                 emitters.set(rootAST, (emitter = new EventEmitter()))
 
                 const programExitHandler = scriptVisitor["Program:exit"]
-                scriptVisitor["Program:exit"] = function() {
+                scriptVisitor["Program:exit"] = node => {
                     try {
                         if (typeof programExitHandler === "function") {
-                            programExitHandler.apply(this, arguments) //eslint-disable-line prefer-rest-params
+                            programExitHandler(node)
                         }
 
                         // Traverse template body.

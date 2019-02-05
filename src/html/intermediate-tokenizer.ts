@@ -103,7 +103,6 @@ export class IntermediateTokenizer {
     public get state(): TokenizerState {
         return this.tokenizer.state
     }
-    //eslint-disable-next-line require-jsdoc
     public set state(value: TokenizerState) {
         this.tokenizer.state = value
     }
@@ -114,7 +113,6 @@ export class IntermediateTokenizer {
     public get namespace(): Namespace {
         return this.tokenizer.namespace
     }
-    //eslint-disable-next-line require-jsdoc
     public set namespace(value: Namespace) {
         this.tokenizer.namespace = value
     }
@@ -125,7 +123,6 @@ export class IntermediateTokenizer {
     public get expressionEnabled(): boolean {
         return this.tokenizer.expressionEnabled
     }
-    //eslint-disable-next-line require-jsdoc
     public set expressionEnabled(value: boolean) {
         this.tokenizer.expressionEnabled = value
     }

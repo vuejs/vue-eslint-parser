@@ -21,7 +21,7 @@ $ npm install --save-dev eslint vue-eslint-parser
 - Requires Node.js 6.5.0 or later.
 - Requires ESLint 5.0.0 or later.
 - Requires `babel-eslint` 8.1.1 or later if you want it. (optional)
-- Requires `typescript-eslint-parser` 21.0.0 or later if you want it. (optional)
+- Requires `@typescript-eslint/parser` 1.0.0 or later if you want it. (optional)
 
 ## 📖 Usage
 
@@ -82,7 +82,7 @@ For example:
 {
     "parser": "vue-eslint-parser",
     "parserOptions": {
-        "parser": "typescript-eslint-parser"
+        "parser": "@typescript-eslint/parser"
     }
 }
 ```

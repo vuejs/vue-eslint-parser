@@ -232,14 +232,13 @@ describe("Basic tests", () => {
             assert(messages.length === 0)
         })
 
-        it("should notify no error with 'typescript-eslint-parser'", () => {
+        it("should notify no error with '@typescript-eslint/parser'", () => {
             const cli = new CLIEngine({
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
                 parserOptions: {
-                    //
-                    parser: "typescript-eslint-parser",
+                    parser: "@typescript-eslint/parser",
                 },
                 rules: { semi: ["error", "never"] },
                 useEslintrc: false,
@@ -270,14 +269,13 @@ describe("Basic tests", () => {
             assert(messages.length === 0)
         })
 
-        it("should notify no error with 'typescript-eslint-parser'", () => {
+        it("should notify no error with '@typescript-eslint/parser'", () => {
             const cli = new CLIEngine({
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 parser: PARSER_PATH,
                 parserOptions: {
-                    //
-                    parser: "typescript-eslint-parser",
+                    parser: "@typescript-eslint/parser",
                 },
                 rules: { semi: ["error", "never"] },
                 useEslintrc: false,
@@ -315,15 +313,14 @@ describe("Basic tests", () => {
             assert(actual === expected)
         })
 
-        it("should fix 'semi' errors with --fix option with 'typescript-eslint-parser'", () => {
+        it("should fix 'semi' errors with --fix option with '@typescript-eslint/parser'", () => {
             const cli = new CLIEngine({
                 cwd: FIXTURE_DIR,
                 envs: ["es6", "node"],
                 fix: true,
                 parser: PARSER_PATH,
                 parserOptions: {
-                    //
-                    parser: "typescript-eslint-parser",
+                    parser: "@typescript-eslint/parser",
                 },
                 rules: { semi: ["error", "always"] },
                 useEslintrc: false,

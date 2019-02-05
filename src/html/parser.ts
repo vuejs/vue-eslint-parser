@@ -187,7 +187,6 @@ export class Parser {
     private get namespace(): Namespace {
         return this.tokenizer.namespace
     }
-    //eslint-disable-next-line require-jsdoc
     private set namespace(value: Namespace) {
         this.tokenizer.namespace = value
     }
@@ -196,11 +195,9 @@ export class Parser {
      * The current flag of expression enabled.
      */
     // @ts-ignore
-    //eslint-disable-next-line require-jsdoc
     private get expressionEnabled(): boolean {
         return this.tokenizer.expressionEnabled
     }
-    //eslint-disable-next-line require-jsdoc
     private set expressionEnabled(value: boolean) {
         this.tokenizer.expressionEnabled = value
     }
@@ -321,7 +318,7 @@ export class Parser {
      * @param token The StartTag token to detect.
      * @returns The namespace of the new element.
      */
-    //eslint-disable-next-line complexity, require-jsdoc
+    //eslint-disable-next-line complexity
     private detectNamespace(token: StartTag): Namespace {
         const name = token.name
         let ns = this.namespace
@@ -431,7 +428,7 @@ export class Parser {
      * Handle the start tag token.
      * @param token The token to handle.
      */
-    //eslint-disable-next-line complexity, require-jsdoc
+    //eslint-disable-next-line complexity
     protected StartTag(token: StartTag): void {
         debug("[html] StartTag %j", token)
 
