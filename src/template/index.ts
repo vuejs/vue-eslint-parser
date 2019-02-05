@@ -108,6 +108,10 @@ function createDirectiveKey(node: VIdentifier): VDirectiveKey {
         ret.name = raw.name = "on"
         ret.shorthand = true
         i = 1
+    } else if (id.startsWith("#")) {
+        ret.name = raw.name = "slot"
+        ret.shorthand = true
+        i = 1
     } else {
         const colon = id.indexOf(":")
         if (colon !== -1) {
