@@ -687,7 +687,7 @@
                 "type": "HTMLIdentifier",
                 "range": [
                     50,
-                    63
+                    56
                 ],
                 "loc": {
                     "start": {
@@ -696,10 +696,46 @@
                     },
                     "end": {
                         "line": 3,
+                        "column": 24
+                    }
+                },
+                "value": "v-slot"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    56,
+                    57
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 25
+                    }
+                },
+                "value": ":"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    57,
+                    63
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 25
+                    },
+                    "end": {
+                        "line": 3,
                         "column": 31
                     }
                 },
-                "value": "v-slot:header"
+                "value": "header"
             },
             {
                 "type": "HTMLAssociation",

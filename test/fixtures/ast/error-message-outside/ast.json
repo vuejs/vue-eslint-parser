@@ -897,10 +897,10 @@
                 "value": "div"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     61,
-                    65
+                    62
                 ],
                 "loc": {
                     "start": {
@@ -909,10 +909,28 @@
                     },
                     "end": {
                         "line": 4,
+                        "column": 10
+                    }
+                },
+                "value": ":"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    62,
+                    65
+                ],
+                "loc": {
+                    "start": {
+                        "line": 4,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 4,
                         "column": 13
                     }
                 },
-                "value": ":foo"
+                "value": "foo"
             },
             {
                 "type": "HTMLAssociation",
@@ -1041,10 +1059,10 @@
                 "value": "div"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     93,
-                    99
+                    94
                 ],
                 "loc": {
                     "start": {
@@ -1053,10 +1071,28 @@
                     },
                     "end": {
                         "line": 5,
+                        "column": 10
+                    }
+                },
+                "value": "@"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    94,
+                    99
+                ],
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 5,
                         "column": 15
                     }
                 },
-                "value": "@click"
+                "value": "click"
             },
             {
                 "type": "HTMLAssociation",

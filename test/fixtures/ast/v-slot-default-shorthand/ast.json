@@ -535,10 +535,10 @@
                 "value": "test-component"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     31,
-                    39
+                    32
                 ],
                 "loc": {
                     "start": {
@@ -547,10 +547,28 @@
                     },
                     "end": {
                         "line": 2,
+                        "column": 21
+                    }
+                },
+                "value": "#"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    32,
+                    39
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 21
+                    },
+                    "end": {
+                        "line": 2,
                         "column": 28
                     }
                 },
-                "value": "#default"
+                "value": "default"
             },
             {
                 "type": "HTMLAssociation",

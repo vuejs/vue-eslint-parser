@@ -422,10 +422,10 @@
                 "value": "div"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     20,
-                    24
+                    21
                 ],
                 "loc": {
                     "start": {
@@ -434,10 +434,64 @@
                     },
                     "end": {
                         "line": 2,
+                        "column": 10
+                    }
+                },
+                "value": ":"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    21,
+                    22
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 11
+                    }
+                },
+                "value": "a"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    22,
+                    23
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 11
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 12
+                    }
+                },
+                "value": "."
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    23,
+                    24
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 2,
                         "column": 13
                     }
                 },
-                "value": ":a.b"
+                "value": "b"
             },
             {
                 "type": "HTMLTagClose",
@@ -530,10 +584,10 @@
                 "value": "div"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     41,
-                    45
+                    42
                 ],
                 "loc": {
                     "start": {
@@ -542,10 +596,64 @@
                     },
                     "end": {
                         "line": 3,
+                        "column": 10
+                    }
+                },
+                "value": "@"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    42,
+                    43
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 11
+                    }
+                },
+                "value": "a"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    43,
+                    44
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 11
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 12
+                    }
+                },
+                "value": "."
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    44,
+                    45
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 3,
                         "column": 13
                     }
                 },
-                "value": "@a.b"
+                "value": "b"
             },
             {
                 "type": "HTMLTagClose",

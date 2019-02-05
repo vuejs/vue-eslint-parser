@@ -310,10 +310,10 @@
                 "value": "div"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     20,
-                    22
+                    21
                 ],
                 "loc": {
                     "start": {
@@ -322,10 +322,28 @@
                     },
                     "end": {
                         "line": 2,
+                        "column": 10
+                    }
+                },
+                "value": ":"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    21,
+                    22
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
                         "column": 11
                     }
                 },
-                "value": ":a"
+                "value": "a"
             },
             {
                 "type": "HTMLAssociation",

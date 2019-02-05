@@ -12,7 +12,7 @@ import { Node } from "./nodes"
 
 const KEYS = Evk.unionWith({
     VAttribute: ["key", "value"],
-    VDirectiveKey: [],
+    VDirectiveKey: ["argument"],
     VDocumentFragment: ["children"],
     VElement: ["startTag", "children", "endTag"],
     VEndTag: [],
@@ -60,6 +60,15 @@ function getFallbackKeys(node: Node): string[] {
 }
 
 /**
+ * Check wheather a given value is a node.
+ * @param x The value to check.
+ * @returns `true` if the value is a node.
+ */
+function isNode(x: any): x is Node {
+    return x !== null && typeof x === "object" && typeof x.type === "string"
+}
+
+/**
  * Traverse the given node.
  * @param node The node to traverse.
  * @param parent The parent node.
@@ -78,11 +87,11 @@ function traverse(node: Node, parent: Node | null, visitor: Visitor): void {
 
         if (Array.isArray(child)) {
             for (j = 0; j < child.length; ++j) {
-                if (child[j]) {
+                if (isNode(child[j])) {
                     traverse(child[j], node, visitor)
                 }
             }
-        } else if (child) {
+        } else if (isNode(child)) {
             traverse(child, node, visitor)
         }
     }

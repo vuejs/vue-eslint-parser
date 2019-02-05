@@ -741,7 +741,7 @@ export interface VText extends HasLocation, HasParent {
  */
 export interface VExpressionContainer extends HasLocation, HasParent {
     type: "VExpressionContainer"
-    parent: VDocumentFragment | VElement | VDirective
+    parent: VDocumentFragment | VElement | VDirective | VDirectiveKey
     expression:
         | ESLintExpression
         | VFilterSequenceExpression
@@ -771,12 +771,12 @@ export interface DirectiveKeyParts {
 /**
  * Attribute name nodes.
  */
-export interface VDirectiveKey
-    extends HasLocation,
-        HasParent,
-        DirectiveKeyParts {
+export interface VDirectiveKey extends HasLocation, HasParent {
     type: "VDirectiveKey"
     parent: VAttribute
+    name: string
+    argument: VExpressionContainer | string | null
+    modifiers: string[]
     shorthand: boolean
     raw: DirectiveKeyParts
 }

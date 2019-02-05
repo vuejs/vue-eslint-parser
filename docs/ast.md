@@ -141,15 +141,17 @@ interface VFilter <: Node {
 interface VDirectiveKey <: Node {
     type: "VDirectiveKey"
     name: string
-    argument: string | null
+    argument: VExpressionContainer | string | null
     modifiers: [ string ]
     shorthand: boolean
 }
 ```
 
 - The `name` property doesn't have `v-` prefix. It's dropped.
+- The `argument` property is a `VExpressionContainer` node if it's a [dynamic argument].
 - In the shorthand of `v-bind` cases, the `name` property is `"bind"` and the `shorthand` property is `true`.
 - In the shorthand of `v-on` cases, the `name` property is `"on"` and the `shorthand` property is `true`.
+- In the shorthand of `v-slot` cases, the `name` property is `"slot"` and the `shorthand` property is `true`.
 - Otherwise, `shorthand` property is always `false`.
 
 ## VLiteral
@@ -276,3 +278,4 @@ This supports only HTML for now. However, I'm going to add other languages Vue.j
 [`v-slot` directives]: https://vuejs.org/v2/api/#v-slot
 [scope]: https://vuejs.org/v2/guide/components.html#Scoped-Slots
 [`slot-scope` attributes]: https://vuejs.org/v2/guide/components.html#Scoped-Slots
+[dynamic argument]: https://vuejs.org/v2/guide/syntax.html#Dynamic-Arguments

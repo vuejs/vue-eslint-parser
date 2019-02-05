@@ -353,10 +353,10 @@
                 "value": "button"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     23,
-                    29
+                    24
                 ],
                 "loc": {
                     "start": {
@@ -365,10 +365,28 @@
                     },
                     "end": {
                         "line": 2,
+                        "column": 13
+                    }
+                },
+                "value": "@"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    24,
+                    29
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 13
+                    },
+                    "end": {
+                        "line": 2,
                         "column": 18
                     }
                 },
-                "value": "@click"
+                "value": "click"
             },
             {
                 "type": "HTMLAssociation",

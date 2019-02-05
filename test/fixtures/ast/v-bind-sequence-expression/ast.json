@@ -480,10 +480,10 @@
                 "value": "div"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     20,
-                    22
+                    21
                 ],
                 "loc": {
                     "start": {
@@ -492,10 +492,28 @@
                     },
                     "end": {
                         "line": 2,
+                        "column": 10
+                    }
+                },
+                "value": ":"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    21,
+                    22
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 2,
                         "column": 11
                     }
                 },
-                "value": ":a"
+                "value": "a"
             },
             {
                 "type": "HTMLAssociation",
@@ -534,10 +552,10 @@
                 "value": "a1,a2"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     40,
-                    42
+                    41
                 ],
                 "loc": {
                     "start": {
@@ -546,10 +564,28 @@
                     },
                     "end": {
                         "line": 3,
+                        "column": 10
+                    }
+                },
+                "value": ":"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    41,
+                    42
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 10
+                    },
+                    "end": {
+                        "line": 3,
                         "column": 11
                     }
                 },
-                "value": ":b"
+                "value": "b"
             },
             {
                 "type": "HTMLAssociation",

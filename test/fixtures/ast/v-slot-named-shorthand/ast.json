@@ -684,10 +684,10 @@
                 "value": "template"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     50,
-                    57
+                    51
                 ],
                 "loc": {
                     "start": {
@@ -696,10 +696,28 @@
                     },
                     "end": {
                         "line": 3,
+                        "column": 19
+                    }
+                },
+                "value": "#"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    51,
+                    57
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 19
+                    },
+                    "end": {
+                        "line": 3,
                         "column": 25
                     }
                 },
-                "value": "#header"
+                "value": "header"
             },
             {
                 "type": "HTMLAssociation",

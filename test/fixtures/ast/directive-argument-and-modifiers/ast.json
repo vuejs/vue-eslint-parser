@@ -427,7 +427,7 @@
                 "type": "HTMLIdentifier",
                 "range": [
                     20,
-                    27
+                    23
                 ],
                 "loc": {
                     "start": {
@@ -436,10 +436,82 @@
                     },
                     "end": {
                         "line": 2,
+                        "column": 12
+                    }
+                },
+                "value": "v-a"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    23,
+                    24
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 13
+                    }
+                },
+                "value": ":"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    24,
+                    25
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 13
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 14
+                    }
+                },
+                "value": "b"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    25,
+                    26
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 15
+                    }
+                },
+                "value": "."
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    26,
+                    27
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 15
+                    },
+                    "end": {
+                        "line": 2,
                         "column": 16
                     }
                 },
-                "value": "v-a:b.c"
+                "value": "c"
             },
             {
                 "type": "HTMLTagClose",
@@ -535,7 +607,7 @@
                 "type": "HTMLIdentifier",
                 "range": [
                     44,
-                    53
+                    47
                 ],
                 "loc": {
                     "start": {
@@ -544,10 +616,118 @@
                     },
                     "end": {
                         "line": 3,
+                        "column": 12
+                    }
+                },
+                "value": "v-a"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    47,
+                    48
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 13
+                    }
+                },
+                "value": ":"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    48,
+                    49
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 13
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 14
+                    }
+                },
+                "value": "b"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    49,
+                    50
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 15
+                    }
+                },
+                "value": "."
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    50,
+                    51
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 15
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 16
+                    }
+                },
+                "value": "c"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    51,
+                    52
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 17
+                    }
+                },
+                "value": "."
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    52,
+                    53
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 17
+                    },
+                    "end": {
+                        "line": 3,
                         "column": 18
                     }
                 },
-                "value": "v-a:b.c.d"
+                "value": "d"
             },
             {
                 "type": "HTMLTagClose",

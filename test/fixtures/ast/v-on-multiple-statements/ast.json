@@ -747,10 +747,10 @@
                 "value": "a"
             },
             {
-                "type": "HTMLIdentifier",
+                "type": "Punctuator",
                 "range": [
                     18,
-                    32
+                    19
                 ],
                 "loc": {
                     "start": {
@@ -759,10 +759,64 @@
                     },
                     "end": {
                         "line": 2,
+                        "column": 8
+                    }
+                },
+                "value": "@"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    19,
+                    24
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 13
+                    }
+                },
+                "value": "click"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    24,
+                    25
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 13
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 14
+                    }
+                },
+                "value": "."
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    25,
+                    32
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 14
+                    },
+                    "end": {
+                        "line": 2,
                         "column": 21
                     }
                 },
-                "value": "@click.prevent"
+                "value": "prevent"
             },
             {
                 "type": "HTMLAssociation",

@@ -1,0 +1,147 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <button v-slot:[key]=\"foo\"></button>\n    <button #[key]=\"foo\"></button>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button v-slot:[key]=\"foo\"></button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button v-slot:[key]=\"foo\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-slot:[key]=\"foo\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-slot:[key]",
+                                        "children": [
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "[key]",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "key",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"foo\"",
+                                        "children": [
+                                            {
+                                                "type": "VSlotScopeExpression",
+                                                "text": "foo",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "foo",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button #[key]=\"foo\"></button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button #[key]=\"foo\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "#[key]=\"foo\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "#[key]",
+                                        "children": [
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "[key]",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "key",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"foo\"",
+                                        "children": [
+                                            {
+                                                "type": "VSlotScopeExpression",
+                                                "text": "foo",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "foo",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

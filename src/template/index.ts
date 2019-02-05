@@ -35,6 +35,10 @@ import {
     parseSlotScopeExpression,
 } from "../script"
 
+const shorthandSign = /^[:@#]/u
+const shorthandNameMap = { ":": "bind", "@": "on", "#": "slot" }
+const shorthandSignMap = { bind: ":", on: "@", slot: "#" }
+
 /**
  * Get the belonging document of the given node.
  * @param leafNode The node to get.
@@ -79,7 +83,7 @@ function createSimpleToken(
  * @param node The identifier node to parse.
  * @returns The directive key node.
  */
-function createDirectiveKey(node: VIdentifier): VDirectiveKey {
+function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
     const raw: DirectiveKeyParts = {
         name: "",
         argument: null,
@@ -100,16 +104,10 @@ function createDirectiveKey(node: VIdentifier): VDirectiveKey {
     const rawId = node.rawName
     let i = 0
 
-    if (node.name.startsWith(":")) {
-        ret.name = raw.name = "bind"
-        ret.shorthand = true
-        i = 1
-    } else if (id.startsWith("@")) {
-        ret.name = raw.name = "on"
-        ret.shorthand = true
-        i = 1
-    } else if (id.startsWith("#")) {
-        ret.name = raw.name = "slot"
+    // Parse.
+    if (shorthandSign.test(id)) {
+        const sign = id[0] as ":" | "@" | "#"
+        ret.name = raw.name = shorthandNameMap[sign]
         ret.shorthand = true
         i = 1
     } else {
@@ -133,10 +131,218 @@ function createDirectiveKey(node: VIdentifier): VDirectiveKey {
     ret.modifiers = dotSplit.slice(1)
     raw.modifiers = dotSplitRaw.slice(1)
 
+    return ret
+}
+
+/**
+ * Parse the tokens of a given key node.
+ * @param node The key node to parse.
+ */
+function parseDirectiveKeyTokens(
+    node: VDirectiveKey,
+    locationCalculator: LocationCalculator,
+): Token[] {
+    const raw = node.raw
+    const tokens: Token[] = []
+    let i = 0
+
+    if (node.shorthand) {
+        const name = raw.name as "bind" | "on" | "slot"
+        tokens.push(
+            createSimpleToken(
+                "Punctuator",
+                node.range[0],
+                node.range[0] + 1,
+                shorthandSignMap[name],
+                locationCalculator,
+            ),
+        )
+        i = 1
+    } else if (raw.name) {
+        tokens.push(
+            createSimpleToken(
+                "HTMLIdentifier",
+                node.range[0],
+                node.range[0] + raw.name.length,
+                raw.name,
+                locationCalculator,
+            ),
+        )
+        i = raw.name.length
+
+        if (raw.argument) {
+            tokens.push(
+                createSimpleToken(
+                    "Punctuator",
+                    node.range[0] + i,
+                    node.range[0] + i + 1,
+                    ":",
+                    locationCalculator,
+                ),
+            )
+            i += 1
+        }
+    }
+
+    if (raw.argument) {
+        tokens.push(
+            createSimpleToken(
+                "HTMLIdentifier",
+                node.range[0] + i,
+                node.range[0] + i + raw.argument.length,
+                raw.argument,
+                locationCalculator,
+            ),
+        )
+        i += raw.argument.length
+    }
+
+    for (const modifier of raw.modifiers) {
+        tokens.push(
+            createSimpleToken(
+                "Punctuator",
+                node.range[0] + i,
+                node.range[0] + i + 1,
+                ".",
+                locationCalculator,
+            ),
+            createSimpleToken(
+                "HTMLIdentifier",
+                node.range[0] + i + 1,
+                node.range[0] + i + 1 + modifier.length,
+                modifier,
+                locationCalculator,
+            ),
+        )
+        i += 1 + modifier.length
+    }
+
+    return tokens
+}
+
+/**
+ * Convert `node.argument` property to a `VExpressionContainer` node if it's a dynamic argument.
+ * @param text The source code text of the directive key node.
+ * @param node The directive key node to convert.
+ * @param document The belonging document node.
+ * @param parserOptions The parser options to parse.
+ * @param locationCalculator The location calculator to parse.
+ */
+function convertDynamicArgument(
+    text: string,
+    node: VDirectiveKey,
+    document: VDocumentFragment | null,
+    parserOptions: any,
+    locationCalculator: LocationCalculator,
+): void {
+    const argument = node.raw.argument
+    if (
+        typeof argument !== "string" ||
+        !argument.startsWith("[") ||
+        !argument.endsWith("]")
+    ) {
+        return
+    }
+
+    const start = node.range[0] + text.indexOf(argument)
+    const end = start + argument.length
+    try {
+        const { comments, expression, references, tokens } = parseExpression(
+            argument.slice(1, -1),
+            locationCalculator.getSubCalculatorAfter(start + 1),
+            parserOptions,
+        )
+
+        node.argument = {
+            type: "VExpressionContainer",
+            range: [start, end],
+            loc: {
+                start: locationCalculator.getLocation(start),
+                end: locationCalculator.getLocation(end),
+            },
+            parent: node,
+            expression,
+            references,
+        }
+
+        if (expression != null) {
+            expression.parent = node.argument
+        }
+
+        // Add tokens of `[` and `]`.
+        tokens.unshift(
+            createSimpleToken(
+                "Punctuator",
+                start,
+                start + 1,
+                "[",
+                locationCalculator,
+            ),
+        )
+        tokens.push(
+            createSimpleToken(
+                "Punctuator",
+                end - 1,
+                end,
+                "]",
+                locationCalculator,
+            ),
+        )
+
+        replaceTokens(document, node.argument, tokens)
+        insertComments(document, comments)
+    } catch (error) {
+        debug("[template] Parse error: %s", error)
+
+        if (ParseError.isParseError(error)) {
+            node.argument = {
+                type: "VExpressionContainer",
+                range: [start, end],
+                loc: {
+                    start: locationCalculator.getLocation(start),
+                    end: locationCalculator.getLocation(end),
+                },
+                parent: node,
+                expression: null,
+                references: [],
+            }
+            insertError(document, error)
+        } else {
+            throw error
+        }
+    }
+}
+
+/**
+ * Parse the given attribute name as a directive key.
+ * @param node The identifier node to parse.
+ * @returns The directive key node.
+ */
+function createDirectiveKey(
+    node: VIdentifier,
+    document: VDocumentFragment | null,
+    parserOptions: any,
+    locationCalculator: LocationCalculator,
+): VDirectiveKey {
+    // Parse node and tokens.
+    const ret = parseDirectiveKeyStatically(node)
+    const tokens = parseDirectiveKeyTokens(ret, locationCalculator)
+    replaceTokens(document, ret, tokens)
+
+    // Drop `v-` prefix.
     if (ret.name.startsWith("v-")) {
         ret.name = ret.name.slice(2)
-        raw.name = raw.name.slice(2)
+        ret.raw.name = ret.raw.name.slice(2)
     }
+
+    // Parse dynamic argument.
+    convertDynamicArgument(
+        node.rawName,
+        ret,
+        document,
+        parserOptions,
+        locationCalculator,
+    )
 
     return ret
 }
@@ -382,14 +588,19 @@ export function convertToDirective(
         node.range,
     )
 
+    const document = getOwnerDocument(node)
     const directive: VDirective = node as any
     directive.directive = true
-    directive.key = createDirectiveKey(node.key)
+    directive.key = createDirectiveKey(
+        node.key,
+        document,
+        parserOptions,
+        locationCalculator,
+    )
 
     if (node.value == null) {
         return
     }
-    const document = getOwnerDocument(node)
 
     try {
         const ret = parseAttributeValue(

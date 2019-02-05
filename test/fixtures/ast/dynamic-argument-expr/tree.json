@@ -1,0 +1,90 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <button :[a+\"suffix\"]=\"foo\"></button>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button :[a+\"suffix\"]=\"foo\"></button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button :[a+\"suffix\"]=\"foo\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":[a+\"suffix\"]=\"foo\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":[a+\"suffix\"]",
+                                        "children": [
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "[a+\"suffix\"]",
+                                                "children": [
+                                                    {
+                                                        "type": "BinaryExpression",
+                                                        "text": "a+\"suffix\"",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "a",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "Literal",
+                                                                "text": "\"suffix\"",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"foo\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "foo",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

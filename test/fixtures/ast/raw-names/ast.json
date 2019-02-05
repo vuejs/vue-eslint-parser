@@ -416,7 +416,7 @@
                 "type": "HTMLIdentifier",
                 "range": [
                     29,
-                    48
+                    35
                 ],
                 "loc": {
                     "start": {
@@ -425,10 +425,82 @@
                     },
                     "end": {
                         "line": 2,
+                        "column": 24
+                    }
+                },
+                "value": "v-bind"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    35,
+                    36
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 25
+                    }
+                },
+                "value": ":"
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    36,
+                    44
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 25
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 33
+                    }
+                },
+                "value": "AttrName"
+            },
+            {
+                "type": "Punctuator",
+                "range": [
+                    44,
+                    45
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 33
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 34
+                    }
+                },
+                "value": "."
+            },
+            {
+                "type": "HTMLIdentifier",
+                "range": [
+                    45,
+                    48
+                ],
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 34
+                    },
+                    "end": {
+                        "line": 2,
                         "column": 37
                     }
                 },
-                "value": "v-bind:attrname.abc"
+                "value": "AbC"
             },
             {
                 "type": "HTMLAssociation",
