@@ -757,15 +757,9 @@ export interface VExpressionContainer extends HasLocation, HasParent {
  */
 export interface VIdentifier extends HasLocation, HasParent {
     type: "VIdentifier"
-    parent: VAttribute
+    parent: VAttribute | VDirectiveKey
     name: string
     rawName: string
-}
-
-export interface DirectiveKeyParts {
-    name: string
-    argument: string | null
-    modifiers: string[]
 }
 
 /**
@@ -774,11 +768,10 @@ export interface DirectiveKeyParts {
 export interface VDirectiveKey extends HasLocation, HasParent {
     type: "VDirectiveKey"
     parent: VAttribute
-    name: string
-    argument: VExpressionContainer | string | null
-    modifiers: string[]
+    name: VIdentifier
+    argument: VExpressionContainer | VIdentifier | null
+    modifiers: VIdentifier[]
     shorthand: boolean
-    raw: DirectiveKeyParts
 }
 
 /**

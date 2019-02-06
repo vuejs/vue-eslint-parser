@@ -147,15 +147,28 @@
                                         "column": 28
                                     }
                                 },
-                                "name": "slot-scope",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        29,
+                                        39
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 18,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 28,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "slot-scope",
+                                    "rawName": "slot-scope"
+                                },
                                 "argument": null,
                                 "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
-                                    "name": "slot-scope",
-                                    "argument": null,
-                                    "modifiers": []
-                                }
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -497,12 +510,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 18
+                        "column": 18,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 28
+                        "column": 28,
+                        "line": 2
                     }
                 },
                 "value": "slot-scope"

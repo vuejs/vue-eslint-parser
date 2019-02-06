@@ -147,15 +147,46 @@
                                         "column": 14
                                     }
                                 },
-                                "name": "a",
-                                "argument": "b",
-                                "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        20,
+                                        23
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 12,
+                                            "line": 2
+                                        }
+                                    },
                                     "name": "a",
-                                    "argument": "b",
-                                    "modifiers": []
-                                }
+                                    "rawName": "a"
+                                },
+                                "argument": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        24,
+                                        25
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 13,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 14,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "b",
+                                    "rawName": "b"
+                                },
+                                "modifiers": [],
+                                "shorthand": false
                             },
                             "value": null
                         }
@@ -269,15 +300,46 @@
                                         "column": 14
                                     }
                                 },
-                                "name": "a",
-                                "argument": "b",
-                                "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        42,
+                                        45
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 3
+                                        },
+                                        "end": {
+                                            "column": 12,
+                                            "line": 3
+                                        }
+                                    },
                                     "name": "a",
-                                    "argument": "b",
-                                    "modifiers": []
-                                }
+                                    "rawName": "a"
+                                },
+                                "argument": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        46,
+                                        47
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 13,
+                                            "line": 3
+                                        },
+                                        "end": {
+                                            "column": 14,
+                                            "line": 3
+                                        }
+                                    },
+                                    "name": "b",
+                                    "rawName": "b"
+                                },
+                                "modifiers": [],
+                                "shorthand": false
                             },
                             "value": null
                         }
@@ -391,15 +453,46 @@
                                         "column": 14
                                     }
                                 },
-                                "name": "a",
-                                "argument": "b",
-                                "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        65,
+                                        68
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 4
+                                        },
+                                        "end": {
+                                            "column": 12,
+                                            "line": 4
+                                        }
+                                    },
                                     "name": "a",
-                                    "argument": "b",
-                                    "modifiers": []
-                                }
+                                    "rawName": "a"
+                                },
+                                "argument": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        69,
+                                        70
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 13,
+                                            "line": 4
+                                        },
+                                        "end": {
+                                            "column": 14,
+                                            "line": 4
+                                        }
+                                    },
+                                    "name": "b",
+                                    "rawName": "b"
+                                },
+                                "modifiers": [],
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -604,12 +697,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 9
+                        "column": 9,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 12
+                        "column": 12,
+                        "line": 2
                     }
                 },
                 "value": "v-a"
@@ -622,12 +715,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 12
+                        "column": 12,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 13
+                        "column": 13,
+                        "line": 2
                     }
                 },
                 "value": ":"
@@ -640,12 +733,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 13
+                        "column": 13,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 14
+                        "column": 14,
+                        "line": 2
                     }
                 },
                 "value": "b"
@@ -748,12 +841,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 9
+                        "column": 9,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 12
+                        "column": 12,
+                        "line": 3
                     }
                 },
                 "value": "v-a"
@@ -766,12 +859,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 12
+                        "column": 12,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 13
+                        "column": 13,
+                        "line": 3
                     }
                 },
                 "value": ":"
@@ -784,12 +877,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 13
+                        "column": 13,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 14
+                        "column": 14,
+                        "line": 3
                     }
                 },
                 "value": "b"
@@ -910,12 +1003,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 4,
-                        "column": 9
+                        "column": 9,
+                        "line": 4
                     },
                     "end": {
-                        "line": 4,
-                        "column": 12
+                        "column": 12,
+                        "line": 4
                     }
                 },
                 "value": "v-a"
@@ -928,12 +1021,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 4,
-                        "column": 12
+                        "column": 12,
+                        "line": 4
                     },
                     "end": {
-                        "line": 4,
-                        "column": 13
+                        "column": 13,
+                        "line": 4
                     }
                 },
                 "value": ":"
@@ -946,12 +1039,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 4,
-                        "column": 13
+                        "column": 13,
+                        "line": 4
                     },
                     "end": {
-                        "line": 4,
-                        "column": 14
+                        "column": 14,
+                        "line": 4
                     }
                 },
                 "value": "b"

@@ -38,7 +38,18 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": ":foo",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "foo",
+                                                "children": []
+                                            }
+                                        ]
                                     },
                                     {
                                         "type": "VExpressionContainer",
@@ -76,7 +87,13 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "scope",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "scope",
+                                                "children": []
+                                            }
+                                        ]
                                     },
                                     {
                                         "type": "VExpressionContainer",

@@ -147,7 +147,25 @@
                                         "column": 24
                                     }
                                 },
-                                "name": "bind",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        23,
+                                        29
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 12,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 18,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "bind",
+                                    "rawName": "bind"
+                                },
                                 "argument": {
                                     "type": "VExpressionContainer",
                                     "range": [
@@ -156,12 +174,12 @@
                                     ],
                                     "loc": {
                                         "start": {
-                                            "line": 2,
-                                            "column": 19
+                                            "column": 19,
+                                            "line": 2
                                         },
                                         "end": {
-                                            "line": 2,
-                                            "column": 24
+                                            "column": 24,
+                                            "line": 2
                                         }
                                     },
                                     "expression": {
@@ -211,12 +229,7 @@
                                     ]
                                 },
                                 "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
-                                    "name": "bind",
-                                    "argument": "[key]",
-                                    "modifiers": []
-                                }
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -391,7 +404,25 @@
                                         "column": 18
                                     }
                                 },
-                                "name": "bind",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        64,
+                                        65
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 12,
+                                            "line": 3
+                                        },
+                                        "end": {
+                                            "column": 13,
+                                            "line": 3
+                                        }
+                                    },
+                                    "name": "bind",
+                                    "rawName": ":"
+                                },
                                 "argument": {
                                     "type": "VExpressionContainer",
                                     "range": [
@@ -400,12 +431,12 @@
                                     ],
                                     "loc": {
                                         "start": {
-                                            "line": 3,
-                                            "column": 13
+                                            "column": 13,
+                                            "line": 3
                                         },
                                         "end": {
-                                            "line": 3,
-                                            "column": 18
+                                            "column": 18,
+                                            "line": 3
                                         }
                                     },
                                     "expression": {
@@ -455,12 +486,7 @@
                                     ]
                                 },
                                 "modifiers": [],
-                                "shorthand": true,
-                                "raw": {
-                                    "name": "bind",
-                                    "argument": "[key]",
-                                    "modifiers": []
-                                }
+                                "shorthand": true
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -635,7 +661,25 @@
                                         "column": 24
                                     }
                                 },
-                                "name": "bind",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        99,
+                                        100
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 12,
+                                            "line": 4
+                                        },
+                                        "end": {
+                                            "column": 13,
+                                            "line": 4
+                                        }
+                                    },
+                                    "name": "bind",
+                                    "rawName": ":"
+                                },
                                 "argument": {
                                     "type": "VExpressionContainer",
                                     "range": [
@@ -644,12 +688,12 @@
                                     ],
                                     "loc": {
                                         "start": {
-                                            "line": 4,
-                                            "column": 13
+                                            "column": 13,
+                                            "line": 4
                                         },
                                         "end": {
-                                            "line": 4,
-                                            "column": 18
+                                            "column": 18,
+                                            "line": 4
                                         }
                                     },
                                     "expression": {
@@ -699,16 +743,27 @@
                                     ]
                                 },
                                 "modifiers": [
-                                    "enter"
+                                    {
+                                        "type": "VIdentifier",
+                                        "range": [
+                                            106,
+                                            111
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "column": 19,
+                                                "line": 4
+                                            },
+                                            "end": {
+                                                "column": 24,
+                                                "line": 4
+                                            }
+                                        },
+                                        "name": "enter",
+                                        "rawName": "enter"
+                                    }
                                 ],
-                                "shorthand": true,
-                                "raw": {
-                                    "name": "bind",
-                                    "argument": "[key]",
-                                    "modifiers": [
-                                        "enter"
-                                    ]
-                                }
+                                "shorthand": true
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -913,12 +968,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 12
+                        "column": 12,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 18
+                        "column": 18,
+                        "line": 2
                     }
                 },
                 "value": "v-bind"
@@ -931,12 +986,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 18
+                        "column": 18,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 19
+                        "column": 19,
+                        "line": 2
                     }
                 },
                 "value": ":"
@@ -1169,12 +1224,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 12
+                        "column": 12,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 13
+                        "column": 13,
+                        "line": 3
                     }
                 },
                 "value": ":"
@@ -1407,12 +1462,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 4,
-                        "column": 12
+                        "column": 12,
+                        "line": 4
                     },
                     "end": {
-                        "line": 4,
-                        "column": 13
+                        "column": 13,
+                        "line": 4
                     }
                 },
                 "value": ":"
@@ -1481,12 +1536,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 4,
-                        "column": 18
+                        "column": 18,
+                        "line": 4
                     },
                     "end": {
-                        "line": 4,
-                        "column": 19
+                        "column": 19,
+                        "line": 4
                     }
                 },
                 "value": "."
@@ -1499,12 +1554,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 4,
-                        "column": 19
+                        "column": 19,
+                        "line": 4
                     },
                     "end": {
-                        "line": 4,
-                        "column": 24
+                        "column": 24,
+                        "line": 4
                     }
                 },
                 "value": "enter"

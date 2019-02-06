@@ -38,7 +38,13 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "v-for",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-for",
+                                                "children": []
+                                            }
+                                        ]
                                     },
                                     {
                                         "type": "VExpressionContainer",
@@ -76,7 +82,18 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": ":foo",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "foo",
+                                                "children": []
+                                            }
+                                        ]
                                     },
                                     {
                                         "type": "VExpressionContainer",
@@ -114,7 +131,18 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "@click",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "@",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "click",
+                                                "children": []
+                                            }
+                                        ]
                                     },
                                     {
                                         "type": "VExpressionContainer",

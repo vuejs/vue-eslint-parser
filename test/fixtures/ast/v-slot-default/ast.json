@@ -147,15 +147,28 @@
                                         "column": 26
                                     }
                                 },
-                                "name": "slot",
-                                "argument": "default",
-                                "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        31,
+                                        37
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 20,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 26,
+                                            "line": 2
+                                        }
+                                    },
                                     "name": "slot",
-                                    "argument": null,
-                                    "modifiers": []
-                                }
+                                    "rawName": "slot"
+                                },
+                                "argument": null,
+                                "modifiers": [],
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -542,12 +555,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 20
+                        "column": 20,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 26
+                        "column": 26,
+                        "line": 2
                     }
                 },
                 "value": "v-slot"

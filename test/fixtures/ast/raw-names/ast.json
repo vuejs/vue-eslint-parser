@@ -185,19 +185,66 @@
                                         "column": 37
                                     }
                                 },
-                                "name": "bind",
-                                "argument": "attrname",
-                                "modifiers": [
-                                    "abc"
-                                ],
-                                "shorthand": false,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        29,
+                                        35
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 18,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 24,
+                                            "line": 2
+                                        }
+                                    },
                                     "name": "bind",
-                                    "argument": "AttrName",
-                                    "modifiers": [
-                                        "AbC"
-                                    ]
-                                }
+                                    "rawName": "bind"
+                                },
+                                "argument": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        36,
+                                        44
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 25,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 33,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "attrname",
+                                    "rawName": "AttrName"
+                                },
+                                "modifiers": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "range": [
+                                            45,
+                                            48
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "column": 34,
+                                                "line": 2
+                                            },
+                                            "end": {
+                                                "column": 37,
+                                                "line": 2
+                                            }
+                                        },
+                                        "name": "abc",
+                                        "rawName": "AbC"
+                                    }
+                                ],
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -420,12 +467,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 18
+                        "column": 18,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 24
+                        "column": 24,
+                        "line": 2
                     }
                 },
                 "value": "v-bind"
@@ -438,12 +485,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 24
+                        "column": 24,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 25
+                        "column": 25,
+                        "line": 2
                     }
                 },
                 "value": ":"
@@ -456,12 +503,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 25
+                        "column": 25,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 33
+                        "column": 33,
+                        "line": 2
                     }
                 },
                 "value": "AttrName"
@@ -474,12 +521,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 33
+                        "column": 33,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 34
+                        "column": 34,
+                        "line": 2
                     }
                 },
                 "value": "."
@@ -492,12 +539,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 34
+                        "column": 34,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 37
+                        "column": 37,
+                        "line": 2
                     }
                 },
                 "value": "AbC"

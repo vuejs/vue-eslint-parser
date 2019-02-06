@@ -28,7 +28,18 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "v-a.b",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-a",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "b",
+                                                "children": []
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -61,7 +72,18 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "v-a.b",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-a",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "b",
+                                                "children": []
+                                            }
+                                        ]
                                     },
                                     {
                                         "type": "VExpressionContainer",
@@ -105,7 +127,23 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "v-a.b.c",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-a",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "b",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "c",
+                                                "children": []
+                                            }
+                                        ]
                                     },
                                     {
                                         "type": "VExpressionContainer",

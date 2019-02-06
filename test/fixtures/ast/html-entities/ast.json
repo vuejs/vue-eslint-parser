@@ -147,15 +147,28 @@
                                         "column": 13
                                     }
                                 },
-                                "name": "if",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        20,
+                                        24
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 13,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "if",
+                                    "rawName": "if"
+                                },
                                 "argument": null,
                                 "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
-                                    "name": "if",
-                                    "argument": null,
-                                    "modifiers": []
-                                }
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -549,12 +562,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 9
+                        "column": 9,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 13
+                        "column": 13,
+                        "line": 2
                     }
                 },
                 "value": "v-if"

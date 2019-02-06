@@ -30,6 +30,11 @@
                                         "text": "v-slot:[key]",
                                         "children": [
                                             {
+                                                "type": "VIdentifier",
+                                                "text": "v-slot",
+                                                "children": []
+                                            },
+                                            {
                                                 "type": "VExpressionContainer",
                                                 "text": "[key]",
                                                 "children": [
@@ -91,6 +96,11 @@
                                         "type": "VDirectiveKey",
                                         "text": "#[key]",
                                         "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "#",
+                                                "children": []
+                                            },
                                             {
                                                 "type": "VExpressionContainer",
                                                 "text": "[key]",

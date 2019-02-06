@@ -147,15 +147,46 @@
                                         "column": 28
                                     }
                                 },
-                                "name": "slot",
-                                "argument": "default",
-                                "modifiers": [],
-                                "shorthand": true,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        31,
+                                        32
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 20,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 21,
+                                            "line": 2
+                                        }
+                                    },
                                     "name": "slot",
-                                    "argument": "default",
-                                    "modifiers": []
-                                }
+                                    "rawName": "#"
+                                },
+                                "argument": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        32,
+                                        39
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 21,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 28,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "default",
+                                    "rawName": "default"
+                                },
+                                "modifiers": [],
+                                "shorthand": true
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -542,12 +573,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 20
+                        "column": 20,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 21
+                        "column": 21,
+                        "line": 2
                     }
                 },
                 "value": "#"
@@ -560,12 +591,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 21
+                        "column": 21,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 28
+                        "column": 28,
+                        "line": 2
                     }
                 },
                 "value": "default"

@@ -28,7 +28,23 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "v-a:b.c",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-a",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "b",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "c",
+                                                "children": []
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -61,7 +77,28 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "v-a:b.c.d",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-a",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "b",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "c",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "d",
+                                                "children": []
+                                            }
+                                        ]
                                     }
                                 ]
                             }

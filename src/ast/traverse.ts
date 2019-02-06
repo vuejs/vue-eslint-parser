@@ -12,7 +12,7 @@ import { Node } from "./nodes"
 
 const KEYS = Evk.unionWith({
     VAttribute: ["key", "value"],
-    VDirectiveKey: ["argument"],
+    VDirectiveKey: ["name", "argument", "modifiers"],
     VDocumentFragment: ["children"],
     VElement: ["startTag", "children", "endTag"],
     VEndTag: [],

@@ -94,7 +94,7 @@ describe("[references] expression containers", () => {
                 ast.templateBody.children[0].startTag.attributes[0]
 
             assert(directive.key.type === "VDirectiveKey")
-            assert(directive.key.name === "on")
+            assert(directive.key.name.name === "on")
             assert(directive.value.references.length === 1)
             assert(
                 directive.value.references[0].id ===

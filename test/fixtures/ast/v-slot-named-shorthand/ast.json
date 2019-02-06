@@ -204,15 +204,46 @@
                                                 "column": 25
                                             }
                                         },
-                                        "name": "slot",
-                                        "argument": "header",
-                                        "modifiers": [],
-                                        "shorthand": true,
-                                        "raw": {
+                                        "name": {
+                                            "type": "VIdentifier",
+                                            "range": [
+                                                50,
+                                                51
+                                            ],
+                                            "loc": {
+                                                "start": {
+                                                    "column": 18,
+                                                    "line": 3
+                                                },
+                                                "end": {
+                                                    "column": 19,
+                                                    "line": 3
+                                                }
+                                            },
                                             "name": "slot",
-                                            "argument": "header",
-                                            "modifiers": []
-                                        }
+                                            "rawName": "#"
+                                        },
+                                        "argument": {
+                                            "type": "VIdentifier",
+                                            "range": [
+                                                51,
+                                                57
+                                            ],
+                                            "loc": {
+                                                "start": {
+                                                    "column": 19,
+                                                    "line": 3
+                                                },
+                                                "end": {
+                                                    "column": 25,
+                                                    "line": 3
+                                                }
+                                            },
+                                            "name": "header",
+                                            "rawName": "header"
+                                        },
+                                        "modifiers": [],
+                                        "shorthand": true
                                     },
                                     "value": {
                                         "type": "VExpressionContainer",
@@ -691,12 +722,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 18
+                        "column": 18,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 19
+                        "column": 19,
+                        "line": 3
                     }
                 },
                 "value": "#"
@@ -709,12 +740,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 19
+                        "column": 19,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 25
+                        "column": 25,
+                        "line": 3
                     }
                 },
                 "value": "header"

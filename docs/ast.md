@@ -55,6 +55,7 @@ extend interface Node {
 interface VIdentifier <: Node {
     type: "VIdentifier"
     name: string
+    rawName: string
 }
 ```
 
@@ -140,9 +141,9 @@ interface VFilter <: Node {
 ```js
 interface VDirectiveKey <: Node {
     type: "VDirectiveKey"
-    name: string
-    argument: VExpressionContainer | string | null
-    modifiers: [ string ]
+    name: VIdentifier
+    argument: VExpressionContainer | VIdentifier | null
+    modifiers: [ VIdentifier ]
     shorthand: boolean
 }
 ```

@@ -204,15 +204,28 @@
                                                 "column": 23
                                             }
                                         },
-                                        "name": "slot-scope",
+                                        "name": {
+                                            "type": "VIdentifier",
+                                            "range": [
+                                                45,
+                                                55
+                                            ],
+                                            "loc": {
+                                                "start": {
+                                                    "column": 13,
+                                                    "line": 3
+                                                },
+                                                "end": {
+                                                    "column": 23,
+                                                    "line": 3
+                                                }
+                                            },
+                                            "name": "slot-scope",
+                                            "rawName": "slot-scope"
+                                        },
                                         "argument": null,
                                         "modifiers": [],
-                                        "shorthand": false,
-                                        "raw": {
-                                            "name": "slot-scope",
-                                            "argument": null,
-                                            "modifiers": []
-                                        }
+                                        "shorthand": false
                                     },
                                     "value": {
                                         "type": "VExpressionContainer",
@@ -591,12 +604,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 13
+                        "column": 13,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 23
+                        "column": 23,
+                        "line": 3
                     }
                 },
                 "value": "slot-scope"

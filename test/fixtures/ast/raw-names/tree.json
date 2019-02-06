@@ -39,7 +39,23 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "v-bind:AttrName.AbC",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-bind",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "AttrName",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "AbC",
+                                                "children": []
+                                            }
+                                        ]
                                     },
                                     {
                                         "type": "VExpressionContainer",

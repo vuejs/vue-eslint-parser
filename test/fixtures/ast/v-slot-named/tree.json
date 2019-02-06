@@ -42,7 +42,18 @@
                                             {
                                                 "type": "VDirectiveKey",
                                                 "text": "v-slot:header",
-                                                "children": []
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "v-slot",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "header",
+                                                        "children": []
+                                                    }
+                                                ]
                                             },
                                             {
                                                 "type": "VExpressionContainer",

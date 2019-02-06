@@ -147,15 +147,28 @@
                                         "column": 14
                                     }
                                 },
-                                "name": "for",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        20,
+                                        25
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 14,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "for",
+                                    "rawName": "for"
+                                },
                                 "argument": null,
                                 "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
-                                    "name": "for",
-                                    "argument": null,
-                                    "modifiers": []
-                                }
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -543,15 +556,28 @@
                                         "column": 14
                                     }
                                 },
-                                "name": "for",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        63,
+                                        68
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 3
+                                        },
+                                        "end": {
+                                            "column": 14,
+                                            "line": 3
+                                        }
+                                    },
+                                    "name": "for",
+                                    "rawName": "for"
+                                },
                                 "argument": null,
                                 "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
-                                    "name": "for",
-                                    "argument": null,
-                                    "modifiers": []
-                                }
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -897,15 +923,28 @@
                                         "column": 14
                                     }
                                 },
-                                "name": "for",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        107,
+                                        112
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 4
+                                        },
+                                        "end": {
+                                            "column": 14,
+                                            "line": 4
+                                        }
+                                    },
+                                    "name": "for",
+                                    "rawName": "for"
+                                },
                                 "argument": null,
                                 "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
-                                    "name": "for",
-                                    "argument": null,
-                                    "modifiers": []
-                                }
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -1207,15 +1246,28 @@
                                         "column": 14
                                     }
                                 },
-                                "name": "for",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        145,
+                                        150
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 5
+                                        },
+                                        "end": {
+                                            "column": 14,
+                                            "line": 5
+                                        }
+                                    },
+                                    "name": "for",
+                                    "rawName": "for"
+                                },
                                 "argument": null,
                                 "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
-                                    "name": "for",
-                                    "argument": null,
-                                    "modifiers": []
-                                }
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -1718,12 +1770,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 9
+                        "column": 9,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 14
+                        "column": 14,
+                        "line": 2
                     }
                 },
                 "value": "v-for"
@@ -2020,12 +2072,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 9
+                        "column": 9,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 14
+                        "column": 14,
+                        "line": 3
                     }
                 },
                 "value": "v-for"
@@ -2422,12 +2474,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 4,
-                        "column": 9
+                        "column": 9,
+                        "line": 4
                     },
                     "end": {
-                        "line": 4,
-                        "column": 14
+                        "column": 14,
+                        "line": 4
                     }
                 },
                 "value": "v-for"
@@ -2724,12 +2776,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 5,
-                        "column": 9
+                        "column": 9,
+                        "line": 5
                     },
                     "end": {
-                        "line": 5,
-                        "column": 14
+                        "column": 14,
+                        "line": 5
                     }
                 },
                 "value": "v-for"

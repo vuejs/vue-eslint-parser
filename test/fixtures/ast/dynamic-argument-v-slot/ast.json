@@ -147,7 +147,25 @@
                                         "column": 24
                                     }
                                 },
-                                "name": "slot",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        23,
+                                        29
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 12,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 18,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "slot",
+                                    "rawName": "slot"
+                                },
                                 "argument": {
                                     "type": "VExpressionContainer",
                                     "range": [
@@ -156,12 +174,12 @@
                                     ],
                                     "loc": {
                                         "start": {
-                                            "line": 2,
-                                            "column": 19
+                                            "column": 19,
+                                            "line": 2
                                         },
                                         "end": {
-                                            "line": 2,
-                                            "column": 24
+                                            "column": 24,
+                                            "line": 2
                                         }
                                     },
                                     "expression": {
@@ -211,12 +229,7 @@
                                     ]
                                 },
                                 "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
-                                    "name": "slot",
-                                    "argument": "[key]",
-                                    "modifiers": []
-                                }
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -410,7 +423,25 @@
                                         "column": 18
                                     }
                                 },
-                                "name": "slot",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        64,
+                                        65
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 12,
+                                            "line": 3
+                                        },
+                                        "end": {
+                                            "column": 13,
+                                            "line": 3
+                                        }
+                                    },
+                                    "name": "slot",
+                                    "rawName": "#"
+                                },
                                 "argument": {
                                     "type": "VExpressionContainer",
                                     "range": [
@@ -419,12 +450,12 @@
                                     ],
                                     "loc": {
                                         "start": {
-                                            "line": 3,
-                                            "column": 13
+                                            "column": 13,
+                                            "line": 3
                                         },
                                         "end": {
-                                            "line": 3,
-                                            "column": 18
+                                            "column": 18,
+                                            "line": 3
                                         }
                                     },
                                     "expression": {
@@ -474,12 +505,7 @@
                                     ]
                                 },
                                 "modifiers": [],
-                                "shorthand": true,
-                                "raw": {
-                                    "name": "slot",
-                                    "argument": "[key]",
-                                    "modifiers": []
-                                }
+                                "shorthand": true
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -703,12 +729,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 12
+                        "column": 12,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 18
+                        "column": 18,
+                        "line": 2
                     }
                 },
                 "value": "v-slot"
@@ -721,12 +747,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 18
+                        "column": 18,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 19
+                        "column": 19,
+                        "line": 2
                     }
                 },
                 "value": ":"
@@ -959,12 +985,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 12
+                        "column": 12,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 13
+                        "column": 13,
+                        "line": 3
                     }
                 },
                 "value": "#"

@@ -28,7 +28,18 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "@click",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "@",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "click",
+                                                "children": []
+                                            }
+                                        ]
                                     },
                                     {
                                         "type": "VExpressionContainer",
@@ -61,7 +72,18 @@
                                     {
                                         "type": "VDirectiveKey",
                                         "text": "@keydown",
-                                        "children": []
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "@",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "keydown",
+                                                "children": []
+                                            }
+                                        ]
                                     },
                                     {
                                         "type": "VExpressionContainer",

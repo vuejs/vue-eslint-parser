@@ -147,19 +147,66 @@
                                         "column": 16
                                     }
                                 },
-                                "name": "a",
-                                "argument": "b",
-                                "modifiers": [
-                                    "c"
-                                ],
-                                "shorthand": false,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        20,
+                                        23
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 12,
+                                            "line": 2
+                                        }
+                                    },
                                     "name": "a",
-                                    "argument": "b",
-                                    "modifiers": [
-                                        "c"
-                                    ]
-                                }
+                                    "rawName": "a"
+                                },
+                                "argument": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        24,
+                                        25
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 13,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 14,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "b",
+                                    "rawName": "b"
+                                },
+                                "modifiers": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "range": [
+                                            26,
+                                            27
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "column": 15,
+                                                "line": 2
+                                            },
+                                            "end": {
+                                                "column": 16,
+                                                "line": 2
+                                            }
+                                        },
+                                        "name": "c",
+                                        "rawName": "c"
+                                    }
+                                ],
+                                "shorthand": false
                             },
                             "value": null
                         }
@@ -273,21 +320,85 @@
                                         "column": 18
                                     }
                                 },
-                                "name": "a",
-                                "argument": "b",
-                                "modifiers": [
-                                    "c",
-                                    "d"
-                                ],
-                                "shorthand": false,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        44,
+                                        47
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 3
+                                        },
+                                        "end": {
+                                            "column": 12,
+                                            "line": 3
+                                        }
+                                    },
                                     "name": "a",
-                                    "argument": "b",
-                                    "modifiers": [
-                                        "c",
-                                        "d"
-                                    ]
-                                }
+                                    "rawName": "a"
+                                },
+                                "argument": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        48,
+                                        49
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 13,
+                                            "line": 3
+                                        },
+                                        "end": {
+                                            "column": 14,
+                                            "line": 3
+                                        }
+                                    },
+                                    "name": "b",
+                                    "rawName": "b"
+                                },
+                                "modifiers": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "range": [
+                                            50,
+                                            51
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "column": 15,
+                                                "line": 3
+                                            },
+                                            "end": {
+                                                "column": 16,
+                                                "line": 3
+                                            }
+                                        },
+                                        "name": "c",
+                                        "rawName": "c"
+                                    },
+                                    {
+                                        "type": "VIdentifier",
+                                        "range": [
+                                            52,
+                                            53
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "column": 17,
+                                                "line": 3
+                                            },
+                                            "end": {
+                                                "column": 18,
+                                                "line": 3
+                                            }
+                                        },
+                                        "name": "d",
+                                        "rawName": "d"
+                                    }
+                                ],
+                                "shorthand": false
                             },
                             "value": null
                         }
@@ -431,12 +542,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 9
+                        "column": 9,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 12
+                        "column": 12,
+                        "line": 2
                     }
                 },
                 "value": "v-a"
@@ -449,12 +560,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 12
+                        "column": 12,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 13
+                        "column": 13,
+                        "line": 2
                     }
                 },
                 "value": ":"
@@ -467,12 +578,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 13
+                        "column": 13,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 14
+                        "column": 14,
+                        "line": 2
                     }
                 },
                 "value": "b"
@@ -485,12 +596,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 14
+                        "column": 14,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 15
+                        "column": 15,
+                        "line": 2
                     }
                 },
                 "value": "."
@@ -503,12 +614,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 15
+                        "column": 15,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 16
+                        "column": 16,
+                        "line": 2
                     }
                 },
                 "value": "c"
@@ -611,12 +722,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 9
+                        "column": 9,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 12
+                        "column": 12,
+                        "line": 3
                     }
                 },
                 "value": "v-a"
@@ -629,12 +740,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 12
+                        "column": 12,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 13
+                        "column": 13,
+                        "line": 3
                     }
                 },
                 "value": ":"
@@ -647,12 +758,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 13
+                        "column": 13,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 14
+                        "column": 14,
+                        "line": 3
                     }
                 },
                 "value": "b"
@@ -665,12 +776,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 14
+                        "column": 14,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 15
+                        "column": 15,
+                        "line": 3
                     }
                 },
                 "value": "."
@@ -683,12 +794,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 15
+                        "column": 15,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 16
+                        "column": 16,
+                        "line": 3
                     }
                 },
                 "value": "c"
@@ -701,12 +812,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 16
+                        "column": 16,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 17
+                        "column": 17,
+                        "line": 3
                     }
                 },
                 "value": "."
@@ -719,12 +830,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 17
+                        "column": 17,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 18
+                        "column": 18,
+                        "line": 3
                     }
                 },
                 "value": "d"

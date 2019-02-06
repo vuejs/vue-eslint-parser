@@ -30,6 +30,11 @@
                                         "text": "v-bind:[key]",
                                         "children": [
                                             {
+                                                "type": "VIdentifier",
+                                                "text": "v-bind",
+                                                "children": []
+                                            },
+                                            {
                                                 "type": "VExpressionContainer",
                                                 "text": "[key]",
                                                 "children": [
@@ -85,6 +90,11 @@
                                         "type": "VDirectiveKey",
                                         "text": ":[key]",
                                         "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
                                             {
                                                 "type": "VExpressionContainer",
                                                 "text": "[key]",
@@ -142,6 +152,11 @@
                                         "text": ":[key].enter",
                                         "children": [
                                             {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
                                                 "type": "VExpressionContainer",
                                                 "text": "[key]",
                                                 "children": [
@@ -151,6 +166,11 @@
                                                         "children": []
                                                     }
                                                 ]
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "enter",
+                                                "children": []
                                             }
                                         ]
                                     },

@@ -147,15 +147,46 @@
                                         "column": 14
                                     }
                                 },
-                                "name": "bind",
-                                "argument": "attr",
-                                "modifiers": [],
-                                "shorthand": true,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        20,
+                                        21
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 10,
+                                            "line": 2
+                                        }
+                                    },
                                     "name": "bind",
-                                    "argument": "attr",
-                                    "modifiers": []
-                                }
+                                    "rawName": ":"
+                                },
+                                "argument": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        21,
+                                        25
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 10,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 14,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "attr",
+                                    "rawName": "attr"
+                                },
+                                "modifiers": [],
+                                "shorthand": true
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -531,12 +562,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 9
+                        "column": 9,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 10
+                        "column": 10,
+                        "line": 2
                     }
                 },
                 "value": ":"
@@ -549,12 +580,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 10
+                        "column": 10,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 14
+                        "column": 14,
+                        "line": 2
                     }
                 },
                 "value": "attr"

@@ -184,15 +184,46 @@
                                         "column": 13
                                     }
                                 },
-                                "name": "bind",
-                                "argument": "foo",
-                                "modifiers": [],
-                                "shorthand": true,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        32,
+                                        33
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 9,
+                                            "line": 3
+                                        },
+                                        "end": {
+                                            "column": 10,
+                                            "line": 3
+                                        }
+                                    },
                                     "name": "bind",
-                                    "argument": "foo",
-                                    "modifiers": []
-                                }
+                                    "rawName": ":"
+                                },
+                                "argument": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        33,
+                                        36
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 10,
+                                            "line": 3
+                                        },
+                                        "end": {
+                                            "column": 13,
+                                            "line": 3
+                                        }
+                                    },
+                                    "name": "foo",
+                                    "rawName": "foo"
+                                },
+                                "modifiers": [],
+                                "shorthand": true
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -324,15 +355,28 @@
                                         "column": 19
                                     }
                                 },
-                                "name": "scope",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        64,
+                                        69
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 14,
+                                            "line": 4
+                                        },
+                                        "end": {
+                                            "column": 19,
+                                            "line": 4
+                                        }
+                                    },
+                                    "name": "scope",
+                                    "rawName": "scope"
+                                },
                                 "argument": null,
                                 "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
-                                    "name": "scope",
-                                    "argument": null,
-                                    "modifiers": []
-                                }
+                                "shorthand": false
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -602,12 +646,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 9
+                        "column": 9,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 10
+                        "column": 10,
+                        "line": 3
                     }
                 },
                 "value": ":"
@@ -620,12 +664,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 10
+                        "column": 10,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 13
+                        "column": 13,
+                        "line": 3
                     }
                 },
                 "value": "foo"
@@ -764,12 +808,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 4,
-                        "column": 14
+                        "column": 14,
+                        "line": 4
                     },
                     "end": {
-                        "line": 4,
-                        "column": 19
+                        "column": 19,
+                        "line": 4
                     }
                 },
                 "value": "scope"

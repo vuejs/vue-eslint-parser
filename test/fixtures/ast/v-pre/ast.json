@@ -282,15 +282,28 @@
                                         "column": 24
                                     }
                                 },
-                                "name": "pre",
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        40,
+                                        45
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 19,
+                                            "line": 3
+                                        },
+                                        "end": {
+                                            "column": 24,
+                                            "line": 3
+                                        }
+                                    },
+                                    "name": "pre",
+                                    "rawName": "pre"
+                                },
                                 "argument": null,
                                 "modifiers": [],
-                                "shorthand": false,
-                                "raw": {
-                                    "name": "pre",
-                                    "argument": null,
-                                    "modifiers": []
-                                }
+                                "shorthand": false
                             },
                             "value": null
                         }
@@ -812,12 +825,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 3,
-                        "column": 19
+                        "column": 19,
+                        "line": 3
                     },
                     "end": {
-                        "line": 3,
-                        "column": 24
+                        "column": 24,
+                        "line": 3
                     }
                 },
                 "value": "v-pre"

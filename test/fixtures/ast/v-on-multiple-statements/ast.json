@@ -147,19 +147,66 @@
                                         "column": 21
                                     }
                                 },
-                                "name": "on",
-                                "argument": "click",
-                                "modifiers": [
-                                    "prevent"
-                                ],
-                                "shorthand": true,
-                                "raw": {
+                                "name": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        18,
+                                        19
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 7,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 8,
+                                            "line": 2
+                                        }
+                                    },
                                     "name": "on",
-                                    "argument": "click",
-                                    "modifiers": [
-                                        "prevent"
-                                    ]
-                                }
+                                    "rawName": "@"
+                                },
+                                "argument": {
+                                    "type": "VIdentifier",
+                                    "range": [
+                                        19,
+                                        24
+                                    ],
+                                    "loc": {
+                                        "start": {
+                                            "column": 8,
+                                            "line": 2
+                                        },
+                                        "end": {
+                                            "column": 13,
+                                            "line": 2
+                                        }
+                                    },
+                                    "name": "click",
+                                    "rawName": "click"
+                                },
+                                "modifiers": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "range": [
+                                            25,
+                                            32
+                                        ],
+                                        "loc": {
+                                            "start": {
+                                                "column": 14,
+                                                "line": 2
+                                            },
+                                            "end": {
+                                                "column": 21,
+                                                "line": 2
+                                            }
+                                        },
+                                        "name": "prevent",
+                                        "rawName": "prevent"
+                                    }
+                                ],
+                                "shorthand": true
                             },
                             "value": {
                                 "type": "VExpressionContainer",
@@ -754,12 +801,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 7
+                        "column": 7,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 8
+                        "column": 8,
+                        "line": 2
                     }
                 },
                 "value": "@"
@@ -772,12 +819,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 8
+                        "column": 8,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 13
+                        "column": 13,
+                        "line": 2
                     }
                 },
                 "value": "click"
@@ -790,12 +837,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 13
+                        "column": 13,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 14
+                        "column": 14,
+                        "line": 2
                     }
                 },
                 "value": "."
@@ -808,12 +855,12 @@
                 ],
                 "loc": {
                     "start": {
-                        "line": 2,
-                        "column": 14
+                        "column": 14,
+                        "line": 2
                     },
                     "end": {
-                        "line": 2,
-                        "column": 21
+                        "column": 21,
+                        "line": 2
                     }
                 },
                 "value": "prevent"
