@@ -144,15 +144,14 @@ interface VDirectiveKey <: Node {
     name: VIdentifier
     argument: VExpressionContainer | VIdentifier | null
     modifiers: [ VIdentifier ]
-    shorthand: boolean
 }
 ```
 
 - The `name` property doesn't have `v-` prefix. It's dropped.
 - The `argument` property is a `VExpressionContainer` node if it's a [dynamic argument].
-- In the shorthand of `v-bind` cases, the `name` property is `"bind"` and the `shorthand` property is `true`.
-- In the shorthand of `v-on` cases, the `name` property is `"on"` and the `shorthand` property is `true`.
-- In the shorthand of `v-slot` cases, the `name` property is `"slot"` and the `shorthand` property is `true`.
+- In the shorthand of `v-bind` case, the `name.name` property is `"bind"` and the `name.rawName` property is `":"`.
+- In the shorthand of `v-on` case, the `name.name` property is `"on"` and the `name.rawName` property is `@`.
+- In the shorthand of `v-slot` case, the `name.name` property is `"slot"` and the `name.rawName` property is `#`.
 - Otherwise, `shorthand` property is always `false`.
 
 ## VLiteral

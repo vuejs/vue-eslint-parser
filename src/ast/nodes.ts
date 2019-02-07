@@ -771,7 +771,6 @@ export interface VDirectiveKey extends HasLocation, HasParent {
     name: VIdentifier
     argument: VExpressionContainer | VIdentifier | null
     modifiers: VIdentifier[]
-    shorthand: boolean
 }
 
 /**

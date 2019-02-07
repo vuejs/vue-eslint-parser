@@ -98,7 +98,6 @@ function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
         name: null as any,
         argument: null as VIdentifier | null,
         modifiers: [] as VIdentifier[],
-        shorthand: false,
     }
     let i = 0
 
@@ -121,7 +120,6 @@ function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
         const sign = text[0] as ":" | "@" | "#"
         directiveKey.name = createIdentifier(0, 1)
         directiveKey.name.name = shorthandNameMap[sign]
-        directiveKey.shorthand = true
         i = 1
     } else {
         const colon = text.indexOf(":")
@@ -155,7 +153,8 @@ function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
  * @param node The key node to parse.
  */
 function parseDirectiveKeyTokens(node: VDirectiveKey): Token[] {
-    const { name, argument, modifiers, shorthand } = node
+    const { name, argument, modifiers } = node
+    const shorthand = name.range[1] - name.range[0] === 1
     const tokens: Token[] = []
 
     if (shorthand) {
