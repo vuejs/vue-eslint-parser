@@ -1,7 +1,7 @@
 [
     {
         "type": "VElement",
-        "text": "<template>\n    <button :[key+!]=\"foo\"></button>\n</template>",
+        "text": "<template>\n    <div v-.a></div>\n</template>",
         "children": [
             {
                 "type": "VStartTag",
@@ -15,39 +15,28 @@
             },
             {
                 "type": "VElement",
-                "text": "<button :[key+!]=\"foo\"></button>",
+                "text": "<div v-.a></div>",
                 "children": [
                     {
                         "type": "VStartTag",
-                        "text": "<button :[key+!]=\"foo\">",
+                        "text": "<div v-.a>",
                         "children": [
                             {
                                 "type": "VAttribute",
-                                "text": ":[key+!]=\"foo\"",
+                                "text": "v-.a",
                                 "children": [
                                     {
                                         "type": "VDirectiveKey",
-                                        "text": ":[key+!]",
+                                        "text": "v-.a",
                                         "children": [
                                             {
                                                 "type": "VIdentifier",
-                                                "text": ":",
+                                                "text": "v-",
                                                 "children": []
                                             },
                                             {
-                                                "type": "VExpressionContainer",
-                                                "text": "[key+!]",
-                                                "children": []
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "type": "VExpressionContainer",
-                                        "text": "\"foo\"",
-                                        "children": [
-                                            {
-                                                "type": "Identifier",
-                                                "text": "foo",
+                                                "type": "VIdentifier",
+                                                "text": "a",
                                                 "children": []
                                             }
                                         ]
@@ -58,7 +47,7 @@
                     },
                     {
                         "type": "VEndTag",
-                        "text": "</button>",
+                        "text": "</div>",
                         "children": []
                     }
                 ]

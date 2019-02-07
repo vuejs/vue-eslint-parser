@@ -79,9 +79,13 @@ function createSimpleToken(
 /**
  * Parse the given attribute name as a directive key.
  * @param node The identifier node to parse.
+ * @param document The document to add parsing errors.
  * @returns The directive key node.
  */
-function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
+function parseDirectiveKeyStatically(
+    node: VIdentifier,
+    document: VDocumentFragment | null,
+): VDirectiveKey {
     const {
         name: text,
         rawName: rawText,
@@ -136,23 +140,53 @@ function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
         .slice(i)
         .split(".")
         .map(modifierName => {
-            //TODO: generate syntax error if modifierName.length === 0.
             const modifier = createIdentifier(i, i + modifierName.length)
+            if (modifierName === "") {
+                insertError(
+                    document,
+                    new ParseError(
+                        `Unexpected token '${text[i]}'`,
+                        undefined,
+                        offset + i,
+                        line,
+                        column + i,
+                    ),
+                )
+            }
             i += modifierName.length + 1
             return modifier
         })
 
     if (directiveKey.name == null) {
         directiveKey.name = nameOrArgument
-    } else {
+    } else if (nameOrArgument.name !== "") {
         directiveKey.argument = nameOrArgument
     }
-    directiveKey.modifiers = modifiers
+    directiveKey.modifiers = modifiers.filter(isNotEmptyModifier)
 
-    if (directiveKey.name.rawName === "." && !modifiers.some(isPropModifier)) {
+    if (directiveKey.name.name === "v-") {
+        insertError(
+            document,
+            new ParseError(
+                `Unexpected token '${
+                    text[directiveKey.name.range[1] - offset]
+                }'`,
+                undefined,
+                directiveKey.name.range[1],
+                directiveKey.name.loc.end.line,
+                directiveKey.name.loc.end.column,
+            ),
+        )
+    }
+
+    // v-bind.prop shorthand
+    if (
+        directiveKey.name.rawName === "." &&
+        !directiveKey.modifiers.some(isPropModifier)
+    ) {
         const pos = (directiveKey.argument || directiveKey.name).range[1]
         const propModifier = createIdentifier(pos, pos, "prop")
-        modifiers.unshift(propModifier)
+        directiveKey.modifiers.unshift(propModifier)
     }
 
     return directiveKey
@@ -164,6 +198,14 @@ function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
  */
 function isPropModifier(node: VIdentifier): boolean {
     return node.name === "prop"
+}
+
+/**
+ * Check whether a given identifier node is empty or not.
+ * @param node The identifier node to check.
+ */
+function isNotEmptyModifier(node: VIdentifier): boolean {
+    return node.name !== ""
 }
 
 /**
@@ -335,7 +377,7 @@ function createDirectiveKey(
     locationCalculator: LocationCalculator,
 ): VDirectiveKey {
     // Parse node and tokens.
-    const directiveKey = parseDirectiveKeyStatically(node)
+    const directiveKey = parseDirectiveKeyStatically(node, document)
     const tokens = parseDirectiveKeyTokens(directiveKey)
     replaceTokens(document, directiveKey, tokens)
 
