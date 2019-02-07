@@ -36,6 +36,7 @@ import {
 
 const shorthandSign = /^[.:@#]/u
 const shorthandNameMap = { ":": "bind", ".": "bind", "@": "on", "#": "slot" }
+const invalidDynamicArgumentNextChar = /^[\s\r\n=/>]$/u
 
 /**
  * Get the belonging document of the given node.
@@ -648,6 +649,25 @@ export function convertToDirective(
         parserOptions,
         locationCalculator,
     )
+
+    const { argument } = directive.key
+    if (
+        argument &&
+        argument.type === "VIdentifier" &&
+        argument.name.startsWith("[") &&
+        invalidDynamicArgumentNextChar.test(code[argument.range[1]])
+    ) {
+        insertError(
+            document,
+            new ParseError(
+                "Dynamic argument cannot contain spaces, '=', '/', or '>'.",
+                undefined,
+                argument.range[1],
+                argument.loc.end.line,
+                argument.loc.end.column,
+            ),
+        )
+    }
 
     if (node.value == null) {
         return

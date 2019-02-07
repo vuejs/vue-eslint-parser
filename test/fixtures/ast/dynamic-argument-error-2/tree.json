@@ -1,0 +1,94 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <button :[\"a\" + name]=\"foo\"></button>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button :[\"a\" + name]=\"foo\"></button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button :[\"a\" + name]=\"foo\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":[\"a\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":[\"a\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "[\"a\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "+",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "+",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "name]=\"foo\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "name]",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"foo\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
