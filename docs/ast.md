@@ -150,6 +150,7 @@ interface VDirectiveKey <: Node {
 - The `name` property doesn't have `v-` prefix. It's dropped.
 - The `argument` property is a `VExpressionContainer` node if it's a [dynamic argument].
 - In the shorthand of `v-bind` case, the `name.name` property is `"bind"` and the `name.rawName` property is `":"`.
+- In the shorthand of `v-bind` with `.prop` modifier case, the `name.name` property is `"bind"` and the `name.rawName` property is `"."` and the `modifiers` property includes a `VIdentifier` node of `"prop"`.
 - In the shorthand of `v-on` case, the `name.name` property is `"on"` and the `name.rawName` property is `@`.
 - In the shorthand of `v-slot` case, the `name.name` property is `"slot"` and the `name.rawName` property is `#`.
 - Otherwise, `shorthand` property is always `false`.

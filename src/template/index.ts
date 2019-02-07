@@ -34,8 +34,8 @@ import {
     parseSlotScopeExpression,
 } from "../script"
 
-const shorthandSign = /^[:@#]/u
-const shorthandNameMap = { ":": "bind", "@": "on", "#": "slot" }
+const shorthandSign = /^[.:@#]/u
+const shorthandNameMap = { ":": "bind", ".": "bind", "@": "on", "#": "slot" }
 
 /**
  * Get the belonging document of the given node.
@@ -101,7 +101,11 @@ function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
     }
     let i = 0
 
-    function createIdentifier(start: number, end: number): VIdentifier {
+    function createIdentifier(
+        start: number,
+        end: number,
+        name?: string,
+    ): VIdentifier {
         return {
             type: "VIdentifier",
             parent: directiveKey,
@@ -110,16 +114,15 @@ function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
                 start: { column: column + start, line },
                 end: { column: column + end, line },
             },
-            name: text.slice(start, end),
+            name: name || text.slice(start, end),
             rawName: rawText.slice(start, end),
         }
     }
 
     // Parse.
     if (shorthandSign.test(text)) {
-        const sign = text[0] as ":" | "@" | "#"
-        directiveKey.name = createIdentifier(0, 1)
-        directiveKey.name.name = shorthandNameMap[sign]
+        const sign = text[0] as ":" | "." | "@" | "#"
+        directiveKey.name = createIdentifier(0, 1, shorthandNameMap[sign])
         i = 1
     } else {
         const colon = text.indexOf(":")
@@ -133,6 +136,7 @@ function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
         .slice(i)
         .split(".")
         .map(modifierName => {
+            //TODO: generate syntax error if modifierName.length === 0.
             const modifier = createIdentifier(i, i + modifierName.length)
             i += modifierName.length + 1
             return modifier
@@ -145,7 +149,21 @@ function parseDirectiveKeyStatically(node: VIdentifier): VDirectiveKey {
     }
     directiveKey.modifiers = modifiers
 
+    if (directiveKey.name.rawName === "." && !modifiers.some(isPropModifier)) {
+        const pos = (directiveKey.argument || directiveKey.name).range[1]
+        const propModifier = createIdentifier(pos, pos, "prop")
+        modifiers.unshift(propModifier)
+    }
+
     return directiveKey
+}
+
+/**
+ * Check whether a given identifier node is `prop` or not.
+ * @param node The identifier node to check.
+ */
+function isPropModifier(node: VIdentifier): boolean {
+    return node.name === "prop"
 }
 
 /**
@@ -193,6 +211,10 @@ function parseDirectiveKeyTokens(node: VDirectiveKey): Token[] {
 
     let lastNode = (argument as VIdentifier | null) || name
     for (const modifier of modifiers) {
+        if (modifier.rawName === "") {
+            continue
+        }
+
         tokens.push(
             {
                 type: "Punctuator",
