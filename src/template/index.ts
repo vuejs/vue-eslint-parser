@@ -185,7 +185,8 @@ function parseDirectiveKeyStatically(
         directiveKey.name.rawName === "." &&
         !directiveKey.modifiers.some(isPropModifier)
     ) {
-        const pos = (directiveKey.argument || directiveKey.name).range[1]
+        const pos =
+            (directiveKey.argument || directiveKey.name).range[1] - offset
         const propModifier = createIdentifier(pos, pos, "prop")
         directiveKey.modifiers.unshift(propModifier)
     }
