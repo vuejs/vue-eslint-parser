@@ -475,8 +475,16 @@ export class Parser {
 
         // Resolve references.
         for (const attribute of element.startTag.attributes) {
-            if (attribute.directive && attribute.value != null) {
-                resolveReferences(attribute.value)
+            if (attribute.directive) {
+                if (
+                    attribute.key.argument != null &&
+                    attribute.key.argument.type === "VExpressionContainer"
+                ) {
+                    resolveReferences(attribute.key.argument)
+                }
+                if (attribute.value != null) {
+                    resolveReferences(attribute.value)
+                }
             }
         }
 

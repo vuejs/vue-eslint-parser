@@ -328,3 +328,33 @@ describe("Variables of template-scope and references", () => {
         }
     })
 })
+
+describe("Variables of v-for and references of dynamic arguments", () => {
+    const code = '<template><div v-for="x of xs" :[x]="1" /></template>'
+    let variables = null
+    let vForReferences = null
+    let vBindKeyReferences = null
+
+    before(() => {
+        const ast = parse(
+            code,
+            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+        ).ast
+        variables = ast.templateBody.children[0].variables
+        vForReferences =
+            ast.templateBody.children[0].startTag.attributes[0].value.references
+        vBindKeyReferences =
+            ast.templateBody.children[0].startTag.attributes[1].key.argument
+                .references
+    })
+
+    it("should have relationship each other", () => {
+        assert(variables.length === 1)
+        assert(vForReferences.length === 1)
+        assert(vBindKeyReferences.length === 1)
+        assert(variables[0].references.length === 1)
+        assert(variables[0].references[0] === vBindKeyReferences[0])
+        assert(vForReferences[0].variable === null)
+        assert(vBindKeyReferences[0].variable === variables[0])
+    })
+})
