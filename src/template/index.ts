@@ -137,12 +137,21 @@ function parseDirectiveKeyStatically(
         }
     }
 
-    const [nameOrArgument, ...modifiers] = text
+    if (directiveKey.name != null && text[i] === "[") {
+        // Dynamic argument.
+        const len = text.slice(i).lastIndexOf("]")
+        if (len !== -1) {
+            directiveKey.argument = createIdentifier(i, i + len + 1)
+            i = i + len + 1 + (text[i + len + 1] === "." ? 1 : 0)
+        }
+    }
+
+    const modifiers = text
         .slice(i)
         .split(".")
         .map(modifierName => {
             const modifier = createIdentifier(i, i + modifierName.length)
-            if (modifierName === "") {
+            if (modifierName === "" && i < text.length) {
                 insertError(
                     document,
                     new ParseError(
@@ -159,9 +168,9 @@ function parseDirectiveKeyStatically(
         })
 
     if (directiveKey.name == null) {
-        directiveKey.name = nameOrArgument
-    } else if (nameOrArgument.name !== "") {
-        directiveKey.argument = nameOrArgument
+        directiveKey.name = modifiers.shift()!
+    } else if (directiveKey.argument == null && modifiers[0].name !== "") {
+        directiveKey.argument = modifiers.shift() || null
     }
     directiveKey.modifiers = modifiers.filter(isNotEmptyModifier)
 
@@ -655,19 +664,23 @@ export function convertToDirective(
     if (
         argument &&
         argument.type === "VIdentifier" &&
-        argument.name.startsWith("[") &&
-        invalidDynamicArgumentNextChar.test(code[argument.range[1]])
+        argument.name.startsWith("[")
     ) {
-        insertError(
-            document,
-            new ParseError(
-                "Dynamic argument cannot contain spaces, '=', '/', or '>'.",
-                undefined,
-                argument.range[1],
-                argument.loc.end.line,
-                argument.loc.end.column,
-            ),
-        )
+        const nextChar = code[argument.range[1]]
+        if (nextChar == null || invalidDynamicArgumentNextChar.test(nextChar)) {
+            const char =
+                nextChar == null ? "EOF" : JSON.stringify(nextChar).slice(1, -1)
+            insertError(
+                document,
+                new ParseError(
+                    `Dynamic argument cannot contain the '${char}' character.`,
+                    undefined,
+                    argument.range[1],
+                    argument.loc.end.line,
+                    argument.loc.end.column,
+                ),
+            )
+        }
     }
 
     if (node.value == null) {

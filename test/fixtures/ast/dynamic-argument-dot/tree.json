@@ -1,0 +1,95 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <button :[obj.prop]=\"foo\"></button>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button :[obj.prop]=\"foo\"></button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button :[obj.prop]=\"foo\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":[obj.prop]=\"foo\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":[obj.prop]",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "[obj.prop]",
+                                                "children": [
+                                                    {
+                                                        "type": "MemberExpression",
+                                                        "text": "obj.prop",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "obj",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "prop",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"foo\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "foo",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
