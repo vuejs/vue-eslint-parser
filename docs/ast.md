@@ -23,7 +23,7 @@ export function create(context) {
                 //...
             }
         },
-        // Event handlers for <script>. (optional)
+        // Event handlers for <script> or scripts. (optional)
         {
             Program(node: AST.ESLintProgram): void {
                 //...
