@@ -72,7 +72,7 @@ function isNode(x: any): x is Node {
  * Traverse the given node.
  * @param node The node to traverse.
  * @param parent The parent node.
- * @param generator The event generator.
+ * @param visitor The node visitor.
  */
 function traverse(node: Node, parent: Node | null, visitor: Visitor): void {
     let i = 0
