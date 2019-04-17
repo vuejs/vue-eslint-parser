@@ -63,7 +63,9 @@ export function define(rootAST: ESLintProgram): ParserServices {
 
             // If this is the first time, initialize the intermediate event emitter.
             if (emitter == null) {
-                emitters.set(rootAST, (emitter = new EventEmitter()))
+                emitter = new EventEmitter()
+                emitter.setMaxListeners(0)
+                emitters.set(rootAST, emitter)
 
                 const programExitHandler = scriptVisitor["Program:exit"]
                 scriptVisitor["Program:exit"] = node => {
