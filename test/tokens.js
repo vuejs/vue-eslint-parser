@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 
 const assert = require("assert")
-const parse = require("..").parseForESLint
+const parse = require("../src").parseForESLint
 
 //------------------------------------------------------------------------------
 // Helpers

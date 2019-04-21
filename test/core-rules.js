@@ -19,7 +19,7 @@ const RuleTester = require("./fixtures/eslint/lib/testers/rule-tester")
 
 const RULE_DEFS_ROOT = path.join(__dirname, "fixtures/eslint/lib/rules")
 const RULE_TESTS_ROOT = path.join(__dirname, "fixtures/eslint/tests/lib/rules")
-const PARSER_PATH = path.resolve(__dirname, "../index.js")
+const PARSER_PATH = path.resolve(__dirname, "../src/index.ts")
 const EXCEPTIONS = new Set([
     // Those rules check outside `<script>` tag as well.
     // It cannot fix the behavior in vue-eslint-parser side.

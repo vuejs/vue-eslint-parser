@@ -13,14 +13,14 @@ const assert = require("assert")
 const fs = require("fs")
 const path = require("path")
 const lodash = require("lodash")
-const parser = require("..")
+const parser = require("../src")
 const Linter = require("./fixtures/eslint").Linter
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 
-const PARSER = path.resolve(__dirname, "..")
+const PARSER = path.resolve(__dirname, "../src/index.ts")
 const ROOT = path.join(__dirname, "fixtures/ast")
 const TARGETS = fs.readdirSync(ROOT)
 const PARSER_OPTIONS = {

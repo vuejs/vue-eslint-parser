@@ -9,3 +9,10 @@ overrides:
         - error
         - allowModules:
           - estree
+
+settings:
+  node:
+    tryExtensions:
+      - .ts
+      - .js
+      - .json

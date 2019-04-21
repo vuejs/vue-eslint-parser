@@ -6,7 +6,7 @@
 
 const assert = require("assert")
 const { rules } = require("@mysticatea/eslint-plugin")
-const parseForESLint = require("..").parseForESLint
+const { parseForESLint } = require("../src")
 const eslint = require("./fixtures/eslint")
 const Linter = eslint.Linter
 

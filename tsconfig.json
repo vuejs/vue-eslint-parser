@@ -9,12 +9,13 @@
         "baseUrl": ".",
         "checkJs": false,
         "declaration": true,
+        "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "inlineSources": true,
         "lib": [
             "es2015"
         ],
-        "module": "es2015",
+        "module": "commonjs",
         "moduleResolution": "node",
         "newLine": "LF",
         "noEmitOnError": true,

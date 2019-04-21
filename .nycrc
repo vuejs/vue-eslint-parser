@@ -1,0 +1,19 @@
+{
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "src/external/**/*.ts"
+    ],
+    "extension": [
+        ".ts"
+    ],
+    "require": [
+        "ts-node/register"
+    ],
+    "reporter": [
+        "lcov",
+        "text-summary"
+    ],
+    "sourceMap": true
+}

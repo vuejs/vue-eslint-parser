@@ -12,8 +12,8 @@
 const assert = require("assert")
 const path = require("path")
 const fs = require("fs-extra")
-const parse = require("..").parse
-const parseForESLint = require("..").parseForESLint
+const parse = require("../src").parse
+const parseForESLint = require("../src").parseForESLint
 const eslint = require("./fixtures/eslint")
 const CLIEngine = eslint.CLIEngine
 const Linter = eslint.Linter
@@ -24,7 +24,7 @@ const Linter = eslint.Linter
 
 const ORIGINAL_FIXTURE_DIR = path.join(__dirname, "fixtures")
 const FIXTURE_DIR = path.join(__dirname, "temp")
-const PARSER_PATH = path.resolve(__dirname, "../index.js")
+const PARSER_PATH = path.resolve(__dirname, "../src/index.ts")
 
 //------------------------------------------------------------------------------
 // Tests
