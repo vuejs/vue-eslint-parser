@@ -83,6 +83,7 @@ export function define(rootAST: ESLintProgram): ParserServices {
                             generator,
                         )
                     } finally {
+                        // eslint-disable-next-line @mysticatea/ts/ban-ts-ignore
                         // @ts-ignore
                         scriptVisitor["Program:exit"] = programExitHandler
                         emitters.delete(rootAST)

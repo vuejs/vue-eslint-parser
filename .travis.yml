@@ -1,10 +1,25 @@
 sudo: false
 
 language: node_js
-node_js:
-  - "6.5"
-  - "8"
-  - "10"
+matrix:
+  include:
+    - node_js: "6.5"
+      env: ESLINT=5
+    - node_js: "8"
+      env: ESLINT=5
+    - node_js: "8"
+      env: ESLINT=6
+    - node_js: "10"
+      env: ESLINT=5
+    - node_js: "10"
+      env: ESLINT=6
+    - node_js: "11"
+
+before_install:
+  - if [ "$ESLINT" = "6" ]; then npm i -D eslint@6.0.0; fi
+  - if [ "$ESLINT" = "6" ]; then npm i -S espree@6.0.0 eslint-scope@5.0.0; fi
+  - if [ "$ESLINT" = "5" ]; then npm i -D eslint@5.16.0 @mysticatea/eslint-plugin@9.0.1; fi
+  - if [ "$ESLINT" = "5" ]; then npm i -S espree@5.0.0 eslint-scope@4.0.0; fi
 
 before_script:
   - npm run setup
