@@ -1,6 +1,6 @@
 {
   "name": "vue-eslint-parser-stzhang",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The ESLint custom parser for `.vue` files.",
   "engines": {
     "node": ">=6.5"
@@ -49,6 +49,7 @@
     "warun": "^1.0.0"
   },
   "scripts": {
+    "prepublishOnly": "npm run build",
     "prebuild": "npm run -s clean",
     "build": "tsc --module es2015 && rollup -c -o index.js && dts-bundle --name vue-eslint-parser-stzhang --main .temp/index.d.ts --out ../index.d.ts",
     "clean": "rimraf .nyc_output .temp coverage index.*",
