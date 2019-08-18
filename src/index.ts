@@ -93,6 +93,14 @@ export function parseForESLint(
     if (!isVueFile(code, options)) {
         result = parseScript(code, options)
     } else {
+        if (
+            options.useJSXTextNode &&
+            options.ecmaFeatures.jsx &&
+            options.sourceType === "module"
+        ) {
+            // bug fix: https://github.com/mysticatea/vue-eslint-parser/issues/45
+            options.filePath += ".tsx"
+        }
         const skipParsingScript = options.parser === false
         const tokenizer = new HTMLTokenizer(code)
         const rootAST = new HTMLParser(tokenizer, options).parse()
