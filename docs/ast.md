@@ -13,7 +13,7 @@ Some types are featured from [ESTree].
 You can use the type definition of this AST:
 
 ```ts
-import { AST } from "vue-eslint-parser"
+import { AST } from "vue-eslint-parser-stzhang"
 
 export function create(context) {
     return context.parserServices.defineTemplateBodyVisitor(
@@ -134,7 +134,7 @@ interface VFilter <: Node {
 - `VSlotScopeExpression` is an expression node like [VariableDeclarator]. This is the value of [`v-slot` directives], [`slot-scope` attributes], and `scope` attributes.
 - `VFilterSequenceExpression` is an expression node for [Vue.js Filters](https://vuejs.org/v2/guide/filters.html) syntax.
 
-> Note: `vue-eslint-parser` transforms `v-for="(x, i) in list"` to `for(let [x, i] in list);` then gives the configured parser (`espree` by default) it. This implies that it needs the capability to parse ES2015 destructuring in order to parse [`v-for` directives].
+> Note: `vue-eslint-parser-stzhang` transforms `v-for="(x, i) in list"` to `for(let [x, i] in list);` then gives the configured parser (`espree` by default) it. This implies that it needs the capability to parse ES2015 destructuring in order to parse [`v-for` directives].
 
 ## VDirectiveKey
 

@@ -1,4 +1,4 @@
-# vue-eslint-parser
+# vue-eslint-parser-stzhang
 
 [![npm version](https://img.shields.io/npm/v/vue-eslint-parser.svg)](https://www.npmjs.com/package/vue-eslint-parser)
 [![Downloads/month](https://img.shields.io/npm/dm/vue-eslint-parser.svg)](http://www.npmtrends.com/vue-eslint-parser)
@@ -31,7 +31,7 @@ $ npm install --save-dev eslint vue-eslint-parser
 ```json
 {
     "extends": "eslint:recommended",
-    "parser": "vue-eslint-parser"
+    "parser": "vue-eslint-parser-stzhang"
 }
 ```
 
@@ -48,7 +48,7 @@ For example:
 
 ```json
 {
-    "parser": "vue-eslint-parser",
+    "parser": "vue-eslint-parser-stzhang",
     "parserOptions": {
         "sourceType": "module",
         "ecmaVersion": 2018,
@@ -69,7 +69,7 @@ For example:
 
 ```json
 {
-    "parser": "vue-eslint-parser",
+    "parser": "vue-eslint-parser-stzhang",
     "parserOptions": {
         "parser": "babel-eslint",
         "sourceType": "module",
@@ -80,14 +80,14 @@ For example:
 
 ```json
 {
-    "parser": "vue-eslint-parser",
+    "parser": "vue-eslint-parser-stzhang",
     "parserOptions": {
         "parser": "@typescript-eslint/parser"
     }
 }
 ```
 
-If the `parserOptions.parser` is `false`, the `vue-eslint-parser` skips parsing `<script>` tags completely.
+If the `parserOptions.parser` is `false`, the `vue-eslint-parser-stzhang` skips parsing `<script>` tags completely.
 This is useful for people who use the language ESLint community doesn't provide custom parser implementation.
 
 ## 🎇 Usage for custom rules / plugins
@@ -113,7 +113,7 @@ Please disable those rules for `.vue` files as necessary.
 
 ## 📰 Changelog
 
-- [GitHub Releases](https://github.com/mysticatea/vue-eslint-parser/releases)
+- [GitHub Releases](https://github.com/stuartZhang/vue-eslint-parser/releases)
 
 ## 🍻 Contributing
 

@@ -4,4 +4,4 @@
  * See LICENSE file in root directory for full license.
  */
 import debugFactory from "debug"
-export const debug = debugFactory("vue-eslint-parser")
+export const debug = debugFactory("vue-eslint-parser-stzhang")

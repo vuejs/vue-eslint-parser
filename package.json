@@ -1,6 +1,6 @@
 {
-  "name": "vue-eslint-parser",
-  "version": "6.0.4",
+  "name": "vue-eslint-parser-stzhang",
+  "version": "1.0.0",
   "description": "The ESLint custom parser for `.vue` files.",
   "engines": {
     "node": ">=6.5"
@@ -50,7 +50,7 @@
   },
   "scripts": {
     "prebuild": "npm run -s clean",
-    "build": "tsc --module es2015 && rollup -c -o index.js && dts-bundle --name vue-eslint-parser --main .temp/index.d.ts --out ../index.d.ts",
+    "build": "tsc --module es2015 && rollup -c -o index.js && dts-bundle --name vue-eslint-parser-stzhang --main .temp/index.d.ts --out ../index.d.ts",
     "clean": "rimraf .nyc_output .temp coverage index.*",
     "codecov": "codecov",
     "coverage": "opener ./coverage/lcov-report/index.html",
@@ -73,13 +73,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mysticatea/vue-eslint-parser.git"
+    "url": "git+https://github.com/stuartZhang/vue-eslint-parser.git"
   },
   "keywords": [],
   "author": "Toru Nagashima",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mysticatea/vue-eslint-parser/issues"
+    "url": "https://github.com/stuartZhang/vue-eslint-parser/issues"
   },
-  "homepage": "https://github.com/mysticatea/vue-eslint-parser#readme"
+  "homepage": "https://github.com/stuartZhang/vue-eslint-parser#readme"
 }

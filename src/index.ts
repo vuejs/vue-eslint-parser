@@ -94,7 +94,11 @@ export function parseForESLint(
         result = parseScript(code, options)
     } else {
         if (
+            options.parser === "@typescript-eslint/parser" &&
+            options.project &&
+            options.tsconfigRootDir &&
             options.useJSXTextNode &&
+            options.ecmaFeatures &&
             options.ecmaFeatures.jsx &&
             options.sourceType === "module"
         ) {
