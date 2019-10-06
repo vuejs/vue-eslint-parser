@@ -15,7 +15,7 @@ This parser allows us to lint the `<template>` of `.vue` files. We can make mist
 ## 💿 Installation
 
 ```bash
-$ npm install --save-dev eslint vue-eslint-parser
+$ npm install --save-dev eslint vue-eslint-parser-stzhang
 ```
 
 - Requires Node.js 6.5.0 or later.
@@ -82,7 +82,16 @@ For example:
 {
     "parser": "vue-eslint-parser-stzhang",
     "parserOptions": {
-        "parser": "@typescript-eslint/parser"
+        "parser": "@typescript-eslint/parser",
+        "warnOnUnsupportedTypeScriptVersion": false,
+        "createDefaultProgram": true,
+        "extraFileExtensions": [".vue"],
+        "project": "./tsconfig.json",
+        "tsconfigRootDir": "./",
+        "useJSXTextNode": true,
+        "ecmaFeatures": {
+            "jsx": true
+        }
     }
 }
 ```
