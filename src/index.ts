@@ -93,18 +93,6 @@ export function parseForESLint(
     if (!isVueFile(code, options)) {
         result = parseScript(code, options)
     } else {
-        if (
-            options.parser === "@typescript-eslint/parser" &&
-            options.project &&
-            options.tsconfigRootDir &&
-            options.useJSXTextNode &&
-            options.ecmaFeatures &&
-            options.ecmaFeatures.jsx &&
-            options.sourceType === "module"
-        ) {
-            // bug fix: https://github.com/mysticatea/vue-eslint-parser/issues/45
-            options.filePath += ".tsx"
-        }
         const skipParsingScript = options.parser === false
         const tokenizer = new HTMLTokenizer(code)
         const rootAST = new HTMLParser(tokenizer, options).parse()
@@ -113,6 +101,10 @@ export function parseForESLint(
             tokenizer.lineTerminators,
         )
         const script = rootAST.children.find(isScriptElement)
+        if (typeof options.callback === "function") {
+            // bug fix: https://github.com/mysticatea/vue-eslint-parser/issues/45
+            options = options.callback(script, options) || options // eslint-disable-line no-param-reassign
+        }
         const template = rootAST.children.find(isTemplateElement)
         const templateLang = getLang(template, "html")
         const concreteInfo: AST.HasConcreteInfo = {
