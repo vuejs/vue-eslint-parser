@@ -566,9 +566,12 @@ export function parseScript(
 ): ESLintExtendedProgram {
     const parser: ESLintCustomParser =
         typeof parserOptions.parser === "string"
-            ? require(parserOptions.parser)
-            : require("espree")
+            ? // eslint-disable-next-line @mysticatea/ts/no-require-imports
+              require(parserOptions.parser)
+            : // eslint-disable-next-line @mysticatea/ts/no-require-imports
+              require("espree")
     const result: any =
+        // eslint-disable-next-line @mysticatea/ts/unbound-method
         typeof parser.parseForESLint === "function"
             ? parser.parseForESLint(code, parserOptions)
             : parser.parse(code, parserOptions)

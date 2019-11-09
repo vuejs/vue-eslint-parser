@@ -48,8 +48,8 @@ function transformReference(reference: escopeTypes.Reference): Reference {
         mode: reference.isReadOnly()
             ? "r"
             : reference.isWriteOnly()
-                ? "w"
-                : /* otherwise */ "rw",
+            ? "w"
+            : /* otherwise */ "rw",
         variable: null,
     }
     Object.defineProperty(ret, "variable", { enumerable: false })
