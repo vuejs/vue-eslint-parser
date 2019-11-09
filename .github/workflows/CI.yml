@@ -61,12 +61,14 @@ jobs:
       run: |
         if [ ${{ matrix.eslint }} -eq 6 ]; then
           cd test/fixtures/eslint
+          npm install
         else
           npm install --no-save eslint@5.16.0
           cd test/fixtures/eslint
           git checkout v5.16.0
+          npm install eslint-utils@1.4.0
+          npm install
         fi
-        npm install
     - name: Build
       run: npm run -s build
     - name: Test
