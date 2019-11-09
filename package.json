@@ -3,20 +3,20 @@
   "version": "6.0.5",
   "description": "The ESLint custom parser for `.vue` files.",
   "engines": {
-    "node": ">=6.5"
+    "node": ">=8.10"
   },
   "main": "index.js",
   "files": [
     "index.*"
   ],
   "peerDependencies": {
-    "eslint": "^5.0.0 || ^6.0.0"
+    "eslint": ">=5.0.0"
   },
   "dependencies": {
     "debug": "^4.1.1",
-    "eslint-scope": "^4.0.0 || ^5.0.0",
-    "eslint-visitor-keys": "^1.0.0",
-    "espree": "^5.0.0 || ^6.0.0",
+    "eslint-scope": "^5.0.0",
+    "eslint-visitor-keys": "^1.1.0",
+    "espree": "^6.1.2",
     "esquery": "^1.0.1",
     "lodash": "^4.17.15"
   },
@@ -57,7 +57,8 @@
     "lint": "node -e \"if(process.env.ESLINT=='5')process.exit(1)\" && eslint src test --ext .js,.ts || node -e \"if(process.env.ESLINT!='5')process.exit(1)\"",
     "setup": "git submodule update --init && cd test/fixtures/eslint && npm install",
     "pretest": "run-s build lint",
-    "test": "nyc mocha \"test/*.js\" --reporter dot --timeout 10000",
+    "test": "npm run -s test:mocha",
+    "test:mocha": "nyc mocha \"test/*.js\" --reporter dot --timeout 10000",
     "preupdate-fixtures": "npm run -s build",
     "update-fixtures": "node scripts/update-fixtures-ast.js",
     "preversion": "npm test",

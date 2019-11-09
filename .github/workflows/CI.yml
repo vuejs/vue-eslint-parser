@@ -1,0 +1,81 @@
+name: CI
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  schedule:
+  - cron: 0 0 * * 0
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - name: Checkout submodules
+      run: git submodule update --init
+    - name: Install Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - name: Install Packages
+      run: npm install
+    - name: Lint
+      run: npm run -s lint
+
+  test:
+    name: Test
+
+    strategy:
+      matrix:
+        eslint: [6, 5]
+        node: [13, 12, 10, 8, "8.10.0"]
+        exclude:
+        # Run ESLint 5 on only the LTS.
+        - node: 13
+          eslint: 5
+        - node: 10
+          eslint: 5
+        - node: 8
+          eslint: 5
+        - node: "8.10.0"
+          eslint: 5
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - name: Checkout submodules
+      run: git submodule update --init
+    - name: Install Node.js v${{ matrix.node }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+    - name: Install Packages
+      run: npm install
+    - name: Install ESLint v${{ matrix.eslint }}
+      run: |
+        if [ ${{ matrix.eslint }} -eq 6 ]; then
+          cd test/fixtures/eslint
+          npm install
+        else
+          npm install --no-save eslint@5.16.0
+          cd test/fixtures/eslint
+          git checkout v5.16.0
+          npm install eslint-utils@1.4.0
+          npm install
+        fi
+    - name: Build
+      run: npm run -s build
+    - name: Test
+      run: npm run -s test:mocha
+    - name: Send Coverage
+      run: npm run -s codecov
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
