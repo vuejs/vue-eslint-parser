@@ -7,7 +7,7 @@
 const assert = require("assert")
 const fs = require("fs")
 const path = require("path")
-const parser = require("..")
+const parser = require("../src")
 
 //------------------------------------------------------------------------------
 // Helpers
