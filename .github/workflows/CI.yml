@@ -16,6 +16,7 @@ jobs:
       uses: actions/checkout@v1
       with:
         fetch-depth: 1
+        submodules: true
     - name: Install Node.js
       uses: actions/setup-node@v1
       with:
@@ -49,6 +50,7 @@ jobs:
       uses: actions/checkout@v1
       with:
         fetch-depth: 1
+        submodules: true
     - name: Install Node.js v${{ matrix.node }}
       uses: actions/setup-node@v1
       with:
@@ -57,11 +59,10 @@ jobs:
       run: npm install
     - name: Install ESLint v${{ matrix.eslint }}
       run: |
-        git submodule update --init
         if [ ${{ matrix.eslint }} -eq 6 ]; then
           cd test/fixtures/eslint
         else
-          npm install --no-save eslint@^${{ matrix.eslint }}
+          npm install --no-save eslint@5.16.0
           cd test/fixtures/eslint
           git checkout v5.16.0
         fi
