@@ -31,8 +31,8 @@ jobs:
 
     strategy:
       matrix:
-        node: [13, 12, 10, 8, "8.10.0"]
         eslint: [6, 5]
+        node: [13, 12, 10, 8, "8.10.0"]
         exclude:
         # Run ESLint 5 on only the LTS.
         - node: 13
