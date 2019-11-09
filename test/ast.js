@@ -76,6 +76,7 @@ function getTree(source) {
     const root = { children: [] }
     let current = root
 
+    linter.defineParser(PARSER, require(PARSER))
     linter.defineRule("maketree", ruleContext =>
         ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
@@ -126,6 +127,7 @@ function validateParent(source) {
     const linter = new Linter()
     const stack = []
 
+    linter.defineParser(PARSER, require(PARSER))
     linter.defineRule("validateparent", ruleContext =>
         ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
