@@ -364,11 +364,11 @@ function parseExpressionBody(
     parserOptions: any,
     allowEmpty = false,
 ): ExpressionParseResult<ESLintExpression> {
-    debug('[script] parse expression: "0(%s)"', code)
+    debug('[script] parse expression: "f(%s)"', code)
 
     try {
         const ast = parseScriptFragment(
-            `0(${code})`,
+            `f(${code})`,
             locationCalculator.getSubCalculatorAfter(-2),
             parserOptions,
         ).ast
