@@ -233,9 +233,14 @@ function parseScriptFragment(
     code: string,
     locationCalculator: LocationCalculator,
     parserOptions: any,
+    useSpecifiedParser?: boolean,
 ): ESLintExtendedProgram {
     try {
-        const result = parseScript(code, parserOptions)
+        const result = parseScript(
+            code,
+            parserOptions,
+            Boolean(useSpecifiedParser),
+        )
         postprocess(result, locationCalculator)
         return result
     } catch (err) {
@@ -563,9 +568,10 @@ export type ESLintCustomParserResult = ESLintProgram | ESLintExtendedProgram
 export function parseScript(
     code: string,
     parserOptions: any,
+    useSpecifiedParser = true,
 ): ESLintExtendedProgram {
     const parser: ESLintCustomParser =
-        typeof parserOptions.parser === "string"
+        typeof parserOptions.parser === "string" && useSpecifiedParser
             ? // eslint-disable-next-line @mysticatea/ts/no-require-imports
               require(parserOptions.parser)
             : // eslint-disable-next-line @mysticatea/ts/no-require-imports
@@ -603,7 +609,12 @@ export function parseScriptElement(
     const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
         offset,
     )
-    const result = parseScriptFragment(code, locationCalculator, parserOptions)
+    const result = parseScriptFragment(
+        code,
+        locationCalculator,
+        parserOptions,
+        true,
+    )
 
     // Needs the tokens of start/end tags for `lines-around-*` rules to work
     // correctly.
