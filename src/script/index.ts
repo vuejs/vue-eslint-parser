@@ -9,7 +9,7 @@ import sortedIndexBy from "lodash/sortedIndexBy"
 import {
     traverseNodes,
     ESLintArrayPattern,
-    ESLintCallExpression,
+    ESLintArrayExpression,
     ESLintExpression,
     ESLintExpressionStatement,
     ESLintExtendedProgram,
@@ -368,16 +368,16 @@ function parseExpressionBody(
 
     try {
         const ast = parseScriptFragment(
-            `f(${code})`,
-            locationCalculator.getSubCalculatorAfter(-2),
+            `[${code}]`,
+            locationCalculator.getSubCalculatorAfter(-1),
             parserOptions,
         ).ast
         const tokens = ast.tokens || []
         const comments = ast.comments || []
         const references = analyzeExternalReferences(ast, parserOptions)
         const statement = ast.body[0] as ESLintExpressionStatement
-        const callExpression = statement.expression as ESLintCallExpression
-        const expression = callExpression.arguments[0]
+        const arrayExpression = statement.expression as ESLintArrayExpression
+        const expression = arrayExpression.elements[0]
 
         if (!allowEmpty && !expression) {
             return throwEmptyError(locationCalculator, "an expression")
@@ -385,16 +385,15 @@ function parseExpressionBody(
         if (expression && expression.type === "SpreadElement") {
             return throwUnexpectedTokenError("...", expression)
         }
-        if (callExpression.arguments[1]) {
-            const node = callExpression.arguments[1]
+        if (arrayExpression.elements[1]) {
+            const node = arrayExpression.elements[1]
             return throwUnexpectedTokenError(
                 ",",
                 getCommaTokenBeforeNode(tokens, node) || node,
             )
         }
 
-        // Remove parens.
-        tokens.shift()
+        // Remove braces.
         tokens.shift()
         tokens.pop()
 
