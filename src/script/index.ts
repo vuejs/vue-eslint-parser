@@ -364,7 +364,7 @@ function parseExpressionBody(
     parserOptions: any,
     allowEmpty = false,
 ): ExpressionParseResult<ESLintExpression> {
-    debug('[script] parse expression: "f(%s)"', code)
+    debug('[script] parse expression: "[%s]"', code)
 
     try {
         const ast = parseScriptFragment(
