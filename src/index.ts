@@ -29,7 +29,10 @@ function isVueFile(code: string, options: any): boolean {
  * @returns `true` if the node is a `<template>` element.
  */
 function isTemplateElement(node: AST.VNode): node is AST.VElement {
-    return node.type === "VElement" && node.name === "template"
+    return (
+        node.type === "VElement" &&
+        ["template", "component"].includes(node.name)
+    )
 }
 
 /**
