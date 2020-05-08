@@ -21,7 +21,7 @@ jobs:
     - name: Install Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 12
+        node-version: 14
     - name: Install Packages
       run: npm install
     - name: Lint
@@ -32,17 +32,26 @@ jobs:
 
     strategy:
       matrix:
-        eslint: [6, 5]
-        node: [13, 12, 10, 8, "8.10.0"]
+        eslint: [7, 6, 5]
+        node: [14, 12, 12.0, 10, 10.12]
         exclude:
-        # Run ESLint 5 on only the LTS.
-        - node: 13
+        # Run ESLint 6 on only the latest LTS.
+        - node: 14
+          eslint: 6
+        - node: 12.0
+          eslint: 6
+        - node: 10
+          eslint: 6
+        - node: 10.12
+          eslint: 6
+          # Run ESLint 5 on only the latest LTS.
+        - node: 14
+          eslint: 5
+        - node: 12.0
           eslint: 5
         - node: 10
           eslint: 5
-        - node: 8
-          eslint: 5
-        - node: "8.10.0"
+        - node: 10.12
           eslint: 5
 
     runs-on: ubuntu-latest
