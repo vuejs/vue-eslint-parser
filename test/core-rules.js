@@ -45,6 +45,19 @@ const originalRun = RuleTester.prototype.run
 const processed = new Set()
 
 /**
+ * Check if the code should be skipped or not.
+ * The following code should be skipped.
+ * - includes shebang
+ * - includes syntax error -- some tests in old ESLint contains syntax error.
+ *   Acorn has fixed to catch the syntax errors in a minor release, so those
+ *   tests go to fail.
+ * @param {string} code The test code.
+ */
+function codeShouldBeSkipped(code) {
+    return code.startsWith("#!") || code.includes("await async")
+}
+
+/**
  * Wrap the given code with a `<script>` tag.
  *
  * @param {string} code - The code to be wrapped.
@@ -69,7 +82,7 @@ function wrapCode(code) {
 //eslint-disable-next-line complexity
 function modifyPattern(ruleId, pattern) {
     if (typeof pattern === "string") {
-        if (pattern.startsWith("#!")) {
+        if (codeShouldBeSkipped(pattern)) {
             return null
         }
         return {
@@ -84,7 +97,7 @@ function modifyPattern(ruleId, pattern) {
     if (
         pattern.parser != null ||
         pattern.filename != null ||
-        pattern.code.startsWith("#!")
+        codeShouldBeSkipped(pattern.code)
     ) {
         return null
     }

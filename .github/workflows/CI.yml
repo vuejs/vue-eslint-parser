@@ -12,45 +12,57 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
-    - name: Checkout submodules
-      run: git submodule update --init
-    - name: Install Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12
-    - name: Install Packages
-      run: npm install
-    - name: Lint
-      run: npm run -s lint
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Checkout submodules
+        run: git submodule update --init
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - name: Install Packages
+        run: npm install
+      - name: Lint
+        run: npm run -s lint
 
   test:
     name: Test
-
     strategy:
       matrix:
-        eslint: [6, 5]
-        node: [13, 12, 10, 8, "8.10.0"]
-        exclude:
-        # Run ESLint 5 on only the LTS.
-        - node: 13
-          eslint: 5
-        - node: 10
-          eslint: 5
-        - node: 8
-          eslint: 5
-        - node: "8.10.0"
-          eslint: 5
+        eslint: [7]
+        node: [14]
+        os: [ubuntu-latest]
+        include:
+          # On other platforms
+          - eslint: 7
+            node: 14
+            os: windows-latest
+          - eslint: 7
+            node: 14
+            os: macos-latest
+          # On old Node.js versions
+          - eslint: 7
+            node: 12
+            os: ubuntu-latest
+          - eslint: 7
+            node: 10
+            os: ubuntu-latest
+          # On old ESLint versions
+          - eslint: 6
+            node: 14
+            os: ubuntu-latest
+          - eslint: 5
+            node: 14
+            os: ubuntu-latest
+          # On the minimum supported ESLint/Node.js version
+          - eslint: 5
+            node: 8.10.0
+            os: ubuntu-latest
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
+      uses: actions/checkout@v2
     - name: Checkout submodules
       run: git submodule update --init
     - name: Install Node.js v${{ matrix.node }}
@@ -60,17 +72,7 @@ jobs:
     - name: Install Packages
       run: npm install
     - name: Install ESLint v${{ matrix.eslint }}
-      run: |
-        if [ ${{ matrix.eslint }} -eq 6 ]; then
-          cd test/fixtures/eslint
-          npm install
-        else
-          npm install --no-save eslint@5.16.0
-          cd test/fixtures/eslint
-          git checkout v5.16.0
-          npm install eslint-utils@1.4.0
-          npm install
-        fi
+      run: node scripts/ci-install-eslint ${{ matrix.eslint }}
     - name: Build
       run: npm run -s build
     - name: Test
