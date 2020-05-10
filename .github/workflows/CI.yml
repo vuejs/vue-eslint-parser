@@ -73,7 +73,7 @@ jobs:
       run: npm install
     - name: Install ESLint v${{ matrix.eslint }}
       run: |
-        if [ ${{ matrix.eslint }} -eq 6 ]; then
+        if [ ${{ matrix.eslint }} != 5 ]; then
           cd test/fixtures/eslint
           npm install
         else
