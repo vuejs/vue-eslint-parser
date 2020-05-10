@@ -12,47 +12,50 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
-    - name: Checkout submodules
-      run: git submodule update --init
-    - name: Install Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: 14
-    - name: Install Packages
-      run: npm install
-    - name: Lint
-      run: npm run -s lint
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v1
+        with:
+          node: 14
+      - name: Install Packages
+        run: npm install
+      - name: Lint
+        run: npm run -s lint
 
   test:
     name: Test
-
     strategy:
       matrix:
-        eslint: [7, 6, 5]
-        node: [14, 12, 12.0, 10, 10.12]
-        exclude:
-        # Run ESLint 6 on only the latest LTS.
-        - node: 14
-          eslint: 6
-        - node: 12.0
-          eslint: 6
-        - node: 10
-          eslint: 6
-        - node: 10.12
-          eslint: 6
-          # Run ESLint 5 on only the latest LTS.
-        - node: 14
-          eslint: 5
-        - node: 12.0
-          eslint: 5
-        - node: 10
-          eslint: 5
-        - node: 10.12
-          eslint: 5
+        eslint: [7]
+        node: [14]
+        os: [ubuntu-latest]
+        include:
+          # On other platforms
+          - eslint: 7
+            node: 14
+            os: windows-latest
+          - eslint: 7
+            node: 14
+            os: macos-latest
+          # On old Node.js versions
+          - eslint: 7
+            node: 12
+            os: ubuntu-latest
+          - eslint: 7
+            node: 10
+            os: ubuntu-latest
+          # On old ESLint versions
+          - eslint: 6
+            node: 14
+            os: ubuntu-latest
+          - eslint: 5
+            node: 14
+            os: ubuntu-latest
+          # On the minimum supported ESLint/Node.js version
+          - eslint: 5
+            node: 8.10.0
+            os: ubuntu-latest
 
     runs-on: ubuntu-latest
     steps:
