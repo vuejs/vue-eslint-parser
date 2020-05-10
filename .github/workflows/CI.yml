@@ -72,14 +72,14 @@ jobs:
       run: npm install
     - name: Install ESLint v${{ matrix.eslint }}
       run: |
-        if [ ${{ matrix.eslint }} != 5 ]; then
-          cd test/fixtures/eslint
-          npm install
-        else
+        if [ ${{ matrix.eslint }} -eq 5 ]; then
           npm install --no-save eslint@5.16.0
           cd test/fixtures/eslint
           git checkout v5.16.0
           npm install eslint-utils@1.4.0
+          npm install
+        else
+          cd test/fixtures/eslint
           npm install
         fi
     - name: Build
