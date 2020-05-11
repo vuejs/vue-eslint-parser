@@ -59,6 +59,7 @@ jobs:
             node: 8.10.0
             os: ubuntu-latest
 
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
