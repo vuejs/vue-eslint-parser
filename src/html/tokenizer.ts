@@ -1493,6 +1493,7 @@ export class Tokenizer {
             this.appendTokenValue(HYPHEN_MINUS, "HTMLComment")
 
             if (cp !== HYPHEN_MINUS) {
+                this.appendTokenValue(HYPHEN_MINUS, "HTMLComment")
                 return this.reconsumeAs("COMMENT")
             }
             cp = this.consumeNextCodePoint()
