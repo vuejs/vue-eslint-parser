@@ -62,10 +62,12 @@ function wrapCode(code) {
 /**
  * Modify the given test pattern to test with vue-eslint-parser.
  *
+ * @param {string} ruleId The rule ID.
  * @param {string|object} pattern - The test pattern to be modified.
  * @returns {object|null} The modified pattern.
  */
-function modifyPattern(pattern) {
+//eslint-disable-next-line complexity
+function modifyPattern(ruleId, pattern) {
     if (typeof pattern === "string") {
         if (pattern.startsWith("#!")) {
             return null
@@ -76,6 +78,9 @@ function modifyPattern(pattern) {
             parser: PARSER_PATH,
         }
     }
+
+    // If a test case depends on filename or special parser (returns constant AST
+    // object), we cannot rewrite the test case with `vue-eslint-parser`.
     if (
         pattern.parser != null ||
         pattern.filename != null ||
@@ -84,22 +89,60 @@ function modifyPattern(pattern) {
         return null
     }
 
+    // Ignore for now
+    if (
+        ruleId === "newline-per-chained-call" &&
+        pattern.code === "foo.bar()['foo' + \u2029 + 'bar']()"
+    ) {
+        return null
+    }
+
+    // Wrap the code by `<script>` tag.
     pattern.filename = "test.vue"
     pattern.parser = PARSER_PATH
     pattern.code = wrapCode(pattern.code)
     if (pattern.output != null) {
         pattern.output = wrapCode(pattern.output)
     }
+
     if (Array.isArray(pattern.errors)) {
         for (const error of pattern.errors) {
             if (typeof error === "object" && !processed.has(error)) {
                 processed.add(error)
 
-                if (error.line != null) {
-                    error.line = Number(error.line) + 1
+                // The line number +1 because `<script>\n` is inserted.
+                if (typeof error.line === "number") {
+                    error.line += 1
                 }
-                if (error.endLine != null) {
-                    error.endLine = Number(error.endLine) + 1
+                if (typeof error.endLine === "number") {
+                    error.endLine += 1
+                }
+
+                // `semi` rule is special a bit.
+                // The `endLine` is explicitly undefined if it inserts semi into EOF.
+                // The `endColumn` is explicitly undefined if it inserts semi into EOF.
+                // Those becomes non-EOF because `\n</script>` is inserted.
+                if (ruleId === "semi") {
+                    if (
+                        Object.hasOwnProperty.call(error, "endLine") &&
+                        error.endLine === undefined
+                    ) {
+                        const lines = pattern.code.split(/\r\n|[\r\n]/gu)
+                        error.endLine = lines.length
+                    }
+                    if (
+                        Object.hasOwnProperty.call(error, "endColumn") &&
+                        error.endColumn === undefined
+                    ) {
+                        error.endColumn = 1
+                    }
+                }
+
+                // Wrap the code by `<script>` tag.
+                if (Array.isArray(error.suggestions)) {
+                    for (const suggestion of error.suggestions) {
+                        suggestion.output = wrapCode(suggestion.output)
+                    }
                 }
             }
         }
@@ -120,8 +163,12 @@ function modifyPattern(pattern) {
  */
 function overrideRun(ruleId, impl, patterns) {
     return originalRun.call(this, ruleId, impl, {
-        valid: patterns.valid.map(modifyPattern).filter(Boolean),
-        invalid: patterns.invalid.map(modifyPattern).filter(Boolean),
+        valid: patterns.valid
+            .map(pattern => modifyPattern(ruleId, pattern))
+            .filter(Boolean),
+        invalid: patterns.invalid
+            .map(pattern => modifyPattern(ruleId, pattern))
+            .filter(Boolean),
     })
 }
 
