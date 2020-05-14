@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [master]
+    branches: [master, try]
   pull_request:
     branches: [master]
   schedule:
@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 14
       - name: Install Packages
-        run: npm install
+        run: npm install && cd test/fixtures/eslint && npm install
       - name: Lint
         run: npm run -s lint
 

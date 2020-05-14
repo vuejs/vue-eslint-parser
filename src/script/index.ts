@@ -17,7 +17,6 @@ import {
     ESLintForOfStatement,
     ESLintFunctionExpression,
     ESLintPattern,
-    ESLintProgram,
     ESLintVariableDeclaration,
     ESLintUnaryExpression,
     HasLocation,
@@ -39,6 +38,7 @@ import {
     analyzeExternalReferences,
     analyzeVariablesAndExternalReferences,
 } from "./scope-analyzer"
+import { ESLintCustomParser, getEspree } from "./espree"
 
 // [1] = spacing before the aliases.
 // [2] = aliases.
@@ -50,14 +50,6 @@ const DUMMY_PARENT: any = {}
 // https://github.com/vuejs/vue/blob/0948d999f2fddf9f90991956493f976273c5da1f/src/compiler/codegen/events.js#L3
 const IS_FUNCTION_EXPRESSION = /^\s*([\w$_]+|\([^)]*?\))\s*=>|^function\s*\(/u
 const IS_SIMPLE_PATH = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['[^']*?'\]|\["[^"]*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/u
-
-/**
- * The interface of ESLint custom parsers.
- */
-interface ESLintCustomParser {
-    parse(code: string, options: any): ESLintCustomParserResult
-    parseForESLint?(code: string, options: any): ESLintCustomParserResult
-}
 
 /**
  * Do post-process of parsing an expression.
@@ -549,11 +541,6 @@ export interface ExpressionParseResult<T extends Node> {
 }
 
 /**
- * The interface of a result of ESLint custom parser.
- */
-export type ESLintCustomParserResult = ESLintProgram | ESLintExtendedProgram
-
-/**
  * Parse the given source code.
  *
  * @param code The source code to parse.
@@ -568,8 +555,7 @@ export function parseScript(
         typeof parserOptions.parser === "string"
             ? // eslint-disable-next-line @mysticatea/ts/no-require-imports
               require(parserOptions.parser)
-            : // eslint-disable-next-line @mysticatea/ts/no-require-imports
-              require("espree")
+            : getEspree()
     const result: any =
         // eslint-disable-next-line @mysticatea/ts/unbound-method
         typeof parser.parseForESLint === "function"
