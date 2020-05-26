@@ -361,7 +361,7 @@ function parseExpressionBody(
     try {
         const ast = parseScriptFragment(
             `0(${code})`,
-            locationCalculator.getSubCalculatorAfter(-2),
+            locationCalculator.getSubCalculatorShift(-2),
             parserOptions,
         ).ast
         const tokens = ast.tokens || []
@@ -478,7 +478,9 @@ function parseFilter(
         if (argsCode != null) {
             const { ast } = parseScriptFragment(
                 `0${argsCode}`,
-                locationCalculator.getSubCalculatorAfter(paren - 1),
+                locationCalculator
+                    .getSubCalculatorAfter(paren)
+                    .getSubCalculatorShift(-1),
                 parserOptions,
             )
             const statement = ast.body[0] as ESLintExpressionStatement
@@ -731,7 +733,7 @@ export function parseVForExpression(
         const replaced = processedCode !== code
         const ast = parseScriptFragment(
             `for(let ${processedCode});`,
-            locationCalculator.getSubCalculatorAfter(-8),
+            locationCalculator.getSubCalculatorShift(-8),
             parserOptions,
         ).ast
         const tokens = ast.tokens || []
@@ -829,7 +831,7 @@ function parseVOnExpressionBody(
     try {
         const ast = parseScriptFragment(
             `void function($event){${code}}`,
-            locationCalculator.getSubCalculatorAfter(-22),
+            locationCalculator.getSubCalculatorShift(-22),
             parserOptions,
         ).ast
         const references = analyzeExternalReferences(ast, parserOptions)
@@ -905,7 +907,7 @@ export function parseSlotScopeExpression(
     try {
         const ast = parseScriptFragment(
             `void function(${code}) {}`,
-            locationCalculator.getSubCalculatorAfter(-14),
+            locationCalculator.getSubCalculatorShift(-14),
             parserOptions,
         ).ast
         const statement = ast.body[0] as ESLintExpressionStatement

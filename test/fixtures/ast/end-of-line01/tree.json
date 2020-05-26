@@ -1,0 +1,311 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <div\n    @click=\"a=b\"\n  ></div>\n  <div\n    :data-click=\"a=b\"\n  ></div>\n  <div\n    :data-foo=\"c&amp;&amp;d\"\n  ></div>\n  <div\n    @foo=\"c&amp;&amp;d\"\n  ></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div\n    @click=\"a=b\"\n  ></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div\n    @click=\"a=b\"\n  >",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "@click=\"a=b\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "@click",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "@",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "click",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"a=b\"",
+                                        "children": [
+                                            {
+                                                "type": "VOnExpression",
+                                                "text": "a=b",
+                                                "children": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "text": "a=b",
+                                                        "children": [
+                                                            {
+                                                                "type": "AssignmentExpression",
+                                                                "text": "a=b",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "a",
+                                                                        "children": []
+                                                                    },
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "b",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div\n    :data-click=\"a=b\"\n  ></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div\n    :data-click=\"a=b\"\n  >",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":data-click=\"a=b\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":data-click",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "data-click",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"a=b\"",
+                                        "children": [
+                                            {
+                                                "type": "AssignmentExpression",
+                                                "text": "a=b",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div\n    :data-foo=\"c&amp;&amp;d\"\n  ></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div\n    :data-foo=\"c&amp;&amp;d\"\n  >",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":data-foo=\"c&amp;&amp;d\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":data-foo",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "data-foo",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"c&amp;&amp;d\"",
+                                        "children": [
+                                            {
+                                                "type": "LogicalExpression",
+                                                "text": "c&amp;&amp;d",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "c",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "d",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div\n    @foo=\"c&amp;&amp;d\"\n  ></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div\n    @foo=\"c&amp;&amp;d\"\n  >",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "@foo=\"c&amp;&amp;d\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "@foo",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "@",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "foo",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"c&amp;&amp;d\"",
+                                        "children": [
+                                            {
+                                                "type": "VOnExpression",
+                                                "text": "c&amp;&amp;d",
+                                                "children": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "text": "c&amp;&amp;d",
+                                                        "children": [
+                                                            {
+                                                                "type": "LogicalExpression",
+                                                                "text": "c&amp;&amp;d",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "c",
+                                                                        "children": []
+                                                                    },
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "d",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
