@@ -431,9 +431,12 @@ function parseFilter(
         // Parse the callee.
         if (calleeCode.trim()) {
             const spaces = /^\s*/u.exec(calleeCode)![0]
+            const subCalculator = locationCalculator.getSubCalculatorShift(
+                spaces.length,
+            )
             const { ast } = parseScriptFragment(
-                `${spaces}"${calleeCode.trim()}"`,
-                locationCalculator,
+                `"${calleeCode.trim()}"`,
+                subCalculator,
                 parserOptions,
             )
             const statement = ast.body[0] as ESLintExpressionStatement
@@ -455,12 +458,13 @@ function parseFilter(
             expression.callee = {
                 type: "Identifier",
                 parent: expression,
-                range: [callee.range[0], callee.range[1] - 2],
+                range: [
+                    callee.range[0],
+                    subCalculator.getOffsetWithGap(calleeCode.trim().length),
+                ],
                 loc: {
                     start: callee.loc.start,
-                    end: locationCalculator.getLocation(
-                        callee.range[1] - callee.range[0] - 1,
-                    ),
+                    end: subCalculator.getLocation(calleeCode.trim().length),
                 },
                 name: String(callee.value),
             }
@@ -686,7 +690,7 @@ export function parseExpression(
         // Parse a filter
         const retF = parseFilter(
             filterCode,
-            locationCalculator.getSubCalculatorAfter(prevLoc + 1),
+            locationCalculator.getSubCalculatorShift(prevLoc + 1),
             parserOptions,
         )
         if (retF) {
