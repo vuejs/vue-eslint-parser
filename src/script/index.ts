@@ -751,6 +751,7 @@ export function parseVForExpression(
             range: [firstToken.range[0], lastToken.range[1]],
             loc: { start: firstToken.loc.start, end: lastToken.loc.end },
             parent: DUMMY_PARENT,
+            delimiter: ast.body[0].type === "ForInStatement" ? "in" : "of",
             left,
             right,
         }
@@ -763,7 +764,7 @@ export function parseVForExpression(
         }
         right.parent = expression
 
-        // Remvoe `for` `(` `let` `)` `;`.
+        // Remove `for` `(` `let` `)` `;`.
         tokens.shift()
         tokens.shift()
         tokens.shift()

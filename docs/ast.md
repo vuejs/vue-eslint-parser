@@ -97,6 +97,7 @@ interface Reference {
 
 interface VForExpression <: Expression {
     type: "VForExpression"
+    delimiter: "in" | "of"
     left: [ Pattern ]
     right: Expression
 }

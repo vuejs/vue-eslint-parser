@@ -668,6 +668,7 @@ export interface Reference {
 export interface VForExpression extends HasLocation, HasParent {
     type: "VForExpression"
     parent: VExpressionContainer
+    delimiter: "in" | "of"
     left: ESLintPattern[]
     right: ESLintExpression
 }
