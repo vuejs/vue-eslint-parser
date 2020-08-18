@@ -491,7 +491,7 @@ export class Parser {
 
         // Check whether the self-closing is valid.
         const isVoid =
-            namespace === NS.HTML && HTML_VOID_ELEMENT_TAGS.has(element.name)
+            namespace === NS.HTML && HTML_VOID_ELEMENT_TAGS.has(element.rawName)
         if (token.selfClosing && !isVoid && namespace === NS.HTML) {
             this.reportParseError(
                 token,
