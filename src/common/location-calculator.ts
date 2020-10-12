@@ -23,17 +23,20 @@ export class LocationCalculator {
     private ltOffsets: number[]
     private baseOffset: number
     private baseIndexOfGap: number
+    private shiftOffset: number
 
     /**
      * Initialize this calculator.
      * @param gapOffsets The list of the offset of removed characters in tokenization phase.
      * @param ltOffsets The list of the offset of line terminators.
      * @param baseOffset The base offset to calculate locations.
+     * @param shiftOffset The shift offset to calculate locations.
      */
     public constructor(
         gapOffsets: number[],
         ltOffsets: number[],
         baseOffset?: number,
+        shiftOffset: number = 0,
     ) {
         this.gapOffsets = gapOffsets
         this.ltOffsets = ltOffsets
@@ -42,6 +45,7 @@ export class LocationCalculator {
             this.baseOffset === 0
                 ? 0
                 : sortedLastIndex(gapOffsets, this.baseOffset)
+        this.shiftOffset = shiftOffset
     }
 
     /**
@@ -54,6 +58,21 @@ export class LocationCalculator {
             this.gapOffsets,
             this.ltOffsets,
             this.baseOffset + offset,
+            this.shiftOffset,
+        )
+    }
+
+    /**
+     * Get sub calculator that shifts the given offset.
+     * @param offset The shift of new sub calculator.
+     * @returns Sub calculator.
+     */
+    public getSubCalculatorShift(offset: number): LocationCalculator {
+        return new LocationCalculator(
+            this.gapOffsets,
+            this.ltOffsets,
+            this.baseOffset,
+            this.shiftOffset + offset,
         )
     }
 
@@ -91,7 +110,7 @@ export class LocationCalculator {
      * @returns The location of the index.
      */
     public getLocation(index: number): Location {
-        return this._getLocation(this.baseOffset + index)
+        return this._getLocation(this.baseOffset + index + this.shiftOffset)
     }
 
     /**
@@ -100,7 +119,13 @@ export class LocationCalculator {
      * @returns The offset of the index.
      */
     public getOffsetWithGap(index: number): number {
-        return this.baseOffset + index + this._getGap(index)
+        const shiftOffset = this.shiftOffset
+        return (
+            this.baseOffset +
+            index +
+            shiftOffset +
+            this._getGap(index + shiftOffset)
+        )
     }
 
     /**
@@ -108,12 +133,13 @@ export class LocationCalculator {
      * @param node The node to modify their location.
      */
     public fixLocation<T extends HasLocation>(node: T): T {
+        const shiftOffset = this.shiftOffset
         const range = node.range
         const loc = node.loc
-        const gap0 = this._getGap(range[0])
-        const gap1 = this._getGap(range[1])
-        const d0 = this.baseOffset + Math.max(0, gap0)
-        const d1 = this.baseOffset + Math.max(0, gap1)
+        const gap0 = this._getGap(range[0] + shiftOffset)
+        const gap1 = this._getGap(range[1] + shiftOffset)
+        const d0 = this.baseOffset + Math.max(0, gap0) + shiftOffset
+        const d1 = this.baseOffset + Math.max(0, gap1) + shiftOffset
 
         if (d0 !== 0) {
             range[0] += d0
@@ -138,8 +164,9 @@ export class LocationCalculator {
      * @param error The error to modify their location.
      */
     public fixErrorLocation(error: ParseError) {
-        const gap = this._getGap(error.index)
-        const diff = this.baseOffset + Math.max(0, gap)
+        const shiftOffset = this.shiftOffset
+        const gap = this._getGap(error.index + shiftOffset)
+        const diff = this.baseOffset + Math.max(0, gap) + shiftOffset
 
         error.index += diff
 

@@ -361,7 +361,7 @@ function parseExpressionBody(
     try {
         const ast = parseScriptFragment(
             `0(${code})`,
-            locationCalculator.getSubCalculatorAfter(-2),
+            locationCalculator.getSubCalculatorShift(-2),
             parserOptions,
         ).ast
         const tokens = ast.tokens || []
@@ -431,9 +431,12 @@ function parseFilter(
         // Parse the callee.
         if (calleeCode.trim()) {
             const spaces = /^\s*/u.exec(calleeCode)![0]
+            const subCalculator = locationCalculator.getSubCalculatorShift(
+                spaces.length,
+            )
             const { ast } = parseScriptFragment(
-                `${spaces}"${calleeCode.trim()}"`,
-                locationCalculator,
+                `"${calleeCode.trim()}"`,
+                subCalculator,
                 parserOptions,
             )
             const statement = ast.body[0] as ESLintExpressionStatement
@@ -455,12 +458,13 @@ function parseFilter(
             expression.callee = {
                 type: "Identifier",
                 parent: expression,
-                range: [callee.range[0], callee.range[1] - 2],
+                range: [
+                    callee.range[0],
+                    subCalculator.getOffsetWithGap(calleeCode.trim().length),
+                ],
                 loc: {
                     start: callee.loc.start,
-                    end: locationCalculator.getLocation(
-                        callee.range[1] - callee.range[0] - 1,
-                    ),
+                    end: subCalculator.getLocation(calleeCode.trim().length),
                 },
                 name: String(callee.value),
             }
@@ -478,7 +482,9 @@ function parseFilter(
         if (argsCode != null) {
             const { ast } = parseScriptFragment(
                 `0${argsCode}`,
-                locationCalculator.getSubCalculatorAfter(paren - 1),
+                locationCalculator
+                    .getSubCalculatorAfter(paren)
+                    .getSubCalculatorShift(-1),
                 parserOptions,
             )
             const statement = ast.body[0] as ESLintExpressionStatement
@@ -684,7 +690,7 @@ export function parseExpression(
         // Parse a filter
         const retF = parseFilter(
             filterCode,
-            locationCalculator.getSubCalculatorAfter(prevLoc + 1),
+            locationCalculator.getSubCalculatorShift(prevLoc + 1),
             parserOptions,
         )
         if (retF) {
@@ -731,7 +737,7 @@ export function parseVForExpression(
         const replaced = processedCode !== code
         const ast = parseScriptFragment(
             `for(let ${processedCode});`,
-            locationCalculator.getSubCalculatorAfter(-8),
+            locationCalculator.getSubCalculatorShift(-8),
             parserOptions,
         ).ast
         const tokens = ast.tokens || []
@@ -829,7 +835,7 @@ function parseVOnExpressionBody(
     try {
         const ast = parseScriptFragment(
             `void function($event){${code}}`,
-            locationCalculator.getSubCalculatorAfter(-22),
+            locationCalculator.getSubCalculatorShift(-22),
             parserOptions,
         ).ast
         const references = analyzeExternalReferences(ast, parserOptions)
@@ -905,7 +911,7 @@ export function parseSlotScopeExpression(
     try {
         const ast = parseScriptFragment(
             `void function(${code}) {}`,
-            locationCalculator.getSubCalculatorAfter(-14),
+            locationCalculator.getSubCalculatorShift(-14),
             parserOptions,
         ).ast
         const statement = ast.body[0] as ESLintExpressionStatement

@@ -198,6 +198,25 @@ describe("Template AST", () => {
                 assert.strictEqual(actualText, expectedText)
             })
 
+            it("should have correct range on windows(CRLF).", () => {
+                const sourceForWin = source.replace(/\r?\n/gu, "\r\n")
+                const actualForWin = parser.parseForESLint(
+                    sourceForWin,
+                    Object.assign({ filePath: sourcePath }, PARSER_OPTIONS)
+                )
+
+                const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
+                const expectedText = fs.readFileSync(resultPath, "utf8")
+                const tokens = getAllTokens(actualForWin.ast).map(t =>
+                    sourceForWin
+                        .slice(t.range[0], t.range[1])
+                        .replace(/\r?\n/gu, "\n")
+                )
+                const actualText = JSON.stringify(tokens, null, 4)
+
+                assert.strictEqual(actualText, expectedText)
+            })
+
             it("should have correct location.", () => {
                 const lines = source.match(/[^\r\n]*(?:\r?\n|$)/gu) || []
                 lines.push(String.fromCodePoint(0))
