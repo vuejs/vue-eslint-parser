@@ -529,7 +529,7 @@ describe("Basic tests", () => {
         })
     })
 
-    describe("https://github.com/mysticatea/vue-eslint-parser/issues/21", () => {
+    describe("https://github.com/vuejs/vue-eslint-parser/issues/21", () => {
         it("should make the correct location of decorators", () => {
             const code = fs.readFileSync(
                 path.join(FIXTURE_DIR, "issue21.vue"),
