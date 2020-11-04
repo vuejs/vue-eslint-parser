@@ -767,7 +767,7 @@ export interface VIdentifier extends HasLocation, HasParent {
  */
 export interface VDirectiveKey extends HasLocation, HasParent {
     type: "VDirectiveKey"
-    parent: VAttribute
+    parent: VDirective
     name: VIdentifier
     argument: VExpressionContainer | VIdentifier | null
     modifiers: VIdentifier[]
