@@ -29,9 +29,9 @@ jobs:
     name: Test
     strategy:
       matrix:
-        eslint: []
-        node: []
-        os: []
+        eslint: [7]
+        node: [14]
+        os: [ubuntu-latest]
         include:
           # On other platforms
           - eslint: 7
