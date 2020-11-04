@@ -54,7 +54,7 @@
     "clean": "rimraf .nyc_output .temp coverage index.*",
     "codecov": "codecov",
     "coverage": "opener ./coverage/lcov-report/index.html",
-    "lint": "node -e \"if(process.env.ESLINT=='5')process.exit(1)\" && eslint src test --ext .js,.ts || node -e \"if(process.env.ESLINT!='5')process.exit(1)\"",
+    "lint": "eslint src test --ext .js,.ts",
     "setup": "git submodule update --init && cd test/fixtures/eslint && npm install",
     "pretest": "run-s build lint",
     "test": "npm run -s test:mocha",
