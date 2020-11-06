@@ -77,6 +77,27 @@ jobs:
       run: npm run -s build
     - name: Test
       run: npm run -s test:mocha
+
+  test-cov:
+    name: Test and Send Coverage
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Checkout submodules
+      run: git submodule update --init
+    - name: Install Node.js v14
+      uses: actions/setup-node@v1
+      with:
+        node-version: 14
+    - name: Install Packages
+      run: npm install
+    - name: Install ESLint v7
+      run: node scripts/ci-install-eslint 7
+    - name: Build
+      run: npm run -s build
+    - name: Test
+      run: npm run -s test:mocha
     - name: Send Coverage
       run: npm run -s codecov
       env:
