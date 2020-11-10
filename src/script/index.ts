@@ -31,6 +31,9 @@ import {
     VForExpression,
     VOnExpression,
     VSlotScopeExpression,
+    OffsetRange,
+    LocationRange,
+    ESLintIdentifier,
 } from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
@@ -68,6 +71,8 @@ function postprocess(
     // E.g. `let {a} = {}` // This `a` appears twice at `Property#key` and `Property#value`.
     const traversed = new Set<Node | number[]>()
 
+    const locOrRangeSet = new Set<LocationRange | OffsetRange>()
+
     traverseNodes(result.ast, {
         visitorKeys: result.visitorKeys,
 
@@ -81,6 +86,8 @@ function postprocess(
                 if (!traversed.has(node.range)) {
                     traversed.add(node.range)
                     locationCalculator.fixLocation(node)
+                    locOrRangeSet.add(node.range)
+                    locOrRangeSet.add(node.loc)
                 }
             }
         },
@@ -92,9 +99,42 @@ function postprocess(
 
     for (const token of result.ast.tokens || []) {
         locationCalculator.fixLocation(token)
+        locOrRangeSet.add(token.range)
+        locOrRangeSet.add(token.loc)
     }
     for (const comment of result.ast.comments || []) {
         locationCalculator.fixLocation(comment)
+        locOrRangeSet.add(comment.range)
+        locOrRangeSet.add(comment.loc)
+    }
+    if (result.scopeManager) {
+        for (const scope of result.scopeManager.scopes) {
+            for (const v of scope.variables) {
+                for (const id of v.identifiers) {
+                    fixLocation(id as ESLintIdentifier)
+                }
+                for (const ref of v.references) {
+                    fixLocation(ref.identifier as ESLintIdentifier)
+                }
+            }
+        }
+
+        function fixLocation<T extends HasLocation>(node: T) {
+            if (locOrRangeSet.has(node.range)) {
+                if (locOrRangeSet.has(node.loc)) {
+                    return
+                }
+                node.loc.start = locationCalculator.getLocFromIndex(
+                    node.range[0],
+                )
+                node.loc.end = locationCalculator.getLocFromIndex(node.range[1])
+                locOrRangeSet.add(node.loc)
+                return
+            }
+            locationCalculator.fixLocation(node)
+            locOrRangeSet.add(node.range)
+            locOrRangeSet.add(node.loc)
+        }
     }
 }
 
@@ -139,7 +179,7 @@ function normalizeLeft(
  */
 function getCommaTokenBeforeNode(tokens: Token[], node: Node): Token | null {
     let tokenIndex = sortedIndexBy(
-        tokens,
+        tokens as { range: OffsetRange }[],
         { range: node.range },
         t => t.range[0],
     )
@@ -563,7 +603,6 @@ export function parseScript(
               require(parserOptions.parser)
             : getEspree()
     const result: any =
-        // eslint-disable-next-line @mysticatea/ts/unbound-method
         typeof parser.parseForESLint === "function"
             ? parser.parseForESLint(code, parserOptions)
             : parser.parse(code, parserOptions)

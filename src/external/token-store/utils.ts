@@ -26,9 +26,9 @@ function getStartLocation(token: { range: number[] }): number {
  */
 export function search(tokens: HasLocation[], location: number): number {
     return sortedIndexBy(
-        tokens,
-        {range: [location]},
-        getStartLocation
+        tokens as { range: number[] }[],
+        { range: [location] },
+        getStartLocation,
     )
 }
 

@@ -527,7 +527,7 @@ export class Tokenizer {
             "Invalid state: the provisional token was not found.",
         )
 
-        const token = this.provisionalToken as Token
+        const token = this.provisionalToken
         this.provisionalToken = null
 
         if (token.range[0] < token.range[1]) {
@@ -542,10 +542,10 @@ export class Tokenizer {
         assert(this.currentToken != null)
         assert(this.provisionalToken != null)
 
-        const token = this.currentToken as Token
+        const token = this.currentToken
         debug("[html] rollback token: %d %s", token.range[0], token.type)
 
-        this.currentToken = this.provisionalToken as Token
+        this.currentToken = this.provisionalToken
         this.provisionalToken = null
     }
 
@@ -1808,7 +1808,7 @@ export class Tokenizer {
 
         // The this.buffer.length is not new length since it includes surrogate pairs.
         // Calculate new length.
-        const token = this.currentToken as Token
+        const token = this.currentToken
         const len0 = token.value.length
         for (const cp1 of this.buffer) {
             this.appendTokenValue(cp1, null)

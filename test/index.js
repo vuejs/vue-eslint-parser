@@ -340,6 +340,29 @@ describe("Basic tests", () => {
         })
     })
 
+    describe("About fixtures/ts-scope-manager.vue", () => {
+        it("should calculate the correct location with '@typescript-eslint/parser'", () => {
+            const cli = new CLIEngine({
+                cwd: FIXTURE_DIR,
+                envs: ["es6", "node"],
+                parser: PARSER_PATH,
+                parserOptions: {
+                    parser: "@typescript-eslint/parser",
+                },
+                rules: { "no-unused-vars": ["error"] },
+                useEslintrc: false,
+            })
+            const report = cli.executeOnFiles(["ts-scope-manager.vue"])
+            const messages = report.results[0].messages
+
+            assert.strictEqual(messages.length, 1)
+            assert.deepStrictEqual(messages[0].line, 8)
+            assert.deepStrictEqual(messages[0].column, 8)
+            assert.deepStrictEqual(messages[0].endLine, 8)
+            assert.deepStrictEqual(messages[0].endColumn, 14)
+        })
+    })
+
     describe("About fixtures/svg-attrs.vue", () => {
         it("parses attributes with colons", () => {
             const cli = new CLIEngine({
