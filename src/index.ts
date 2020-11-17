@@ -9,6 +9,7 @@ import { LocationCalculator } from "./common/location-calculator"
 import { HTMLParser, HTMLTokenizer } from "./html"
 import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
+import { ParserOptions } from "./common/parser-options"
 
 const STARTS_WITH_LT = /^\s*</u
 
@@ -18,8 +19,8 @@ const STARTS_WITH_LT = /^\s*</u
  * @param options The parser options.
  * @returns `true` if the source code is a Vue.js component.
  */
-function isVueFile(code: string, options: any): boolean {
-    const filePath = (options.filePath as string | undefined) || "unknown.js"
+function isVueFile(code: string, options: ParserOptions): boolean {
+    const filePath = options.filePath || "unknown.js"
     return path.extname(filePath) === ".vue" || STARTS_WITH_LT.test(code)
 }
 
@@ -96,7 +97,7 @@ export function parseForESLint(
         document = null
     } else {
         const skipParsingScript = options.parser === false
-        const tokenizer = new HTMLTokenizer(code)
+        const tokenizer = new HTMLTokenizer(code, options)
         const rootAST = new HTMLParser(tokenizer, options).parse()
         const locationCalcurator = new LocationCalculator(
             tokenizer.gaps,

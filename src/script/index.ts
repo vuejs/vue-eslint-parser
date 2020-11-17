@@ -41,6 +41,7 @@ import {
     analyzeVariablesAndExternalReferences,
 } from "./scope-analyzer"
 import { ESLintCustomParser, getEspree } from "./espree"
+import { ParserOptions } from "../common/parser-options"
 
 // [1] = spacing before the aliases.
 // [2] = aliases.
@@ -239,7 +240,7 @@ function throwErrorAsAdjustingOutsideOfCode(
 function parseScriptFragment(
     code: string,
     locationCalculator: LocationCalculator,
-    parserOptions: any,
+    parserOptions: ParserOptions,
 ): ESLintExtendedProgram {
     try {
         const result = parseScript(code, parserOptions)
@@ -368,7 +369,7 @@ function splitFilters(exp: string): string[] {
 function parseExpressionBody(
     code: string,
     locationCalculator: LocationCalculator,
-    parserOptions: any,
+    parserOptions: ParserOptions,
     allowEmpty = false,
 ): ExpressionParseResult<ESLintExpression> {
     debug('[script] parse expression: "0(%s)"', code)
@@ -421,7 +422,7 @@ function parseExpressionBody(
 function parseFilter(
     code: string,
     locationCalculator: LocationCalculator,
-    parserOptions: any,
+    parserOptions: ParserOptions,
 ): ExpressionParseResult<VFilter> | null {
     debug('[script] parse filter: "%s"', code)
 
@@ -570,7 +571,7 @@ export interface ExpressionParseResult<T extends Node> {
  */
 export function parseScript(
     code: string,
-    parserOptions: any,
+    parserOptions: ParserOptions,
 ): ESLintExtendedProgram {
     const parser: ESLintCustomParser =
         typeof parserOptions.parser === "string"
@@ -598,7 +599,7 @@ export function parseScript(
 export function parseScriptElement(
     node: VElement,
     globalLocationCalculator: LocationCalculator,
-    parserOptions: any,
+    parserOptions: ParserOptions,
 ): ESLintExtendedProgram {
     const text = node.children[0]
     const offset =
@@ -648,7 +649,7 @@ export function parseScriptElement(
 export function parseExpression(
     code: string,
     locationCalculator: LocationCalculator,
-    parserOptions: any,
+    parserOptions: ParserOptions,
     { allowEmpty = false, allowFilters = false } = {},
 ): ExpressionParseResult<ESLintExpression | VFilterSequenceExpression> {
     debug('[script] parse expression: "%s"', code)
@@ -738,7 +739,7 @@ export function parseExpression(
 export function parseVForExpression(
     code: string,
     locationCalculator: LocationCalculator,
-    parserOptions: any,
+    parserOptions: ParserOptions,
 ): ExpressionParseResult<VForExpression> {
     const processedCode = replaceAliasParens(code)
     debug('[script] parse v-for expression: "for(%s);"', processedCode)
@@ -820,7 +821,7 @@ export function parseVForExpression(
 export function parseVOnExpression(
     code: string,
     locationCalculator: LocationCalculator,
-    parserOptions: any,
+    parserOptions: ParserOptions,
 ): ExpressionParseResult<ESLintExpression | VOnExpression> {
     if (IS_FUNCTION_EXPRESSION.test(code) || IS_SIMPLE_PATH.test(code)) {
         return parseExpressionBody(code, locationCalculator, parserOptions)
@@ -838,7 +839,7 @@ export function parseVOnExpression(
 function parseVOnExpressionBody(
     code: string,
     locationCalculator: LocationCalculator,
-    parserOptions: any,
+    parserOptions: ParserOptions,
 ): ExpressionParseResult<VOnExpression> {
     debug('[script] parse v-on expression: "void function($event){%s}"', code)
 
@@ -911,7 +912,7 @@ function parseVOnExpressionBody(
 export function parseSlotScopeExpression(
     code: string,
     locationCalculator: LocationCalculator,
-    parserOptions: any,
+    parserOptions: ParserOptions,
 ): ExpressionParseResult<VSlotScopeExpression> {
     debug('[script] parse slot-scope expression: "void function(%s) {}"', code)
 

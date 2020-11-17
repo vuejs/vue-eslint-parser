@@ -5,6 +5,7 @@
  */
 import sortedIndexBy from "lodash/sortedIndexBy"
 import sortedLastIndexBy from "lodash/sortedLastIndexBy"
+import { ParserOptions } from "../common/parser-options"
 import {
     ESLintExpression,
     ParseError,
@@ -299,7 +300,7 @@ function parseDirectiveKeyTokens(node: VDirectiveKey): Token[] {
 function convertDynamicArgument(
     node: VDirectiveKey,
     document: VDocumentFragment | null,
-    parserOptions: any,
+    parserOptions: ParserOptions,
     locationCalculator: LocationCalculator,
 ): void {
     const { argument } = node
@@ -384,7 +385,7 @@ function convertDynamicArgument(
 function createDirectiveKey(
     node: VIdentifier,
     document: VDocumentFragment | null,
-    parserOptions: any,
+    parserOptions: ParserOptions,
     locationCalculator: LocationCalculator,
 ): VDirectiveKey {
     // Parse node and tokens.
@@ -507,7 +508,7 @@ function insertError(
  */
 function parseAttributeValue(
     code: string,
-    parserOptions: any,
+    parserOptions: ParserOptions,
     globalLocationCalculator: LocationCalculator,
     node: VLiteral,
     tagName: string,
@@ -639,7 +640,7 @@ export interface Mustache {
  */
 export function convertToDirective(
     code: string,
-    parserOptions: any,
+    parserOptions: ParserOptions,
     locationCalculator: LocationCalculator,
     node: VAttribute,
 ): void {
@@ -742,7 +743,7 @@ export function convertToDirective(
  * @param mustache The information of mustache to parse.
  */
 export function processMustache(
-    parserOptions: any,
+    parserOptions: ParserOptions,
     globalLocationCalculator: LocationCalculator,
     node: VExpressionContainer,
     mustache: Mustache,

@@ -1,0 +1,148 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    {{a<b}}\n    {{a<b&a>b}}\n    {{a<b&12>b}}\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{a<b}}",
+                "children": [
+                    {
+                        "type": "BinaryExpression",
+                        "text": "a<b",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "a",
+                                "children": []
+                            },
+                            {
+                                "type": "Identifier",
+                                "text": "b",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{a<b&a>b}}",
+                "children": [
+                    {
+                        "type": "BinaryExpression",
+                        "text": "a<b&a>b",
+                        "children": [
+                            {
+                                "type": "BinaryExpression",
+                                "text": "a<b",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "b",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "BinaryExpression",
+                                "text": "a>b",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "b",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{a<b&12>b}}",
+                "children": [
+                    {
+                        "type": "BinaryExpression",
+                        "text": "a<b&12>b",
+                        "children": [
+                            {
+                                "type": "BinaryExpression",
+                                "text": "a<b",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "b",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "BinaryExpression",
+                                "text": "12>b",
+                                "children": [
+                                    {
+                                        "type": "Literal",
+                                        "text": "12",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "b",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

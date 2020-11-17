@@ -101,13 +101,20 @@ function getTree(source, ast) {
 
 for (const name of TARGETS) {
     const sourcePath = path.join(ROOT, `${name}/source.vue`)
+    const optionsPath = path.join(ROOT, `${name}/parser-options.json`)
     const astPath = path.join(ROOT, `${name}/ast.json`)
     const tokenRangesPath = path.join(ROOT, `${name}/token-ranges.json`)
     const treePath = path.join(ROOT, `${name}/tree.json`)
     const source = fs.readFileSync(sourcePath, "utf8")
     const actual = parser.parse(
         source,
-        Object.assign({ filePath: sourcePath }, PARSER_OPTIONS)
+        Object.assign(
+            { filePath: sourcePath },
+            PARSER_OPTIONS,
+            fs.existsSync(optionsPath)
+                ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
+                : {}
+        )
     )
     const tokenRanges = getAllTokens(actual).map(t =>
         source.slice(t.range[0], t.range[1])

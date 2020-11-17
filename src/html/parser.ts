@@ -46,6 +46,7 @@ import {
     Text,
 } from "./intermediate-tokenizer"
 import { Tokenizer } from "./tokenizer"
+import { ParserOptions } from "../common/parser-options"
 
 const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
 const DT_DD = /^d[dt]$/u
@@ -148,7 +149,7 @@ function propagateEndLocation(node: VDocumentFragment | VElement): void {
 export class Parser {
     private tokenizer: IntermediateTokenizer
     private locationCalculator: LocationCalculator
-    private parserOptions: any
+    private parserOptions: ParserOptions
     private document: VDocumentFragment
     private elementStack: VElement[]
     private vPreElement: VElement | null
@@ -222,7 +223,7 @@ export class Parser {
      * @param tokenizer The tokenizer to parse.
      * @param parserOptions The parser options to parse inline expressions.
      */
-    public constructor(tokenizer: Tokenizer, parserOptions: any) {
+    public constructor(tokenizer: Tokenizer, parserOptions: ParserOptions) {
         this.tokenizer = new IntermediateTokenizer(tokenizer)
         this.locationCalculator = new LocationCalculator(
             tokenizer.gaps,

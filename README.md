@@ -90,6 +90,33 @@ For example:
 If the `parserOptions.parser` is `false`, the `vue-eslint-parser` skips parsing `<script>` tags completely.
 This is useful for people who use the language ESLint community doesn't provide custom parser implementation.
 
+### parserOptions.vueFeatures.interpolationAsNonHTML
+
+You can use `parserOptions.vueFeatures.interpolationAsNonHTML` property to specify whether to parse the interpolation as HTML. If you specify `true`, the parser handles the interpolation as non-HTML (However, you can use HTML escaping in the interpolation).
+For example:
+
+```json
+{
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "vueFeatures": {
+            "interpolationAsNonHTML": true
+        }
+    }
+}
+```
+
+If you specify `true`, it can be parsed in the same way as Vue 3.
+The following template can be parsed well.
+
+```vue
+<template>
+  <div>{{a<b}}</div>
+</template>
+```
+
+But, it cannot be parsed with Vue 2.
+
 ## 🎇 Usage for custom rules / plugins
 
 - This parser provides `parserServices` to traverse `<template>`.

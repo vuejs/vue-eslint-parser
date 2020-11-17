@@ -68,9 +68,10 @@ function getAllTokens(ast) {
 /**
  * Create simple tree.
  * @param {string} source The source code.
+ * @param {object} parserOptions The parser options.
  * @returns {object} Simple tree.
  */
-function getTree(source) {
+function getTree(source, parserOptions) {
     const linter = new Linter()
     const stack = []
     const root = { children: [] }
@@ -98,7 +99,7 @@ function getTree(source) {
         source,
         {
             parser: PARSER,
-            parserOptions: { ecmaVersion: 2018 },
+            parserOptions: Object.assign({ ecmaVersion: 2018 }, parserOptions),
             rules: { maketree: "error" },
         },
         undefined,
@@ -121,9 +122,10 @@ function nodeToString(node, source) {
 /**
  * Validate the parent property of every node.
  * @param {string} source The source code.
+ * @param {object} parserOptions The parser options.
  * @returns {void}
  */
-function validateParent(source) {
+function validateParent(source, parserOptions) {
     const linter = new Linter()
     const stack = []
 
@@ -155,7 +157,7 @@ function validateParent(source) {
         source,
         {
             parser: PARSER,
-            parserOptions: { ecmaVersion: 2017 },
+            parserOptions: Object.assign({ ecmaVersion: 2017 }, parserOptions),
             rules: { validateparent: "error" },
         },
         undefined,
@@ -170,11 +172,17 @@ function validateParent(source) {
 describe("Template AST", () => {
     for (const name of TARGETS) {
         const sourcePath = path.join(ROOT, `${name}/source.vue`)
+        const optionsPath = path.join(ROOT, `${name}/parser-options.json`)
         const source = fs.readFileSync(sourcePath, "utf8")
-        const actual = parser.parseForESLint(
-            source,
-            Object.assign({ filePath: sourcePath }, PARSER_OPTIONS)
+        const parserOptions = fs.existsSync(optionsPath)
+            ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
+            : {}
+        const options = Object.assign(
+            { filePath: sourcePath },
+            PARSER_OPTIONS,
+            parserOptions
         )
+        const actual = parser.parseForESLint(source, options)
 
         describe(`'test/fixtures/ast/${name}/source.vue'`, () => {
             it("should be parsed to valid AST.", () => {
@@ -202,7 +210,7 @@ describe("Template AST", () => {
                 const sourceForWin = source.replace(/\r?\n/gu, "\r\n")
                 const actualForWin = parser.parseForESLint(
                     sourceForWin,
-                    Object.assign({ filePath: sourcePath }, PARSER_OPTIONS)
+                    options
                 )
 
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
@@ -258,14 +266,14 @@ describe("Template AST", () => {
             it("should traverse AST in the correct order.", () => {
                 const resultPath = path.join(ROOT, `${name}/tree.json`)
                 const expectedText = fs.readFileSync(resultPath, "utf8")
-                const tokens = getTree(source)
+                const tokens = getTree(source, parserOptions)
                 const actualText = JSON.stringify(tokens, null, 4)
 
                 assert.strictEqual(actualText, expectedText)
             })
 
             it("should have correct parent properties.", () => {
-                validateParent(source)
+                validateParent(source, parserOptions)
             })
         })
     }
