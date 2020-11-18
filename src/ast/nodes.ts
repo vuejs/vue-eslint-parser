@@ -280,7 +280,8 @@ export interface ESLintImportDeclaration extends HasLocation, HasParent {
     specifiers: (
         | ESLintImportSpecifier
         | ESLintImportDefaultSpecifier
-        | ESLintImportNamespaceSpecifier)[]
+        | ESLintImportNamespaceSpecifier
+    )[]
     source: ESLintLiteral
 }
 
@@ -375,7 +376,8 @@ export interface ESLintObjectExpression extends HasLocation, HasParent {
     properties: (
         | ESLintProperty
         | ESLintSpreadElement
-        | ESLintLegacySpreadProperty)[]
+        | ESLintLegacySpreadProperty
+    )[]
 }
 
 export interface ESLintProperty extends HasLocation, HasParent {
@@ -570,7 +572,8 @@ export interface ESLintObjectPattern extends HasLocation, HasParent {
     properties: (
         | ESLintAssignmentProperty
         | ESLintRestElement
-        | ESLintLegacyRestProperty)[]
+        | ESLintLegacyRestProperty
+    )[]
 }
 
 export interface ESLintAssignmentProperty extends ESLintProperty {

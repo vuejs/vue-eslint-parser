@@ -1,8 +1,12 @@
 extends:
   - plugin:@mysticatea/es2015
   - plugin:@mysticatea/+node
-
+globals: {
+  root: "off"
+}
 overrides:
+  - files: "**/*.ts"
+    parser: "@typescript-eslint/parser"
   - files: "typings/**"
     rules:
       node/no-missing-import:

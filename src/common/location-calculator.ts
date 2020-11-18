@@ -36,7 +36,7 @@ export class LocationCalculator {
         gapOffsets: number[],
         ltOffsets: number[],
         baseOffset?: number,
-        shiftOffset: number = 0,
+        shiftOffset = 0,
     ) {
         this.gapOffsets = gapOffsets
         this.ltOffsets = ltOffsets
@@ -74,6 +74,15 @@ export class LocationCalculator {
             this.baseOffset,
             this.shiftOffset + offset,
         )
+    }
+
+    /**
+     * Calculate the location of the given index.
+     * @param index The index to calculate their location.
+     * @returns The location of the index.
+     */
+    public getLocFromIndex(index: number): Location {
+        return this._getLocation(index)
     }
 
     /**

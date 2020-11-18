@@ -15,19 +15,20 @@ export interface ESLintCustomParser {
     parseForESLint?(code: string, options: any): ESLintCustomParserResult
 }
 
-const createRequire: (filename: string) => (filename: string) => any =
+const createRequire: (filename: string) => (modname: string) => any =
     // Added in v12.2.0
     (Module as any).createRequire ||
     // Added in v10.12.0, but deprecated in v12.2.0.
+    // eslint-disable-next-line @mysticatea/node/no-deprecated-api
     Module.createRequireFromPath ||
     // Polyfill - This is not executed on the tests on node@>=10.
     /* istanbul ignore next */
-    (filename => {
-        const mod = new Module(filename)
+    (modname => {
+        const mod = new Module(modname)
 
-        mod.filename = filename
-        mod.paths = (Module as any)._nodeModulePaths(path.dirname(filename))
-        ;(mod as any)._compile("module.exports = require;", filename)
+        mod.filename = modname
+        mod.paths = (Module as any)._nodeModulePaths(path.dirname(modname))
+        ;(mod as any)._compile("module.exports = require;", modname)
         return mod.exports
     })
 

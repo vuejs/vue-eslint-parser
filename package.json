@@ -21,13 +21,13 @@
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "@mysticatea/eslint-plugin": "^11.0.0",
+    "@mysticatea/eslint-plugin": "^13.0.0",
     "@types/debug": "0.0.30",
     "@types/estree": "0.0.38",
     "@types/lodash": "^4.14.120",
     "@types/mocha": "^5.2.4",
     "@types/node": "^10.12.21",
-    "@typescript-eslint/parser": "^2.31.0",
+    "@typescript-eslint/parser": "^4.7.0",
     "babel-eslint": "^10.0.1",
     "chokidar": "^2.0.4",
     "codecov": "^3.1.0",
@@ -44,7 +44,7 @@
     "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "ts-node": "^8.1.0",
-    "typescript": "~3.4.4",
+    "typescript": "~4.0.5",
     "wait-on": "^3.2.0",
     "warun": "^1.0.0"
   },
@@ -59,6 +59,7 @@
     "pretest": "run-s build lint",
     "test": "npm run -s test:mocha",
     "test:mocha": "nyc mocha \"test/*.js\" --reporter dot --timeout 10000",
+    "test:debug": "mocha --inspect --require ts-node/register \"test/*.js\" --reporter dot --timeout 10000",
     "preupdate-fixtures": "npm run -s build",
     "update-fixtures": "node scripts/update-fixtures-ast.js && node scripts/update-fixtures-document-fragment.js",
     "preversion": "npm test",

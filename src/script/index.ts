@@ -31,6 +31,8 @@ import {
     VForExpression,
     VOnExpression,
     VSlotScopeExpression,
+    OffsetRange,
+    LocationRange,
 } from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
@@ -66,7 +68,7 @@ function postprocess(
 ): void {
     // There are cases which the same node instance appears twice in the tree.
     // E.g. `let {a} = {}` // This `a` appears twice at `Property#key` and `Property#value`.
-    const traversed = new Set<Node | number[]>()
+    const traversed = new Set<Node | number[] | LocationRange>()
 
     traverseNodes(result.ast, {
         visitorKeys: result.visitorKeys,
@@ -78,9 +80,22 @@ function postprocess(
 
                 // `babel-eslint@8` has shared `Node#range` with multiple nodes.
                 // See also: https://github.com/vuejs/eslint-plugin-vue/issues/208
-                if (!traversed.has(node.range)) {
-                    traversed.add(node.range)
+                if (traversed.has(node.range)) {
+                    if (!traversed.has(node.loc)) {
+                        // However, `Node#loc` may not be shared.
+                        // See also: https://github.com/vuejs/vue-eslint-parser/issues/84
+                        node.loc.start = locationCalculator.getLocFromIndex(
+                            node.range[0],
+                        )
+                        node.loc.end = locationCalculator.getLocFromIndex(
+                            node.range[1],
+                        )
+                        traversed.add(node.loc)
+                    }
+                } else {
                     locationCalculator.fixLocation(node)
+                    traversed.add(node.range)
+                    traversed.add(node.loc)
                 }
             }
         },
@@ -139,7 +154,7 @@ function normalizeLeft(
  */
 function getCommaTokenBeforeNode(tokens: Token[], node: Node): Token | null {
     let tokenIndex = sortedIndexBy(
-        tokens,
+        tokens as { range: OffsetRange }[],
         { range: node.range },
         t => t.range[0],
     )
@@ -563,7 +578,6 @@ export function parseScript(
               require(parserOptions.parser)
             : getEspree()
     const result: any =
-        // eslint-disable-next-line @mysticatea/ts/unbound-method
         typeof parser.parseForESLint === "function"
             ? parser.parseForESLint(code, parserOptions)
             : parser.parse(code, parserOptions)
