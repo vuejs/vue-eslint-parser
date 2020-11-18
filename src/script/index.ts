@@ -33,7 +33,6 @@ import {
     VSlotScopeExpression,
     OffsetRange,
     LocationRange,
-    ESLintIdentifier,
 } from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
@@ -69,9 +68,7 @@ function postprocess(
 ): void {
     // There are cases which the same node instance appears twice in the tree.
     // E.g. `let {a} = {}` // This `a` appears twice at `Property#key` and `Property#value`.
-    const traversed = new Set<Node | number[]>()
-
-    const locOrRangeSet = new Set<LocationRange | OffsetRange>()
+    const traversed = new Set<Node | number[] | LocationRange>()
 
     traverseNodes(result.ast, {
         visitorKeys: result.visitorKeys,
@@ -83,11 +80,22 @@ function postprocess(
 
                 // `babel-eslint@8` has shared `Node#range` with multiple nodes.
                 // See also: https://github.com/vuejs/eslint-plugin-vue/issues/208
-                if (!traversed.has(node.range)) {
-                    traversed.add(node.range)
+                if (traversed.has(node.range)) {
+                    if (!traversed.has(node.loc)) {
+                        // However, loc may not be shared.
+                        // See also: https://github.com/vuejs/vue-eslint-parser/issues/84
+                        node.loc.start = locationCalculator.getLocFromIndex(
+                            node.range[0],
+                        )
+                        node.loc.end = locationCalculator.getLocFromIndex(
+                            node.range[1],
+                        )
+                        traversed.add(node.loc)
+                    }
+                } else {
                     locationCalculator.fixLocation(node)
-                    locOrRangeSet.add(node.range)
-                    locOrRangeSet.add(node.loc)
+                    traversed.add(node.range)
+                    traversed.add(node.loc)
                 }
             }
         },
@@ -99,42 +107,9 @@ function postprocess(
 
     for (const token of result.ast.tokens || []) {
         locationCalculator.fixLocation(token)
-        locOrRangeSet.add(token.range)
-        locOrRangeSet.add(token.loc)
     }
     for (const comment of result.ast.comments || []) {
         locationCalculator.fixLocation(comment)
-        locOrRangeSet.add(comment.range)
-        locOrRangeSet.add(comment.loc)
-    }
-    if (result.scopeManager) {
-        for (const scope of result.scopeManager.scopes) {
-            for (const v of scope.variables) {
-                for (const id of v.identifiers) {
-                    fixLocation(id as ESLintIdentifier)
-                }
-                for (const ref of v.references) {
-                    fixLocation(ref.identifier as ESLintIdentifier)
-                }
-            }
-        }
-
-        function fixLocation<T extends HasLocation>(node: T) {
-            if (locOrRangeSet.has(node.range)) {
-                if (locOrRangeSet.has(node.loc)) {
-                    return
-                }
-                node.loc.start = locationCalculator.getLocFromIndex(
-                    node.range[0],
-                )
-                node.loc.end = locationCalculator.getLocFromIndex(node.range[1])
-                locOrRangeSet.add(node.loc)
-                return
-            }
-            locationCalculator.fixLocation(node)
-            locOrRangeSet.add(node.range)
-            locOrRangeSet.add(node.loc)
-        }
     }
 }
 

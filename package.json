@@ -59,6 +59,7 @@
     "pretest": "run-s build lint",
     "test": "npm run -s test:mocha",
     "test:mocha": "nyc mocha \"test/*.js\" --reporter dot --timeout 10000",
+    "test:debug": "mocha --inspect --require ts-node/register \"test/*.js\" --reporter dot --timeout 10000",
     "preupdate-fixtures": "npm run -s build",
     "update-fixtures": "node scripts/update-fixtures-ast.js && node scripts/update-fixtures-document-fragment.js",
     "preversion": "npm test",
