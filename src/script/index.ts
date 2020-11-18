@@ -82,7 +82,7 @@ function postprocess(
                 // See also: https://github.com/vuejs/eslint-plugin-vue/issues/208
                 if (traversed.has(node.range)) {
                     if (!traversed.has(node.loc)) {
-                        // However, loc may not be shared.
+                        // However, `Node#loc` may not be shared.
                         // See also: https://github.com/vuejs/vue-eslint-parser/issues/84
                         node.loc.start = locationCalculator.getLocFromIndex(
                             node.range[0],
