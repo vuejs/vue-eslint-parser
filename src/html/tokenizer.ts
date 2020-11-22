@@ -1900,6 +1900,8 @@ export class Tokenizer {
                 this.returnState = "V_EXPRESSION_DATA"
                 return "V_EXPRESSION_END"
             }
+            // Already checked
+            /* istanbul ignore next */
             if (cp === EOF) {
                 this.reportParseError("x-missing-interpolation-end")
                 return "DATA"
