@@ -1,0 +1,190 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div>{{ foo | bar-baz }}</div>\n    <div>{{ foo | (bar) }}</div>\n    <div>{{ foo || bar }}</div>\n    <div>{{ foo | bar:baz }}</div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>{{ foo | bar-baz }}</div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{ foo | bar-baz }}",
+                        "children": [
+                            {
+                                "type": "VFilterSequenceExpression",
+                                "text": "foo | bar-baz",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VFilter",
+                                        "text": "bar-baz",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "bar-baz",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>{{ foo | (bar) }}</div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{ foo | (bar) }}",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>{{ foo || bar }}</div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{ foo || bar }}",
+                        "children": [
+                            {
+                                "type": "LogicalExpression",
+                                "text": "foo || bar",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "bar",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>{{ foo | bar:baz }}</div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{ foo | bar:baz }}",
+                        "children": [
+                            {
+                                "type": "VFilterSequenceExpression",
+                                "text": "foo | bar:baz",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VFilter",
+                                        "text": "bar:baz",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "bar:baz",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

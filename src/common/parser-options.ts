@@ -3,6 +3,7 @@ export interface ParserOptions {
     parser?: boolean | string
     vueFeatures?: {
         interpolationAsNonHTML?: boolean // default false
+        filter?: boolean // default true
     }
 
     // espree options
