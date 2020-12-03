@@ -50,6 +50,7 @@ import {
     SOLIDUS,
     toLowerCodePoint,
 } from "./util/unicode"
+import { ParserOptions } from "../common/parser-options"
 
 /**
  * Enumeration of token types.
@@ -123,6 +124,7 @@ export type TokenizerState =
     | "NUMERIC_CHARACTER_REFERENCE_END"
     | "CHARACTER_REFERENCE_END"
     | "V_EXPRESSION_START"
+    | "V_EXPRESSION_DATA"
     | "V_EXPRESSION_END"
 // ---- Use RAWTEXT state for <script> elements instead ----
 // "SCRIPT_DATA" |
@@ -165,6 +167,7 @@ export class Tokenizer {
     public readonly text: string
     public readonly gaps: number[]
     public readonly lineTerminators: number[]
+    private readonly parserOptions: ParserOptions
     private lastCodePoint: number
     private offset: number
     private column: number
@@ -172,6 +175,7 @@ export class Tokenizer {
 
     // Tokenizing
     private returnState: TokenizerState
+    private vExpressionScriptState: { state: TokenizerState } | null = null
     private reconsuming: boolean
     private buffer: number[]
     private crStartOffset: number
@@ -208,12 +212,14 @@ export class Tokenizer {
     /**
      * Initialize this tokenizer.
      * @param text The source code to tokenize.
+     * @param parserOptions The parser options.
      */
-    public constructor(text: string) {
+    public constructor(text: string, parserOptions?: ParserOptions) {
         debug("[html] the source code length: %d", text.length)
         this.text = text
         this.gaps = []
         this.lineTerminators = []
+        this.parserOptions = parserOptions || {}
         this.lastCodePoint = NULL
         this.offset = -1
         this.column = -1
@@ -1834,13 +1840,81 @@ export class Tokenizer {
             this.startToken("VExpressionStart")
             this.appendTokenValue(LEFT_CURLY_BRACKET, null)
             this.appendTokenValue(LEFT_CURLY_BRACKET, null)
-            return this.returnState
+
+            if (!this.parserOptions.vueFeatures?.interpolationAsNonHTML) {
+                return this.returnState
+            }
+
+            const closeIndex = this.text.indexOf("}}", this.offset + 1)
+            if (closeIndex === -1) {
+                this.reportParseError("x-missing-interpolation-end")
+                return this.returnState
+            }
+            this.vExpressionScriptState = {
+                state: this.returnState,
+            }
+            return "V_EXPRESSION_DATA"
         }
 
         this.appendTokenValue(LEFT_CURLY_BRACKET, null)
         return this.reconsumeAs(this.returnState)
     }
 
+    /**
+     * Original state.
+     * Parse in interpolation.
+     * @see https://github.com/vuejs/vue-next/blob/3a6b1207fa39cb35eed5bae0b5fdcdb465926bca/packages/compiler-core/src/parse.ts#L752
+     * @param cp The current code point.
+     * @returns The next state.
+     */
+    protected V_EXPRESSION_DATA(cp: number): TokenizerState {
+        this.clearStartTokenMark()
+        const state = this.vExpressionScriptState!.state
+
+        while (true) {
+            const type = isWhitespace(cp)
+                ? "HTMLWhitespace"
+                : state === "RCDATA"
+                ? "HTMLRawText"
+                : state === "RAWTEXT"
+                ? "HTMLRCDataText"
+                : "HTMLText"
+            if (this.currentToken != null && this.currentToken.type !== type) {
+                this.endToken()
+                return this.reconsumeAs(this.state)
+            }
+            if (this.currentToken == null) {
+                this.startToken(type)
+            }
+
+            if (cp === AMPERSAND && state !== "RAWTEXT") {
+                this.returnState = "V_EXPRESSION_DATA"
+                return "CHARACTER_REFERENCE"
+            }
+            // if (cp === LESS_THAN_SIGN) {
+            //     this.setStartTokenMark()
+            //     return "TAG_OPEN"
+            // }
+            if (cp === RIGHT_CURLY_BRACKET) {
+                this.setStartTokenMark()
+                this.returnState = "V_EXPRESSION_DATA"
+                return "V_EXPRESSION_END"
+            }
+            // Already checked
+            /* istanbul ignore next */
+            if (cp === EOF) {
+                this.reportParseError("x-missing-interpolation-end")
+                return "DATA"
+            }
+
+            if (cp === NULL) {
+                this.reportParseError("unexpected-null-character")
+            }
+            this.appendTokenValue(cp, type)
+
+            cp = this.consumeNextCodePoint()
+        }
+    }
     /**
      * Create `}} `token.
      * @param cp The current code point.
@@ -1851,7 +1925,9 @@ export class Tokenizer {
             this.startToken("VExpressionEnd")
             this.appendTokenValue(RIGHT_CURLY_BRACKET, null)
             this.appendTokenValue(RIGHT_CURLY_BRACKET, null)
-            return this.returnState
+            return this.vExpressionScriptState
+                ? this.vExpressionScriptState.state
+                : this.returnState
         }
 
         this.appendTokenValue(RIGHT_CURLY_BRACKET, null)

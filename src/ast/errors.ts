@@ -147,6 +147,7 @@ export type ErrorCode =
     | "non-void-html-element-start-tag-with-trailing-solidus"
     | "x-invalid-end-tag"
     | "x-invalid-namespace"
+    | "x-missing-interpolation-end"
 // ---- Use RAWTEXT state for <script> elements instead ----
 // "eof-in-script-html-comment-like-text" |
 // ---- Use BOGUS_COMMENT state for DOCTYPEs instead ----

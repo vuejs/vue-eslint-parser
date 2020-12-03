@@ -4,6 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import escope, * as escopeTypes from "eslint-scope"
+import { ParserOptions } from "../common/parser-options"
 import {
     ESLintIdentifier,
     ESLintProgram,
@@ -88,7 +89,10 @@ function getForScope(scope: escopeTypes.Scope): escopeTypes.Scope {
  * @param ast
  * @param parserOptions
  */
-function analyze(ast: ESLintProgram, parserOptions: any): escopeTypes.Scope {
+function analyze(
+    ast: ESLintProgram,
+    parserOptions: ParserOptions,
+): escopeTypes.Scope {
     const ecmaVersion = parserOptions.ecmaVersion || 2017
     const ecmaFeatures = parserOptions.ecmaFeatures || {}
     const sourceType = parserOptions.sourceType || "script"
@@ -111,7 +115,7 @@ function analyze(ast: ESLintProgram, parserOptions: any): escopeTypes.Scope {
  */
 export function analyzeExternalReferences(
     ast: ESLintProgram,
-    parserOptions: any,
+    parserOptions: ParserOptions,
 ): Reference[] {
     const scope = analyze(ast, parserOptions)
     return scope.through.filter(isUnique).map(transformReference)
@@ -124,7 +128,7 @@ export function analyzeExternalReferences(
  */
 export function analyzeVariablesAndExternalReferences(
     ast: ESLintProgram,
-    parserOptions: any,
+    parserOptions: ParserOptions,
 ): { variables: Variable[]; references: Reference[] } {
     const scope = analyze(ast, parserOptions)
     return {
