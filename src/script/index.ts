@@ -654,9 +654,10 @@ export function parseExpression(
 ): ExpressionParseResult<ESLintExpression | VFilterSequenceExpression> {
     debug('[script] parse expression: "%s"', code)
 
-    const [mainCode, ...filterCodes] = allowFilters
-        ? splitFilters(code)
-        : [code]
+    const [mainCode, ...filterCodes] =
+        allowFilters && (parserOptions.vueFeatures?.filter ?? true)
+            ? splitFilters(code)
+            : [code]
     if (filterCodes.length === 0) {
         return parseExpressionBody(
             code,

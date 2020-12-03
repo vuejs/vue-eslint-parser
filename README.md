@@ -90,6 +90,56 @@ For example:
 If the `parserOptions.parser` is `false`, the `vue-eslint-parser` skips parsing `<script>` tags completely.
 This is useful for people who use the language ESLint community doesn't provide custom parser implementation.
 
+### parserOptions.vueFeatures
+
+You can use `parserOptions.vueFeatures` property to specify how to parse related to Vue features.
+For example:
+
+```json
+{
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "vueFeatures": {
+            "filter": true,
+            "interpolationAsNonHTML": false,
+        }
+    }
+}
+```
+
+### parserOptions.vueFeatures.filter
+
+You can use `parserOptions.vueFeatures.filter` property to specify whether to parse the Vue2 filter. If you specify `false`, the parser does not parse `|` as a filter.
+For example:
+
+```json
+{
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "vueFeatures": {
+            "filter": false
+        }
+    }
+}
+```
+
+If you specify `false`, it can be parsed in the same way as Vue 3.
+The following template parses as a bitwise operation.
+
+```vue
+<template>
+  <div>{{ a | b }}</div>
+</template>
+```
+
+However, the following template that are valid in Vue 2 cannot be parsed.
+
+```vue
+<template>
+  <div>{{ a | valid:filter }}</div>
+</template>
+```
+
 ### parserOptions.vueFeatures.interpolationAsNonHTML
 
 You can use `parserOptions.vueFeatures.interpolationAsNonHTML` property to specify whether to parse the interpolation as HTML. If you specify `true`, the parser handles the interpolation as non-HTML (However, you can use HTML escaping in the interpolation).
