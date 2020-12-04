@@ -1,0 +1,34 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<custom-block>\n  Do not escape &lt;&gt;\n</custom-block>\n",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<custom-block>\n  Do not escape &lt;&gt;\n</custom-block>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<custom-block>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  Do not escape &lt;&gt;\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</custom-block>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            }
+        ]
+    }
+]

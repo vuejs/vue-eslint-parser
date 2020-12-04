@@ -1,0 +1,235 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<!DOCTYPE html>\n<html>\n<head>\n  <style type=\"text/css\">\n  a {\n    color: pink;\n  }\n  </style>\n</head>\n<body>\n  <div></div>\n  <script type=\"text/x-template\" id=\"hello-world-template\">\n    <p>Hello hello hello</p>\n  </script>\n  <script>\n  Vue.component('hello-world', {\n    template: '#hello-world-template'\n  })\n  </script>\n</body>\n</html>",
+        "children": [
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<html>\n<head>\n  <style type=\"text/css\">\n  a {\n    color: pink;\n  }\n  </style>\n</head>\n<body>\n  <div></div>\n  <script type=\"text/x-template\" id=\"hello-world-template\">\n    <p>Hello hello hello</p>\n  </script>\n  <script>\n  Vue.component('hello-world', {\n    template: '#hello-world-template'\n  })\n  </script>\n</body>\n</html>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<html>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<head>\n  <style type=\"text/css\">\n  a {\n    color: pink;\n  }\n  </style>\n</head>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<head>",
+                                "children": []
+                            },
+                            {
+                                "type": "VText",
+                                "text": "\n  ",
+                                "children": []
+                            },
+                            {
+                                "type": "VElement",
+                                "text": "<style type=\"text/css\">\n  a {\n    color: pink;\n  }\n  </style>",
+                                "children": [
+                                    {
+                                        "type": "VStartTag",
+                                        "text": "<style type=\"text/css\">",
+                                        "children": [
+                                            {
+                                                "type": "VAttribute",
+                                                "text": "type=\"text/css\"",
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "type",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VLiteral",
+                                                        "text": "\"text/css\"",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VText",
+                                        "text": "\n  a {\n    color: pink;\n  }\n  ",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VEndTag",
+                                        "text": "</style>",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VText",
+                                "text": "\n",
+                                "children": []
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</head>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<body>\n  <div></div>\n  <script type=\"text/x-template\" id=\"hello-world-template\">\n    <p>Hello hello hello</p>\n  </script>\n  <script>\n  Vue.component('hello-world', {\n    template: '#hello-world-template'\n  })\n  </script>\n</body>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<body>",
+                                "children": []
+                            },
+                            {
+                                "type": "VText",
+                                "text": "\n  ",
+                                "children": []
+                            },
+                            {
+                                "type": "VElement",
+                                "text": "<div></div>",
+                                "children": [
+                                    {
+                                        "type": "VStartTag",
+                                        "text": "<div>",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VEndTag",
+                                        "text": "</div>",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VText",
+                                "text": "\n  ",
+                                "children": []
+                            },
+                            {
+                                "type": "VElement",
+                                "text": "<script type=\"text/x-template\" id=\"hello-world-template\">\n    <p>Hello hello hello</p>\n  </script>",
+                                "children": [
+                                    {
+                                        "type": "VStartTag",
+                                        "text": "<script type=\"text/x-template\" id=\"hello-world-template\">",
+                                        "children": [
+                                            {
+                                                "type": "VAttribute",
+                                                "text": "type=\"text/x-template\"",
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "type",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VLiteral",
+                                                        "text": "\"text/x-template\"",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "VAttribute",
+                                                "text": "id=\"hello-world-template\"",
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "id",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VLiteral",
+                                                        "text": "\"hello-world-template\"",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VText",
+                                        "text": "\n    <p>Hello hello hello</p>\n  ",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VEndTag",
+                                        "text": "</script>",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VText",
+                                "text": "\n  ",
+                                "children": []
+                            },
+                            {
+                                "type": "VElement",
+                                "text": "<script>\n  Vue.component('hello-world', {\n    template: '#hello-world-template'\n  })\n  </script>",
+                                "children": [
+                                    {
+                                        "type": "VStartTag",
+                                        "text": "<script>",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VText",
+                                        "text": "\n  Vue.component('hello-world', {\n    template: '#hello-world-template'\n  })\n  ",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VEndTag",
+                                        "text": "</script>",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VText",
+                                "text": "\n",
+                                "children": []
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</body>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</html>",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]

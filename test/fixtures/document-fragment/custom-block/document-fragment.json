@@ -1,0 +1,370 @@
+{
+    "type": "VDocumentFragment",
+    "range": [
+        0,
+        54
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 4,
+            "column": 0
+        }
+    },
+    "children": [
+        {
+            "type": "VElement",
+            "range": [
+                0,
+                53
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 3,
+                    "column": 15
+                }
+            },
+            "name": "custom-block",
+            "rawName": "custom-block",
+            "namespace": "http://www.w3.org/1999/xhtml",
+            "startTag": {
+                "type": "VStartTag",
+                "range": [
+                    0,
+                    14
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 14
+                    }
+                },
+                "selfClosing": false,
+                "attributes": []
+            },
+            "children": [
+                {
+                    "type": "VText",
+                    "range": [
+                        14,
+                        38
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 14
+                        },
+                        "end": {
+                            "line": 3,
+                            "column": 0
+                        }
+                    },
+                    "value": "\n  This Is Custom Block\n"
+                }
+            ],
+            "endTag": {
+                "type": "VEndTag",
+                "range": [
+                    38,
+                    53
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 15
+                    }
+                }
+            },
+            "variables": []
+        },
+        {
+            "type": "VText",
+            "range": [
+                53,
+                54
+            ],
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 15
+                },
+                "end": {
+                    "line": 4,
+                    "column": 0
+                }
+            },
+            "value": "\n"
+        }
+    ],
+    "tokens": [
+        {
+            "type": "HTMLTagOpen",
+            "range": [
+                0,
+                13
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 13
+                }
+            },
+            "value": "custom-block"
+        },
+        {
+            "type": "HTMLTagClose",
+            "range": [
+                13,
+                14
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 13
+                },
+                "end": {
+                    "line": 1,
+                    "column": 14
+                }
+            },
+            "value": ""
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                14,
+                17
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 14
+                },
+                "end": {
+                    "line": 2,
+                    "column": 2
+                }
+            },
+            "value": "\n  "
+        },
+        {
+            "type": "HTMLRawText",
+            "range": [
+                17,
+                21
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 2
+                },
+                "end": {
+                    "line": 2,
+                    "column": 6
+                }
+            },
+            "value": "This"
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                21,
+                22
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 6
+                },
+                "end": {
+                    "line": 2,
+                    "column": 7
+                }
+            },
+            "value": " "
+        },
+        {
+            "type": "HTMLRawText",
+            "range": [
+                22,
+                24
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 7
+                },
+                "end": {
+                    "line": 2,
+                    "column": 9
+                }
+            },
+            "value": "Is"
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                24,
+                25
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 9
+                },
+                "end": {
+                    "line": 2,
+                    "column": 10
+                }
+            },
+            "value": " "
+        },
+        {
+            "type": "HTMLRawText",
+            "range": [
+                25,
+                31
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 10
+                },
+                "end": {
+                    "line": 2,
+                    "column": 16
+                }
+            },
+            "value": "Custom"
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                31,
+                32
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 16
+                },
+                "end": {
+                    "line": 2,
+                    "column": 17
+                }
+            },
+            "value": " "
+        },
+        {
+            "type": "HTMLRawText",
+            "range": [
+                32,
+                37
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 17
+                },
+                "end": {
+                    "line": 2,
+                    "column": 22
+                }
+            },
+            "value": "Block"
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                37,
+                38
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 22
+                },
+                "end": {
+                    "line": 3,
+                    "column": 0
+                }
+            },
+            "value": "\n"
+        },
+        {
+            "type": "HTMLEndTagOpen",
+            "range": [
+                38,
+                52
+            ],
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 0
+                },
+                "end": {
+                    "line": 3,
+                    "column": 14
+                }
+            },
+            "value": "custom-block"
+        },
+        {
+            "type": "HTMLTagClose",
+            "range": [
+                52,
+                53
+            ],
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 14
+                },
+                "end": {
+                    "line": 3,
+                    "column": 15
+                }
+            },
+            "value": ""
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                53,
+                54
+            ],
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 15
+                },
+                "end": {
+                    "line": 4,
+                    "column": 0
+                }
+            },
+            "value": "\n"
+        }
+    ],
+    "comments": [],
+    "errors": []
+}

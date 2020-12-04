@@ -955,7 +955,7 @@ export class Tokenizer {
                 this.endToken()
                 return "BEFORE_ATTRIBUTE_NAME"
             }
-            if (!isLetter(cp)) {
+            if (!isLetter(cp) && !maybeValidCustomBlock.call(this, cp)) {
                 this.rollbackProvisionalToken()
                 this.appendTokenValue(LESS_THAN_SIGN, "HTMLRawText")
                 this.appendTokenValue(SOLIDUS, "HTMLRawText")
@@ -972,6 +972,20 @@ export class Tokenizer {
             this.buffer.push(cp)
 
             cp = this.consumeNextCodePoint()
+        }
+
+        function maybeValidCustomBlock(this: Tokenizer, nextCp: number) {
+            if (
+                !this.currentToken ||
+                !this.currentToken.value ||
+                !this.lastTagOpenToken ||
+                !this.lastTagOpenToken.value
+            ) {
+                return false
+            }
+            return this.lastTagOpenToken.value.startsWith(
+                this.currentToken.value + String.fromCodePoint(nextCp),
+            )
         }
     }
 

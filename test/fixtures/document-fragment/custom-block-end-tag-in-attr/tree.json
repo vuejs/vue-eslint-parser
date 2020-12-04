@@ -1,0 +1,120 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<custom-block>\n  End Tag in Attr e.g. <foo attr=\"</custom-block>\" ></foo> is Invalid!\n</custom-block>\n\n<custom-block-html lang=\"html\">\n  End Tag in Attr e.g. <foo attr=\"</custom-block-html>\" ></foo> is Invalid!\n</custom-block-html>",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<custom-block>\n  End Tag in Attr e.g. <foo attr=\"</custom-block>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<custom-block>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  End Tag in Attr e.g. <foo attr=\"",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</custom-block>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\" >",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": " is Invalid!\n",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<custom-block-html lang=\"html\">\n  End Tag in Attr e.g. <foo attr=\"</custom-block-html>\" ></foo> is Invalid!\n</custom-block-html>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<custom-block-html lang=\"html\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "lang=\"html\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "lang",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"html\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  End Tag in Attr e.g. ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<foo attr=\"</custom-block-html>\" ></foo>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<foo attr=\"</custom-block-html>\" >",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "attr=\"</custom-block-html>\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "attr",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VLiteral",
+                                                "text": "\"</custom-block-html>\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</foo>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": " is Invalid!\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</custom-block-html>",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]

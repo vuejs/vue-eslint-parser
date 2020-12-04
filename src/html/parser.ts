@@ -3,6 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
+import * as path from "path"
 import assert from "assert"
 import last from "lodash/last"
 import findLastIndex from "lodash/findLastIndex"
@@ -150,6 +151,7 @@ export class Parser {
     private tokenizer: IntermediateTokenizer
     private locationCalculator: LocationCalculator
     private parserOptions: ParserOptions
+    private isSFC: boolean
     private document: VDocumentFragment
     private elementStack: VElement[]
     private vPreElement: VElement | null
@@ -230,6 +232,8 @@ export class Parser {
             tokenizer.lineTerminators,
         )
         this.parserOptions = parserOptions
+        this.isSFC =
+            path.extname(parserOptions.filePath || "unknown.vue") === ".vue"
         this.document = {
             type: "VDocumentFragment",
             range: [0, 0],
@@ -516,27 +520,40 @@ export class Parser {
 
         // Update the content type of this element.
         if (namespace === NS.HTML) {
-            if (
-                element.name === "template" &&
-                element.parent.type === "VDocumentFragment"
-            ) {
+            if (element.parent.type === "VDocumentFragment") {
                 const langAttr = element.startTag.attributes.find(
                     a => !a.directive && a.key.name === "lang",
                 ) as VAttribute | undefined
-                const lang =
-                    (langAttr && langAttr.value && langAttr.value.value) ||
-                    "html"
+                const lang = langAttr?.value?.value
 
-                if (lang !== "html") {
+                if (element.name === "template") {
+                    if (lang && lang !== "html") {
+                        // It is not an HTML template.
+                        this.tokenizer.state = "RAWTEXT"
+                    }
+                    this.expressionEnabled = true
+                } else if (this.isSFC) {
+                    // Element is Custom Block. e.g. <i18n>
+                    // Referred to the Vue parser. See https://github.com/vuejs/vue-next/blob/cbaa3805064cb581fc2007cf63774c91d39844fe/packages/compiler-sfc/src/parse.ts#L127
+                    if (!lang || lang !== "html") {
+                        // Custom Block is not HTML.
+                        this.tokenizer.state = "RAWTEXT"
+                    }
+                } else {
+                    if (HTML_RCDATA_TAGS.has(element.name)) {
+                        this.tokenizer.state = "RCDATA"
+                    }
+                    if (HTML_RAWTEXT_TAGS.has(element.name)) {
+                        this.tokenizer.state = "RAWTEXT"
+                    }
+                }
+            } else {
+                if (HTML_RCDATA_TAGS.has(element.name)) {
+                    this.tokenizer.state = "RCDATA"
+                }
+                if (HTML_RAWTEXT_TAGS.has(element.name)) {
                     this.tokenizer.state = "RAWTEXT"
                 }
-                this.expressionEnabled = true
-            }
-            if (HTML_RCDATA_TAGS.has(element.name)) {
-                this.tokenizer.state = "RCDATA"
-            }
-            if (HTML_RAWTEXT_TAGS.has(element.name)) {
-                this.tokenizer.state = "RAWTEXT"
             }
         }
     }
