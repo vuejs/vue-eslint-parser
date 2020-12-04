@@ -1,0 +1,46 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<textarea lang=\"html\">\n  &lt; RCDATA &gt; <br>\n</textarea>",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<textarea lang=\"html\">\n  &lt; RCDATA &gt; <br>\n</textarea>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<textarea lang=\"html\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "lang=\"html\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "lang",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"html\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  &lt; RCDATA &gt; <br>\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</textarea>",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]

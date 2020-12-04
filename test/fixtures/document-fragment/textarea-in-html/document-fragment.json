@@ -1,0 +1,444 @@
+{
+    "type": "VDocumentFragment",
+    "range": [
+        0,
+        58
+    ],
+    "loc": {
+        "start": {
+            "line": 1,
+            "column": 0
+        },
+        "end": {
+            "line": 3,
+            "column": 11
+        }
+    },
+    "children": [
+        {
+            "type": "VElement",
+            "range": [
+                0,
+                58
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 3,
+                    "column": 11
+                }
+            },
+            "name": "textarea",
+            "rawName": "textarea",
+            "namespace": "http://www.w3.org/1999/xhtml",
+            "startTag": {
+                "type": "VStartTag",
+                "range": [
+                    0,
+                    22
+                ],
+                "loc": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 1,
+                        "column": 22
+                    }
+                },
+                "selfClosing": false,
+                "attributes": [
+                    {
+                        "type": "VAttribute",
+                        "range": [
+                            10,
+                            21
+                        ],
+                        "loc": {
+                            "start": {
+                                "line": 1,
+                                "column": 10
+                            },
+                            "end": {
+                                "line": 1,
+                                "column": 21
+                            }
+                        },
+                        "directive": false,
+                        "key": {
+                            "type": "VIdentifier",
+                            "range": [
+                                10,
+                                14
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 10
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 14
+                                }
+                            },
+                            "name": "lang",
+                            "rawName": "lang"
+                        },
+                        "value": {
+                            "type": "VLiteral",
+                            "range": [
+                                15,
+                                21
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 1,
+                                    "column": 15
+                                },
+                                "end": {
+                                    "line": 1,
+                                    "column": 21
+                                }
+                            },
+                            "value": "html"
+                        }
+                    }
+                ]
+            },
+            "children": [
+                {
+                    "type": "VText",
+                    "range": [
+                        22,
+                        47
+                    ],
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 22
+                        },
+                        "end": {
+                            "line": 3,
+                            "column": 0
+                        }
+                    },
+                    "value": "\n  < RCDATA > <br>\n"
+                }
+            ],
+            "endTag": {
+                "type": "VEndTag",
+                "range": [
+                    47,
+                    58
+                ],
+                "loc": {
+                    "start": {
+                        "line": 3,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 3,
+                        "column": 11
+                    }
+                }
+            },
+            "variables": []
+        }
+    ],
+    "tokens": [
+        {
+            "type": "HTMLTagOpen",
+            "range": [
+                0,
+                9
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 9
+                }
+            },
+            "value": "textarea"
+        },
+        {
+            "type": "HTMLIdentifier",
+            "range": [
+                10,
+                14
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 10
+                },
+                "end": {
+                    "line": 1,
+                    "column": 14
+                }
+            },
+            "value": "lang"
+        },
+        {
+            "type": "HTMLAssociation",
+            "range": [
+                14,
+                15
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 14
+                },
+                "end": {
+                    "line": 1,
+                    "column": 15
+                }
+            },
+            "value": ""
+        },
+        {
+            "type": "HTMLLiteral",
+            "range": [
+                15,
+                21
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 15
+                },
+                "end": {
+                    "line": 1,
+                    "column": 21
+                }
+            },
+            "value": "html"
+        },
+        {
+            "type": "HTMLTagClose",
+            "range": [
+                21,
+                22
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 21
+                },
+                "end": {
+                    "line": 1,
+                    "column": 22
+                }
+            },
+            "value": ""
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                22,
+                25
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 22
+                },
+                "end": {
+                    "line": 2,
+                    "column": 2
+                }
+            },
+            "value": "\n  "
+        },
+        {
+            "type": "HTMLRCDataText",
+            "range": [
+                25,
+                29
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 2
+                },
+                "end": {
+                    "line": 2,
+                    "column": 6
+                }
+            },
+            "value": "<"
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                29,
+                30
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 6
+                },
+                "end": {
+                    "line": 2,
+                    "column": 7
+                }
+            },
+            "value": " "
+        },
+        {
+            "type": "HTMLRCDataText",
+            "range": [
+                30,
+                36
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 7
+                },
+                "end": {
+                    "line": 2,
+                    "column": 13
+                }
+            },
+            "value": "RCDATA"
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                36,
+                37
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 13
+                },
+                "end": {
+                    "line": 2,
+                    "column": 14
+                }
+            },
+            "value": " "
+        },
+        {
+            "type": "HTMLRCDataText",
+            "range": [
+                37,
+                41
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 14
+                },
+                "end": {
+                    "line": 2,
+                    "column": 18
+                }
+            },
+            "value": ">"
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                41,
+                42
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 18
+                },
+                "end": {
+                    "line": 2,
+                    "column": 19
+                }
+            },
+            "value": " "
+        },
+        {
+            "type": "HTMLRCDataText",
+            "range": [
+                42,
+                46
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 19
+                },
+                "end": {
+                    "line": 2,
+                    "column": 23
+                }
+            },
+            "value": "<br>"
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                46,
+                47
+            ],
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 23
+                },
+                "end": {
+                    "line": 3,
+                    "column": 0
+                }
+            },
+            "value": "\n"
+        },
+        {
+            "type": "HTMLEndTagOpen",
+            "range": [
+                47,
+                57
+            ],
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 0
+                },
+                "end": {
+                    "line": 3,
+                    "column": 10
+                }
+            },
+            "value": "textarea"
+        },
+        {
+            "type": "HTMLTagClose",
+            "range": [
+                57,
+                58
+            ],
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 10
+                },
+                "end": {
+                    "line": 3,
+                    "column": 11
+                }
+            },
+            "value": ""
+        }
+    ],
+    "comments": [],
+    "errors": []
+}

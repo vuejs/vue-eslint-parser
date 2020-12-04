@@ -1,11 +1,11 @@
 [
     {
         "type": "VDocumentFragment",
-        "text": "<textarea>\n  <script>RCDATA-</script>\n</textarea>\n",
+        "text": "<textarea>\n  &lt; custom block &gt; <br>\n</textarea>\n\n<textarea lang=\"html\">\n  &lt; not RCDATA &gt; <br>\n</textarea>\n",
         "children": [
             {
                 "type": "VElement",
-                "text": "<textarea>\n  <script>RCDATA-</script>\n</textarea>",
+                "text": "<textarea>\n  &lt; custom block &gt; <br>\n</textarea>",
                 "children": [
                     {
                         "type": "VStartTag",
@@ -14,7 +14,66 @@
                     },
                     {
                         "type": "VText",
-                        "text": "\n  <script>RCDATA-</script>\n",
+                        "text": "\n  &lt; custom block &gt; <br>\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</textarea>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<textarea lang=\"html\">\n  &lt; not RCDATA &gt; <br>\n</textarea>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<textarea lang=\"html\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "lang=\"html\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "lang",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"html\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  &lt; not RCDATA &gt; ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<br>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<br>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
                         "children": []
                     },
                     {
