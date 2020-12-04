@@ -975,16 +975,12 @@ export class Tokenizer {
         }
 
         function maybeValidCustomBlock(this: Tokenizer, nextCp: number) {
-            if (
-                !this.currentToken ||
-                !this.currentToken.value ||
-                !this.lastTagOpenToken ||
-                !this.lastTagOpenToken.value
-            ) {
-                return false
-            }
-            return this.lastTagOpenToken.value.startsWith(
-                this.currentToken.value + String.fromCodePoint(nextCp),
+            return (
+                this.currentToken &&
+                this.lastTagOpenToken &&
+                this.lastTagOpenToken.value.startsWith(
+                    this.currentToken.value + String.fromCodePoint(nextCp),
+                )
             )
         }
     }
