@@ -82,7 +82,7 @@ export function parseForESLint(
     options = Object.assign(
         {
             comment: true,
-            ecmaVersion: 2015,
+            ecmaVersion: 2017,
             loc: true,
             range: true,
             tokens: true,
@@ -92,14 +92,16 @@ export function parseForESLint(
 
     let result: AST.ESLintExtendedProgram
     let document: AST.VDocumentFragment | null
+    let locationCalculator: LocationCalculator | null
     if (!isVueFile(code, options)) {
         result = parseScript(code, options)
         document = null
+        locationCalculator = null
     } else {
         const skipParsingScript = options.parser === false
         const tokenizer = new HTMLTokenizer(code, options)
         const rootAST = new HTMLParser(tokenizer, options).parse()
-        const locationCalcurator = new LocationCalculator(
+        locationCalculator = new LocationCalculator(
             tokenizer.gaps,
             tokenizer.lineTerminators,
         )
@@ -119,7 +121,7 @@ export function parseForESLint(
         if (skipParsingScript || script == null) {
             result = parseScript("", options)
         } else {
-            result = parseScriptElement(script, locationCalcurator, options)
+            result = parseScriptElement(script, locationCalculator, options)
         }
 
         result.ast.templateBody = templateBody
@@ -128,7 +130,9 @@ export function parseForESLint(
 
     result.services = Object.assign(
         result.services || {},
-        services.define(result.ast, document),
+        services.define(code, result.ast, document, locationCalculator, {
+            parserOptions: options,
+        }),
     )
 
     return result
