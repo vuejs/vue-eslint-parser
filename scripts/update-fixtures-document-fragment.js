@@ -61,8 +61,53 @@ for (const name of TARGETS) {
     const actual = result.services.getDocumentFragment()
 
     const resultPath = path.join(ROOT, `${name}/document-fragment.json`)
+    const tokenRangesPath = path.join(ROOT, `${name}/token-ranges.json`)
+    const treePath = path.join(ROOT, `${name}/tree.json`)
 
     console.log("Update:", name)
 
+    const tokenRanges = getAllTokens(actual).map(t =>
+        source.slice(t.range[0], t.range[1])
+    )
+    const tree = getTree(source, actual)
+
     fs.writeFileSync(resultPath, JSON.stringify(actual, replacer, 4))
+    fs.writeFileSync(tokenRangesPath, JSON.stringify(tokenRanges, replacer, 4))
+    fs.writeFileSync(treePath, JSON.stringify(tree, replacer, 4))
+}
+
+function getAllTokens(fgAst) {
+    const tokenArrays = [fgAst.tokens, fgAst.comments]
+
+    return Array.prototype.concat.apply([], tokenArrays)
+}
+
+/**
+ * Create simple tree.
+ * @param {string} source The source code.
+ * @param {VDocumentFragment} fgAst The root node.
+ * @returns {object} Simple tree.
+ */
+function getTree(source, fgAst) {
+    const stack = []
+    const root = { children: [] }
+    let current = root
+
+    parser.AST.traverseNodes(fgAst, {
+        enterNode(node) {
+            stack.push(current)
+            current.children.push(
+                (current = {
+                    type: node.type,
+                    text: source.slice(node.range[0], node.range[1]),
+                    children: [],
+                })
+            )
+        },
+        leaveNode() {
+            current = stack.pop()
+        },
+    })
+
+    return root.children
 }

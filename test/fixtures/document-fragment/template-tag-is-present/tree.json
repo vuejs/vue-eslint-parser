@@ -1,0 +1,81 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<docs>\n    doc\n</docs>\n<script>\nexport default {\n    name: 'test'\n}\n</script>\n<style>\na {\n    color: pink;\n}\n</style>",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<docs>\n    doc\n</docs>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<docs>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    doc\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</docs>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<script>\nexport default {\n    name: 'test'\n}\n</script>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<script>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\nexport default {\n    name: 'test'\n}\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</script>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<style>\na {\n    color: pink;\n}\n</style>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<style>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\na {\n    color: pink;\n}\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</style>",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -75,6 +75,23 @@ describe("services.getDocumentFragment", () => {
                     expected
                 )
             })
+
+            it("should have correct range.", () => {
+                const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
+                const expectedText = fs.readFileSync(resultPath, "utf8")
+                const tokens = getAllTokens(actual).map(t =>
+                    source.slice(t.range[0], t.range[1])
+                )
+                const actualText = JSON.stringify(tokens, null, 4)
+
+                assert.strictEqual(actualText, expectedText)
+            })
         })
     }
 })
+
+function getAllTokens(fgAst) {
+    const tokenArrays = [fgAst.tokens, fgAst.comments]
+
+    return Array.prototype.concat.apply([], tokenArrays)
+}

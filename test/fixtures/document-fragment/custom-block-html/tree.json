@@ -1,0 +1,114 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<custom-block lang=\"html\">\n  <div><h1>lang =\"html\" parses the &lt;tag&gt; as HTML</h1></div>\n</custom-block>\n\n<custom-block-no-html>\n  <div><h1>Is Not HTML</h1></div>\n</custom-block-no-html>",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<custom-block lang=\"html\">\n  <div><h1>lang =\"html\" parses the &lt;tag&gt; as HTML</h1></div>\n</custom-block>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<custom-block lang=\"html\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "lang=\"html\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "lang",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"html\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<div><h1>lang =\"html\" parses the &lt;tag&gt; as HTML</h1></div>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<div>",
+                                "children": []
+                            },
+                            {
+                                "type": "VElement",
+                                "text": "<h1>lang =\"html\" parses the &lt;tag&gt; as HTML</h1>",
+                                "children": [
+                                    {
+                                        "type": "VStartTag",
+                                        "text": "<h1>",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VText",
+                                        "text": "lang =\"html\" parses the &lt;tag&gt; as HTML",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VEndTag",
+                                        "text": "</h1>",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</div>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</custom-block>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<custom-block-no-html>\n  <div><h1>Is Not HTML</h1></div>\n</custom-block-no-html>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<custom-block-no-html>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  <div><h1>Is Not HTML</h1></div>\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</custom-block-no-html>",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]
