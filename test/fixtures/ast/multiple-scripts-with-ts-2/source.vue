@@ -1,0 +1,7 @@
+<script>
+"script"
+</script>
+
+<script setup>
+"script setup"
+</script>

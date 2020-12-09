@@ -7,7 +7,7 @@ import * as path from "path"
 import * as AST from "./ast"
 import { LocationCalculator } from "./common/location-calculator"
 import { HTMLParser, HTMLTokenizer } from "./html"
-import { parseScript, parseScriptElement } from "./script"
+import { parseScript, parseScriptElement, parseScriptElements } from "./script"
 import * as services from "./parser-services"
 import type { ParserOptions } from "./common/parser-options"
 
@@ -69,6 +69,15 @@ function getLang(
 }
 
 /**
+ * Checks whether the given script element is `<script setup>`.
+ */
+function isScriptSetup(script: AST.VElement): boolean {
+    return script.startTag.attributes.some(
+        (attr) => !attr.directive && attr.key.name === "setup",
+    )
+}
+
+/**
  * Parse the given source code.
  * @param code The source code to parse.
  * @param options The parser options.
@@ -101,11 +110,12 @@ export function parseForESLint(
         const skipParsingScript = options.parser === false
         const tokenizer = new HTMLTokenizer(code, options)
         const rootAST = new HTMLParser(tokenizer, options).parse()
+
         locationCalculator = new LocationCalculator(
             tokenizer.gaps,
             tokenizer.lineTerminators,
         )
-        const script = rootAST.children.find(isScriptElement)
+        const scripts = rootAST.children.filter(isScriptElement)
         const template = rootAST.children.find(isTemplateElement)
         const templateLang = getLang(template, "html")
         const concreteInfo: AST.HasConcreteInfo = {
@@ -118,10 +128,21 @@ export function parseForESLint(
                 ? Object.assign(template, concreteInfo)
                 : undefined
 
-        if (skipParsingScript || script == null) {
+        if (skipParsingScript || !scripts.length) {
             result = parseScript("", options)
+        } else if (
+            scripts.length === 2 &&
+            scripts.some(isScriptSetup) &&
+            scripts.some((e) => !isScriptSetup(e))
+        ) {
+            result = parseScriptElements(
+                scripts,
+                code,
+                new LocationCalculator([], tokenizer.lineTerminators),
+                options,
+            )
         } else {
-            result = parseScriptElement(script, locationCalculator, options)
+            result = parseScriptElement(scripts[0], locationCalculator, options)
         }
 
         result.ast.templateBody = templateBody

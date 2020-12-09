@@ -643,4 +643,80 @@ describe("Basic tests", () => {
             assert.strictEqual(messages2[0].message, "OK")
         })
     })
+
+    describe("Multiple <script>", () => {
+        it("should notify parsing error", () => {
+            const code =
+                '<script>"script" /* </script><script setup>*/</script>'
+            const config = {
+                parser: PARSER_PATH,
+            }
+            const linter = new Linter()
+
+            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
+
+            const messages = linter.verify(code, config)
+
+            assert.strictEqual(messages.length, 1)
+            assert.strictEqual(
+                messages[0].message,
+                "Parsing error: Unterminated comment"
+            )
+        })
+        it("should notify parsing error #2", () => {
+            const code = "<script>var a = `</script><script setup>`</script>"
+            const config = {
+                parser: PARSER_PATH,
+                parserOptions: {
+                    ecmaVersion: 2015,
+                },
+            }
+            const linter = new Linter()
+
+            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
+
+            const messages = linter.verify(code, config)
+
+            assert.strictEqual(messages.length, 1)
+            assert.strictEqual(
+                messages[0].message,
+                "Parsing error: Unterminated template literal"
+            )
+        })
+        it("should notify parsing error #3", () => {
+            const code = '<script>var a = "</script><script setup>"</script>'
+            const config = {
+                parser: PARSER_PATH,
+            }
+            const linter = new Linter()
+
+            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
+
+            const messages = linter.verify(code, config)
+
+            assert.strictEqual(messages.length, 1)
+            assert.strictEqual(
+                messages[0].message,
+                "Parsing error: Unterminated string constant"
+            )
+        })
+        it("should notify 1 no-undef error", () => {
+            const code =
+                "<script>var a = 1, b = 2;</script><script setup>c = a + b</script>"
+            const config = {
+                parser: PARSER_PATH,
+                rules: {
+                    "no-undef": "error",
+                },
+            }
+            const linter = new Linter()
+
+            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
+
+            const messages = linter.verify(code, config)
+
+            assert.strictEqual(messages.length, 1)
+            assert.strictEqual(messages[0].message, "'c' is not defined.")
+        })
+    })
 })
