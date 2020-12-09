@@ -237,6 +237,7 @@ export function define(
                                 text: sourceText,
                                 customBlock,
                                 parsedResult,
+                                globalLocationCalculator,
                                 parserOptions,
                             })
 

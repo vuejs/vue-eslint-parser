@@ -196,11 +196,13 @@ export function createCustomBlockSharedContext({
     text,
     customBlock,
     parsedResult,
+    globalLocationCalculator,
     parserOptions,
 }: {
     text: string
     customBlock: VElement
     parsedResult: ESLintExtendedProgram & { error?: ParseError | Error }
+    globalLocationCalculator: LocationCalculator
     parserOptions: any
 }) {
     let sourceCode: SourceCode
@@ -226,6 +228,17 @@ export function createCustomBlockSharedContext({
                 ),
             parserServices: {
                 customBlock,
+                parseCustomBlockElement(
+                    parser: ESLintCustomBlockParser,
+                    options: any,
+                ) {
+                    return parseCustomBlockElement(
+                        customBlock,
+                        parser,
+                        globalLocationCalculator,
+                        { ...parserOptions, ...options },
+                    )
+                },
                 ...(parsedResult.services || {}),
                 ...(parsedResult.error
                     ? { parseError: parsedResult.error }
