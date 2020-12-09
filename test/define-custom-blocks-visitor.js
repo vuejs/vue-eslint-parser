@@ -329,7 +329,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
         assert.strictEqual(messages[1].line, 5)
         assert.strictEqual(messages[1].column, 19)
     })
-    it("should work even with scriptVisitor().", () => {
+    it("should work even with scriptVisitor.", () => {
         const code = `
 <i18n lang="json">
 { "foo": 42 }
@@ -353,6 +353,55 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
         assert.strictEqual(messages[1].line, 2)
         assert.strictEqual(messages[1].column, 19)
         assert.strictEqual(messages[2].message, "OK 42@count:1")
+    })
+    it("should work with parseCustomBlockElement().", () => {
+        const code = `
+<i18n lang="json">
+{ "foo": "bar" }// comment
+</i18n>
+`
+        const linter = createLinter()
+        linter.defineRule("test-for-parse-custom-block-element", context =>
+            context.parserServices.defineCustomBlocksVisitor(
+                context,
+                jsonParser,
+                {
+                    target: "json",
+                    create(ctx) {
+                        return {
+                            Program(node) {
+                                const error = ctx.parserServices.parseCustomBlockElement(
+                                    jsonParser,
+                                    { jsonSyntax: "json" }
+                                ).error
+                                ctx.report({
+                                    node,
+                                    message: JSON.stringify({
+                                        lineNumber: error.lineNumber,
+                                        column: error.column,
+                                        message: error.message,
+                                    }),
+                                })
+                            },
+                        }
+                    },
+                }
+            )
+        )
+
+        const messages = linter.verify(code, {
+            ...LINTER_CONFIG,
+            rules: {
+                "test-for-parse-custom-block-element": "error",
+                ...LINTER_CONFIG.rules,
+            },
+        })
+
+        assert.strictEqual(messages.length, 1)
+        assert.strictEqual(
+            messages[0].message,
+            '{"lineNumber":3,"column":16,"message":"Unexpected comment."}'
+        )
     })
 
     describe("API tests", () => {
