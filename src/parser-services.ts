@@ -244,10 +244,16 @@ export function define(
                             emitter.setMaxListeners(0)
 
                             for (const factory of activeVisitorFactories) {
-                                const visitor = factory.create({
-                                    ...factory.context,
+                                const ctx = {
                                     ...customBlockContext,
-                                })
+                                }
+                                // eslint-disable-next-line @mysticatea/ts/ban-ts-ignore
+                                // @ts-ignore -- custom context
+                                ctx.__proto__ = factory.context
+
+                                const visitor = factory.create(
+                                    ctx as CustomBlockContext,
+                                )
                                 // Register handlers into the intermediate event emitter.
                                 for (const selector of Object.keys(
                                     visitor || {},
