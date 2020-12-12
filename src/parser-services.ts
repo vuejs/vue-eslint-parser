@@ -23,6 +23,7 @@ import {
     getLang,
     parseCustomBlockElement,
 } from "./sfc/custom-block"
+import { isSFCFile, ParserOptions } from "./common/parser-options"
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -97,7 +98,7 @@ export function define(
     rootAST: ESLintProgram,
     document: VDocumentFragment | null,
     globalLocationCalculator: LocationCalculator | null,
-    { parserOptions }: { parserOptions: object },
+    { parserOptions }: { parserOptions: ParserOptions },
 ): ParserServices {
     const customBlocksEmitters = new Map<
         ESLintCustomBlockParser,
@@ -107,6 +108,8 @@ export function define(
             create: CustomBlockVisitorFactory
         }[]
     >()
+
+    const isSFC = isSFCFile(parserOptions)
 
     return {
         /**
@@ -186,6 +189,9 @@ export function define(
         ): { [key: string]: (...args: any) => void } {
             if (scriptVisitor == null) {
                 scriptVisitor = {} //eslint-disable-line no-param-reassign
+            }
+            if (!isSFC) {
+                return scriptVisitor
             }
             parserOptions = { ...parserOptions } //eslint-disable-line no-param-reassign
             const customBlocks = getCustomBlocks(document).filter(

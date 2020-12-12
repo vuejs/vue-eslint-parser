@@ -3,7 +3,6 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import * as path from "path"
 import assert from "assert"
 import last from "lodash/last"
 import findLastIndex from "lodash/findLastIndex"
@@ -47,7 +46,7 @@ import {
     Text,
 } from "./intermediate-tokenizer"
 import { Tokenizer } from "./tokenizer"
-import { ParserOptions } from "../common/parser-options"
+import { isSFCFile, ParserOptions } from "../common/parser-options"
 
 const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
 const DT_DD = /^d[dt]$/u
@@ -232,8 +231,7 @@ export class Parser {
             tokenizer.lineTerminators,
         )
         this.parserOptions = parserOptions
-        this.isSFC =
-            path.extname(parserOptions.filePath || "unknown.vue") === ".vue"
+        this.isSFC = isSFCFile(parserOptions)
         this.document = {
             type: "VDocumentFragment",
             range: [0, 0],

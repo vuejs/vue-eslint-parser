@@ -259,6 +259,19 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
         assert.strictEqual(messages2.length, 1)
     })
 
+    it("should ignore html.", () => {
+        const code = `
+<i18n lang="json">
+{ "foo": 42 }
+</i18n>
+`
+        const linter = createLinter()
+
+        const messages = linter.verify(code, LINTER_CONFIG, "test.html")
+
+        assert.strictEqual(messages.length, 0)
+    })
+
     it("should work even if parse error.", () => {
         const code = `
 <i18n lang="json">

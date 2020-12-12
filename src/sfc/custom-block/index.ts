@@ -4,6 +4,7 @@ import {
     ESLintExtendedProgram,
     getFallbackKeys,
     Node,
+    OffsetRange,
     ParseError,
     VAttribute,
     VDocumentFragment,
@@ -90,13 +91,26 @@ export function parseCustomBlockElement(
     parserOptions: ParserOptions,
 ): ESLintExtendedProgram & { error?: ParseError | Error } {
     const text = node.children[0]
-    const offset =
+    const { code, range, loc } =
         text != null && text.type === "VText"
-            ? text.range[0]
-            : node.startTag.range[1]
-    const code = text != null && text.type === "VText" ? text.value : ""
+            ? {
+                  code: text.value,
+                  range: text.range,
+                  loc: text.loc,
+              }
+            : {
+                  code: "",
+                  range: [
+                      node.startTag.range[1],
+                      node.endTag!.range[0],
+                  ] as OffsetRange,
+                  loc: {
+                      start: node.startTag.loc.end,
+                      end: node.endTag!.loc.start,
+                  },
+              }
     const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
-        offset,
+        range[0],
     )
     try {
         return parseCustomBlockFragment(
@@ -113,17 +127,16 @@ export function parseCustomBlockElement(
                 sourceType: "module",
                 loc: {
                     start: {
-                        ...node.startTag.loc.end,
+                        ...loc.start,
                     },
                     end: {
-                        ...node.endTag!.loc.start,
+                        ...loc.end,
                     },
                 },
-                range: [node.startTag.range[1], node.endTag!.range[0]],
+                range: [...range],
                 body: [],
                 tokens: [],
                 comments: [],
-                errors: [],
             },
         }
     }
