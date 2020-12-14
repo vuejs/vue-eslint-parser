@@ -3,27 +3,30 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import { Rule } from "eslint"
+import type { Rule } from "eslint"
 import EventEmitter from "events"
 import NodeEventGenerator from "./external/node-event-generator"
 import TokenStore from "./external/token-store"
-import {
-    traverseNodes,
+import type {
     ESLintProgram,
     VElement,
     VDocumentFragment,
     VAttribute,
 } from "./ast"
-import { LocationCalculator } from "./common/location-calculator"
-import {
-    createCustomBlockSharedContext,
+import { traverseNodes } from "./ast"
+import type { LocationCalculator } from "./common/location-calculator"
+import type {
     CustomBlockContext,
     ESLintCustomBlockParser,
+} from "./sfc/custom-block"
+import {
+    createCustomBlockSharedContext,
     getCustomBlocks,
     getLang,
     parseCustomBlockElement,
 } from "./sfc/custom-block"
-import { isSFCFile, ParserOptions } from "./common/parser-options"
+import type { ParserOptions } from "./common/parser-options"
+import { isSFCFile } from "./common/parser-options"
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -137,7 +140,7 @@ export function define(
                 emitters.set(rootAST, emitter)
 
                 const programExitHandler = scriptVisitor["Program:exit"]
-                scriptVisitor["Program:exit"] = node => {
+                scriptVisitor["Program:exit"] = (node) => {
                     try {
                         if (typeof programExitHandler === "function") {
                             programExitHandler(node)
@@ -195,7 +198,7 @@ export function define(
             }
             parserOptions = { ...parserOptions } //eslint-disable-line no-param-reassign
             const customBlocks = getCustomBlocks(document).filter(
-                block =>
+                (block) =>
                     block.endTag &&
                     !block.startTag.attributes.some(
                         (attr): attr is VAttribute =>
@@ -214,7 +217,7 @@ export function define(
                 const visitorFactories = factories
 
                 const programExitHandler = scriptVisitor["Program:exit"]
-                scriptVisitor["Program:exit"] = node => {
+                scriptVisitor["Program:exit"] = (node) => {
                     try {
                         if (typeof programExitHandler === "function") {
                             programExitHandler(node)
@@ -223,7 +226,7 @@ export function define(
                             const lang = getLang(customBlock)
 
                             const activeVisitorFactories = visitorFactories.filter(
-                                f => f.test(lang, customBlock),
+                                (f) => f.test(lang, customBlock),
                             )
                             if (!activeVisitorFactories.length) {
                                 continue

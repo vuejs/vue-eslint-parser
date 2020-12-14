@@ -101,31 +101,31 @@ function createLinter(target = "json") {
     const linter = new Linter()
 
     linter.defineParser(PARSER_PATH, require(PARSER_PATH))
-    linter.defineRule("test-no-number-literal", context =>
+    linter.defineRule("test-no-number-literal", (context) =>
         context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
             target,
             ...noNumberLiteralRule,
         })
     )
-    linter.defineRule("test-no-forbidden-key", context =>
+    linter.defineRule("test-no-forbidden-key", (context) =>
         context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
             target,
             ...noNoForbiddenKeyRule,
         })
     )
-    linter.defineRule("test-no-parsing-error", context =>
+    linter.defineRule("test-no-parsing-error", (context) =>
         context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
             target,
             ...noParsingErrorRule,
         })
     )
-    linter.defineRule("test-no-parsing-error", context =>
+    linter.defineRule("test-no-parsing-error", (context) =>
         context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
             target,
             ...noParsingErrorRule,
         })
     )
-    linter.defineRule("test-no-program-exit", context =>
+    linter.defineRule("test-no-program-exit", (context) =>
         context.parserServices.defineCustomBlocksVisitor(
             context,
             jsonParser,
@@ -310,7 +310,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>
 `
         const linter = createLinter()
-        linter.defineRule("test-no-yml-parsing-error", context =>
+        linter.defineRule("test-no-yml-parsing-error", (context) =>
             context.parserServices.defineCustomBlocksVisitor(
                 context,
                 {
@@ -374,7 +374,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>
 `
         const linter = createLinter()
-        linter.defineRule("test-for-parse-custom-block-element", context =>
+        linter.defineRule("test-for-parse-custom-block-element", (context) =>
             context.parserServices.defineCustomBlocksVisitor(
                 context,
                 jsonParser,
@@ -425,7 +425,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>
 `
             const linter = createLinter()
-            linter.defineRule("test", context =>
+            linter.defineRule("test", (context) =>
                 context.parserServices.defineCustomBlocksVisitor(
                     context,
                     jsonParser,
@@ -439,7 +439,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
                                         message: JSON.stringify(
                                             customBlockContext
                                                 .getAncestors()
-                                                .map(n => n.type)
+                                                .map((n) => n.type)
                                         ),
                                     })
                                 },
@@ -470,7 +470,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>
 `
             const linter = createLinter()
-            linter.defineRule("test", context =>
+            linter.defineRule("test", (context) =>
                 context.parserServices.defineCustomBlocksVisitor(
                     context,
                     jsonParser,

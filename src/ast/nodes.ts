@@ -3,10 +3,10 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import { ScopeManager } from "eslint-scope"
-import { ParseError } from "./errors"
-import { HasLocation } from "./locations"
-import { Token } from "./tokens"
+import type { ScopeManager } from "eslint-scope"
+import type { ParseError } from "./errors"
+import type { HasLocation } from "./locations"
+import type { Token } from "./tokens"
 
 //------------------------------------------------------------------------------
 // Common

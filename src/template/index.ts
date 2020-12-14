@@ -5,10 +5,9 @@
  */
 import sortedIndexBy from "lodash/sortedIndexBy"
 import sortedLastIndexBy from "lodash/sortedLastIndexBy"
-import { ParserOptions } from "../common/parser-options"
-import {
+import type { ParserOptions } from "../common/parser-options"
+import type {
     ESLintExpression,
-    ParseError,
     Reference,
     Token,
     VAttribute,
@@ -25,10 +24,11 @@ import {
     VOnExpression,
     VSlotScopeExpression,
 } from "../ast"
+import { ParseError } from "../ast"
 import { debug } from "../common/debug"
-import { LocationCalculator } from "../common/location-calculator"
+import type { LocationCalculator } from "../common/location-calculator"
+import type { ExpressionParseResult } from "../script"
 import {
-    ExpressionParseResult,
     parseExpression,
     parseVForExpression,
     parseVOnExpression,
@@ -150,7 +150,7 @@ function parseDirectiveKeyStatically(
     const modifiers = text
         .slice(i)
         .split(".")
-        .map(modifierName => {
+        .map((modifierName) => {
             const modifier = createIdentifier(i, i + modifierName.length)
             if (modifierName === "" && i < text.length) {
                 insertError(

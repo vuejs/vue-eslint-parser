@@ -1,20 +1,20 @@
-import { Rule, SourceCode } from "eslint"
-import escope, { ScopeManager, Scope } from "eslint-scope"
-import {
+import type { Rule, SourceCode } from "eslint"
+import type { ScopeManager, Scope } from "eslint-scope"
+import escope from "eslint-scope"
+import type {
     ESLintExtendedProgram,
-    getFallbackKeys,
     Node,
     OffsetRange,
-    ParseError,
     VAttribute,
     VDocumentFragment,
     VElement,
     VExpressionContainer,
     VText,
 } from "../../ast"
+import { getFallbackKeys, ParseError } from "../../ast"
 import { fixLocations } from "../../common/fix-locations"
-import { LocationCalculator } from "../../common/location-calculator"
-import { ParserOptions } from "../../common/parser-options"
+import type { LocationCalculator } from "../../common/location-calculator"
+import type { ParserOptions } from "../../common/parser-options"
 
 export interface ESLintCustomBlockParser {
     parse(code: string, options: any): any
@@ -59,7 +59,7 @@ export function getCustomBlocks(
         ? document.children
               .filter(isVElement)
               .filter(
-                  block =>
+                  (block) =>
                       block.name !== "script" &&
                       block.name !== "template" &&
                       block.name !== "style",
@@ -369,7 +369,7 @@ function markVariableAsUsed(
 
     for (let scope: Scope | null = initialScope; scope; scope = scope.upper) {
         const variable = scope.variables.find(
-            scopeVar => scopeVar.name === name,
+            (scopeVar) => scopeVar.name === name,
         )
 
         if (variable) {

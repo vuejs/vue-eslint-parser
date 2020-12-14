@@ -5,16 +5,16 @@
  */
 import assert from "assert"
 import last from "lodash/last"
-import {
+import type {
     ErrorCode,
     HasLocation,
     Namespace,
-    ParseError,
     Token,
     VAttribute,
 } from "../ast"
+import { ParseError } from "../ast"
 import { debug } from "../common/debug"
-import { Tokenizer, TokenizerState, TokenType } from "./tokenizer"
+import type { Tokenizer, TokenizerState, TokenType } from "./tokenizer"
 
 const DUMMY_PARENT: any = Object.freeze({})
 

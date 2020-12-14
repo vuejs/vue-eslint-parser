@@ -1,10 +1,6 @@
-import {
-    ESLintExtendedProgram,
-    LocationRange,
-    Node,
-    traverseNodes,
-} from "../ast"
-import { LocationCalculator } from "./location-calculator"
+import type { ESLintExtendedProgram, LocationRange, Node } from "../ast"
+import { traverseNodes } from "../ast"
+import type { LocationCalculator } from "./location-calculator"
 
 /**
  * Do post-process of parsing an expression.

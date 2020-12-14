@@ -6,7 +6,13 @@ globals: {
 }
 overrides:
   - files: "**/*.ts"
+    plugins:
+      - "@typescript-eslint"
     parser: "@typescript-eslint/parser"
+    rules:
+      "@typescript-eslint/consistent-type-imports": error
+      no-duplicate-imports: off
+      "@typescript-eslint/no-duplicate-imports": error
   - files: "typings/**"
     rules:
       node/no-missing-import:

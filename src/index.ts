@@ -9,7 +9,7 @@ import { LocationCalculator } from "./common/location-calculator"
 import { HTMLParser, HTMLTokenizer } from "./html"
 import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
-import { ParserOptions } from "./common/parser-options"
+import type { ParserOptions } from "./common/parser-options"
 
 const STARTS_WITH_LT = /^\s*</u
 

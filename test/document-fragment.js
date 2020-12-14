@@ -35,7 +35,7 @@ function replacer(key, value) {
         return undefined
     }
     if (key === "errors" && Array.isArray(value)) {
-        return value.map(e => ({
+        return value.map((e) => ({
             message: e.message,
             index: e.index,
             lineNumber: e.lineNumber,
@@ -53,7 +53,7 @@ describe("services.getDocumentFragment", () => {
     for (const name of TARGETS) {
         const sourceFileName = fs
             .readdirSync(path.join(ROOT, name))
-            .find(f => f.startsWith("source."))
+            .find((f) => f.startsWith("source."))
         const sourcePath = path.join(ROOT, `${name}/${sourceFileName}`)
         const source = fs.readFileSync(sourcePath, "utf8")
         const result = parser.parseForESLint(
@@ -79,7 +79,7 @@ describe("services.getDocumentFragment", () => {
             it("should have correct range.", () => {
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
                 const expectedText = fs.readFileSync(resultPath, "utf8")
-                const tokens = getAllTokens(actual).map(t =>
+                const tokens = getAllTokens(actual).map((t) =>
                     source.slice(t.range[0], t.range[1])
                 )
                 const actualText = JSON.stringify(tokens, null, 4)

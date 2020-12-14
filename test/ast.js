@@ -42,7 +42,7 @@ function replacer(key, value) {
         return undefined
     }
     if (key === "errors" && Array.isArray(value)) {
-        return value.map(e => ({
+        return value.map((e) => ({
             message: e.message,
             index: e.index,
             lineNumber: e.lineNumber,
@@ -78,7 +78,7 @@ function getTree(source, parserOptions) {
     let current = root
 
     linter.defineParser(PARSER, require(PARSER))
-    linter.defineRule("maketree", ruleContext =>
+    linter.defineRule("maketree", (ruleContext) =>
         ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
                 stack.push(current)
@@ -130,7 +130,7 @@ function validateParent(source, parserOptions) {
     const stack = []
 
     linter.defineParser(PARSER, require(PARSER))
-    linter.defineRule("validateparent", ruleContext =>
+    linter.defineRule("validateparent", (ruleContext) =>
         ruleContext.parserServices.defineTemplateBodyVisitor({
             "*"(node) {
                 if (stack.length >= 1) {
@@ -198,7 +198,7 @@ describe("Template AST", () => {
             it("should have correct range.", () => {
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
                 const expectedText = fs.readFileSync(resultPath, "utf8")
-                const tokens = getAllTokens(actual.ast).map(t =>
+                const tokens = getAllTokens(actual.ast).map((t) =>
                     source.slice(t.range[0], t.range[1])
                 )
                 const actualText = JSON.stringify(tokens, null, 4)
@@ -215,7 +215,7 @@ describe("Template AST", () => {
 
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
                 const expectedText = fs.readFileSync(resultPath, "utf8")
-                const tokens = getAllTokens(actualForWin.ast).map(t =>
+                const tokens = getAllTokens(actualForWin.ast).map((t) =>
                     sourceForWin
                         .slice(t.range[0], t.range[1])
                         .replace(/\r?\n/gu, "\n")

@@ -589,7 +589,7 @@ describe("Basic tests", () => {
             const linter = new Linter()
 
             linter.defineParser(PARSER_PATH, require(PARSER_PATH))
-            linter.defineRule("test-rule", context =>
+            linter.defineRule("test-rule", (context) =>
                 context.parserServices.defineTemplateBodyVisitor({
                     "VElement[name='div']"(node) {
                         context.report({ node, message: "OK" })
