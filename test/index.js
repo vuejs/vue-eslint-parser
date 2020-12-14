@@ -603,7 +603,7 @@ describe("Basic tests", () => {
             assert.strictEqual(messages1.length, 1)
             assert.strictEqual(messages1[0].message, "OK")
             assert.strictEqual(messages2.length, 1)
-            assert.strictEqual(messages1[0].message, "OK")
+            assert.strictEqual(messages2[0].message, "OK")
         })
     })
 })

@@ -7,7 +7,6 @@ import first from "lodash/first"
 import last from "lodash/last"
 import sortedIndexBy from "lodash/sortedIndexBy"
 import {
-    traverseNodes,
     ESLintArrayPattern,
     ESLintCallExpression,
     ESLintExpression,
@@ -32,7 +31,6 @@ import {
     VOnExpression,
     VSlotScopeExpression,
     OffsetRange,
-    LocationRange,
 } from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
@@ -42,6 +40,7 @@ import {
 } from "./scope-analyzer"
 import { ESLintCustomParser, getEspree } from "./espree"
 import { ParserOptions } from "../common/parser-options"
+import { fixLocations } from "../common/fix-locations"
 
 // [1] = spacing before the aliases.
 // [2] = aliases.
@@ -53,66 +52,6 @@ const DUMMY_PARENT: any = {}
 // https://github.com/vuejs/vue/blob/0948d999f2fddf9f90991956493f976273c5da1f/src/compiler/codegen/events.js#L3
 const IS_FUNCTION_EXPRESSION = /^\s*([\w$_]+|\([^)]*?\))\s*=>|^function\s*\(/u
 const IS_SIMPLE_PATH = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['[^']*?'\]|\["[^"]*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/u
-
-/**
- * Do post-process of parsing an expression.
- *
- * 1. Set `node.parent`.
- * 2. Fix `node.range` and `node.loc` for HTML entities.
- *
- * @param result The parsing result to modify.
- * @param locationCalculator The location calculator to modify.
- */
-function postprocess(
-    result: ESLintExtendedProgram,
-    locationCalculator: LocationCalculator,
-): void {
-    // There are cases which the same node instance appears twice in the tree.
-    // E.g. `let {a} = {}` // This `a` appears twice at `Property#key` and `Property#value`.
-    const traversed = new Set<Node | number[] | LocationRange>()
-
-    traverseNodes(result.ast, {
-        visitorKeys: result.visitorKeys,
-
-        enterNode(node, parent) {
-            if (!traversed.has(node)) {
-                traversed.add(node)
-                node.parent = parent
-
-                // `babel-eslint@8` has shared `Node#range` with multiple nodes.
-                // See also: https://github.com/vuejs/eslint-plugin-vue/issues/208
-                if (traversed.has(node.range)) {
-                    if (!traversed.has(node.loc)) {
-                        // However, `Node#loc` may not be shared.
-                        // See also: https://github.com/vuejs/vue-eslint-parser/issues/84
-                        node.loc.start = locationCalculator.getLocFromIndex(
-                            node.range[0],
-                        )
-                        node.loc.end = locationCalculator.getLocFromIndex(
-                            node.range[1],
-                        )
-                        traversed.add(node.loc)
-                    }
-                } else {
-                    locationCalculator.fixLocation(node)
-                    traversed.add(node.range)
-                    traversed.add(node.loc)
-                }
-            }
-        },
-
-        leaveNode() {
-            // Do nothing.
-        },
-    })
-
-    for (const token of result.ast.tokens || []) {
-        locationCalculator.fixLocation(token)
-    }
-    for (const comment of result.ast.comments || []) {
-        locationCalculator.fixLocation(comment)
-    }
-}
 
 /**
  * Replace parentheses which wrap the alias of 'v-for' directive values by array brackets in order to avoid syntax errors.
@@ -233,7 +172,7 @@ function throwErrorAsAdjustingOutsideOfCode(
  * Parse the given source code.
  *
  * @param code The source code to parse.
- * @param locationCalculator The location calculator for postprocess.
+ * @param locationCalculator The location calculator for fixLocations.
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
@@ -244,7 +183,7 @@ function parseScriptFragment(
 ): ESLintExtendedProgram {
     try {
         const result = parseScript(code, parserOptions)
-        postprocess(result, locationCalculator)
+        fixLocations(result, locationCalculator)
         return result
     } catch (err) {
         const perr = ParseError.normalize(err)
@@ -592,7 +531,7 @@ export function parseScript(
 /**
  * Parse the source code of the given `<script>` element.
  * @param node The `<script>` element to parse.
- * @param globalLocationCalculator The location calculator for postprocess.
+ * @param globalLocationCalculator The location calculator for fixLocations.
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */

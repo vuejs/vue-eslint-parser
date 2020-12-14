@@ -1,3 +1,5 @@
+import * as path from "path"
+
 export interface ParserOptions {
     // vue-eslint-parser options
     parser?: boolean | string
@@ -32,4 +34,11 @@ export interface ParserOptions {
 
     // others
     // [key: string]: any
+}
+
+export function isSFCFile(parserOptions: ParserOptions) {
+    if (parserOptions.filePath === "<input>") {
+        return true
+    }
+    return path.extname(parserOptions.filePath || "unknown.vue") === ".vue"
 }
