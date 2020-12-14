@@ -1,6 +1,6 @@
 import Module from "module"
 import path from "path"
-import { ESLintExtendedProgram, ESLintProgram } from "../ast"
+import type { ESLintExtendedProgram, ESLintProgram } from "../ast"
 
 /**
  * The interface of a result of ESLint custom parser.
@@ -23,7 +23,7 @@ const createRequire: (filename: string) => (modname: string) => any =
     Module.createRequireFromPath ||
     // Polyfill - This is not executed on the tests on node@>=10.
     /* istanbul ignore next */
-    (modname => {
+    ((modname) => {
         const mod = new Module(modname)
 
         mod.filename = modname

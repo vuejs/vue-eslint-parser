@@ -3,15 +3,16 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import escope, * as escopeTypes from "eslint-scope"
-import { ParserOptions } from "../common/parser-options"
-import {
+import type * as escopeTypes from "eslint-scope"
+import escope from "eslint-scope"
+import type { ParserOptions } from "../common/parser-options"
+import type {
     ESLintIdentifier,
     ESLintProgram,
     Reference,
     Variable,
-    getFallbackKeys,
 } from "../ast"
+import { getFallbackKeys } from "../ast"
 
 /**
  * Check whether the given reference is unique in the belonging array.

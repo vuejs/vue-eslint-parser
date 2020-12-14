@@ -4,7 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import sortedLastIndex from "lodash/sortedLastIndex"
-import { HasLocation, Location, ParseError } from "../ast"
+import type { HasLocation, Location, ParseError } from "../ast"
 
 /**
  * Location calculators.

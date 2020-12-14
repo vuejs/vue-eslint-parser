@@ -9,12 +9,12 @@ function parentMain() {
     const { spawn } = require("child_process")
 
     describe("Loading espree from ESLint", () => {
-        it("should load espree from the ESLint location.", done => {
+        it("should load espree from the ESLint location.", (done) => {
             spawn(process.execPath, [__filename, "--child"], {
                 stdio: "inherit",
             })
                 .on("error", done)
-                .on("exit", code =>
+                .on("exit", (code) =>
                     code
                         ? done(new Error(`Exited with non-zero: ${code}`))
                         : done()

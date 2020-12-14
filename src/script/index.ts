@@ -6,7 +6,7 @@
 import first from "lodash/first"
 import last from "lodash/last"
 import sortedIndexBy from "lodash/sortedIndexBy"
-import {
+import type {
     ESLintArrayPattern,
     ESLintCallExpression,
     ESLintExpression,
@@ -20,7 +20,6 @@ import {
     ESLintUnaryExpression,
     HasLocation,
     Node,
-    ParseError,
     Reference,
     Token,
     Variable,
@@ -32,14 +31,16 @@ import {
     VSlotScopeExpression,
     OffsetRange,
 } from "../ast"
+import { ParseError } from "../ast"
 import { debug } from "../common/debug"
-import { LocationCalculator } from "../common/location-calculator"
+import type { LocationCalculator } from "../common/location-calculator"
 import {
     analyzeExternalReferences,
     analyzeVariablesAndExternalReferences,
 } from "./scope-analyzer"
-import { ESLintCustomParser, getEspree } from "./espree"
-import { ParserOptions } from "../common/parser-options"
+import type { ESLintCustomParser } from "./espree"
+import { getEspree } from "./espree"
+import type { ParserOptions } from "../common/parser-options"
 import { fixLocations } from "../common/fix-locations"
 
 // [1] = spacing before the aliases.
@@ -96,7 +97,7 @@ function getCommaTokenBeforeNode(tokens: Token[], node: Node): Token | null {
     let tokenIndex = sortedIndexBy(
         tokens as { range: OffsetRange }[],
         { range: node.range },
-        t => t.range[0],
+        (t) => t.range[0],
     )
 
     while (tokenIndex >= 0) {
@@ -615,9 +616,7 @@ export function parseExpression(
     if (!retB.expression) {
         return retB
     }
-    const ret = (retB as unknown) as ExpressionParseResult<
-        VFilterSequenceExpression
-    >
+    const ret = (retB as unknown) as ExpressionParseResult<VFilterSequenceExpression>
 
     ret.expression = {
         type: "VFilterSequenceExpression",
@@ -735,7 +734,7 @@ export function parseVForExpression(
         if (replaced) {
             const closeOffset = statement.left.range[1] - 1
             const open = tokens[0]
-            const close = tokens.find(t => t.range[0] === closeOffset)
+            const close = tokens.find((t) => t.range[0] === closeOffset)
 
             if (open != null) {
                 open.value = "("

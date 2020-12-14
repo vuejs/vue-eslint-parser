@@ -177,10 +177,10 @@ function modifyPattern(ruleId, pattern) {
 function overrideRun(ruleId, impl, patterns) {
     return originalRun.call(this, ruleId, impl, {
         valid: patterns.valid
-            .map(pattern => modifyPattern(ruleId, pattern))
+            .map((pattern) => modifyPattern(ruleId, pattern))
             .filter(Boolean),
         invalid: patterns.invalid
-            .map(pattern => modifyPattern(ruleId, pattern))
+            .map((pattern) => modifyPattern(ruleId, pattern))
             .filter(Boolean),
     })
 }

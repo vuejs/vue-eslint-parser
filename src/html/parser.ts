@@ -6,18 +6,17 @@
 import assert from "assert"
 import last from "lodash/last"
 import findLastIndex from "lodash/findLastIndex"
-import {
+import type {
     ErrorCode,
     HasLocation,
     Namespace,
-    NS,
-    ParseError,
     Token,
     VAttribute,
     VDocumentFragment,
     VElement,
     VExpressionContainer,
 } from "../ast"
+import { NS, ParseError } from "../ast"
 import { debug } from "../common/debug"
 import { LocationCalculator } from "../common/location-calculator"
 import {
@@ -37,16 +36,17 @@ import {
     HTML_VOID_ELEMENT_TAGS,
     SVG_ELEMENT_NAME_MAP,
 } from "./util/tag-names"
-import {
+import type {
     IntermediateToken,
-    IntermediateTokenizer,
     EndTag,
     Mustache,
     StartTag,
     Text,
 } from "./intermediate-tokenizer"
-import { Tokenizer } from "./tokenizer"
-import { isSFCFile, ParserOptions } from "../common/parser-options"
+import { IntermediateTokenizer } from "./intermediate-tokenizer"
+import type { Tokenizer } from "./tokenizer"
+import type { ParserOptions } from "../common/parser-options"
+import { isSFCFile } from "../common/parser-options"
 
 const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
 const DT_DD = /^d[dt]$/u
@@ -83,7 +83,7 @@ function isHTMLIntegrationPoint(element: VElement): boolean {
         return (
             element.name === "annotation-xml" &&
             element.startTag.attributes.some(
-                a =>
+                (a) =>
                     a.directive === false &&
                     a.key.name === "encoding" &&
                     a.value != null &&
@@ -358,7 +358,7 @@ export class Parser {
         }
 
         if (name === "template") {
-            const xmlns = token.attributes.find(a => a.key.name === "xmlns")
+            const xmlns = token.attributes.find((a) => a.key.name === "xmlns")
             const value = xmlns && xmlns.value && xmlns.value.value
 
             if (value === NS.HTML || value === NS.MathML || value === NS.SVG) {
@@ -462,7 +462,7 @@ export class Parser {
         }
         const hasVPre =
             !this.isInVPreElement &&
-            token.attributes.some(a => a.key.name === "v-pre")
+            token.attributes.some((a) => a.key.name === "v-pre")
 
         // Disable expression if v-pre
         if (hasVPre) {
@@ -520,7 +520,7 @@ export class Parser {
         if (namespace === NS.HTML) {
             if (element.parent.type === "VDocumentFragment") {
                 const langAttr = element.startTag.attributes.find(
-                    a => !a.directive && a.key.name === "lang",
+                    (a) => !a.directive && a.key.name === "lang",
                 ) as VAttribute | undefined
                 const lang = langAttr?.value?.value
 
@@ -565,7 +565,7 @@ export class Parser {
 
         const i = findLastIndex(
             this.elementStack,
-            el => el.name.toLowerCase() === token.name,
+            (el) => el.name.toLowerCase() === token.name,
         )
         if (i === -1) {
             this.reportParseError(token, "x-invalid-end-tag")

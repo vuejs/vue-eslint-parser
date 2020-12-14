@@ -3,8 +3,9 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import Evk, { VisitorKeys } from "eslint-visitor-keys"
-import { Node } from "./nodes"
+import type { VisitorKeys } from "eslint-visitor-keys"
+import Evk from "eslint-visitor-keys"
+import type { Node } from "./nodes"
 
 //------------------------------------------------------------------------------
 // Helpers

@@ -8,7 +8,8 @@
 
 import assert from "assert"
 import { debug } from "../common/debug"
-import { ErrorCode, Namespace, NS, ParseError, Token } from "../ast"
+import type { ErrorCode, Namespace, Token } from "../ast"
+import { NS, ParseError } from "../ast"
 import { alternativeCR } from "./util/alternative-cr"
 import { entitySets } from "./util/entities"
 import {
@@ -50,7 +51,7 @@ import {
     SOLIDUS,
     toLowerCodePoint,
 } from "./util/unicode"
-import { ParserOptions } from "../common/parser-options"
+import type { ParserOptions } from "../common/parser-options"
 
 /**
  * Enumeration of token types.

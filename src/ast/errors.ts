@@ -3,7 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import { Location } from "./locations"
+import type { Location } from "./locations"
 
 /**
  * Check whether the given value has acorn style location information.
