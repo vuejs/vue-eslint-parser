@@ -7,12 +7,18 @@ import first from "lodash/first"
 import last from "lodash/last"
 import sortedIndexBy from "lodash/sortedIndexBy"
 import type {
+    ESLintArrayExpression,
+    ESLintArrayPattern,
     ESLintCallExpression,
     ESLintExpression,
     ESLintExpressionStatement,
     ESLintExtendedProgram,
+    ESLintForInStatement,
+    ESLintForOfStatement,
     ESLintFunctionExpression,
+    ESLintIdentifier,
     ESLintUnaryExpression,
+    ESLintVariableDeclaration,
     HasLocation,
     Node,
     Reference,
@@ -25,12 +31,6 @@ import type {
     VOnExpression,
     VSlotScopeExpression,
     OffsetRange,
-    ESLintForInStatement,
-    ESLintForOfStatement,
-    ESLintVariableDeclaration,
-    ESLintArrayPattern,
-    ESLintArrayExpression,
-    ESLintIdentifier,
 } from "../ast"
 import { ParseError } from "../ast"
 import { debug } from "../common/debug"
