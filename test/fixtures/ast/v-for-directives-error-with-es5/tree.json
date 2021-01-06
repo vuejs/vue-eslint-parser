@@ -1,0 +1,380 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div v-for=\"abc\"></div>\n    <div v-for=\"in abc\"></div>\n    <div v-for=\"/**/ in abc\"></div>\n    <!-- destructuring -->\n    <div v-for=\"{key,name} in list\"></div>\n    <div v-for=\"{key:key,name:name} in list\"></div>\n    <div v-for=\"([a,,b], c) in list\"></div>\n    <div v-for=\"[a,b] of list\"></div>\n    <div v-for=\"{[z]:key=x,name} in list\"></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"abc\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"abc\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"abc\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-for",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"abc\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"in abc\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"in abc\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"in abc\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-for",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"in abc\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"/**/ in abc\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"/**/ in abc\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"/**/ in abc\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-for",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"/**/ in abc\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"{key,name} in list\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"{key,name} in list\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"{key,name} in list\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-for",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"{key,name} in list\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"{key:key,name:name} in list\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"{key:key,name:name} in list\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"{key:key,name:name} in list\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-for",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"{key:key,name:name} in list\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"([a,,b], c) in list\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"([a,,b], c) in list\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"([a,,b], c) in list\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-for",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"([a,,b], c) in list\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"[a,b] of list\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"[a,b] of list\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"[a,b] of list\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-for",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"[a,b] of list\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div v-for=\"{[z]:key=x,name} in list\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div v-for=\"{[z]:key=x,name} in list\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "v-for=\"{[z]:key=x,name} in list\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "v-for",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "v-for",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"{[z]:key=x,name} in list\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
