@@ -1,7 +1,7 @@
 [
     {
         "type": "VElement",
-        "text": "<template>\n    {{a + }}\n    <div v-for=\"i in abc.\"></div>\n    <div :foo=\"abc + (1\"></div>\n    <div @click=\"abc('hello'\"></div>\n</template>",
+        "text": "<template>\n    <div v-for=\"abc\"></div>\n    <div v-for=\"in abc\"></div>\n    <div v-for=\"/**/ in abc\"></div>\n</template>",
         "children": [
             {
                 "type": "VStartTag",
@@ -14,26 +14,16 @@
                 "children": []
             },
             {
-                "type": "VExpressionContainer",
-                "text": "{{a + }}",
-                "children": []
-            },
-            {
-                "type": "VText",
-                "text": "\n    ",
-                "children": []
-            },
-            {
                 "type": "VElement",
-                "text": "<div v-for=\"i in abc.\"></div>",
+                "text": "<div v-for=\"abc\"></div>",
                 "children": [
                     {
                         "type": "VStartTag",
-                        "text": "<div v-for=\"i in abc.\">",
+                        "text": "<div v-for=\"abc\">",
                         "children": [
                             {
                                 "type": "VAttribute",
-                                "text": "v-for=\"i in abc.\"",
+                                "text": "v-for=\"abc\"",
                                 "children": [
                                     {
                                         "type": "VDirectiveKey",
@@ -48,7 +38,7 @@
                                     },
                                     {
                                         "type": "VExpressionContainer",
-                                        "text": "\"i in abc.\"",
+                                        "text": "\"abc\"",
                                         "children": []
                                     }
                                 ]
@@ -69,35 +59,30 @@
             },
             {
                 "type": "VElement",
-                "text": "<div :foo=\"abc + (1\"></div>",
+                "text": "<div v-for=\"in abc\"></div>",
                 "children": [
                     {
                         "type": "VStartTag",
-                        "text": "<div :foo=\"abc + (1\">",
+                        "text": "<div v-for=\"in abc\">",
                         "children": [
                             {
                                 "type": "VAttribute",
-                                "text": ":foo=\"abc + (1\"",
+                                "text": "v-for=\"in abc\"",
                                 "children": [
                                     {
                                         "type": "VDirectiveKey",
-                                        "text": ":foo",
+                                        "text": "v-for",
                                         "children": [
                                             {
                                                 "type": "VIdentifier",
-                                                "text": ":",
-                                                "children": []
-                                            },
-                                            {
-                                                "type": "VIdentifier",
-                                                "text": "foo",
+                                                "text": "v-for",
                                                 "children": []
                                             }
                                         ]
                                     },
                                     {
                                         "type": "VExpressionContainer",
-                                        "text": "\"abc + (1\"",
+                                        "text": "\"in abc\"",
                                         "children": []
                                     }
                                 ]
@@ -118,35 +103,30 @@
             },
             {
                 "type": "VElement",
-                "text": "<div @click=\"abc('hello'\"></div>",
+                "text": "<div v-for=\"/**/ in abc\"></div>",
                 "children": [
                     {
                         "type": "VStartTag",
-                        "text": "<div @click=\"abc('hello'\">",
+                        "text": "<div v-for=\"/**/ in abc\">",
                         "children": [
                             {
                                 "type": "VAttribute",
-                                "text": "@click=\"abc('hello'\"",
+                                "text": "v-for=\"/**/ in abc\"",
                                 "children": [
                                     {
                                         "type": "VDirectiveKey",
-                                        "text": "@click",
+                                        "text": "v-for",
                                         "children": [
                                             {
                                                 "type": "VIdentifier",
-                                                "text": "@",
-                                                "children": []
-                                            },
-                                            {
-                                                "type": "VIdentifier",
-                                                "text": "click",
+                                                "text": "v-for",
                                                 "children": []
                                             }
                                         ]
                                     },
                                     {
                                         "type": "VExpressionContainer",
-                                        "text": "\"abc('hello'\"",
+                                        "text": "\"/**/ in abc\"",
                                         "children": []
                                     }
                                 ]

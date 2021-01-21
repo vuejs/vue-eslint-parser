@@ -1,7 +1,7 @@
 [
     {
         "type": "VElement",
-        "text": "<template>\n    {{a + }}\n    <div v-for=\"i in abc.\"></div>\n    <div :foo=\"abc + (1\"></div>\n    <div @click=\"abc('hello'\"></div>\n</template>",
+        "text": "<template>\n    <div v-for=\"(a,,b) in list\"></div>\n    <div v-for=\"(a,,b) of list\"></div>\n</template>",
         "children": [
             {
                 "type": "VStartTag",
@@ -14,26 +14,16 @@
                 "children": []
             },
             {
-                "type": "VExpressionContainer",
-                "text": "{{a + }}",
-                "children": []
-            },
-            {
-                "type": "VText",
-                "text": "\n    ",
-                "children": []
-            },
-            {
                 "type": "VElement",
-                "text": "<div v-for=\"i in abc.\"></div>",
+                "text": "<div v-for=\"(a,,b) in list\"></div>",
                 "children": [
                     {
                         "type": "VStartTag",
-                        "text": "<div v-for=\"i in abc.\">",
+                        "text": "<div v-for=\"(a,,b) in list\">",
                         "children": [
                             {
                                 "type": "VAttribute",
-                                "text": "v-for=\"i in abc.\"",
+                                "text": "v-for=\"(a,,b) in list\"",
                                 "children": [
                                     {
                                         "type": "VDirectiveKey",
@@ -48,8 +38,30 @@
                                     },
                                     {
                                         "type": "VExpressionContainer",
-                                        "text": "\"i in abc.\"",
-                                        "children": []
+                                        "text": "\"(a,,b) in list\"",
+                                        "children": [
+                                            {
+                                                "type": "VForExpression",
+                                                "text": "(a,,b) in list",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "list",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
                                     }
                                 ]
                             }
@@ -69,85 +81,53 @@
             },
             {
                 "type": "VElement",
-                "text": "<div :foo=\"abc + (1\"></div>",
+                "text": "<div v-for=\"(a,,b) of list\"></div>",
                 "children": [
                     {
                         "type": "VStartTag",
-                        "text": "<div :foo=\"abc + (1\">",
+                        "text": "<div v-for=\"(a,,b) of list\">",
                         "children": [
                             {
                                 "type": "VAttribute",
-                                "text": ":foo=\"abc + (1\"",
+                                "text": "v-for=\"(a,,b) of list\"",
                                 "children": [
                                     {
                                         "type": "VDirectiveKey",
-                                        "text": ":foo",
+                                        "text": "v-for",
                                         "children": [
                                             {
                                                 "type": "VIdentifier",
-                                                "text": ":",
-                                                "children": []
-                                            },
-                                            {
-                                                "type": "VIdentifier",
-                                                "text": "foo",
+                                                "text": "v-for",
                                                 "children": []
                                             }
                                         ]
                                     },
                                     {
                                         "type": "VExpressionContainer",
-                                        "text": "\"abc + (1\"",
-                                        "children": []
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "VEndTag",
-                        "text": "</div>",
-                        "children": []
-                    }
-                ]
-            },
-            {
-                "type": "VText",
-                "text": "\n    ",
-                "children": []
-            },
-            {
-                "type": "VElement",
-                "text": "<div @click=\"abc('hello'\"></div>",
-                "children": [
-                    {
-                        "type": "VStartTag",
-                        "text": "<div @click=\"abc('hello'\">",
-                        "children": [
-                            {
-                                "type": "VAttribute",
-                                "text": "@click=\"abc('hello'\"",
-                                "children": [
-                                    {
-                                        "type": "VDirectiveKey",
-                                        "text": "@click",
+                                        "text": "\"(a,,b) of list\"",
                                         "children": [
                                             {
-                                                "type": "VIdentifier",
-                                                "text": "@",
-                                                "children": []
-                                            },
-                                            {
-                                                "type": "VIdentifier",
-                                                "text": "click",
-                                                "children": []
+                                                "type": "VForExpression",
+                                                "text": "(a,,b) of list",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "list",
+                                                        "children": []
+                                                    }
+                                                ]
                                             }
                                         ]
-                                    },
-                                    {
-                                        "type": "VExpressionContainer",
-                                        "text": "\"abc('hello'\"",
-                                        "children": []
                                     }
                                 ]
                             }

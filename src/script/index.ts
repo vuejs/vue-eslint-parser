@@ -7,6 +7,7 @@ import first from "lodash/first"
 import last from "lodash/last"
 import sortedIndexBy from "lodash/sortedIndexBy"
 import type {
+    ESLintArrayExpression,
     ESLintArrayPattern,
     ESLintCallExpression,
     ESLintExpression,
@@ -15,9 +16,9 @@ import type {
     ESLintForInStatement,
     ESLintForOfStatement,
     ESLintFunctionExpression,
-    ESLintPattern,
-    ESLintVariableDeclaration,
+    ESLintIdentifier,
     ESLintUnaryExpression,
+    ESLintVariableDeclaration,
     HasLocation,
     Node,
     Reference,
@@ -43,10 +44,11 @@ import { getEspree } from "./espree"
 import type { ParserOptions } from "../common/parser-options"
 import { fixLocations } from "../common/fix-locations"
 
-// [1] = spacing before the aliases.
-// [2] = aliases.
-// [3] = all after the aliases.
-const ALIAS_PARENS = /^(\s*)\(([\s\S]+)\)(\s*(?:in|of)\b[\s\S]+)$/u
+// [1] = aliases.
+// [2] = delimiter.
+// [3] = iterator.
+const ALIAS_ITERATOR = /^([\s\S]*?(?:\s|\)))(\bin|of\b)([\s\S]*)$/u
+const PARENS = /^(\s*\()([\s\S]*?)(\)\s*)$/u
 const DUMMY_PARENT: any = {}
 
 // Like Vue, it judges whether it is a function expression or not.
@@ -55,36 +57,42 @@ const IS_FUNCTION_EXPRESSION = /^\s*([\w$_]+|\([^)]*?\))\s*=>|^function\s*\(/u
 const IS_SIMPLE_PATH = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['[^']*?'\]|\["[^"]*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/u
 
 /**
- * Replace parentheses which wrap the alias of 'v-for' directive values by array brackets in order to avoid syntax errors.
- * @param code The code to replace.
- * @returns The replaced code.
+ * Parse the alias and iterator of 'v-for' directive values.
+ * @param code The code to parse.
+ * @returns The parsed result.
  */
-function replaceAliasParens(code: string): string {
-    const match = ALIAS_PARENS.exec(code)
+function processVForAliasAndIterator(
+    code: string,
+): {
+    aliases: string
+    hasParens: boolean
+    delimiter: string
+    iterator: string
+    aliasesWithBrackets: string
+} {
+    const match = ALIAS_ITERATOR.exec(code)
     if (match != null) {
-        return `${match[1]}[${match[2]}]${match[3]}`
+        const aliases = match[1]
+        const parenMatch = PARENS.exec(aliases)
+        return {
+            aliases,
+            hasParens: Boolean(parenMatch),
+            aliasesWithBrackets: parenMatch
+                ? `${parenMatch[1].slice(0, -1)}[${
+                      parenMatch[2]
+                  }]${parenMatch[3].slice(1)}`
+                : `[${aliases.slice(0, -1)}]`,
+            delimiter: match[2] || "",
+            iterator: match[3],
+        }
     }
-    return code
-}
-
-/**
- * Normalize the `ForXStatement#left` node to parse v-for expressions.
- * @param left The `ForXStatement#left` node to normalize.
- * @param replaced The flag to indicate that the alias parentheses were replaced.
- */
-function normalizeLeft(
-    left: ESLintVariableDeclaration | ESLintPattern,
-    replaced: boolean,
-): ESLintPattern[] {
-    if (left.type !== "VariableDeclaration") {
-        throw new Error("unreachable")
+    return {
+        aliases: "",
+        hasParens: false,
+        aliasesWithBrackets: "",
+        delimiter: "",
+        iterator: code,
     }
-    const id = left.declarations[0].id
-
-    if (replaced) {
-        return (id as ESLintArrayPattern).elements
-    }
-    return [id]
 }
 
 /**
@@ -675,23 +683,41 @@ export function parseExpression(
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
+// eslint-disable-next-line complexity
 export function parseVForExpression(
     code: string,
     locationCalculator: LocationCalculator,
     parserOptions: ParserOptions,
 ): ExpressionParseResult<VForExpression> {
-    const processedCode = replaceAliasParens(code)
-    debug('[script] parse v-for expression: "for(%s);"', processedCode)
-
     if (code.trim() === "") {
         throwEmptyError(locationCalculator, "'<alias> in <expression>'")
     }
 
+    if (isEcmaVersion5(parserOptions)) {
+        return parseVForExpressionForEcmaVersion5(
+            code,
+            locationCalculator,
+            parserOptions,
+        )
+    }
+    const processed = processVForAliasAndIterator(code)
+
+    if (!processed.aliases.trim()) {
+        return throwEmptyError(locationCalculator, "an alias")
+    }
     try {
-        const replaced = processedCode !== code
+        debug(
+            '[script] parse v-for expression: "for(%s%s%s);"',
+            processed.aliasesWithBrackets,
+            processed.delimiter,
+            processed.iterator,
+        )
+
         const ast = parseScriptFragment(
-            `for(let ${processedCode});`,
-            locationCalculator.getSubCalculatorShift(-8),
+            `for(let ${processed.aliasesWithBrackets}${processed.delimiter}${processed.iterator});`,
+            locationCalculator.getSubCalculatorShift(
+                processed.hasParens ? -8 : -9,
+            ),
             parserOptions,
         ).ast
         const tokens = ast.tokens || []
@@ -702,10 +728,41 @@ export function parseVForExpression(
         const statement = ast.body[0] as
             | ESLintForInStatement
             | ESLintForOfStatement
-        const left = normalizeLeft(statement.left, replaced)
+        const varDecl = statement.left as ESLintVariableDeclaration
+        const id = varDecl.declarations[0].id as ESLintArrayPattern
+        const left = id.elements
         const right = statement.right
-        const firstToken = tokens[3] || statement.left
-        const lastToken = tokens[tokens.length - 3] || statement.right
+
+        if (!processed.hasParens && !left.length) {
+            return throwEmptyError(locationCalculator, "an alias")
+        }
+        // Remove `for` `(` `let` `)` `;`.
+        tokens.shift()
+        tokens.shift()
+        tokens.shift()
+        tokens.pop()
+        tokens.pop()
+
+        const closeOffset = statement.left.range[1] - 1
+        const closeIndex = tokens.findIndex((t) => t.range[0] === closeOffset)
+
+        if (processed.hasParens) {
+            // Restore parentheses from array brackets.
+            const open = tokens[0]
+            if (open != null) {
+                open.value = "("
+            }
+            const close = tokens[closeIndex]
+            if (close != null) {
+                close.value = ")"
+            }
+        } else {
+            // Remove array brackets.
+            tokens.splice(closeIndex, 1)
+            tokens.shift()
+        }
+        const firstToken = tokens[0] || statement.left
+        const lastToken = tokens[tokens.length - 1] || statement.right
         const expression: VForExpression = {
             type: "VForExpression",
             range: [firstToken.range[0], lastToken.range[1]],
@@ -723,31 +780,192 @@ export function parseVForExpression(
         }
         right.parent = expression
 
-        // Remvoe `for` `(` `let` `)` `;`.
-        tokens.shift()
-        tokens.shift()
-        tokens.shift()
-        tokens.pop()
-        tokens.pop()
+        return { expression, tokens, comments, references, variables }
+    } catch (err) {
+        return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
+    }
+}
 
-        // Restore parentheses from array brackets.
-        if (replaced) {
-            const closeOffset = statement.left.range[1] - 1
-            const open = tokens[0]
-            const close = tokens.find((t) => t.range[0] === closeOffset)
+function isEcmaVersion5(parserOptions: ParserOptions) {
+    return (
+        (parserOptions.ecmaVersion == null || parserOptions.ecmaVersion <= 5) &&
+        (parserOptions.parser == null || parserOptions.parser === "espree")
+    )
+}
 
+function parseVForExpressionForEcmaVersion5(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: ParserOptions,
+): ExpressionParseResult<VForExpression> {
+    const processed = processVForAliasAndIterator(code)
+
+    if (!processed.aliases.trim()) {
+        return throwEmptyError(locationCalculator, "an alias")
+    }
+    try {
+        const tokens: Token[] = []
+        const comments: Token[] = []
+
+        const parsedAliases = parseVForAliasesForEcmaVersion5(
+            processed.aliasesWithBrackets,
+            locationCalculator.getSubCalculatorShift(
+                processed.hasParens ? 0 : -1,
+            ),
+            parserOptions,
+        )
+
+        if (processed.hasParens) {
+            // Restore parentheses from array brackets.
+            const open = parsedAliases.tokens[0]
             if (open != null) {
                 open.value = "("
             }
+            const close = last(parsedAliases.tokens)
             if (close != null) {
                 close.value = ")"
             }
+        } else {
+            // Remove array brackets.
+            parsedAliases.tokens.shift()
+            parsedAliases.tokens.pop()
         }
+        tokens.push(...parsedAliases.tokens)
+        comments.push(...parsedAliases.comments)
+        const { left, variables } = parsedAliases
+
+        if (!processed.hasParens && !left.length) {
+            return throwEmptyError(locationCalculator, "an alias")
+        }
+
+        const delimiterStart = processed.aliases.length
+        const delimiterEnd = delimiterStart + processed.delimiter.length
+        tokens.push(
+            locationCalculator.fixLocation({
+                type: processed.delimiter === "in" ? "Keyword" : "Identifier",
+                value: processed.delimiter,
+                start: delimiterStart,
+                end: delimiterEnd,
+                loc: {} as any,
+                range: [delimiterStart, delimiterEnd],
+            } as Token),
+        )
+
+        const parsedIterator = parseVForIteratorForEcmaVersion5(
+            processed.iterator,
+            locationCalculator.getSubCalculatorShift(delimiterEnd),
+            parserOptions,
+        )
+
+        tokens.push(...parsedIterator.tokens)
+        comments.push(...parsedIterator.comments)
+        const { right, references } = parsedIterator
+        const firstToken = tokens[0]
+        const lastToken = last(tokens) || firstToken
+        const expression: VForExpression = {
+            type: "VForExpression",
+            range: [firstToken.range[0], lastToken.range[1]],
+            loc: { start: firstToken.loc.start, end: lastToken.loc.end },
+            parent: DUMMY_PARENT,
+            left,
+            right,
+        }
+
+        // Modify parent.
+        for (const l of left) {
+            if (l != null) {
+                l.parent = expression
+            }
+        }
+        right.parent = expression
 
         return { expression, tokens, comments, references, variables }
     } catch (err) {
         return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
     }
+}
+
+function parseVForAliasesForEcmaVersion5(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: ParserOptions,
+) {
+    const ast = parseScriptFragment(
+        `0(${code})`,
+        locationCalculator.getSubCalculatorShift(-2),
+        parserOptions,
+    ).ast
+    const tokens = ast.tokens || []
+    const comments = ast.comments || []
+    const variables = analyzeExternalReferences(ast, parserOptions).map(
+        transformVariable,
+    )
+
+    const statement = ast.body[0] as ESLintExpressionStatement
+    const callExpression = statement.expression as ESLintCallExpression
+    const expression = callExpression.arguments[0] as ESLintArrayExpression
+
+    const left: ESLintIdentifier[] = expression.elements.filter(
+        (e): e is ESLintIdentifier => {
+            if (e == null || e.type === "Identifier") {
+                return true
+            }
+            const errorToken = tokens.find(
+                (t) => e.range[0] <= t.range[0] && t.range[1] <= e.range[1],
+            )!
+            return throwUnexpectedTokenError(errorToken.value, errorToken)
+        },
+    )
+    // Remove parens.
+    tokens.shift()
+    tokens.shift()
+    tokens.pop()
+
+    return { left, tokens, comments, variables }
+
+    function transformVariable(reference: Reference): Variable {
+        const ret: Variable = {
+            id: reference.id,
+            kind: "v-for",
+            references: [],
+        }
+        Object.defineProperty(ret, "references", { enumerable: false })
+
+        return ret
+    }
+}
+
+function parseVForIteratorForEcmaVersion5(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: ParserOptions,
+) {
+    const ast = parseScriptFragment(
+        `0(${code})`,
+        locationCalculator.getSubCalculatorShift(-2),
+        parserOptions,
+    ).ast
+    const tokens = ast.tokens || []
+    const comments = ast.comments || []
+    const references = analyzeExternalReferences(ast, parserOptions)
+
+    const statement = ast.body[0] as ESLintExpressionStatement
+    const callExpression = statement.expression as ESLintCallExpression
+    const expression = callExpression.arguments[0]
+
+    if (!expression) {
+        return throwEmptyError(locationCalculator, "an expression")
+    }
+    if (expression && expression.type === "SpreadElement") {
+        return throwUnexpectedTokenError("...", expression)
+    }
+    const right = expression
+
+    // Remove parens.
+    tokens.shift()
+    tokens.shift()
+    tokens.pop()
+    return { right, tokens, comments, references }
 }
 
 /**
@@ -903,7 +1121,7 @@ export function parseSlotScopeExpression(
             param.parent = expression
         }
 
-        // Remvoe `void` `function` `(` `)` `{` `}`.
+        // Remove `void` `function` `(` `)` `{` `}`.
         tokens.shift()
         tokens.shift()
         tokens.shift()
