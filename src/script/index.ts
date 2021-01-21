@@ -47,7 +47,7 @@ import { fixLocations } from "../common/fix-locations"
 // [1] = aliases.
 // [2] = delimiter.
 // [3] = iterator.
-const ALIAS_ITERATOR = /^([\s\S]*?(?:\s|\)))(\bin|of\b)([\s\S]*)$/u
+const ALIAS_ITERATOR = /^([\s\S]*?(?:\s|\)))(\bin\b|\bof\b)([\s\S]*)$/u
 const PARENS = /^(\s*\()([\s\S]*?)(\)\s*)$/u
 const DUMMY_PARENT: any = {}
 
