@@ -12,6 +12,7 @@
 const assert = require("assert")
 const path = require("path")
 const fs = require("fs-extra")
+const semver = require("semver")
 const parse = require("../src").parse
 const parseForESLint = require("../src").parseForESLint
 const eslint = require("./fixtures/eslint")
@@ -232,22 +233,24 @@ describe("Basic tests", () => {
             assert(messages.length === 0)
         })
 
-        it("should notify no error with '@typescript-eslint/parser'", () => {
-            const cli = new CLIEngine({
-                cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                parserOptions: {
-                    parser: "@typescript-eslint/parser",
-                },
-                rules: { semi: ["error", "never"] },
-                useEslintrc: false,
-            })
-            const report = cli.executeOnFiles(["typed.js"])
-            const messages = report.results[0].messages
+        if (semver.gte(process.version, "10.0.0")) {
+            it("should notify no error with '@typescript-eslint/parser'", () => {
+                const cli = new CLIEngine({
+                    cwd: FIXTURE_DIR,
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    parserOptions: {
+                        parser: "@typescript-eslint/parser",
+                    },
+                    rules: { semi: ["error", "never"] },
+                    useEslintrc: false,
+                })
+                const report = cli.executeOnFiles(["typed.js"])
+                const messages = report.results[0].messages
 
-            assert(messages.length === 0)
-        })
+                assert(messages.length === 0)
+            })
+        }
     })
 
     describe("About fixtures/typed.vue", () => {
@@ -269,22 +272,24 @@ describe("Basic tests", () => {
             assert(messages.length === 0)
         })
 
-        it("should notify no error with '@typescript-eslint/parser'", () => {
-            const cli = new CLIEngine({
-                cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                parserOptions: {
-                    parser: "@typescript-eslint/parser",
-                },
-                rules: { semi: ["error", "never"] },
-                useEslintrc: false,
-            })
-            const report = cli.executeOnFiles(["typed.vue"])
-            const messages = report.results[0].messages
+        if (semver.gte(process.version, "10.0.0")) {
+            it("should notify no error with '@typescript-eslint/parser'", () => {
+                const cli = new CLIEngine({
+                    cwd: FIXTURE_DIR,
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    parserOptions: {
+                        parser: "@typescript-eslint/parser",
+                    },
+                    rules: { semi: ["error", "never"] },
+                    useEslintrc: false,
+                })
+                const report = cli.executeOnFiles(["typed.vue"])
+                const messages = report.results[0].messages
 
-            assert(messages.length === 0)
-        })
+                assert(messages.length === 0)
+            })
+        }
 
         it("should fix 'semi' errors with --fix option with 'babel-eslint'", () => {
             const cli = new CLIEngine({
@@ -313,55 +318,59 @@ describe("Basic tests", () => {
             assert(actual === expected)
         })
 
-        it("should fix 'semi' errors with --fix option with '@typescript-eslint/parser'", () => {
-            const cli = new CLIEngine({
-                cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                fix: true,
-                parser: PARSER_PATH,
-                parserOptions: {
-                    parser: "@typescript-eslint/parser",
-                },
-                rules: { semi: ["error", "always"] },
-                useEslintrc: false,
+        if (semver.gte(process.version, "10.0.0")) {
+            it("should fix 'semi' errors with --fix option with '@typescript-eslint/parser'", () => {
+                const cli = new CLIEngine({
+                    cwd: FIXTURE_DIR,
+                    envs: ["es6", "node"],
+                    fix: true,
+                    parser: PARSER_PATH,
+                    parserOptions: {
+                        parser: "@typescript-eslint/parser",
+                    },
+                    rules: { semi: ["error", "always"] },
+                    useEslintrc: false,
+                })
+                CLIEngine.outputFixes(cli.executeOnFiles(["typed.vue"]))
+
+                const actual = fs.readFileSync(
+                    path.join(FIXTURE_DIR, "typed.vue"),
+                    "utf8"
+                )
+                const expected = fs.readFileSync(
+                    path.join(FIXTURE_DIR, "typed.vue.fixed"),
+                    "utf8"
+                )
+
+                assert(actual === expected)
             })
-            CLIEngine.outputFixes(cli.executeOnFiles(["typed.vue"]))
-
-            const actual = fs.readFileSync(
-                path.join(FIXTURE_DIR, "typed.vue"),
-                "utf8"
-            )
-            const expected = fs.readFileSync(
-                path.join(FIXTURE_DIR, "typed.vue.fixed"),
-                "utf8"
-            )
-
-            assert(actual === expected)
-        })
+        }
     })
 
-    describe("About fixtures/ts-scope-manager.vue", () => {
-        it("should calculate the correct location with '@typescript-eslint/parser'", () => {
-            const cli = new CLIEngine({
-                cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                parserOptions: {
-                    parser: "@typescript-eslint/parser",
-                },
-                rules: { "no-unused-vars": ["error"] },
-                useEslintrc: false,
-            })
-            const report = cli.executeOnFiles(["ts-scope-manager.vue"])
-            const messages = report.results[0].messages
+    if (semver.gte(process.version, "10.0.0")) {
+        describe("About fixtures/ts-scope-manager.vue", () => {
+            it("should calculate the correct location with '@typescript-eslint/parser'", () => {
+                const cli = new CLIEngine({
+                    cwd: FIXTURE_DIR,
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    parserOptions: {
+                        parser: "@typescript-eslint/parser",
+                    },
+                    rules: { "no-unused-vars": ["error"] },
+                    useEslintrc: false,
+                })
+                const report = cli.executeOnFiles(["ts-scope-manager.vue"])
+                const messages = report.results[0].messages
 
-            assert.strictEqual(messages.length, 1)
-            assert.deepStrictEqual(messages[0].line, 8)
-            assert.deepStrictEqual(messages[0].column, 8)
-            assert.deepStrictEqual(messages[0].endLine, 8)
-            assert.deepStrictEqual(messages[0].endColumn, 14)
+                assert.strictEqual(messages.length, 1)
+                assert.deepStrictEqual(messages[0].line, 8)
+                assert.deepStrictEqual(messages[0].column, 8)
+                assert.deepStrictEqual(messages[0].endLine, 8)
+                assert.deepStrictEqual(messages[0].endColumn, 14)
+            })
         })
-    })
+    }
 
     describe("About fixtures/svg-attrs.vue", () => {
         it("parses attributes with colons", () => {
