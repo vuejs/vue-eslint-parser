@@ -614,5 +614,33 @@ describe("Basic tests", () => {
             assert.strictEqual(messages2.length, 1)
             assert.strictEqual(messages2[0].message, "OK")
         })
+
+        it("should work even if used sibling selector.", () => {
+            const code = "<template><div/><div/></template>"
+            const config = {
+                parser: PARSER_PATH,
+                rules: {
+                    "test-rule": "error",
+                },
+            }
+            const linter = new Linter()
+
+            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
+            linter.defineRule("test-rule", (context) =>
+                context.parserServices.defineTemplateBodyVisitor({
+                    "* ~ *"(node) {
+                        context.report({ node, message: "OK" })
+                    },
+                })
+            )
+
+            const messages1 = linter.verify(code, config)
+            const messages2 = linter.verify(linter.getSourceCode(), config)
+
+            assert.strictEqual(messages1.length, 1)
+            assert.strictEqual(messages1[0].message, "OK")
+            assert.strictEqual(messages2.length, 1)
+            assert.strictEqual(messages2[0].message, "OK")
+        })
     })
 })

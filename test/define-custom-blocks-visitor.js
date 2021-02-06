@@ -96,6 +96,18 @@ const noProgramExitRule = {
         }
     },
 }
+const siblingSelectorRule = {
+    create(context) {
+        return {
+            "* ~ *"(node) {
+                context.report({
+                    node,
+                    message: "* ~ *",
+                })
+            },
+        }
+    },
+}
 
 function createLinter(target = "json") {
     const linter = new Linter()
@@ -415,6 +427,36 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
             messages[0].message,
             '{"lineNumber":3,"column":16,"message":"Unexpected comment."}'
         )
+    })
+
+    it("should work even if used sibling selector.", () => {
+        const code = `
+<i18n lang="json">
+[42, 42]
+</i18n>
+`
+        const linter = createLinter()
+        linter.defineRule("test-for-sibling-selector", (context) =>
+            context.parserServices.defineCustomBlocksVisitor(
+                context,
+                jsonParser,
+                {
+                    target: "json",
+                    create: siblingSelectorRule.create,
+                }
+            )
+        )
+        const messages = linter.verify(code, {
+            ...LINTER_CONFIG,
+            rules: {
+                "test-for-sibling-selector": "error",
+            },
+        })
+
+        assert.strictEqual(messages.length, 1)
+        assert.strictEqual(messages[0].message, "* ~ *")
+        assert.strictEqual(messages[0].line, 3)
+        assert.strictEqual(messages[0].column, 6)
     })
 
     describe("API tests", () => {

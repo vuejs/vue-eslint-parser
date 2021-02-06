@@ -13,7 +13,7 @@ import type {
     VDocumentFragment,
     VAttribute,
 } from "./ast"
-import { traverseNodes } from "./ast"
+import { getFallbackKeys, KEYS, traverseNodes } from "./ast/traverse"
 import type { LocationCalculator } from "./common/location-calculator"
 import type {
     CustomBlockContext,
@@ -149,6 +149,10 @@ export function define(
                         // Traverse template body.
                         const generator = new NodeEventGenerator(
                             emitter as EventEmitter,
+                            {
+                                visitorKeys: KEYS,
+                                fallback: getFallbackKeys,
+                            },
                         )
                         traverseNodes(
                             rootAST.templateBody as VElement,
@@ -273,7 +277,10 @@ export function define(
                             }
 
                             // Traverse custom block.
-                            const generator = new NodeEventGenerator(emitter)
+                            const generator = new NodeEventGenerator(emitter, {
+                                visitorKeys: parsedResult.visitorKeys,
+                                fallback: getFallbackKeys,
+                            })
                             traverseNodes(parsedResult.ast, {
                                 visitorKeys: parsedResult.visitorKeys,
                                 enterNode(n) {

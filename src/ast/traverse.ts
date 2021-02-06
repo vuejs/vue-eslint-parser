@@ -11,7 +11,7 @@ import type { Node } from "./nodes"
 // Helpers
 //------------------------------------------------------------------------------
 
-const KEYS = Evk.unionWith({
+export const KEYS = Evk.unionWith({
     VAttribute: ["key", "value"],
     VDirectiveKey: ["name", "argument", "modifiers"],
     VDocumentFragment: ["children"],

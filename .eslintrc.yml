@@ -15,7 +15,7 @@ overrides:
       "@typescript-eslint/no-duplicate-imports": error
   - files: "typings/**"
     rules:
-      node/no-missing-import:
+      '@mysticatea/node/no-missing-import':
         - error
         - allowModules:
           - estree

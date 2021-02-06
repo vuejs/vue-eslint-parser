@@ -4,7 +4,32 @@
  * See LICENSE file in root directory for full license.
  */
 
-export type Selector = AdjacentSelector | AttributeSelector | ChildSelector | ClassSelector | CompoundSelector | DescendantSelector | FieldSelector | HasSelector | IdentifierSelector | MatchesSelector | NotSelector | NthChildSelector | NthLastChildSelector | SiblingSelector | WildcardSelector
+import type { Node } from "../../src/ast"
+// eslint-disable-next-line @mysticatea/node/no-missing-import
+import type { VisitorKeys } from "../eslint-visitor-keys"
+
+export type Selector =
+    | AdjacentSelector
+    | AttributeSelector
+    | ChildSelector
+    | ClassSelector
+    | CompoundSelector
+    | DescendantSelector
+    | FieldSelector
+    | HasSelector
+    | IdentifierSelector
+    | MatchesSelector
+    | NotSelector
+    | NthChildSelector
+    | NthLastChildSelector
+    | SiblingSelector
+    | WildcardSelector
+
+export type TraverseOptionFallback = (node: Node) => readonly string[]
+export interface ESQueryOptions {
+    visitorKeys?: VisitorKeys
+    fallback?: TraverseOptionFallback
+}
 
 export interface AdjacentSelector {
     type: "adjacent"
@@ -16,7 +41,7 @@ export interface AttributeSelector {
     type: "attribute"
     name: string
     operator: string | null | undefined
-    value: { type: string, value: any }
+    value: { type: string; value: any }
 }
 
 export interface ChildSelector {
@@ -68,13 +93,13 @@ export interface NotSelector {
 export interface NthChildSelector {
     type: "nth-child"
     right: Selector
-    index: { type: string, value: any }
+    index: { type: string; value: any }
 }
 
 export interface NthLastChildSelector {
     type: "nth-last-child"
     right: Selector
-    index: { type: string, value: any }
+    index: { type: string; value: any }
 }
 
 export interface SiblingSelector {
@@ -89,6 +114,11 @@ export interface WildcardSelector {
 
 declare const esquery: {
     parse(query: string): Selector
-    matches(node: object, selector: Selector, ancestry: object[]): boolean
+    matches(
+        node: object,
+        selector: Selector,
+        ancestry: object[],
+        options?: ESQueryOptions,
+    ): boolean
 }
 export default esquery
