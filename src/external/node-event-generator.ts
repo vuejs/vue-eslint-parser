@@ -2,7 +2,7 @@
  * This file is copied from `eslint/lib/util/node-event-generator.js`
  */
 import EventEmitter from "events"
-import esquery, {Selector} from "esquery"
+import esquery, {ESQueryOptions, Selector} from "esquery"
 import union from "lodash/union"
 import intersection from "lodash/intersection"
 import memoize from "lodash/memoize"
@@ -187,6 +187,7 @@ const parseSelector = memoize<(rawSelector: string) => NodeSelector>(rawSelector
  */
 export default class NodeEventGenerator {
     emitter: EventEmitter
+    esqueryOptions: ESQueryOptions
 
     private currentAncestry: Node[]
     private enterSelectorsByNodeType: Map<string, NodeSelector[]>
@@ -198,8 +199,9 @@ export default class NodeEventGenerator {
     * @param emitter - An event emitter which is the destination of events. This emitter must already
     * have registered listeners for all of the events that it needs to listen for.
     */
-    constructor(emitter: EventEmitter) {
+    constructor(emitter: EventEmitter, esqueryOptions: ESQueryOptions) {
         this.emitter = emitter
+        this.esqueryOptions = esqueryOptions
         this.currentAncestry = []
         this.enterSelectorsByNodeType = new Map()
         this.exitSelectorsByNodeType = new Map()
@@ -260,7 +262,7 @@ export default class NodeEventGenerator {
      * @param selector An AST selector descriptor
      */
     private applySelector(node: Node, selector: NodeSelector): void {
-        if (esquery.matches(node, selector.parsedSelector, this.currentAncestry)) {
+        if (esquery.matches(node, selector.parsedSelector, this.currentAncestry,  this.esqueryOptions)) {
             this.emitter.emit(selector.rawSelector, node)
         }
     }
