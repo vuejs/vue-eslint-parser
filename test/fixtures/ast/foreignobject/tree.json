@@ -1,7 +1,7 @@
 [
     {
         "type": "VElement",
-        "text": "<template>\n    <svg>\n        <path d=\"\"/>\n        <foreignobject>\n            <div>Hello</div>\n        </foreignobject>\n    </svg>\n</template>",
+        "text": "<template>\n    <svg>\n        <path d=\"\"/>\n        <foreignObject>\n            <div>Hello</div>\n        </foreignObject>\n    </svg>\n</template>",
         "children": [
             {
                 "type": "VStartTag",
@@ -15,7 +15,7 @@
             },
             {
                 "type": "VElement",
-                "text": "<svg>\n        <path d=\"\"/>\n        <foreignobject>\n            <div>Hello</div>\n        </foreignobject>\n    </svg>",
+                "text": "<svg>\n        <path d=\"\"/>\n        <foreignObject>\n            <div>Hello</div>\n        </foreignObject>\n    </svg>",
                 "children": [
                     {
                         "type": "VStartTag",
@@ -62,11 +62,11 @@
                     },
                     {
                         "type": "VElement",
-                        "text": "<foreignobject>\n            <div>Hello</div>\n        </foreignobject>",
+                        "text": "<foreignObject>\n            <div>Hello</div>\n        </foreignObject>",
                         "children": [
                             {
                                 "type": "VStartTag",
-                                "text": "<foreignobject>",
+                                "text": "<foreignObject>",
                                 "children": []
                             },
                             {
@@ -102,7 +102,7 @@
                             },
                             {
                                 "type": "VEndTag",
-                                "text": "</foreignobject>",
+                                "text": "</foreignObject>",
                                 "children": []
                             }
                         ]

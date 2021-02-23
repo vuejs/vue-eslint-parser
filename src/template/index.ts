@@ -6,6 +6,7 @@
 import sortedIndexBy from "lodash/sortedIndexBy"
 import sortedLastIndexBy from "lodash/sortedLastIndexBy"
 import type { ParserOptions } from "../common/parser-options"
+import { isSFCFile } from "../common/parser-options"
 import type {
     ESLintExpression,
     Reference,
@@ -38,6 +39,17 @@ import {
 const shorthandSign = /^[.:@#]/u
 const shorthandNameMap = { ":": "bind", ".": "bind", "@": "on", "#": "slot" }
 const invalidDynamicArgumentNextChar = /^[\s\r\n=/>]$/u
+
+/**
+ * Gets the tag name from the given node or token.
+ * For SFC, it returns the value of `rawName` to be case sensitive.
+ */
+function getTagName(
+    startTagOrElement: { name: string; rawName: string },
+    isSFC: boolean,
+) {
+    return isSFC ? startTagOrElement.rawName : startTagOrElement.name
+}
 
 /**
  * Get the belonging document of the given node.
@@ -694,7 +706,7 @@ export function convertToDirective(
             parserOptions,
             locationCalculator,
             node.value,
-            node.parent.parent.name,
+            getTagName(node.parent.parent, isSFCFile(parserOptions)),
             directive.key,
         )
 

@@ -1,7 +1,7 @@
 [
     {
         "type": "VElement",
-        "text": "<template>\n    <svg Width=\"100\" heiGht=\"100\" viewbox=\"0 0 100 100\">\n        <style><![CDATA[\n            path {\n                stroke: black;\n            }\n            /* ] ]] ]]] */\n        ]]></style>\n        <path d=\"M0,0 L100,100\"/>\n    </svg>\n</template>",
+        "text": "<template>\n    <SVG Width=\"100\" heiGht=\"100\" viewbox=\"0 0 100 100\">\n    </svg>\n</template>",
         "children": [
             {
                 "type": "VStartTag",
@@ -15,11 +15,11 @@
             },
             {
                 "type": "VElement",
-                "text": "<svg Width=\"100\" heiGht=\"100\" viewbox=\"0 0 100 100\">\n        <style><![CDATA[\n            path {\n                stroke: black;\n            }\n            /* ] ]] ]]] */\n        ]]></style>\n        <path d=\"M0,0 L100,100\"/>\n    </svg>",
+                "text": "<SVG Width=\"100\" heiGht=\"100\" viewbox=\"0 0 100 100\">\n    </svg>",
                 "children": [
                     {
                         "type": "VStartTag",
-                        "text": "<svg Width=\"100\" heiGht=\"100\" viewbox=\"0 0 100 100\">",
+                        "text": "<SVG Width=\"100\" heiGht=\"100\" viewbox=\"0 0 100 100\">",
                         "children": [
                             {
                                 "type": "VAttribute",
@@ -66,65 +66,6 @@
                                         "type": "VLiteral",
                                         "text": "\"0 0 100 100\"",
                                         "children": []
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "VText",
-                        "text": "\n        ",
-                        "children": []
-                    },
-                    {
-                        "type": "VElement",
-                        "text": "<style><![CDATA[\n            path {\n                stroke: black;\n            }\n            /* ] ]] ]]] */\n        ]]></style>",
-                        "children": [
-                            {
-                                "type": "VStartTag",
-                                "text": "<style>",
-                                "children": []
-                            },
-                            {
-                                "type": "VText",
-                                "text": "<![CDATA[\n            path {\n                stroke: black;\n            }\n            /* ] ]] ]]] */\n        ]]>",
-                                "children": []
-                            },
-                            {
-                                "type": "VEndTag",
-                                "text": "</style>",
-                                "children": []
-                            }
-                        ]
-                    },
-                    {
-                        "type": "VText",
-                        "text": "\n        ",
-                        "children": []
-                    },
-                    {
-                        "type": "VElement",
-                        "text": "<path d=\"M0,0 L100,100\"/>",
-                        "children": [
-                            {
-                                "type": "VStartTag",
-                                "text": "<path d=\"M0,0 L100,100\"/>",
-                                "children": [
-                                    {
-                                        "type": "VAttribute",
-                                        "text": "d=\"M0,0 L100,100\"",
-                                        "children": [
-                                            {
-                                                "type": "VIdentifier",
-                                                "text": "d",
-                                                "children": []
-                                            },
-                                            {
-                                                "type": "VLiteral",
-                                                "text": "\"M0,0 L100,100\"",
-                                                "children": []
-                                            }
-                                        ]
                                     }
                                 ]
                             }

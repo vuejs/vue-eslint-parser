@@ -53,14 +53,26 @@ const DT_DD = /^d[dt]$/u
 const DUMMY_PARENT: any = Object.freeze({})
 
 /**
+ * Gets the tag name from the given node or token.
+ * For SFC, it returns the value of `rawName` to be case sensitive.
+ */
+function getTagName(
+    startTagOrElement: { name: string; rawName: string },
+    isSFC: boolean,
+) {
+    return isSFC ? startTagOrElement.rawName : startTagOrElement.name
+}
+
+/**
  * Check whether the element is a MathML text integration point or not.
  * @see https://html.spec.whatwg.org/multipage/parsing.html#tree-construction-dispatcher
  * @param element The current element.
+ * @param isSFC For SFC, give `true`.
  * @returns `true` if the element is a MathML text integration point.
  */
-function isMathMLIntegrationPoint(element: VElement): boolean {
+function isMathMLIntegrationPoint(element: VElement, isSFC: boolean): boolean {
     if (element.namespace === NS.MathML) {
-        const name = element.name
+        const name = getTagName(element, isSFC)
         return (
             name === "mi" ||
             name === "mo" ||
@@ -76,12 +88,13 @@ function isMathMLIntegrationPoint(element: VElement): boolean {
  * Check whether the element is a HTML integration point or not.
  * @see https://html.spec.whatwg.org/multipage/parsing.html#tree-construction-dispatcher
  * @param element The current element.
+ * @param isSFC For SFC, give `true`.
  * @returns `true` if the element is a HTML integration point.
  */
-function isHTMLIntegrationPoint(element: VElement): boolean {
+function isHTMLIntegrationPoint(element: VElement, isSFC: boolean): boolean {
     if (element.namespace === NS.MathML) {
         return (
-            element.name === "annotation-xml" &&
+            getTagName(element, isSFC) === "annotation-xml" &&
             element.startTag.attributes.some(
                 (a) =>
                     a.directive === false &&
@@ -93,7 +106,7 @@ function isHTMLIntegrationPoint(element: VElement): boolean {
         )
     }
     if (element.namespace === NS.SVG) {
-        const name = element.name
+        const name = getTagName(element, isSFC)
         return name === "foreignObject" || name === "desc" || name === "title"
     }
 
@@ -318,13 +331,21 @@ export class Parser {
     }
 
     /**
+     * Gets the tag name from the given node or token.
+     * For SFC, it returns the value of `rawName` to be case sensitive.
+     */
+    private getTagName(startTagOrElement: { name: string; rawName: string }) {
+        return getTagName(startTagOrElement, this.isSFC)
+    }
+
+    /**
      * Detect the namespace of the new element.
      * @param token The StartTag token to detect.
      * @returns The namespace of the new element.
      */
     //eslint-disable-next-line complexity
     private detectNamespace(token: StartTag): Namespace {
-        const name = token.name
+        const name = this.getTagName(token)
         let ns = this.namespace
 
         if (ns === NS.MathML || ns === NS.SVG) {
@@ -332,14 +353,14 @@ export class Parser {
             if (element.type === "VElement") {
                 if (
                     element.namespace === NS.MathML &&
-                    element.name === "annotation-xml" &&
+                    this.getTagName(element) === "annotation-xml" &&
                     name === "svg"
                 ) {
                     return NS.SVG
                 }
                 if (
-                    isHTMLIntegrationPoint(element) ||
-                    (isMathMLIntegrationPoint(element) &&
+                    isHTMLIntegrationPoint(element, this.isSFC) ||
+                    (isMathMLIntegrationPoint(element, this.isSFC) &&
                         name !== "mglyph" &&
                         name !== "malignmark")
                 ) {
@@ -371,21 +392,23 @@ export class Parser {
 
     /**
      * Close the current element if necessary.
-     * @param name The tag name to check.
+     * @param token The start tag to check.
      */
-    private closeCurrentElementIfNecessary(name: string): void {
+    private closeCurrentElementIfNecessary(token: StartTag): void {
         const element = this.currentNode
         if (element.type !== "VElement") {
             return
         }
+        const name = this.getTagName(token)
+        const elementName = this.getTagName(element)
 
-        if (element.name === "p" && HTML_NON_FHRASING_TAGS.has(name)) {
+        if (elementName === "p" && HTML_NON_FHRASING_TAGS.has(name)) {
             this.popElementStack()
         }
-        if (element.name === name && HTML_CAN_BE_LEFT_OPEN_TAGS.has(name)) {
+        if (elementName === name && HTML_CAN_BE_LEFT_OPEN_TAGS.has(name)) {
             this.popElementStack()
         }
-        if (DT_DD.test(element.name) && DT_DD.test(name)) {
+        if (DT_DD.test(elementName) && DT_DD.test(name)) {
             this.popElementStack()
         }
     }
@@ -396,8 +419,8 @@ export class Parser {
      * @param namespace The current namespace.
      */
     private processAttribute(node: VAttribute, namespace: Namespace): void {
-        const tagName = node.parent.parent.name
-        const attrName = node.key.name
+        const tagName = this.getTagName(node.parent.parent)
+        const attrName = this.getTagName(node.key)
 
         if (
             (this.expressionEnabled ||
@@ -415,10 +438,8 @@ export class Parser {
             return
         }
 
-        const key = (node.key.name = adjustAttributeName(
-            node.key.name,
-            namespace,
-        ))
+        node.key.name = adjustAttributeName(node.key.name, namespace)
+        const key = this.getTagName(node.key)
         const value = node.value && node.value.value
 
         if (key === "xmlns" && value !== namespace) {
@@ -436,7 +457,7 @@ export class Parser {
     protected StartTag(token: StartTag): void {
         debug("[html] StartTag %j", token)
 
-        this.closeCurrentElementIfNecessary(token.name)
+        this.closeCurrentElementIfNecessary(token)
 
         const parent = this.currentNode
         const namespace = this.detectNamespace(token)
@@ -462,7 +483,7 @@ export class Parser {
         }
         const hasVPre =
             !this.isInVPreElement &&
-            token.attributes.some((a) => a.key.name === "v-pre")
+            token.attributes.some((a) => this.getTagName(a.key) === "v-pre")
 
         // Disable expression if v-pre
         if (hasVPre) {
@@ -494,7 +515,8 @@ export class Parser {
 
         // Check whether the self-closing is valid.
         const isVoid =
-            namespace === NS.HTML && HTML_VOID_ELEMENT_TAGS.has(element.name)
+            namespace === NS.HTML &&
+            HTML_VOID_ELEMENT_TAGS.has(this.getTagName(element))
         if (token.selfClosing && !isVoid && namespace === NS.HTML) {
             this.reportParseError(
                 token,
@@ -518,13 +540,14 @@ export class Parser {
 
         // Update the content type of this element.
         if (namespace === NS.HTML) {
+            const elementName = this.getTagName(element)
             if (element.parent.type === "VDocumentFragment") {
                 const langAttr = element.startTag.attributes.find(
                     (a) => !a.directive && a.key.name === "lang",
                 ) as VAttribute | undefined
                 const lang = langAttr?.value?.value
 
-                if (element.name === "template") {
+                if (elementName === "template") {
                     if (lang && lang !== "html") {
                         // It is not an HTML template.
                         this.tokenizer.state = "RAWTEXT"
@@ -538,18 +561,18 @@ export class Parser {
                         this.tokenizer.state = "RAWTEXT"
                     }
                 } else {
-                    if (HTML_RCDATA_TAGS.has(element.name)) {
+                    if (HTML_RCDATA_TAGS.has(elementName)) {
                         this.tokenizer.state = "RCDATA"
                     }
-                    if (HTML_RAWTEXT_TAGS.has(element.name)) {
+                    if (HTML_RAWTEXT_TAGS.has(elementName)) {
                         this.tokenizer.state = "RAWTEXT"
                     }
                 }
             } else {
-                if (HTML_RCDATA_TAGS.has(element.name)) {
+                if (HTML_RCDATA_TAGS.has(elementName)) {
                     this.tokenizer.state = "RCDATA"
                 }
-                if (HTML_RAWTEXT_TAGS.has(element.name)) {
+                if (HTML_RAWTEXT_TAGS.has(elementName)) {
                     this.tokenizer.state = "RAWTEXT"
                 }
             }
