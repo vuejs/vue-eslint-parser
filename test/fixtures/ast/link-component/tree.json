@@ -1,0 +1,340 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <Link :to=\"to\" class=\"flex items-center\">\n    <span v-if=\"prefixIcon || $slots.prefix\" class=\"mr-1\">\n      <slot name=\"prefix\">\n        <FontAwesomeIcon v-if=\"prefixIcon\" :icon=\"prefixIcon\" fixedWidth />\n      </slot>\n    </span>\n    <slot />\n  </Link>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<Link :to=\"to\" class=\"flex items-center\">\n    <span v-if=\"prefixIcon || $slots.prefix\" class=\"mr-1\">\n      <slot name=\"prefix\">\n        <FontAwesomeIcon v-if=\"prefixIcon\" :icon=\"prefixIcon\" fixedWidth />\n      </slot>\n    </span>\n    <slot />\n  </Link>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<Link :to=\"to\" class=\"flex items-center\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":to=\"to\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":to",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "to",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"to\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "to",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "class=\"flex items-center\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "class",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"flex items-center\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<span v-if=\"prefixIcon || $slots.prefix\" class=\"mr-1\">\n      <slot name=\"prefix\">\n        <FontAwesomeIcon v-if=\"prefixIcon\" :icon=\"prefixIcon\" fixedWidth />\n      </slot>\n    </span>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<span v-if=\"prefixIcon || $slots.prefix\" class=\"mr-1\">",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "v-if=\"prefixIcon || $slots.prefix\"",
+                                        "children": [
+                                            {
+                                                "type": "VDirectiveKey",
+                                                "text": "v-if",
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "v-if",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "\"prefixIcon || $slots.prefix\"",
+                                                "children": [
+                                                    {
+                                                        "type": "LogicalExpression",
+                                                        "text": "prefixIcon || $slots.prefix",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "prefixIcon",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "MemberExpression",
+                                                                "text": "$slots.prefix",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "$slots",
+                                                                        "children": []
+                                                                    },
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "prefix",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "class=\"mr-1\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "class",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VLiteral",
+                                                "text": "\"mr-1\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VText",
+                                "text": "\n      ",
+                                "children": []
+                            },
+                            {
+                                "type": "VElement",
+                                "text": "<slot name=\"prefix\">\n        <FontAwesomeIcon v-if=\"prefixIcon\" :icon=\"prefixIcon\" fixedWidth />\n      </slot>",
+                                "children": [
+                                    {
+                                        "type": "VStartTag",
+                                        "text": "<slot name=\"prefix\">",
+                                        "children": [
+                                            {
+                                                "type": "VAttribute",
+                                                "text": "name=\"prefix\"",
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "name",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VLiteral",
+                                                        "text": "\"prefix\"",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VText",
+                                        "text": "\n        ",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VElement",
+                                        "text": "<FontAwesomeIcon v-if=\"prefixIcon\" :icon=\"prefixIcon\" fixedWidth />",
+                                        "children": [
+                                            {
+                                                "type": "VStartTag",
+                                                "text": "<FontAwesomeIcon v-if=\"prefixIcon\" :icon=\"prefixIcon\" fixedWidth />",
+                                                "children": [
+                                                    {
+                                                        "type": "VAttribute",
+                                                        "text": "v-if=\"prefixIcon\"",
+                                                        "children": [
+                                                            {
+                                                                "type": "VDirectiveKey",
+                                                                "text": "v-if",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "VIdentifier",
+                                                                        "text": "v-if",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": "VExpressionContainer",
+                                                                "text": "\"prefixIcon\"",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "prefixIcon",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "VAttribute",
+                                                        "text": ":icon=\"prefixIcon\"",
+                                                        "children": [
+                                                            {
+                                                                "type": "VDirectiveKey",
+                                                                "text": ":icon",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "VIdentifier",
+                                                                        "text": ":",
+                                                                        "children": []
+                                                                    },
+                                                                    {
+                                                                        "type": "VIdentifier",
+                                                                        "text": "icon",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": "VExpressionContainer",
+                                                                "text": "\"prefixIcon\"",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "prefixIcon",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "VAttribute",
+                                                        "text": "fixedWidth",
+                                                        "children": [
+                                                            {
+                                                                "type": "VIdentifier",
+                                                                "text": "fixedWidth",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VText",
+                                        "text": "\n      ",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VEndTag",
+                                        "text": "</slot>",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VText",
+                                "text": "\n    ",
+                                "children": []
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</span>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<slot />",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<slot />",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</Link>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

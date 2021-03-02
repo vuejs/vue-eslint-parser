@@ -1,8 +1,8 @@
 <template>
     <svg>
         <path d=""/>
-        <foreignobject>
+        <foreignObject>
             <div>Hello</div>
-        </foreignobject>
+        </foreignObject>
     </svg>
 </template>

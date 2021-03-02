@@ -1,0 +1,124 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <div>\n    <p>\n      <Address\n        value=\"\"\n        onchange=\"await setTokenAddress(event.target.value)\"/>\n    </p>\n  </div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>\n    <p>\n      <Address\n        value=\"\"\n        onchange=\"await setTokenAddress(event.target.value)\"/>\n    </p>\n  </div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<p>\n      <Address\n        value=\"\"\n        onchange=\"await setTokenAddress(event.target.value)\"/>\n    </p>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<p>",
+                                "children": []
+                            },
+                            {
+                                "type": "VText",
+                                "text": "\n      ",
+                                "children": []
+                            },
+                            {
+                                "type": "VElement",
+                                "text": "<Address\n        value=\"\"\n        onchange=\"await setTokenAddress(event.target.value)\"/>",
+                                "children": [
+                                    {
+                                        "type": "VStartTag",
+                                        "text": "<Address\n        value=\"\"\n        onchange=\"await setTokenAddress(event.target.value)\"/>",
+                                        "children": [
+                                            {
+                                                "type": "VAttribute",
+                                                "text": "value=\"\"",
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "value",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VLiteral",
+                                                        "text": "\"\"",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "VAttribute",
+                                                "text": "onchange=\"await setTokenAddress(event.target.value)\"",
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "onchange",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VLiteral",
+                                                        "text": "\"await setTokenAddress(event.target.value)\"",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VText",
+                                "text": "\n    ",
+                                "children": []
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</p>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
