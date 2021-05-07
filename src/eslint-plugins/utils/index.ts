@@ -3,80 +3,190 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
- 'use strict'
+'use strict'
 
- import * as ESLint from "eslint";
- import * as ESTree from "estree";
+import * as ESLint from "eslint";
+import * as ESTree from "estree";
+import { VueObjectData, VueObjectType, VueVisitor } from "../types/utils";
+
+type RuleModule = ESLint.Rule.RuleModule;
+type Position = ESTree.Position;
+type CodePath = ESLint.Rule.CodePath;
+type CodePathSegment = ESLint.Rule.CodePathSegment;
+
+type ComponentArrayPropDetectName = {
+  type: "array";
+  key: Literal | TemplateLiteral;
+  propName: string;
+  value: null;
+  node: Expression | SpreadElement;
+};
+
+type ComponentArrayPropUnknownName = {
+  type: "array";
+  key: null;
+  propName: null;
+  value: null;
+  node: Expression | SpreadElement;
+};
+
+type ComponentArrayProp =
+  | ComponentArrayPropDetectName
+  | ComponentArrayPropUnknownName;
+
+type ComponentObjectPropDetectName = {
+  type: "object";
+  key: Expression;
+  propName: string;
+  value: Expression;
+  node: Property;
+};
+
+type ComponentObjectPropUnknownName = {
+  type: "object";
+  key: null;
+  propName: null;
+  value: Expression;
+  node: Property;
+};
+
+type ComponentObjectProp =
+  | ComponentObjectPropDetectName
+  | ComponentObjectPropUnknownName;
+
+type ComponentArrayEmitDetectName = {
+  type: "array";
+  key: Literal | TemplateLiteral;
+  emitName: string;
+  value: null;
+  node: Expression | SpreadElement;
+};
+
+type ComponentArrayEmitUnknownName = {
+  type: "array";
+  key: null;
+  emitName: null;
+  value: null;
+  node: Expression | SpreadElement;
+};
+
+type ComponentArrayEmit =
+  | ComponentArrayEmitDetectName
+  | ComponentArrayEmitUnknownName;
+
+type ComponentObjectEmitDetectName = {
+  type: "object";
+  key: Expression;
+  emitName: string;
+  value: Expression;
+  node: Property;
+};
+
+type ComponentObjectEmitUnknownName = {
+  type: "object";
+  key: null;
+  emitName: null;
+  value: Expression;
+  node: Property;
+};
+
+type ComponentObjectEmit =
+  | ComponentObjectEmitDetectName
+  | ComponentObjectEmitUnknownName;
+
+type ComponentComputedProperty = {
+  key: string | null;
+  value: BlockStatement | null;
+};
+
+type GroupName = "props" | "data" | "computed" | "setup" | "watch" | "methods";
+type ComponentArrayPropertyData = {
+  type: "array";
+  name: string;
+  groupName: GroupName;
+  node: Literal | TemplateLiteral;
+};
+type ComponentObjectPropertyData = {
+  type: "object";
+  name: string;
+  groupName: GroupName;
+  node: Identifier | Literal | TemplateLiteral;
+  property: Property;
+};
+type ComponentPropertyData =
+  | ComponentArrayPropertyData
+  | ComponentObjectPropertyData;
+
 
  /**
-  * @typedef {import('eslint').Rule.RuleModule} RuleModule
-  * @typedef {import('estree').Position} Position
-  * @typedef {import('eslint').Rule.CodePath} CodePath
-  * @typedef {import('eslint').Rule.CodePathSegment} CodePathSegment
+  // * @typedef {import('eslint').Rule.RuleModule} RuleModule
+  // * @typedef {import('estree').Position} Position
+  // * @typedef {import('eslint').Rule.CodePath} CodePath
+  // * @typedef {import('eslint').Rule.CodePathSegment} CodePathSegment
   */
  /**
-  * @typedef {object} ComponentArrayPropDetectName
-  * @property {'array'} type
-  * @property {Literal | TemplateLiteral} key
-  * @property {string} propName
-  * @property {null} value
-  * @property {Expression | SpreadElement} node
+  // * @typedef {object} ComponentArrayPropDetectName
+  // * @property {'array'} type
+  // * @property {Literal | TemplateLiteral} key
+  // * @property {string} propName
+  // * @property {null} value
+  // * @property {Expression | SpreadElement} node
   *
-  * @typedef {object} ComponentArrayPropUnknownName
-  * @property {'array'} type
-  * @property {null} key
-  * @property {null} propName
-  * @property {null} value
-  * @property {Expression | SpreadElement} node
+  // * @typedef {object} ComponentArrayPropUnknownName
+  // * @property {'array'} type
+  // * @property {null} key
+  // * @property {null} propName
+  // * @property {null} value
+  // * @property {Expression | SpreadElement} node
   *
-  * @typedef {ComponentArrayPropDetectName | ComponentArrayPropUnknownName} ComponentArrayProp
+  // * @typedef {ComponentArrayPropDetectName | ComponentArrayPropUnknownName} ComponentArrayProp
   *
-  * @typedef {object} ComponentObjectPropDetectName
-  * @property {'object'} type
-  * @property {Expression} key
-  * @property {string} propName
-  * @property {Expression} value
-  * @property {Property} node
+  // * @typedef {object} ComponentObjectPropDetectName
+  // * @property {'object'} type
+  // * @property {Expression} key
+  // * @property {string} propName
+  // * @property {Expression} value
+  // * @property {Property} node
   *
-  * @typedef {object} ComponentObjectPropUnknownName
-  * @property {'object'} type
-  * @property {null} key
-  * @property {null} propName
-  * @property {Expression} value
-  * @property {Property} node
+  // * @typedef {object} ComponentObjectPropUnknownName
+  // * @property {'object'} type
+  // * @property {null} key
+  // * @property {null} propName
+  // * @property {Expression} value
+  // * @property {Property} node
   *
-  * @typedef {ComponentObjectPropDetectName | ComponentObjectPropUnknownName} ComponentObjectProp
+  // * @typedef {ComponentObjectPropDetectName | ComponentObjectPropUnknownName} ComponentObjectProp
   */
  /**
-  * @typedef {object} ComponentArrayEmitDetectName
-  * @property {'array'} type
-  * @property {Literal | TemplateLiteral} key
-  * @property {string} emitName
-  * @property {null} value
-  * @property {Expression | SpreadElement} node
+  // * @typedef {object} ComponentArrayEmitDetectName
+  // * @property {'array'} type
+  // * @property {Literal | TemplateLiteral} key
+  // * @property {string} emitName
+  // * @property {null} value
+  // * @property {Expression | SpreadElement} node
   *
-  * @typedef {object} ComponentArrayEmitUnknownName
-  * @property {'array'} type
-  * @property {null} key
-  * @property {null} emitName
-  * @property {null} value
-  * @property {Expression | SpreadElement} node
+  // * @typedef {object} ComponentArrayEmitUnknownName
+  // * @property {'array'} type
+  // * @property {null} key
+  // * @property {null} emitName
+  // * @property {null} value
+  // * @property {Expression | SpreadElement} node
   *
-  * @typedef {ComponentArrayEmitDetectName | ComponentArrayEmitUnknownName} ComponentArrayEmit
+  // * @typedef {ComponentArrayEmitDetectName | ComponentArrayEmitUnknownName} ComponentArrayEmit
   *
-  * @typedef {object} ComponentObjectEmitDetectName
-  * @property {'object'} type
-  * @property {Expression} key
-  * @property {string} emitName
-  * @property {Expression} value
-  * @property {Property} node
+  // * @typedef {object} ComponentObjectEmitDetectName
+  // * @property {'object'} type
+  // * @property {Expression} key
+  // * @property {string} emitName
+  // * @property {Expression} value
+  // * @property {Property} node
   *
-  * @typedef {object} ComponentObjectEmitUnknownName
-  * @property {'object'} type
-  * @property {null} key
-  * @property {null} emitName
-  * @property {Expression} value
-  * @property {Property} node
+  // * @typedef {object} ComponentObjectEmitUnknownName
+  // * @property {'object'} type
+  // * @property {null} key
+  // * @property {null} emitName
+  // * @property {Expression} value
+  // * @property {Property} node
   *
   * @typedef {ComponentObjectEmitDetectName | ComponentObjectEmitUnknownName} ComponentObjectEmit
   */
@@ -102,10 +212,13 @@
  const HTML_ELEMENT_NAMES = new Set(require('./html-elements.json'))
  const SVG_ELEMENT_NAMES = new Set(require('./svg-elements.json'))
  const VOID_ELEMENT_NAMES = new Set(require('./void-elements.json'))
- const path = require('path')
- const vueEslintParser = require('vue-eslint-parser')
- const { findVariable } = require('eslint-utils')
- 
+ import path from "path";
+ import vueEslintParser from "vue-eslint-parser";
+ import {findVariable} from "eslint-utils";
+
+
+
+  
  /**
   * @type { WeakMap<RuleContext, Token[]> }
   */
