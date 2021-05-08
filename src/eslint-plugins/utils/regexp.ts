@@ -1,4 +1,5 @@
 const RE_REGEXP_CHAR = /[\\^$.*+?()[\]{}|]/gu
+// eslint-disable-next-line require-unicode-regexp
 const RE_HAS_REGEXP_CHAR = new RegExp(RE_REGEXP_CHAR.source)
 
 const RE_REGEXP_STR = /^\/(.+)\/(.*)$/u
@@ -23,6 +24,7 @@ export function toRegExp(string: string) {
     if (parts) {
         return new RegExp(parts[1], parts[2])
     }
+    // eslint-disable-next-line require-unicode-regexp
     return new RegExp(`^${escape(string)}$`)
 }
 
