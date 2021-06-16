@@ -395,10 +395,11 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
                     create(ctx) {
                         return {
                             Program(node) {
-                                const error = ctx.parserServices.parseCustomBlockElement(
-                                    jsonParser,
-                                    { jsonSyntax: "json" }
-                                ).error
+                                const error =
+                                    ctx.parserServices.parseCustomBlockElement(
+                                        jsonParser,
+                                        { jsonSyntax: "json" }
+                                    ).error
                                 ctx.report({
                                     node,
                                     message: JSON.stringify({
