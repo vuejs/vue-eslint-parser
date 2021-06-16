@@ -1,0 +1,1 @@
+The code in this directory is designed to be used in ESLint plugins, such as `eslint-plugin-vue`.

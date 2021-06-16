@@ -5,6 +5,7 @@
  */
 import * as path from "path"
 import * as AST from "./ast"
+import * as ESLintPlugins from "./eslint-plugins"
 import { LocationCalculator } from "./common/location-calculator"
 import { HTMLParser, HTMLTokenizer } from "./html"
 import { parseScript, parseScriptElement } from "./script"
@@ -149,3 +150,4 @@ export function parse(code: string, options: any): AST.ESLintProgram {
 }
 
 export { AST }
+export { ESLintPlugins }
