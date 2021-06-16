@@ -32,9 +32,7 @@ import { isSFCFile } from "./common/parser-options"
 // Helpers
 //------------------------------------------------------------------------------
 
-type CustomBlockVisitorFactory = (
-    context: CustomBlockContext,
-) =>
+type CustomBlockVisitorFactory = (context: CustomBlockContext) =>
     | {
           [key: string]: (...args: any) => void
       }
@@ -229,9 +227,10 @@ export function define(
                         for (const customBlock of customBlocks) {
                             const lang = getLang(customBlock)
 
-                            const activeVisitorFactories = visitorFactories.filter(
-                                (f) => f.test(lang, customBlock),
-                            )
+                            const activeVisitorFactories =
+                                visitorFactories.filter((f) =>
+                                    f.test(lang, customBlock),
+                                )
                             if (!activeVisitorFactories.length) {
                                 continue
                             }

@@ -768,9 +768,8 @@ export function processMustache(
 
     const document = getOwnerDocument(node)
     try {
-        const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
-            range[0],
-        )
+        const locationCalculator =
+            globalLocationCalculator.getSubCalculatorAfter(range[0])
         const ret = parseExpression(
             mustache.value,
             locationCalculator,

@@ -54,16 +54,15 @@ const DUMMY_PARENT: any = {}
 // Like Vue, it judges whether it is a function expression or not.
 // https://github.com/vuejs/vue/blob/0948d999f2fddf9f90991956493f976273c5da1f/src/compiler/codegen/events.js#L3
 const IS_FUNCTION_EXPRESSION = /^\s*([\w$_]+|\([^)]*?\))\s*=>|^function\s*\(/u
-const IS_SIMPLE_PATH = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['[^']*?'\]|\["[^"]*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/u
+const IS_SIMPLE_PATH =
+    /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['[^']*?'\]|\["[^"]*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/u
 
 /**
  * Parse the alias and iterator of 'v-for' directive values.
  * @param code The code to parse.
  * @returns The parsed result.
  */
-function processVForAliasAndIterator(
-    code: string,
-): {
+function processVForAliasAndIterator(code: string): {
     aliases: string
     hasParens: boolean
     delimiter: string
@@ -555,9 +554,8 @@ export function parseScriptElement(
             ? text.range[0]
             : node.startTag.range[1]
     const code = text != null && text.type === "VText" ? text.value : ""
-    const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
-        offset,
-    )
+    const locationCalculator =
+        globalLocationCalculator.getSubCalculatorAfter(offset)
     const result = parseScriptFragment(code, locationCalculator, parserOptions)
 
     // Needs the tokens of start/end tags for `lines-around-*` rules to work
@@ -624,7 +622,8 @@ export function parseExpression(
     if (!retB.expression) {
         return retB
     }
-    const ret = (retB as unknown) as ExpressionParseResult<VFilterSequenceExpression>
+    const ret =
+        retB as unknown as ExpressionParseResult<VFilterSequenceExpression>
 
     ret.expression = {
         type: "VFilterSequenceExpression",
@@ -1012,8 +1011,9 @@ function parseVOnExpressionBody(
         ).ast
         const references = analyzeExternalReferences(ast, parserOptions)
         const outermostStatement = ast.body[0] as ESLintExpressionStatement
-        const functionDecl = (outermostStatement.expression as ESLintUnaryExpression)
-            .argument as ESLintFunctionExpression
+        const functionDecl = (
+            outermostStatement.expression as ESLintUnaryExpression
+        ).argument as ESLintFunctionExpression
         const block = functionDecl.body
         const body = block.body
         const firstStatement = first(body)
