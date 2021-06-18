@@ -38,7 +38,7 @@ class CodeBlocks {
     }
     public appendSplitPunctuators(punctuator: string) {
         this.splitPunctuators.push(this.code.length)
-        this.code += punctuator
+        this.code += `${punctuator}\n`
     }
     public appendCodeBlocks(codeBlocks: CodeBlocks) {
         const start = this.code.length
@@ -83,7 +83,13 @@ export function parseScriptSetupElements(
 ): ESLintExtendedProgram {
     const parserOptions: ParserOptions = {
         ...originalParserOptions,
-        sourceType: "module", // enforce module
+        // enforce module
+        sourceType: "module",
+        ecmaVersion:
+            typeof originalParserOptions.ecmaVersion === "number" &&
+            originalParserOptions.ecmaVersion > 5
+                ? originalParserOptions.ecmaVersion
+                : 2015,
     }
     const scriptSetupCodeBlocks = getScriptsCodeBlocks(
         scriptSetupElement,
@@ -166,6 +172,12 @@ export function parseScriptSetupElements(
     }
     result.ast.body.sort((a, b) => a.range[0] - b.range[0])
 
+    const programEndOffset = result.ast.body.reduce(
+        (end, node) => Math.max(end, node.range[1]),
+        0,
+    )
+    result.ast.range[1] = programEndOffset
+    result.ast.loc.end = locationFixCalculator.getLocFromIndex(programEndOffset)
     if (result.ast.end != null) {
         result.ast.end = [scriptSetupElement, scriptElement].reduce(
             (end, node) => {
@@ -177,7 +189,7 @@ export function parseScriptSetupElements(
                         : node.endTag?.range[1] ?? node.range[1],
                 )
             },
-            result.ast.end,
+            0,
         )
     }
 
@@ -196,11 +208,11 @@ export function parseScriptSetupElements(
  * ```vue
  * <script>
  * export let count = 42
- * <script>
+ * </script>
  * <script setup>
  * import MyComponent from './MyComponent.vue'
  * let count = 42
- * <script>
+ * </script>
  * ```
  *
  * ↓
@@ -219,13 +231,13 @@ export function parseScriptSetupElements(
  * ```vue
  * <script>
  * export let count = 42
- * <script>
+ * </script>
  * <script setup>
  * import MyComponent1 from './MyComponent1.vue'
  * let count = 42
  * import MyComponent2 from './MyComponent2.vue'
  * let a
- * <script>
+ * </script>
  * ```
  *
  * ↓
