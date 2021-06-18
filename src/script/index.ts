@@ -45,7 +45,11 @@ import {
 import type { ESLintCustomParser } from "./espree"
 import { getEspree } from "./espree"
 import type { ParserOptions } from "../common/parser-options"
-import { fixErrorLocation, fixLocations } from "../common/fix-locations"
+import {
+    fixErrorLocation,
+    fixLocation,
+    fixLocations,
+} from "../common/fix-locations"
 
 // [1] = aliases.
 // [2] = delimiter.
@@ -137,7 +141,7 @@ function throwEmptyError(
         loc.line,
         loc.column,
     )
-    locationCalculator.fixErrorLocation(err)
+    fixErrorLocation(err, locationCalculator)
 
     throw err
 }
@@ -640,12 +644,15 @@ export function parseExpression(
     for (const filterCode of filterCodes) {
         // Pipe token.
         ret.tokens.push(
-            locationCalculator.fixLocation({
-                type: "Punctuator",
-                value: "|",
-                range: [prevLoc, prevLoc + 1],
-                loc: {} as any,
-            }),
+            fixLocation(
+                {
+                    type: "Punctuator",
+                    value: "|",
+                    range: [prevLoc, prevLoc + 1],
+                    loc: {} as any,
+                },
+                locationCalculator,
+            ),
         )
 
         // Parse a filter
@@ -840,14 +847,18 @@ function parseVForExpressionForEcmaVersion5(
         const delimiterStart = processed.aliases.length
         const delimiterEnd = delimiterStart + processed.delimiter.length
         tokens.push(
-            locationCalculator.fixLocation({
-                type: processed.delimiter === "in" ? "Keyword" : "Identifier",
-                value: processed.delimiter,
-                start: delimiterStart,
-                end: delimiterEnd,
-                loc: {} as any,
-                range: [delimiterStart, delimiterEnd],
-            } as Token),
+            fixLocation(
+                {
+                    type:
+                        processed.delimiter === "in" ? "Keyword" : "Identifier",
+                    value: processed.delimiter,
+                    start: delimiterStart,
+                    end: delimiterEnd,
+                    loc: {} as any,
+                    range: [delimiterStart, delimiterEnd],
+                } as Token,
+                locationCalculator,
+            ),
         )
 
         const parsedIterator = parseVForIteratorForEcmaVersion5(

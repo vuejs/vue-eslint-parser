@@ -4,8 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import sortedLastIndex from "lodash/sortedLastIndex"
-import type { HasLocation, Location, ParseError } from "../ast"
-import { fixErrorLocation, fixLocation } from "./fix-locations"
+import type { Location } from "../ast"
 import { LinesAndColumns } from "./lines-and-columns"
 
 /**
@@ -141,14 +140,6 @@ export class LocationCalculatorForHtml
     }
 
     /**
-     * Modify the location information of the given node with using the base offset and gaps of this calculator.
-     * @param node The node to modify their location.
-     */
-    public fixLocation<T extends HasLocation>(node: T): T {
-        return fixLocation(node, this)
-    }
-
-    /**
      * Gets the fix location offset of the given offset with using the base offset of this calculator.
      * @param offset The offset to modify.
      */
@@ -156,13 +147,5 @@ export class LocationCalculatorForHtml
         const shiftOffset = this.shiftOffset
         const gap = this._getGap(offset + shiftOffset)
         return this.baseOffset + Math.max(0, gap) + shiftOffset
-    }
-
-    /**
-     * Modify the location information of the given error with using the base offset and gaps of this calculator.
-     * @param error The error to modify their location.
-     */
-    public fixErrorLocation(error: ParseError) {
-        fixErrorLocation(error, this)
     }
 }

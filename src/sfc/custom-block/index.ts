@@ -12,7 +12,7 @@ import type {
     VText,
 } from "../../ast"
 import { getFallbackKeys, ParseError } from "../../ast"
-import { fixLocations } from "../../common/fix-locations"
+import { fixErrorLocation, fixLocations } from "../../common/fix-locations"
 import type { LocationCalculatorForHtml } from "../../common/location-calculator"
 import type { ParserOptions } from "../../common/parser-options"
 
@@ -174,7 +174,7 @@ function parseCustomBlockFragment(
     } catch (err) {
         const perr = ParseError.normalize(err)
         if (perr) {
-            locationCalculator.fixErrorLocation(perr)
+            fixErrorLocation(perr, locationCalculator)
             throw perr
         }
         throw err
