@@ -2,7 +2,13 @@
  * @author Yosuke Ota <https://github.com/ota-meshi>
  * See LICENSE file in root directory for full license.
  */
-import type { ESLintExtendedProgram, ESLintStatement, VElement } from "../ast"
+import type { ScopeManager, Scope } from "eslint-scope"
+import type {
+    ESLintBlockStatement,
+    ESLintExtendedProgram,
+    ESLintStatement,
+    VElement,
+} from "../ast"
 import { ParseError, traverseNodes } from "../ast"
 import { fixErrorLocation, fixLocations } from "../common/fix-locations"
 import type { LinesAndColumns } from "../common/lines-and-columns"
@@ -410,6 +416,7 @@ function remapAST(
         return
     }
 
+    let scriptSetupBlock: ESLintBlockStatement | null = null
     for (let index = result.ast.body.length - 1; index >= 0; index--) {
         const body = result.ast.body[index]
 
@@ -418,6 +425,14 @@ function remapAST(
                 scriptSetupBlockRange[0] <= body.range[0] &&
                 body.range[1] <= scriptSetupBlockRange[1]
             ) {
+                if (scriptSetupBlock) {
+                    throw new Error(
+                        `Unexpected state error: An unexpected block statement was found. ${JSON.stringify(
+                            body.loc,
+                        )}`,
+                    )
+                }
+                scriptSetupBlock = body
                 result.ast.body.splice(
                     index,
                     1,
@@ -434,11 +449,59 @@ function remapAST(
         }
     }
 
+    if (result.scopeManager && scriptSetupBlock) {
+        const blockScope = result.scopeManager.acquire(
+            scriptSetupBlock as never,
+            true,
+        )!
+        remapScope(result.scopeManager, blockScope)
+    }
+
     function isSplitPunctuatorsEmptyStatement(body: ESLintStatement) {
         return (
             body.type === "EmptyStatement" &&
             codeBlocks.splitPunctuators.includes(body.range[1] - 1)
         )
+    }
+
+    function remapScope(scopeManager: ScopeManager, blockScope: Scope) {
+        const moduleScope = blockScope.upper!
+
+        // Restore references
+        for (const reference of blockScope.references) {
+            reference.from = moduleScope
+            moduleScope.references.push(reference)
+        }
+        // Restore variables
+        for (const variable of blockScope.variables) {
+            variable.scope = moduleScope
+            const alreadyVariable = moduleScope.variables.find(
+                (v) => v.name === variable.name,
+            )
+            if (alreadyVariable) {
+                alreadyVariable.defs.push(...variable.defs)
+                alreadyVariable.identifiers.push(...variable.identifiers)
+                alreadyVariable.references.push(...variable.references)
+                for (const reference of variable.references) {
+                    reference.resolved = alreadyVariable
+                }
+            } else {
+                moduleScope.variables.push(variable)
+                moduleScope.set.set(variable.name, variable)
+            }
+        }
+        // Remove scope
+        const upper = blockScope.upper
+        if (upper) {
+            const index = upper.childScopes.indexOf(blockScope)
+            if (index >= 0) {
+                upper.childScopes.splice(index, 1)
+            }
+        }
+        const index = scopeManager.scopes.indexOf(blockScope)
+        if (index >= 0) {
+            scopeManager.scopes.splice(index, 1)
+        }
     }
 }
 
