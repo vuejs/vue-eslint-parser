@@ -6,8 +6,7 @@ import type { ESLintExtendedProgram, ESLintStatement, VElement } from "../ast"
 import { ParseError, traverseNodes } from "../ast"
 import { fixErrorLocation, fixLocations } from "../common/fix-locations"
 import type { LinesAndColumns } from "../common/lines-and-columns"
-import type { LocationFixCalculator } from "../common/location-fix-calculator"
-import { simpleOffsetLocationFixCalculator } from "../common/location-fix-calculator"
+import type { LocationCalculator } from "../common/location-calculator"
 import type { ParserOptions } from "../common/parser-options"
 import { parseScript, parseScriptFragment } from "../script"
 
@@ -101,7 +100,7 @@ export function parseScriptSetupElements(
     if (!scriptSetupCodeBlocks) {
         return parseScriptFragment(
             "",
-            simpleOffsetLocationFixCalculator(
+            simpleOffsetLocationCalculator(
                 scriptSetupElement.startTag.range[1],
                 linesAndColumns,
             ),
@@ -109,7 +108,7 @@ export function parseScriptSetupElements(
         )
     }
 
-    const locationFixCalculator: LocationFixCalculator = {
+    const locationCalculator: LocationCalculator = {
         getFixOffset(offset, kind) {
             const test: (block: RemapBlock) => boolean =
                 kind === "start"
@@ -135,7 +134,7 @@ export function parseScriptSetupElements(
     } catch (err) {
         const perr = ParseError.normalize(err)
         if (perr) {
-            fixErrorLocation(perr, locationFixCalculator)
+            fixErrorLocation(perr, locationCalculator)
             throw perr
         }
         throw err
@@ -145,7 +144,7 @@ export function parseScriptSetupElements(
     remapAST(result, scriptSetupCodeBlocks)
 
     /* Remap locations */
-    remapLocationAndTokens(result, scriptSetupCodeBlocks, locationFixCalculator)
+    remapLocationAndTokens(result, scriptSetupCodeBlocks, locationCalculator)
 
     // Adjust AST and tokens
     if (result.ast.tokens != null) {
@@ -177,7 +176,7 @@ export function parseScriptSetupElements(
         0,
     )
     result.ast.range[1] = programEndOffset
-    result.ast.loc.end = locationFixCalculator.getLocFromIndex(programEndOffset)
+    result.ast.loc.end = locationCalculator.getLocFromIndex(programEndOffset)
     if (result.ast.end != null) {
         result.ast.end = [scriptSetupElement, scriptElement].reduce(
             (end, node) => {
@@ -328,7 +327,7 @@ function getScriptSetupCodeBlocks(
         if (perr) {
             fixErrorLocation(
                 perr,
-                simpleOffsetLocationFixCalculator(
+                simpleOffsetLocationCalculator(
                     scriptStartOffset,
                     linesAndColumns,
                 ),
@@ -446,7 +445,7 @@ function remapAST(
 function remapLocationAndTokens(
     result: ESLintExtendedProgram,
     { codeBlocks }: ScriptSetupCodeBlocks,
-    locationFixCalculator: LocationFixCalculator,
+    locationCalculator: LocationCalculator,
 ) {
     traverseNodes(result.ast, {
         visitorKeys: result.visitorKeys,
@@ -480,5 +479,17 @@ function remapLocationAndTokens(
         }
     }
 
-    fixLocations(result, locationFixCalculator)
+    fixLocations(result, locationCalculator)
+}
+
+function simpleOffsetLocationCalculator(
+    offset: number,
+    linesAndColumns: LinesAndColumns,
+): LocationCalculator {
+    return {
+        getFixOffset() {
+            return offset
+        },
+        getLocFromIndex: linesAndColumns.getLocFromIndex.bind(linesAndColumns),
+    }
 }

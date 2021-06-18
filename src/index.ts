@@ -5,7 +5,7 @@
  */
 import * as path from "path"
 import * as AST from "./ast"
-import { LocationCalculator } from "./common/location-calculator"
+import { LocationCalculatorForHtml } from "./common/location-calculator"
 import { HTMLParser, HTMLTokenizer } from "./html"
 import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
@@ -104,7 +104,7 @@ export function parseForESLint(
 
     let result: AST.ESLintExtendedProgram
     let document: AST.VDocumentFragment | null
-    let locationCalculator: LocationCalculator | null
+    let locationCalculator: LocationCalculatorForHtml | null
     if (!isVueFile(code, options)) {
         result = parseScript(code, options)
         document = null
@@ -114,7 +114,7 @@ export function parseForESLint(
         const tokenizer = new HTMLTokenizer(code, options)
         const rootAST = new HTMLParser(tokenizer, options).parse()
 
-        locationCalculator = new LocationCalculator(
+        locationCalculator = new LocationCalculatorForHtml(
             tokenizer.gaps,
             tokenizer.lineTerminators,
         )

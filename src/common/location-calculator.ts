@@ -7,7 +7,24 @@ import sortedLastIndex from "lodash/sortedLastIndex"
 import type { HasLocation, Location, ParseError } from "../ast"
 import { fixErrorLocation, fixLocation } from "./fix-locations"
 import { LinesAndColumns } from "./lines-and-columns"
-import type { LocationFixCalculator } from "./location-fix-calculator"
+
+/**
+ * Location calculators.
+ */
+export interface LocationCalculator {
+    /**
+     * Gets the fix location offset of the given offset with using the base offset of this calculator.
+     * @param offset The offset to modify.
+     */
+    getFixOffset(offset: number, kind: "start" | "end"): number
+
+    /**
+     * Calculate the location of the given index.
+     * @param index The index to calculate their location.
+     * @returns The location of the index.
+     */
+    getLocFromIndex(index: number): Location
+}
 
 /**
  * Location calculators.
@@ -21,9 +38,9 @@ import type { LocationFixCalculator } from "./location-fix-calculator"
  * - Adjusts the locations of script ASTs.
  * - Creates expression containers in postprocess.
  */
-export class LocationCalculator
+export class LocationCalculatorForHtml
     extends LinesAndColumns
-    implements LocationFixCalculator
+    implements LocationCalculator
 {
     private gapOffsets: number[]
     private baseOffset: number
@@ -59,8 +76,8 @@ export class LocationCalculator
      * @param offset The base offset of new sub calculator.
      * @returns Sub calculator.
      */
-    public getSubCalculatorAfter(offset: number): LocationCalculator {
-        return new LocationCalculator(
+    public getSubCalculatorAfter(offset: number): LocationCalculatorForHtml {
+        return new LocationCalculatorForHtml(
             this.gapOffsets,
             this.ltOffsets,
             this.baseOffset + offset,
@@ -73,8 +90,8 @@ export class LocationCalculator
      * @param offset The shift of new sub calculator.
      * @returns Sub calculator.
      */
-    public getSubCalculatorShift(offset: number): LocationCalculator {
-        return new LocationCalculator(
+    public getSubCalculatorShift(offset: number): LocationCalculatorForHtml {
+        return new LocationCalculatorForHtml(
             this.gapOffsets,
             this.ltOffsets,
             this.baseOffset,

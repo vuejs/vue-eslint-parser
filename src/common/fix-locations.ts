@@ -6,7 +6,7 @@ import type {
     ParseError,
 } from "../ast"
 import { traverseNodes } from "../ast"
-import type { LocationFixCalculator } from "./location-fix-calculator"
+import type { LocationCalculator } from "./location-calculator"
 
 /**
  * Do post-process of parsing an expression.
@@ -19,7 +19,7 @@ import type { LocationFixCalculator } from "./location-fix-calculator"
  */
 export function fixLocations(
     result: ESLintExtendedProgram,
-    locationCalculator: LocationFixCalculator,
+    locationCalculator: LocationCalculator,
 ): void {
     // There are cases which the same node instance appears twice in the tree.
     // E.g. `let {a} = {}` // This `a` appears twice at `Property#key` and `Property#value`.
@@ -74,7 +74,7 @@ export function fixLocations(
  */
 export function fixLocation<T extends HasLocation>(
     node: T,
-    locationCalculator: LocationFixCalculator,
+    locationCalculator: LocationCalculator,
 ): T {
     const range = node.range
     const loc = node.loc
@@ -105,7 +105,7 @@ export function fixLocation<T extends HasLocation>(
  */
 export function fixErrorLocation(
     error: ParseError,
-    locationCalculator: LocationFixCalculator,
+    locationCalculator: LocationCalculator,
 ) {
     const diff = locationCalculator.getFixOffset(error.index, "start")
 

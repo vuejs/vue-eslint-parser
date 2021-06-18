@@ -34,7 +34,10 @@ import type {
 } from "../ast"
 import { ParseError } from "../ast"
 import { debug } from "../common/debug"
-import type { LocationCalculator } from "../common/location-calculator"
+import type {
+    LocationCalculator,
+    LocationCalculatorForHtml,
+} from "../common/location-calculator"
 import {
     analyzeExternalReferences,
     analyzeVariablesAndExternalReferences,
@@ -43,7 +46,6 @@ import type { ESLintCustomParser } from "./espree"
 import { getEspree } from "./espree"
 import type { ParserOptions } from "../common/parser-options"
 import { fixErrorLocation, fixLocations } from "../common/fix-locations"
-import type { LocationFixCalculator } from "../common/location-fix-calculator"
 
 // [1] = aliases.
 // [2] = delimiter.
@@ -124,7 +126,7 @@ function getCommaTokenBeforeNode(tokens: Token[], node: Node): Token | null {
  * @param locationCalculator The location calculator to get line/column.
  */
 function throwEmptyError(
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     expected: string,
 ): never {
     const loc = locationCalculator.getLocation(0)
@@ -165,7 +167,7 @@ function throwUnexpectedTokenError(name: string, token: HasLocation): never {
 function throwErrorAsAdjustingOutsideOfCode(
     err: any,
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
 ): never {
     if (ParseError.isParseError(err)) {
         const endOffset = locationCalculator.getOffsetWithGap(code.length)
@@ -187,7 +189,7 @@ function throwErrorAsAdjustingOutsideOfCode(
  */
 export function parseScriptFragment(
     code: string,
-    locationCalculator: LocationFixCalculator,
+    locationCalculator: LocationCalculator,
     parserOptions: ParserOptions,
 ): ESLintExtendedProgram {
     try {
@@ -316,7 +318,7 @@ function splitFilters(exp: string): string[] {
  */
 function parseExpressionBody(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
     allowEmpty = false,
 ): ExpressionParseResult<ESLintExpression> {
@@ -369,7 +371,7 @@ function parseExpressionBody(
  */
 function parseFilter(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ): ExpressionParseResult<VFilter> | null {
     debug('[script] parse filter: "%s"', code)
@@ -546,7 +548,7 @@ export function parseScript(
  */
 export function parseScriptElement(
     node: VElement,
-    globalLocationCalculator: LocationCalculator,
+    globalLocationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ): ESLintExtendedProgram {
     const text = node.children[0]
@@ -592,7 +594,7 @@ export function parseScriptElement(
  */
 export function parseExpression(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
     { allowEmpty = false, allowFilters = false } = {},
 ): ExpressionParseResult<ESLintExpression | VFilterSequenceExpression> {
@@ -683,7 +685,7 @@ export function parseExpression(
 // eslint-disable-next-line complexity
 export function parseVForExpression(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ): ExpressionParseResult<VForExpression> {
     if (code.trim() === "") {
@@ -792,7 +794,7 @@ function isEcmaVersion5(parserOptions: ParserOptions) {
 
 function parseVForExpressionForEcmaVersion5(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ): ExpressionParseResult<VForExpression> {
     const processed = processVForAliasAndIterator(code)
@@ -884,7 +886,7 @@ function parseVForExpressionForEcmaVersion5(
 
 function parseVForAliasesForEcmaVersion5(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ) {
     const ast = parseScriptFragment(
@@ -934,7 +936,7 @@ function parseVForAliasesForEcmaVersion5(
 
 function parseVForIteratorForEcmaVersion5(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ) {
     const ast = parseScriptFragment(
@@ -974,7 +976,7 @@ function parseVForIteratorForEcmaVersion5(
  */
 export function parseVOnExpression(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ): ExpressionParseResult<ESLintExpression | VOnExpression> {
     if (IS_FUNCTION_EXPRESSION.test(code) || IS_SIMPLE_PATH.test(code)) {
@@ -992,7 +994,7 @@ export function parseVOnExpression(
  */
 function parseVOnExpressionBody(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ): ExpressionParseResult<VOnExpression> {
     debug('[script] parse v-on expression: "void function($event){%s}"', code)
@@ -1066,7 +1068,7 @@ function parseVOnExpressionBody(
  */
 export function parseSlotScopeExpression(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ): ExpressionParseResult<VSlotScopeExpression> {
     debug('[script] parse slot-scope expression: "void function(%s) {}"', code)
