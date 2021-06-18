@@ -42,7 +42,8 @@ import {
 import type { ESLintCustomParser } from "./espree"
 import { getEspree } from "./espree"
 import type { ParserOptions } from "../common/parser-options"
-import { fixLocations } from "../common/fix-locations"
+import { fixErrorLocation, fixLocations } from "../common/fix-locations"
+import type { LocationFixCalculator } from "../common/location-fix-calculator"
 
 // [1] = aliases.
 // [2] = delimiter.
@@ -184,9 +185,9 @@ function throwErrorAsAdjustingOutsideOfCode(
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
-function parseScriptFragment(
+export function parseScriptFragment(
     code: string,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationFixCalculator,
     parserOptions: ParserOptions,
 ): ESLintExtendedProgram {
     try {
@@ -196,7 +197,7 @@ function parseScriptFragment(
     } catch (err) {
         const perr = ParseError.normalize(err)
         if (perr) {
-            locationCalculator.fixErrorLocation(perr)
+            fixErrorLocation(perr, locationCalculator)
             throw perr
         }
         throw err
@@ -580,125 +581,6 @@ export function parseScriptElement(
     }
 
     return result
-}
-
-/**
- * Parse the source code of the given `<script>` elements.
- * @param nodes The `<script>` elements to parse.
- * @param code The source code of SFC.
- * @param globalLocationCalculatorWithoutGapOffsets The location calculator for fixLocations.
- * @param parserOptions The parser options.
- * @returns The result of parsing.
- */
-export function parseScriptElements(
-    nodes: VElement[],
-    code: string,
-    globalLocationCalculatorWithoutGapOffsets: LocationCalculator,
-    parserOptions: ParserOptions,
-): ESLintExtendedProgram {
-    let scriptCode = ""
-    let startOffset = 0
-    const tagTokens: Token[] = []
-
-    let firstScriptTextNode: Token | null = null
-    for (const node of nodes) {
-        const scriptTextNode = node.children[0]
-        if (scriptTextNode.type === "VText") {
-            const scriptText = code.slice(...scriptTextNode.range)
-            if (!scriptCode) {
-                firstScriptTextNode = scriptTextNode
-                scriptCode += scriptText
-            } else {
-                const spaces = code
-                    .slice(startOffset, scriptTextNode.range[0])
-                    // eslint-disable-next-line require-unicode-regexp -- ignore u flag
-                    .replace(/[^\n\r\u2028\u2029 ]/g, " ")
-                scriptCode += spaces + scriptText
-            }
-            startOffset = scriptTextNode.range[1]
-
-            const startTag = node.startTag
-            const endTag = node.endTag
-            tagTokens.push({
-                type: "Punctuator",
-                range: startTag.range,
-                loc: startTag.loc,
-                value: "<script>",
-            })
-            if (endTag != null) {
-                tagTokens.push({
-                    type: "Punctuator",
-                    range: endTag.range,
-                    loc: endTag.loc,
-                    value: "</script>",
-                })
-            }
-        }
-    }
-    const offset =
-        firstScriptTextNode != null
-            ? firstScriptTextNode.range[0]
-            : nodes[0].startTag.range[1]
-
-    const locationCalculator =
-        globalLocationCalculatorWithoutGapOffsets.getSubCalculatorAfter(offset)
-    const result = parseScriptFragment(
-        scriptCode,
-        locationCalculator,
-        parserOptions,
-    )
-
-    if (result.ast.comments != null) {
-        for (const comment of result.ast.comments) {
-            for (const tagToken of tagTokens) {
-                checkIntersect(tagToken, comment)
-            }
-        }
-    }
-    if (result.ast.tokens != null) {
-        const newTokens: Token[] = []
-        let tagToken = tagTokens.shift()
-        for (const token of result.ast.tokens) {
-            while (tagToken && tagToken.range[0] < token.range[0]) {
-                newTokens.push(tagToken)
-                tagToken = tagTokens.shift()
-            }
-            checkIntersect(tagToken, token)
-            newTokens.push(token)
-        }
-        if (tagToken) {
-            newTokens.push(tagToken, ...tagTokens)
-        }
-        result.ast.tokens = newTokens
-    }
-
-    return result
-
-    /**
-     * Check if the tokens intersect.
-     */
-    function checkIntersect(tagToken: Token | undefined, token: Token) {
-        if (tagToken) {
-            if (
-                token.range[0] < tagToken.range[0] &&
-                tagToken.range[0] < token.range[1]
-            ) {
-                throw new ParseError(
-                    token.type === "Template"
-                        ? "Unterminated template literal"
-                        : token.type === "Block"
-                        ? "Unterminated comment"
-                        : token.type === "String"
-                        ? "Unterminated string constant"
-                        : `Unterminated '${token.type}'`,
-                    undefined,
-                    tagToken.range[0],
-                    tagToken.loc.start.line,
-                    tagToken.loc.start.column,
-                )
-            }
-        }
-    }
 }
 
 /**

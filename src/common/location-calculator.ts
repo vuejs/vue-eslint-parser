@@ -5,6 +5,9 @@
  */
 import sortedLastIndex from "lodash/sortedLastIndex"
 import type { HasLocation, Location, ParseError } from "../ast"
+import { fixErrorLocation, fixLocation } from "./fix-locations"
+import { LinesAndColumns } from "./lines-and-columns"
+import type { LocationFixCalculator } from "./location-fix-calculator"
 
 /**
  * Location calculators.
@@ -18,9 +21,11 @@ import type { HasLocation, Location, ParseError } from "../ast"
  * - Adjusts the locations of script ASTs.
  * - Creates expression containers in postprocess.
  */
-export class LocationCalculator {
+export class LocationCalculator
+    extends LinesAndColumns
+    implements LocationFixCalculator
+{
     private gapOffsets: number[]
-    private ltOffsets: number[]
     private baseOffset: number
     private baseIndexOfGap: number
     private shiftOffset: number
@@ -38,6 +43,7 @@ export class LocationCalculator {
         baseOffset?: number,
         shiftOffset = 0,
     ) {
+        super(ltOffsets)
         this.gapOffsets = gapOffsets
         this.ltOffsets = ltOffsets
         this.baseOffset = baseOffset || 0
@@ -77,26 +83,6 @@ export class LocationCalculator {
     }
 
     /**
-     * Calculate the location of the given index.
-     * @param index The index to calculate their location.
-     * @returns The location of the index.
-     */
-    public getLocFromIndex(index: number): Location {
-        return this._getLocation(index)
-    }
-
-    /**
-     * Calculate the location of the given offset.
-     * @param offset The offset to calculate their location.
-     * @returns The location of the offset.
-     */
-    private _getLocation(offset: number): Location {
-        const line = sortedLastIndex(this.ltOffsets, offset) + 1
-        const column = offset - (line === 1 ? 0 : this.ltOffsets[line - 2])
-        return { line, column }
-    }
-
-    /**
      * Calculate gap at the given index.
      * @param index The index to calculate gap.
      */
@@ -119,7 +105,7 @@ export class LocationCalculator {
      * @returns The location of the index.
      */
     public getLocation(index: number): Location {
-        return this._getLocation(this.baseOffset + index + this.shiftOffset)
+        return this.getLocFromIndex(this.baseOffset + index + this.shiftOffset)
     }
 
     /**
@@ -142,30 +128,17 @@ export class LocationCalculator {
      * @param node The node to modify their location.
      */
     public fixLocation<T extends HasLocation>(node: T): T {
+        return fixLocation(node, this)
+    }
+
+    /**
+     * Gets the fix location offset of the given offset with using the base offset of this calculator.
+     * @param offset The offset to modify.
+     */
+    public getFixOffset(offset: number): number {
         const shiftOffset = this.shiftOffset
-        const range = node.range
-        const loc = node.loc
-        const gap0 = this._getGap(range[0] + shiftOffset)
-        const gap1 = this._getGap(range[1] + shiftOffset)
-        const d0 = this.baseOffset + Math.max(0, gap0) + shiftOffset
-        const d1 = this.baseOffset + Math.max(0, gap1) + shiftOffset
-
-        if (d0 !== 0) {
-            range[0] += d0
-            if (node.start != null) {
-                node.start += d0
-            }
-            loc.start = this._getLocation(range[0])
-        }
-        if (d1 !== 0) {
-            range[1] += d1
-            if (node.end != null) {
-                node.end += d0
-            }
-            loc.end = this._getLocation(range[1])
-        }
-
-        return node
+        const gap = this._getGap(offset + shiftOffset)
+        return this.baseOffset + Math.max(0, gap) + shiftOffset
     }
 
     /**
@@ -173,14 +146,6 @@ export class LocationCalculator {
      * @param error The error to modify their location.
      */
     public fixErrorLocation(error: ParseError) {
-        const shiftOffset = this.shiftOffset
-        const gap = this._getGap(error.index + shiftOffset)
-        const diff = this.baseOffset + Math.max(0, gap) + shiftOffset
-
-        error.index += diff
-
-        const loc = this._getLocation(error.index)
-        error.lineNumber = loc.line
-        error.column = loc.column
+        fixErrorLocation(error, this)
     }
 }

@@ -7,9 +7,12 @@ import * as path from "path"
 import * as AST from "./ast"
 import { LocationCalculator } from "./common/location-calculator"
 import { HTMLParser, HTMLTokenizer } from "./html"
-import { parseScript, parseScriptElement, parseScriptElements } from "./script"
+import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
 import type { ParserOptions } from "./common/parser-options"
+import { parseScriptSetupElements } from "./script-setup"
+import { LinesAndColumns } from "./common/lines-and-columns"
+import type { VElement } from "./ast"
 
 const STARTS_WITH_LT = /^\s*</u
 
@@ -128,17 +131,18 @@ export function parseForESLint(
                 ? Object.assign(template, concreteInfo)
                 : undefined
 
+        let scriptSetup: VElement | undefined
         if (skipParsingScript || !scripts.length) {
             result = parseScript("", options)
         } else if (
             scripts.length === 2 &&
-            scripts.some(isScriptSetup) &&
-            scripts.some((e) => !isScriptSetup(e))
+            (scriptSetup = scripts.find(isScriptSetup))
         ) {
-            result = parseScriptElements(
-                scripts,
+            result = parseScriptSetupElements(
+                scriptSetup,
+                scripts.find((e) => e !== scriptSetup)!,
                 code,
-                new LocationCalculator([], tokenizer.lineTerminators),
+                new LinesAndColumns(tokenizer.lineTerminators),
                 options,
             )
         } else {
