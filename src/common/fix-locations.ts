@@ -1,4 +1,10 @@
-import type { ESLintExtendedProgram, LocationRange, Node } from "../ast"
+import type {
+    ESLintExtendedProgram,
+    HasLocation,
+    LocationRange,
+    Node,
+    ParseError,
+} from "../ast"
 import { traverseNodes } from "../ast"
 import type { LocationCalculator } from "./location-calculator"
 
@@ -42,7 +48,7 @@ export function fixLocations(
                         traversed.add(node.loc)
                     }
                 } else {
-                    locationCalculator.fixLocation(node)
+                    fixLocation(node, locationCalculator)
                     traversed.add(node.range)
                     traversed.add(node.loc)
                 }
@@ -55,9 +61,57 @@ export function fixLocations(
     })
 
     for (const token of result.ast.tokens || []) {
-        locationCalculator.fixLocation(token)
+        fixLocation(token, locationCalculator)
     }
     for (const comment of result.ast.comments || []) {
-        locationCalculator.fixLocation(comment)
+        fixLocation(comment, locationCalculator)
     }
+}
+
+/**
+ * Modify the location information of the given node with using the base offset and gaps of this calculator.
+ * @param node The node to modify their location.
+ */
+export function fixLocation<T extends HasLocation>(
+    node: T,
+    locationCalculator: LocationCalculator,
+): T {
+    const range = node.range
+    const loc = node.loc
+    const d0 = locationCalculator.getFixOffset(range[0], "start")
+    const d1 = locationCalculator.getFixOffset(range[1], "end")
+
+    if (d0 !== 0) {
+        range[0] += d0
+        if (node.start != null) {
+            node.start += d0
+        }
+        loc.start = locationCalculator.getLocFromIndex(range[0])
+    }
+    if (d1 !== 0) {
+        range[1] += d1
+        if (node.end != null) {
+            node.end += d0
+        }
+        loc.end = locationCalculator.getLocFromIndex(range[1])
+    }
+
+    return node
+}
+
+/**
+ * Modify the location information of the given error with using the base offset and gaps of this calculator.
+ * @param error The error to modify their location.
+ */
+export function fixErrorLocation(
+    error: ParseError,
+    locationCalculator: LocationCalculator,
+) {
+    const diff = locationCalculator.getFixOffset(error.index, "start")
+
+    error.index += diff
+
+    const loc = locationCalculator.getLocFromIndex(error.index)
+    error.lineNumber = loc.line
+    error.column = loc.column
 }

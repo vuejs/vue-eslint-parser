@@ -14,7 +14,7 @@ import type {
     VAttribute,
 } from "./ast"
 import { getFallbackKeys, KEYS, traverseNodes } from "./ast/traverse"
-import type { LocationCalculator } from "./common/location-calculator"
+import type { LocationCalculatorForHtml } from "./common/location-calculator"
 import type {
     CustomBlockContext,
     ESLintCustomBlockParser,
@@ -98,7 +98,7 @@ export function define(
     sourceText: string,
     rootAST: ESLintProgram,
     document: VDocumentFragment | null,
-    globalLocationCalculator: LocationCalculator | null,
+    globalLocationCalculator: LocationCalculatorForHtml | null,
     { parserOptions }: { parserOptions: ParserOptions },
 ): ParserServices {
     const customBlocksEmitters = new Map<

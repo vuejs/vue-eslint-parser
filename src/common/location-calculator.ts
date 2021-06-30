@@ -4,7 +4,26 @@
  * See LICENSE file in root directory for full license.
  */
 import sortedLastIndex from "lodash/sortedLastIndex"
-import type { HasLocation, Location, ParseError } from "../ast"
+import type { Location } from "../ast"
+import { LinesAndColumns } from "./lines-and-columns"
+
+/**
+ * Location calculators.
+ */
+export interface LocationCalculator {
+    /**
+     * Gets the fix location offset of the given offset with using the base offset of this calculator.
+     * @param offset The offset to modify.
+     */
+    getFixOffset(offset: number, kind: "start" | "end"): number
+
+    /**
+     * Calculate the location of the given index.
+     * @param index The index to calculate their location.
+     * @returns The location of the index.
+     */
+    getLocFromIndex(index: number): Location
+}
 
 /**
  * Location calculators.
@@ -18,9 +37,11 @@ import type { HasLocation, Location, ParseError } from "../ast"
  * - Adjusts the locations of script ASTs.
  * - Creates expression containers in postprocess.
  */
-export class LocationCalculator {
+export class LocationCalculatorForHtml
+    extends LinesAndColumns
+    implements LocationCalculator
+{
     private gapOffsets: number[]
-    private ltOffsets: number[]
     private baseOffset: number
     private baseIndexOfGap: number
     private shiftOffset: number
@@ -38,6 +59,7 @@ export class LocationCalculator {
         baseOffset?: number,
         shiftOffset = 0,
     ) {
+        super(ltOffsets)
         this.gapOffsets = gapOffsets
         this.ltOffsets = ltOffsets
         this.baseOffset = baseOffset || 0
@@ -53,8 +75,8 @@ export class LocationCalculator {
      * @param offset The base offset of new sub calculator.
      * @returns Sub calculator.
      */
-    public getSubCalculatorAfter(offset: number): LocationCalculator {
-        return new LocationCalculator(
+    public getSubCalculatorAfter(offset: number): LocationCalculatorForHtml {
+        return new LocationCalculatorForHtml(
             this.gapOffsets,
             this.ltOffsets,
             this.baseOffset + offset,
@@ -67,33 +89,13 @@ export class LocationCalculator {
      * @param offset The shift of new sub calculator.
      * @returns Sub calculator.
      */
-    public getSubCalculatorShift(offset: number): LocationCalculator {
-        return new LocationCalculator(
+    public getSubCalculatorShift(offset: number): LocationCalculatorForHtml {
+        return new LocationCalculatorForHtml(
             this.gapOffsets,
             this.ltOffsets,
             this.baseOffset,
             this.shiftOffset + offset,
         )
-    }
-
-    /**
-     * Calculate the location of the given index.
-     * @param index The index to calculate their location.
-     * @returns The location of the index.
-     */
-    public getLocFromIndex(index: number): Location {
-        return this._getLocation(index)
-    }
-
-    /**
-     * Calculate the location of the given offset.
-     * @param offset The offset to calculate their location.
-     * @returns The location of the offset.
-     */
-    private _getLocation(offset: number): Location {
-        const line = sortedLastIndex(this.ltOffsets, offset) + 1
-        const column = offset - (line === 1 ? 0 : this.ltOffsets[line - 2])
-        return { line, column }
     }
 
     /**
@@ -119,7 +121,7 @@ export class LocationCalculator {
      * @returns The location of the index.
      */
     public getLocation(index: number): Location {
-        return this._getLocation(this.baseOffset + index + this.shiftOffset)
+        return this.getLocFromIndex(this.baseOffset + index + this.shiftOffset)
     }
 
     /**
@@ -138,49 +140,12 @@ export class LocationCalculator {
     }
 
     /**
-     * Modify the location information of the given node with using the base offset and gaps of this calculator.
-     * @param node The node to modify their location.
+     * Gets the fix location offset of the given offset with using the base offset of this calculator.
+     * @param offset The offset to modify.
      */
-    public fixLocation<T extends HasLocation>(node: T): T {
+    public getFixOffset(offset: number): number {
         const shiftOffset = this.shiftOffset
-        const range = node.range
-        const loc = node.loc
-        const gap0 = this._getGap(range[0] + shiftOffset)
-        const gap1 = this._getGap(range[1] + shiftOffset)
-        const d0 = this.baseOffset + Math.max(0, gap0) + shiftOffset
-        const d1 = this.baseOffset + Math.max(0, gap1) + shiftOffset
-
-        if (d0 !== 0) {
-            range[0] += d0
-            if (node.start != null) {
-                node.start += d0
-            }
-            loc.start = this._getLocation(range[0])
-        }
-        if (d1 !== 0) {
-            range[1] += d1
-            if (node.end != null) {
-                node.end += d0
-            }
-            loc.end = this._getLocation(range[1])
-        }
-
-        return node
-    }
-
-    /**
-     * Modify the location information of the given error with using the base offset and gaps of this calculator.
-     * @param error The error to modify their location.
-     */
-    public fixErrorLocation(error: ParseError) {
-        const shiftOffset = this.shiftOffset
-        const gap = this._getGap(error.index + shiftOffset)
-        const diff = this.baseOffset + Math.max(0, gap) + shiftOffset
-
-        error.index += diff
-
-        const loc = this._getLocation(error.index)
-        error.lineNumber = loc.line
-        error.column = loc.column
+        const gap = this._getGap(offset + shiftOffset)
+        return this.baseOffset + Math.max(0, gap) + shiftOffset
     }
 }

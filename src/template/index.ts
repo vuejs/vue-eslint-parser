@@ -27,7 +27,7 @@ import type {
 } from "../ast"
 import { ParseError } from "../ast"
 import { debug } from "../common/debug"
-import type { LocationCalculator } from "../common/location-calculator"
+import type { LocationCalculatorForHtml } from "../common/location-calculator"
 import type { ExpressionParseResult } from "../script"
 import {
     parseExpression,
@@ -77,7 +77,7 @@ function createSimpleToken(
     start: number,
     end: number,
     value: string,
-    globalLocationCalculator: LocationCalculator,
+    globalLocationCalculator: LocationCalculatorForHtml,
 ): Token {
     return {
         type,
@@ -313,7 +313,7 @@ function convertDynamicArgument(
     node: VDirectiveKey,
     document: VDocumentFragment | null,
     parserOptions: ParserOptions,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
 ): void {
     const { argument } = node
     if (
@@ -398,7 +398,7 @@ function createDirectiveKey(
     node: VIdentifier,
     document: VDocumentFragment | null,
     parserOptions: ParserOptions,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
 ): VDirectiveKey {
     // Parse node and tokens.
     const directiveKey = parseDirectiveKeyStatically(node, document)
@@ -521,7 +521,7 @@ function insertError(
 function parseAttributeValue(
     code: string,
     parserOptions: ParserOptions,
-    globalLocationCalculator: LocationCalculator,
+    globalLocationCalculator: LocationCalculatorForHtml,
     node: VLiteral,
     tagName: string,
     directiveKey: VDirectiveKey,
@@ -653,7 +653,7 @@ export interface Mustache {
 export function convertToDirective(
     code: string,
     parserOptions: ParserOptions,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     node: VAttribute,
 ): void {
     debug(
@@ -756,7 +756,7 @@ export function convertToDirective(
  */
 export function processMustache(
     parserOptions: ParserOptions,
-    globalLocationCalculator: LocationCalculator,
+    globalLocationCalculator: LocationCalculatorForHtml,
     node: VExpressionContainer,
     mustache: Mustache,
 ): void {

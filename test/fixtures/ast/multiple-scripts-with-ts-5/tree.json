@@ -1,0 +1,45 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template><Foo>{{ count }}</Foo></template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<Foo>{{ count }}</Foo>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<Foo>",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{ count }}",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "count",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</Foo>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

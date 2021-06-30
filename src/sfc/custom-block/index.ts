@@ -12,8 +12,8 @@ import type {
     VText,
 } from "../../ast"
 import { getFallbackKeys, ParseError } from "../../ast"
-import { fixLocations } from "../../common/fix-locations"
-import type { LocationCalculator } from "../../common/location-calculator"
+import { fixErrorLocation, fixLocations } from "../../common/fix-locations"
+import type { LocationCalculatorForHtml } from "../../common/location-calculator"
 import type { ParserOptions } from "../../common/parser-options"
 
 export interface ESLintCustomBlockParser {
@@ -87,7 +87,7 @@ export function getLang(customBlock: VElement) {
 export function parseCustomBlockElement(
     node: VElement,
     parser: ESLintCustomBlockParser,
-    globalLocationCalculator: LocationCalculator,
+    globalLocationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ): ESLintExtendedProgram & { error?: ParseError | Error } {
     const text = node.children[0]
@@ -154,7 +154,7 @@ export function parseCustomBlockElement(
 function parseCustomBlockFragment(
     code: string,
     parser: ESLintCustomBlockParser,
-    locationCalculator: LocationCalculator,
+    locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ): ESLintExtendedProgram {
     try {
@@ -174,7 +174,7 @@ function parseCustomBlockFragment(
     } catch (err) {
         const perr = ParseError.normalize(err)
         if (perr) {
-            locationCalculator.fixErrorLocation(perr)
+            fixErrorLocation(perr, locationCalculator)
             throw perr
         }
         throw err
@@ -215,7 +215,7 @@ export function createCustomBlockSharedContext({
     text: string
     customBlock: VElement
     parsedResult: ESLintExtendedProgram & { error?: ParseError | Error }
-    globalLocationCalculator: LocationCalculator
+    globalLocationCalculator: LocationCalculatorForHtml
     parserOptions: any
 }) {
     let sourceCode: SourceCode

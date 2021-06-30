@@ -18,7 +18,7 @@ import type {
 } from "../ast"
 import { NS, ParseError } from "../ast"
 import { debug } from "../common/debug"
-import { LocationCalculator } from "../common/location-calculator"
+import { LocationCalculatorForHtml } from "../common/location-calculator"
 import {
     convertToDirective,
     processMustache,
@@ -161,7 +161,7 @@ function propagateEndLocation(node: VDocumentFragment | VElement): void {
  */
 export class Parser {
     private tokenizer: IntermediateTokenizer
-    private locationCalculator: LocationCalculator
+    private locationCalculator: LocationCalculatorForHtml
     private parserOptions: ParserOptions
     private isSFC: boolean
     private document: VDocumentFragment
@@ -239,7 +239,7 @@ export class Parser {
      */
     public constructor(tokenizer: Tokenizer, parserOptions: ParserOptions) {
         this.tokenizer = new IntermediateTokenizer(tokenizer)
-        this.locationCalculator = new LocationCalculator(
+        this.locationCalculator = new LocationCalculatorForHtml(
             tokenizer.gaps,
             tokenizer.lineTerminators,
         )

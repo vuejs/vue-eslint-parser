@@ -15,6 +15,7 @@ const path = require("path")
 const lodash = require("lodash")
 const parser = require("../src")
 const Linter = require("./fixtures/eslint").Linter
+const semver = require("semver")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -173,15 +174,29 @@ describe("Template AST", () => {
     for (const name of TARGETS) {
         const sourcePath = path.join(ROOT, `${name}/source.vue`)
         const optionsPath = path.join(ROOT, `${name}/parser-options.json`)
+        const requirementsPath = path.join(ROOT, `${name}/requirements.json`)
         const source = fs.readFileSync(sourcePath, "utf8")
         const parserOptions = fs.existsSync(optionsPath)
             ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
+            : {}
+        const requirements = fs.existsSync(requirementsPath)
+            ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
             : {}
         const options = Object.assign(
             { filePath: sourcePath },
             PARSER_OPTIONS,
             parserOptions
         )
+
+        if (
+            Object.entries(requirements).some(([pkgName, pkgVersion]) => {
+                const pkg = require(`${pkgName}/package.json`)
+                return !semver.satisfies(pkg.version, pkgVersion)
+            })
+        ) {
+            continue
+        }
+
         const actual = parser.parseForESLint(source, options)
 
         describe(`'test/fixtures/ast/${name}/source.vue'`, () => {

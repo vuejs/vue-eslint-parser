@@ -5,11 +5,14 @@
  */
 import * as path from "path"
 import * as AST from "./ast"
-import { LocationCalculator } from "./common/location-calculator"
+import { LocationCalculatorForHtml } from "./common/location-calculator"
 import { HTMLParser, HTMLTokenizer } from "./html"
 import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
 import type { ParserOptions } from "./common/parser-options"
+import { parseScriptSetupElements } from "./script-setup"
+import { LinesAndColumns } from "./common/lines-and-columns"
+import type { VElement } from "./ast"
 
 const STARTS_WITH_LT = /^\s*</u
 
@@ -69,6 +72,15 @@ function getLang(
 }
 
 /**
+ * Checks whether the given script element is `<script setup>`.
+ */
+function isScriptSetup(script: AST.VElement): boolean {
+    return script.startTag.attributes.some(
+        (attr) => !attr.directive && attr.key.name === "setup",
+    )
+}
+
+/**
  * Parse the given source code.
  * @param code The source code to parse.
  * @param options The parser options.
@@ -92,7 +104,7 @@ export function parseForESLint(
 
     let result: AST.ESLintExtendedProgram
     let document: AST.VDocumentFragment | null
-    let locationCalculator: LocationCalculator | null
+    let locationCalculator: LocationCalculatorForHtml | null
     if (!isVueFile(code, options)) {
         result = parseScript(code, options)
         document = null
@@ -101,11 +113,12 @@ export function parseForESLint(
         const skipParsingScript = options.parser === false
         const tokenizer = new HTMLTokenizer(code, options)
         const rootAST = new HTMLParser(tokenizer, options).parse()
-        locationCalculator = new LocationCalculator(
+
+        locationCalculator = new LocationCalculatorForHtml(
             tokenizer.gaps,
             tokenizer.lineTerminators,
         )
-        const script = rootAST.children.find(isScriptElement)
+        const scripts = rootAST.children.filter(isScriptElement)
         const template = rootAST.children.find(isTemplateElement)
         const templateLang = getLang(template, "html")
         const concreteInfo: AST.HasConcreteInfo = {
@@ -118,10 +131,22 @@ export function parseForESLint(
                 ? Object.assign(template, concreteInfo)
                 : undefined
 
-        if (skipParsingScript || script == null) {
+        let scriptSetup: VElement | undefined
+        if (skipParsingScript || !scripts.length) {
             result = parseScript("", options)
+        } else if (
+            scripts.length === 2 &&
+            (scriptSetup = scripts.find(isScriptSetup))
+        ) {
+            result = parseScriptSetupElements(
+                scriptSetup,
+                scripts.find((e) => e !== scriptSetup)!,
+                code,
+                new LinesAndColumns(tokenizer.lineTerminators),
+                options,
+            )
         } else {
-            result = parseScriptElement(script, locationCalculator, options)
+            result = parseScriptElement(scripts[0], locationCalculator, options)
         }
 
         result.ast.templateBody = templateBody
