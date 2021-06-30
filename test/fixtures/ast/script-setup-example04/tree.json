@@ -1,0 +1,55 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <div>{{ msg }}</div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>{{ msg }}</div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{ msg }}",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "msg",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

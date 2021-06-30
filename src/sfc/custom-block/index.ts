@@ -1,6 +1,5 @@
 import type { Rule, SourceCode } from "eslint"
 import type { ScopeManager, Scope } from "eslint-scope"
-import escope from "eslint-scope"
 import type {
     ESLintExtendedProgram,
     Node,
@@ -12,6 +11,8 @@ import type {
     VText,
 } from "../../ast"
 import { getFallbackKeys, ParseError } from "../../ast"
+import { getEslintScope } from "../../common/eslint-scope"
+import { getEcmaVersionIfUseEspree } from "../../common/espree"
 import { fixErrorLocation, fixLocations } from "../../common/fix-locations"
 import type { LocationCalculatorForHtml } from "../../common/location-calculator"
 import type { ParserOptions } from "../../common/parser-options"
@@ -280,10 +281,10 @@ export function createCustomBlockSharedContext({
             return parsedResult.scopeManager || scopeManager
         }
 
-        const ecmaVersion = parserOptions.ecmaVersion || 2017
+        const ecmaVersion = getEcmaVersionIfUseEspree(parserOptions) || 2022
         const ecmaFeatures = parserOptions.ecmaFeatures || {}
         const sourceType = parserOptions.sourceType || "script"
-        scopeManager = escope.analyze(parsedResult.ast, {
+        scopeManager = getEslintScope().analyze(parsedResult.ast, {
             ignoreEval: true,
             nodejsScope: false,
             impliedStrict: ecmaFeatures.impliedStrict,

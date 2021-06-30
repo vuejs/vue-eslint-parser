@@ -23,7 +23,7 @@ const PARSER_PATH = path.resolve(__dirname, "../src/index.ts")
 const LINTER_CONFIG = {
     parser: PARSER_PATH,
     parserOptions: {
-        ecmaVersion: 2018,
+        ecmaVersion: 2015,
     },
     rules: {
         "test-no-number-literal": "error",

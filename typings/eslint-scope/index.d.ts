@@ -3,7 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import * as estree from "estree"
+import type * as estree from "estree"
 
 export interface AnalysisOptions {
     optimistic?: boolean
@@ -75,5 +75,6 @@ export interface Reference {
 
 declare const eslintScope: {
     analyze(ast: object, options?: AnalysisOptions): ScopeManager
+    version: string
 }
 export default eslintScope

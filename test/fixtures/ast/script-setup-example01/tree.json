@@ -1,0 +1,106 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <Foo :count=\"count\" @click=\"inc\" />\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<Foo :count=\"count\" @click=\"inc\" />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<Foo :count=\"count\" @click=\"inc\" />",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":count=\"count\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":count",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "count",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"count\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "count",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "@click=\"inc\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "@click",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "@",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "click",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"inc\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "inc",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
