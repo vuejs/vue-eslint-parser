@@ -98,7 +98,6 @@ export function parseScriptSetupElements(
 ): ESLintExtendedProgram {
     const parserOptions: ParserOptions = getScriptSetupParserOptions(
         originalParserOptions,
-        scriptSetupElement,
     )
     const scriptSetupCodeBlocks = getScriptsCodeBlocks(
         scriptSetupElement,

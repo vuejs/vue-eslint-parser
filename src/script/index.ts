@@ -561,7 +561,7 @@ export function parseScriptElement(
     originalParserOptions: ParserOptions,
 ): ESLintExtendedProgram {
     const parserOptions: ParserOptions = isScriptSetup(node)
-        ? getScriptSetupParserOptions(originalParserOptions, node)
+        ? getScriptSetupParserOptions(originalParserOptions)
         : originalParserOptions
 
     const text = node.children[0]

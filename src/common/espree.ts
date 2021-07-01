@@ -99,6 +99,7 @@ function getNewestEspree(): Espree {
 
 export function getEcmaVersionIfUseEspree(
     parserOptions: ParserOptions,
+    getDefault?: (defaultVer: number) => number,
 ): number | undefined {
     if (parserOptions.parser != null && parserOptions.parser !== "espree") {
         return undefined
@@ -108,13 +109,18 @@ export function getEcmaVersionIfUseEspree(
         return normalizeEcmaVersion(getNewestEspree().latestEcmaVersion)
     }
     if (parserOptions.ecmaVersion == null) {
-        if (lt(getEspreeFromLinter().version, "9.0.0")) {
-            return 5
-        }
-        // Perhaps the version 9 will change the default to "latest".
-        return normalizeEcmaVersion(getNewestEspree().latestEcmaVersion)
+        const defVer = getDefaultEcmaVersion()
+        return getDefault?.(defVer) ?? defVer
     }
     return normalizeEcmaVersion(parserOptions.ecmaVersion)
+}
+
+function getDefaultEcmaVersion(): number {
+    if (lt(getEspreeFromLinter().version, "9.0.0")) {
+        return 5
+    }
+    // Perhaps the version 9 will change the default to "latest".
+    return normalizeEcmaVersion(getNewestEspree().latestEcmaVersion)
 }
 
 /**
