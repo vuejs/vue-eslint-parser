@@ -562,7 +562,10 @@ export function parseScriptElement(
 ): ESLintExtendedProgram {
     const parserOptions: ParserOptions = isScriptSetup(node)
         ? getScriptSetupParserOptions(originalParserOptions)
-        : originalParserOptions
+        : {
+              ...originalParserOptions,
+              ecmaVersion: originalParserOptions.ecmaVersion || 2017,
+          }
 
     const text = node.children[0]
     const { code, offset } =
