@@ -40,7 +40,6 @@ import type {
 } from "../common/location-calculator"
 import {
     analyzeExternalReferences,
-    analyzeScope,
     analyzeVariablesAndExternalReferences,
 } from "./scope-analyzer"
 import type { ESLintCustomParser } from "../common/espree"
