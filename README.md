@@ -170,12 +170,46 @@ But, it cannot be parsed with Vue 2.
 ## 🎇 Usage for custom rules / plugins
 
 - This parser provides `parserServices` to traverse `<template>`.
-    - `defineTemplateBodyVisitor(templateVisitor, scriptVisitor)` ... returns ESLint visitor to traverse `<template>`.
+    - `defineTemplateBodyVisitor(templateVisitor, scriptVisitor, options)` ... returns ESLint visitor to traverse `<template>`.
     - `getTemplateBodyTokenStore()` ... returns ESLint `TokenStore` to get the tokens of `<template>`.
     - `getDocumentFragment()` ... returns the root `VDocumentFragment`.
     - `defineCustomBlocksVisitor(context, customParser, rule, scriptVisitor)` ... returns ESLint visitor that parses and traverses the contents of the custom block.
 - [ast.md](./docs/ast.md) is `<template>` AST specification.
 - [mustache-interpolation-spacing.js](https://github.com/vuejs/eslint-plugin-vue/blob/b434ff99d37f35570fa351681e43ba2cf5746db3/lib/rules/mustache-interpolation-spacing.js) is an example.
+
+### `defineTemplateBodyVisitor(templateBodyVisitor, scriptVisitor, options)`
+
+*Arguments*
+
+- `templateBodyVisitor` ... Event handlers for `<template>`.
+- `scriptVisitor` ... Event handlers for `<script>` or scripts. (optional)
+- `options` ... Options. (optional)
+  - `templateBodyTriggerSelector` ... Script AST node selector that triggers the templateBodyVisitor. Default is `"Program:exit"`. (optional)
+
+```ts
+import { AST } from "vue-eslint-parser"
+
+export function create(context) {
+    return context.parserServices.defineTemplateBodyVisitor(
+        // Event handlers for <template>.
+        {
+            VElement(node: AST.VElement): void {
+                //...
+            }
+        },
+        // Event handlers for <script> or scripts. (optional)
+        {
+            Program(node: AST.ESLintProgram): void {
+                //...
+            }
+        },
+        // Options. (optional)
+        {
+            templateBodyTriggerSelector: "Program:exit"
+        }
+    )
+}
+```
 
 ## ⚠️ Known Limitations
 

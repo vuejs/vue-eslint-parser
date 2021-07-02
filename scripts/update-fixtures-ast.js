@@ -22,7 +22,7 @@ const ROOT = path.join(__dirname, "../test/fixtures/ast")
 const TARGETS = fs.readdirSync(ROOT)
 const PARSER_OPTIONS = {
     comment: true,
-    ecmaVersion: 2018,
+    ecmaVersion: 2022,
     loc: true,
     range: true,
     tokens: true,

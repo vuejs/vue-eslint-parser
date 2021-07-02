@@ -15,6 +15,7 @@ import type { LinesAndColumns } from "../common/lines-and-columns"
 import type { LocationCalculator } from "../common/location-calculator"
 import type { ParserOptions } from "../common/parser-options"
 import { parseScript, parseScriptFragment } from "../script"
+import { getScriptSetupParserOptions } from "./parser-options"
 
 type RemapBlock = {
     range: [number, number]
@@ -42,8 +43,8 @@ class CodeBlocks {
         })
     }
     public appendSplitPunctuators(punctuator: string) {
-        this.splitPunctuators.push(this.code.length)
-        this.code += `${punctuator}\n`
+        this.splitPunctuators.push(this.code.length, this.code.length + 1)
+        this.code += `\n${punctuator}\n`
     }
     public appendCodeBlocks(codeBlocks: CodeBlocks) {
         const start = this.code.length
@@ -71,6 +72,15 @@ type ScriptSetupCodeBlocks = {
 }
 
 /**
+ * Checks whether the given script element is `<script setup>`.
+ */
+export function isScriptSetup(script: VElement): boolean {
+    return script.startTag.attributes.some(
+        (attr) => !attr.directive && attr.key.name === "setup",
+    )
+}
+
+/**
  * Parse the source code of the given `<script setup>` and `<script>` elements.
  * @param scriptSetupElement The `<script setup>` element to parse.
  * @param nodes The `<script>` elements to parse.
@@ -86,16 +96,9 @@ export function parseScriptSetupElements(
     linesAndColumns: LinesAndColumns,
     originalParserOptions: ParserOptions,
 ): ESLintExtendedProgram {
-    const parserOptions: ParserOptions = {
-        ...originalParserOptions,
-        // enforce module
-        sourceType: "module",
-        ecmaVersion:
-            typeof originalParserOptions.ecmaVersion === "number" &&
-            originalParserOptions.ecmaVersion > 5
-                ? originalParserOptions.ecmaVersion
-                : 2015,
-    }
+    const parserOptions: ParserOptions = getScriptSetupParserOptions(
+        originalParserOptions,
+    )
     const scriptSetupCodeBlocks = getScriptsCodeBlocks(
         scriptSetupElement,
         scriptElement,
@@ -513,10 +516,10 @@ function remapLocationAndTokens(
     traverseNodes(result.ast, {
         visitorKeys: result.visitorKeys,
         enterNode(node) {
-            if (codeBlocks.splitPunctuators.includes(node.range[1] - 1)) {
+            while (codeBlocks.splitPunctuators.includes(node.range[1] - 1)) {
                 node.range[1]--
             }
-            if (
+            while (
                 node.end != null &&
                 codeBlocks.splitPunctuators.includes(node.end - 1)
             ) {

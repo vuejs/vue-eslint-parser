@@ -4,7 +4,6 @@
  * See LICENSE file in root directory for full license.
  */
 import type * as escopeTypes from "eslint-scope"
-import escope from "eslint-scope"
 import type { ParserOptions } from "../common/parser-options"
 import type {
     ESLintIdentifier,
@@ -13,6 +12,8 @@ import type {
     Variable,
 } from "../ast"
 import { getFallbackKeys } from "../ast"
+import { getEslintScope } from "../common/eslint-scope"
+import { getEcmaVersionIfUseEspree } from "../common/espree"
 
 /**
  * Check whether the given reference is unique in the belonging array.
@@ -94,10 +95,10 @@ function analyze(
     ast: ESLintProgram,
     parserOptions: ParserOptions,
 ): escopeTypes.Scope {
-    const ecmaVersion = parserOptions.ecmaVersion || 2017
+    const ecmaVersion = getEcmaVersionIfUseEspree(parserOptions) || 2022
     const ecmaFeatures = parserOptions.ecmaFeatures || {}
     const sourceType = parserOptions.sourceType || "script"
-    const result = escope.analyze(ast, {
+    const result = getEslintScope().analyze(ast, {
         ignoreEval: true,
         nodejsScope: false,
         impliedStrict: ecmaFeatures.impliedStrict,

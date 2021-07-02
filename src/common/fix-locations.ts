@@ -23,14 +23,14 @@ export function fixLocations(
 ): void {
     // There are cases which the same node instance appears twice in the tree.
     // E.g. `let {a} = {}` // This `a` appears twice at `Property#key` and `Property#value`.
-    const traversed = new Set<Node | number[] | LocationRange>()
+    const traversed = new Map<Node | number[] | LocationRange, Node>()
 
     traverseNodes(result.ast, {
         visitorKeys: result.visitorKeys,
 
         enterNode(node, parent) {
             if (!traversed.has(node)) {
-                traversed.add(node)
+                traversed.set(node, node)
                 node.parent = parent
 
                 // `babel-eslint@8` has shared `Node#range` with multiple nodes.
@@ -45,12 +45,18 @@ export function fixLocations(
                         node.loc.end = locationCalculator.getLocFromIndex(
                             node.range[1],
                         )
-                        traversed.add(node.loc)
+                        traversed.set(node.loc, node)
+                    } else if (node.start != null || node.end != null) {
+                        const traversedNode = traversed.get(node.range)!
+                        if (traversedNode.type === node.type) {
+                            node.start = traversedNode.start
+                            node.end = traversedNode.end
+                        }
                     }
                 } else {
                     fixLocation(node, locationCalculator)
-                    traversed.add(node.range)
-                    traversed.add(node.loc)
+                    traversed.set(node.range, node)
+                    traversed.set(node.loc, node)
                 }
             }
         },

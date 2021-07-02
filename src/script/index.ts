@@ -42,14 +42,19 @@ import {
     analyzeExternalReferences,
     analyzeVariablesAndExternalReferences,
 } from "./scope-analyzer"
-import type { ESLintCustomParser } from "./espree"
-import { getEspree } from "./espree"
+import type { ESLintCustomParser } from "../common/espree"
+import {
+    getEspreeFromEcmaVersion,
+    getEcmaVersionIfUseEspree,
+} from "../common/espree"
 import type { ParserOptions } from "../common/parser-options"
 import {
     fixErrorLocation,
     fixLocation,
     fixLocations,
 } from "../common/fix-locations"
+import { isScriptSetup } from "../script-setup"
+import { getScriptSetupParserOptions } from "../script-setup/parser-options"
 
 // [1] = aliases.
 // [2] = delimiter.
@@ -531,7 +536,7 @@ export function parseScript(
         typeof parserOptions.parser === "string"
             ? // eslint-disable-next-line @mysticatea/ts/no-require-imports
               require(parserOptions.parser)
-            : getEspree()
+            : getEspreeFromEcmaVersion(parserOptions.ecmaVersion)
     const result: any =
         typeof parser.parseForESLint === "function"
             ? parser.parseForESLint(code, parserOptions)
@@ -553,8 +558,12 @@ export function parseScript(
 export function parseScriptElement(
     node: VElement,
     globalLocationCalculator: LocationCalculatorForHtml,
-    parserOptions: ParserOptions,
+    originalParserOptions: ParserOptions,
 ): ESLintExtendedProgram {
+    const parserOptions: ParserOptions = isScriptSetup(node)
+        ? getScriptSetupParserOptions(originalParserOptions)
+        : originalParserOptions
+
     const text = node.children[0]
     const { code, offset } =
         text != null && text.type === "VText"
@@ -793,10 +802,8 @@ export function parseVForExpression(
 }
 
 function isEcmaVersion5(parserOptions: ParserOptions) {
-    return (
-        (parserOptions.ecmaVersion == null || parserOptions.ecmaVersion <= 5) &&
-        (parserOptions.parser == null || parserOptions.parser === "espree")
-    )
+    const ecmaVersion = getEcmaVersionIfUseEspree(parserOptions)
+    return ecmaVersion != null && ecmaVersion <= 5
 }
 
 function parseVForExpressionForEcmaVersion5(

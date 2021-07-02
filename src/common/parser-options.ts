@@ -9,7 +9,7 @@ export interface ParserOptions {
     }
 
     // espree options
-    ecmaVersion?: number
+    ecmaVersion?: number | "latest"
     sourceType?: "script" | "module"
     ecmaFeatures?: { [key: string]: any }
 

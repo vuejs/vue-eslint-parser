@@ -39,9 +39,6 @@ type CustomBlockVisitorFactory = (context: CustomBlockContext) =>
     | null
     | undefined
 
-const emitters = new WeakMap<object, EventEmitter>()
-const stores = new WeakMap<object, TokenStore>()
-
 //------------------------------------------------------------------------------
 // Exports
 //------------------------------------------------------------------------------
@@ -51,10 +48,12 @@ export interface ParserServices {
      * Define handlers to traverse the template body.
      * @param templateBodyVisitor The template body handlers.
      * @param scriptVisitor The script handlers. This is optional.
+     * @param options The options. This is optional.
      */
     defineTemplateBodyVisitor(
         templateBodyVisitor: { [key: string]: (...args: any) => void },
         scriptVisitor?: { [key: string]: (...args: any) => void },
+        options?: { templateBodyTriggerSelector: "Program" | "Program:exit" },
     ): object
 
     /**
@@ -101,8 +100,12 @@ export function define(
     globalLocationCalculator: LocationCalculatorForHtml | null,
     { parserOptions }: { parserOptions: ParserOptions },
 ): ParserServices {
+    const templateBodyEmitters = new Map<string, EventEmitter>()
+    const stores = new WeakMap<object, TokenStore>()
+
     const customBlocksEmitters = new Map<
-        ESLintCustomBlockParser,
+        | ESLintCustomBlockParser["parseForESLint"]
+        | ESLintCustomBlockParser["parse"],
         {
             context: Rule.RuleContext
             test: (lang: string | null, customBlock: VElement) => boolean
@@ -121,6 +124,9 @@ export function define(
         defineTemplateBodyVisitor(
             templateBodyVisitor: { [key: string]: (...args: any) => void },
             scriptVisitor?: { [key: string]: (...args: any) => void },
+            options?: {
+                templateBodyTriggerSelector: "Program" | "Program:exit"
+            },
         ): object {
             if (scriptVisitor == null) {
                 scriptVisitor = {} //eslint-disable-line no-param-reassign
@@ -128,30 +134,30 @@ export function define(
             if (rootAST.templateBody == null) {
                 return scriptVisitor
             }
+            const templateBodyTriggerSelector =
+                options?.templateBodyTriggerSelector ?? "Program:exit"
 
-            let emitter = emitters.get(rootAST)
+            let emitter = templateBodyEmitters.get(templateBodyTriggerSelector)
 
             // If this is the first time, initialize the intermediate event emitter.
             if (emitter == null) {
                 emitter = new EventEmitter()
                 emitter.setMaxListeners(0)
-                emitters.set(rootAST, emitter)
+                templateBodyEmitters.set(templateBodyTriggerSelector, emitter)
 
-                const programExitHandler = scriptVisitor["Program:exit"]
-                scriptVisitor["Program:exit"] = (node) => {
+                const programExitHandler =
+                    scriptVisitor[templateBodyTriggerSelector]
+                scriptVisitor[templateBodyTriggerSelector] = (node) => {
                     try {
                         if (typeof programExitHandler === "function") {
                             programExitHandler(node)
                         }
 
                         // Traverse template body.
-                        const generator = new NodeEventGenerator(
-                            emitter as EventEmitter,
-                            {
-                                visitorKeys: KEYS,
-                                fallback: getFallbackKeys,
-                            },
-                        )
+                        const generator = new NodeEventGenerator(emitter!, {
+                            visitorKeys: KEYS,
+                            fallback: getFallbackKeys,
+                        })
                         traverseNodes(
                             rootAST.templateBody as VElement,
                             generator,
@@ -159,8 +165,9 @@ export function define(
                     } finally {
                         // eslint-disable-next-line @mysticatea/ts/ban-ts-ignore
                         // @ts-ignore
-                        scriptVisitor["Program:exit"] = programExitHandler
-                        emitters.delete(rootAST)
+                        scriptVisitor[templateBodyTriggerSelector] =
+                            programExitHandler
+                        templateBodyEmitters.delete(templateBodyTriggerSelector)
                     }
                 }
             }
@@ -210,12 +217,13 @@ export function define(
             if (!customBlocks.length || globalLocationCalculator == null) {
                 return {}
             }
-            let factories = customBlocksEmitters.get(parser)
+            const key = parser.parseForESLint ?? parser.parse
+            let factories = customBlocksEmitters.get(key)
 
             // If this is the first time, initialize the intermediate event emitter.
             if (factories == null) {
                 factories = []
-                customBlocksEmitters.set(parser, factories)
+                customBlocksEmitters.set(key, factories)
                 const visitorFactories = factories
 
                 const programExitHandler = scriptVisitor["Program:exit"]
@@ -296,7 +304,7 @@ export function define(
                         // eslint-disable-next-line @mysticatea/ts/ban-ts-ignore
                         // @ts-ignore
                         scriptVisitor["Program:exit"] = programExitHandler
-                        customBlocksEmitters.delete(parser)
+                        customBlocksEmitters.delete(key)
                     }
                 }
             }

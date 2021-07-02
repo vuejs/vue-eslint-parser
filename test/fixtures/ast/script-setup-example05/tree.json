@@ -1,0 +1,60 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <Foo />\n  <!-- kebab-case also works -->\n  <my-component />\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<Foo />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<Foo />",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<my-component />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<my-component />",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

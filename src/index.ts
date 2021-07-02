@@ -10,7 +10,7 @@ import { HTMLParser, HTMLTokenizer } from "./html"
 import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
 import type { ParserOptions } from "./common/parser-options"
-import { parseScriptSetupElements } from "./script-setup"
+import { isScriptSetup, parseScriptSetupElements } from "./script-setup"
 import { LinesAndColumns } from "./common/lines-and-columns"
 import type { VElement } from "./ast"
 
@@ -69,15 +69,6 @@ function getLang(
     const langAttr = element && element.startTag.attributes.find(isLang)
     const lang = langAttr && langAttr.value && langAttr.value.value
     return lang || defaultLang
-}
-
-/**
- * Checks whether the given script element is `<script setup>`.
- */
-function isScriptSetup(script: AST.VElement): boolean {
-    return script.startTag.attributes.some(
-        (attr) => !attr.directive && attr.key.name === "setup",
-    )
 }
 
 /**
