@@ -4,6 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import type * as estree from "estree"
+import type { VisitorKeys } from "eslint-visitor-keys"
 
 export interface AnalysisOptions {
     optimistic?: boolean
@@ -14,6 +15,7 @@ export interface AnalysisOptions {
     fallback?: string | Function
     sourceType?: "script" | "module"
     ecmaVersion?: number
+    childVisitorKeys?: VisitorKeys
 }
 
 export interface ScopeManager {

@@ -85,7 +85,6 @@ export function parseForESLint(
     options = Object.assign(
         {
             comment: true,
-            ecmaVersion: 2017,
             loc: true,
             range: true,
             tokens: true,
@@ -97,7 +96,10 @@ export function parseForESLint(
     let document: AST.VDocumentFragment | null
     let locationCalculator: LocationCalculatorForHtml | null
     if (!isVueFile(code, options)) {
-        result = parseScript(code, options)
+        result = parseScript(code, {
+            ecmaVersion: 2017,
+            ...options,
+        })
         document = null
         locationCalculator = null
     } else {

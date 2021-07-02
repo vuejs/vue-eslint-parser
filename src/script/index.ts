@@ -40,6 +40,7 @@ import type {
 } from "../common/location-calculator"
 import {
     analyzeExternalReferences,
+    analyzeScope,
     analyzeVariablesAndExternalReferences,
 } from "./scope-analyzer"
 import type { ESLintCustomParser } from "../common/espree"
@@ -562,7 +563,10 @@ export function parseScriptElement(
 ): ESLintExtendedProgram {
     const parserOptions: ParserOptions = isScriptSetup(node)
         ? getScriptSetupParserOptions(originalParserOptions)
-        : originalParserOptions
+        : {
+              ecmaVersion: 2017,
+              ...originalParserOptions,
+          }
 
     const text = node.children[0]
     const { code, offset } =

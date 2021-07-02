@@ -15,6 +15,7 @@ import type { LinesAndColumns } from "../common/lines-and-columns"
 import type { LocationCalculator } from "../common/location-calculator"
 import type { ParserOptions } from "../common/parser-options"
 import { parseScript, parseScriptFragment } from "../script"
+import { analyzeScope } from "../script/scope-analyzer"
 import { getScriptSetupParserOptions } from "./parser-options"
 
 type RemapBlock = {
@@ -198,6 +199,17 @@ export function parseScriptSetupElements(
                 )
             },
             0,
+        )
+    }
+
+    if (
+        originalParserOptions.sourceType !== parserOptions.sourceType &&
+        !result.scopeManager
+    ) {
+        result.scopeManager = analyzeScope(
+            result.ast,
+            parserOptions,
+            result.visitorKeys,
         )
     }
 

@@ -16,8 +16,6 @@ export function getScriptSetupParserOptions(
     )
 
     return {
-        // Script setup requires module support, so set module to sourceType.
-        sourceType: "module",
         ...parserOptions,
         ecmaVersion: espreeEcmaVersion,
     }
@@ -28,5 +26,5 @@ function getDefaultEcmaVersion(def: number) {
         // Script setup requires top level await support, so default the ecma version to 2022.
         return getEspreeFromLinter().latestEcmaVersion!
     }
-    return Math.max(def, 2015)
+    return Math.max(def, 2017)
 }

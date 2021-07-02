@@ -36,5 +36,21 @@ describe("parserOptions", () => {
             assert.strictEqual(messages.length, 1)
             assert.strictEqual(messages[0].ruleId, "vue/valid-template-root")
         })
+
+        it("Fail in <script setup> without sourceType.", () => {
+            const code = `<template>Hello</template>
+<script setup>import Foo from './foo'</script>`
+            const config = {
+                parser: "vue-eslint-parser",
+                parserOptions: {},
+                rules: {
+                    "vue/valid-template-root": "error",
+                },
+            }
+            const messages = linter.verify(code, config, "test.vue")
+
+            assert.strictEqual(messages.length, 1)
+            assert.strictEqual(messages[0].fatal, true)
+        })
     })
 })
