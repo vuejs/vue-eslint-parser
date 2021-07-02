@@ -26,7 +26,7 @@ const ROOT = path.join(__dirname, "fixtures/ast")
 const TARGETS = fs.readdirSync(ROOT)
 const PARSER_OPTIONS = {
     comment: true,
-    ecmaVersion: 2022,
+    ecmaVersion: 2020,
     loc: true,
     range: true,
     tokens: true,
@@ -100,7 +100,7 @@ function getTree(source, parserOptions) {
         source,
         {
             parser: PARSER,
-            parserOptions: Object.assign({ ecmaVersion: 2022 }, parserOptions),
+            parserOptions: Object.assign({ ecmaVersion: 2020 }, parserOptions),
             rules: { maketree: "error" },
         },
         undefined,

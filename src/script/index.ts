@@ -44,8 +44,9 @@ import {
 } from "./scope-analyzer"
 import type { ESLintCustomParser } from "../common/espree"
 import {
-    getEspreeFromEcmaVersion,
     getEcmaVersionIfUseEspree,
+    getEspreeFromUser,
+    getEspreeFromEcmaVersion,
 } from "../common/espree"
 import type { ParserOptions } from "../common/parser-options"
 import {
@@ -521,6 +522,14 @@ export interface ExpressionParseResult<T extends Node> {
     variables: Variable[]
 }
 
+function loadParser(parser: string) {
+    if (parser !== "espree") {
+        // eslint-disable-next-line @mysticatea/ts/no-require-imports
+        return require(parser)
+    }
+    return getEspreeFromUser()
+}
+
 /**
  * Parse the given source code.
  *
@@ -534,9 +543,9 @@ export function parseScript(
 ): ESLintExtendedProgram {
     const parser: ESLintCustomParser =
         typeof parserOptions.parser === "string"
-            ? // eslint-disable-next-line @mysticatea/ts/no-require-imports
-              require(parserOptions.parser)
+            ? loadParser(parserOptions.parser)
             : getEspreeFromEcmaVersion(parserOptions.ecmaVersion)
+
     const result: any =
         typeof parser.parseForESLint === "function"
             ? parser.parseForESLint(code, parserOptions)

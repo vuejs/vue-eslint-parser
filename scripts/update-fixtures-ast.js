@@ -13,6 +13,7 @@ const fs = require("fs")
 const path = require("path")
 const parser = require("../")
 const escope = require("eslint-scope")
+const semver = require("semver")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -22,7 +23,7 @@ const ROOT = path.join(__dirname, "../test/fixtures/ast")
 const TARGETS = fs.readdirSync(ROOT)
 const PARSER_OPTIONS = {
     comment: true,
-    ecmaVersion: 2022,
+    ecmaVersion: 2020,
     loc: true,
     range: true,
     tokens: true,
@@ -201,6 +202,18 @@ function analyze(ast, parserOptions) {
 //------------------------------------------------------------------------------
 
 for (const name of TARGETS) {
+    const requirementsPath = path.join(ROOT, `${name}/requirements.json`)
+    const requirements = fs.existsSync(requirementsPath)
+        ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
+        : {}
+    if (
+        Object.entries(requirements).some(([pkgName, pkgVersion]) => {
+            const pkg = require(`${pkgName}/package.json`)
+            return !semver.satisfies(pkg.version, pkgVersion)
+        })
+    ) {
+        continue
+    }
     const sourcePath = path.join(ROOT, `${name}/source.vue`)
     const optionsPath = path.join(ROOT, `${name}/parser-options.json`)
     const astPath = path.join(ROOT, `${name}/ast.json`)
