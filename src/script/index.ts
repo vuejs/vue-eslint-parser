@@ -563,8 +563,8 @@ export function parseScriptElement(
     const parserOptions: ParserOptions = isScriptSetup(node)
         ? getScriptSetupParserOptions(originalParserOptions)
         : {
-              ecmaVersion: 2017,
               ...originalParserOptions,
+              ecmaVersion: originalParserOptions.ecmaVersion || 2017,
           }
 
     const text = node.children[0]
