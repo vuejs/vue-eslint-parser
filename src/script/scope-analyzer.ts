@@ -14,8 +14,6 @@ import type {
 import { getFallbackKeys } from "../ast"
 import { getEslintScope } from "../common/eslint-scope"
 import { getEcmaVersionIfUseEspree } from "../common/espree"
-import type { VisitorKeys } from "eslint-visitor-keys"
-import evk from "eslint-visitor-keys"
 
 /**
  * Check whether the given reference is unique in the belonging array.
@@ -88,25 +86,6 @@ function getForScope(scope: escopeTypes.Scope): escopeTypes.Scope {
     return child.block === scope.block ? child.childScopes[0] : child
 }
 
-export function analyzeScope(
-    ast: ESLintProgram,
-    parserOptions: ParserOptions,
-    visitorKeys?: VisitorKeys,
-): escopeTypes.ScopeManager {
-    const ecmaVersion = getEcmaVersionIfUseEspree(parserOptions) || 2022
-    const ecmaFeatures = parserOptions.ecmaFeatures || {}
-    const sourceType = parserOptions.sourceType || "script"
-    return getEslintScope().analyze(ast, {
-        ignoreEval: true,
-        nodejsScope: false,
-        impliedStrict: ecmaFeatures.impliedStrict,
-        ecmaVersion,
-        sourceType,
-        childVisitorKeys: visitorKeys || evk.KEYS,
-        fallback: getFallbackKeys,
-    })
-}
-
 /**
  *
  * @param ast
@@ -115,9 +94,20 @@ export function analyzeScope(
 function analyze(
     ast: ESLintProgram,
     parserOptions: ParserOptions,
-    visitorKeys?: VisitorKeys,
 ): escopeTypes.Scope {
-    return analyzeScope(ast, parserOptions, visitorKeys).globalScope
+    const ecmaVersion = getEcmaVersionIfUseEspree(parserOptions) || 2022
+    const ecmaFeatures = parserOptions.ecmaFeatures || {}
+    const sourceType = parserOptions.sourceType || "script"
+    const result = getEslintScope().analyze(ast, {
+        ignoreEval: true,
+        nodejsScope: false,
+        impliedStrict: ecmaFeatures.impliedStrict,
+        ecmaVersion,
+        sourceType,
+        fallback: getFallbackKeys,
+    })
+
+    return result.globalScope
 }
 
 /**
