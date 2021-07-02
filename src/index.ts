@@ -92,7 +92,7 @@ export function parseForESLint(
         options || {},
     )
 
-    const optionWithEcmaVersion = {
+    const optionsWithEcmaVersion = {
         ...options,
         ecmaVersion: options.ecmaVersion || 2017,
     }
@@ -101,13 +101,16 @@ export function parseForESLint(
     let document: AST.VDocumentFragment | null
     let locationCalculator: LocationCalculatorForHtml | null
     if (!isVueFile(code, options)) {
-        result = parseScript(code, optionWithEcmaVersion)
+        result = parseScript(code, optionsWithEcmaVersion)
         document = null
         locationCalculator = null
     } else {
         const skipParsingScript = options.parser === false
-        const tokenizer = new HTMLTokenizer(code, optionWithEcmaVersion)
-        const rootAST = new HTMLParser(tokenizer, optionWithEcmaVersion).parse()
+        const tokenizer = new HTMLTokenizer(code, optionsWithEcmaVersion)
+        const rootAST = new HTMLParser(
+            tokenizer,
+            optionsWithEcmaVersion,
+        ).parse()
 
         locationCalculator = new LocationCalculatorForHtml(
             tokenizer.gaps,
@@ -128,7 +131,7 @@ export function parseForESLint(
 
         let scriptSetup: VElement | undefined
         if (skipParsingScript || !scripts.length) {
-            result = parseScript("", optionWithEcmaVersion)
+            result = parseScript("", optionsWithEcmaVersion)
         } else if (
             scripts.length === 2 &&
             (scriptSetup = scripts.find(isScriptSetup))
