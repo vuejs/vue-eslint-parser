@@ -5,22 +5,39 @@
 import type { ScopeManager, Scope } from "eslint-scope"
 import type {
     ESLintBlockStatement,
+    ESLintExportSpecifier,
     ESLintExtendedProgram,
+    ESLintIdentifier,
+    ESLintModuleDeclaration,
+    ESLintNode,
+    ESLintProgram,
     ESLintStatement,
+    Token,
     VElement,
 } from "../ast"
 import { ParseError, traverseNodes } from "../ast"
-import { fixErrorLocation, fixLocations } from "../common/fix-locations"
+import {
+    fixErrorLocation,
+    fixLocation,
+    fixLocations,
+    fixNodeLocations,
+} from "../common/fix-locations"
 import type { LinesAndColumns } from "../common/lines-and-columns"
 import type { LocationCalculator } from "../common/location-calculator"
 import type { ParserOptions } from "../common/parser-options"
-import { parseScript, parseScriptFragment } from "../script"
+import { parseScript as parseScriptBase, parseScriptFragment } from "../script"
 import { getScriptSetupParserOptions } from "./parser-options"
 
 type RemapBlock = {
     range: [number, number]
     offset: number
 }
+
+/**
+ * `parseScriptSetupElements` rewrites the source code so that it can parse
+ * the combination of `<script>` and `<script setup>`, and parses it source code with JavaScript parser.
+ * This class holds the information to restore the AST and token locations parsed in the rewritten source code.
+ */
 class CodeBlocks {
     public code: string
     // The location information for remapping.
@@ -63,13 +80,92 @@ class CodeBlocks {
     }
 }
 
+type RestoreASTCallback = (node: ESLintStatement) => {
+    statement: ESLintStatement | ESLintModuleDeclaration
+    tokens: Token[]
+} | null
+/**
+ * Some named exports need to be replaced with a different syntax to successfully parse
+ * the combination of `<script>` and `<script setup>`.
+ * e.g. `export {a,b}` -> `({a,b});`, `export let a` -> `let a`
+ * This class holds the callbacks to restore the rewritten syntax AST back to the original `export` AST.
+ */
+class RestoreASTCallbacks {
+    private callbacks: {
+        range: [number, number]
+        callback: RestoreASTCallback
+    }[] = []
+    public addCallback(
+        originalOffsetStart: number,
+        range: [number, number],
+        callback: RestoreASTCallback,
+    ) {
+        this.callbacks.push({
+            range: [
+                originalOffsetStart + range[0],
+                originalOffsetStart + range[1],
+            ],
+            callback,
+        })
+    }
+    public restore(
+        program: ESLintProgram,
+        scriptSetupStatements: ESLintStatement[],
+        linesAndColumns: LinesAndColumns,
+    ) {
+        if (this.callbacks.length === 0) {
+            return
+        }
+        const callbacks = new Set(this.callbacks)
+        for (const statement of scriptSetupStatements) {
+            for (const cb of callbacks) {
+                if (
+                    cb.range[0] <= statement.range[0] &&
+                    statement.range[1] <= cb.range[1]
+                ) {
+                    const restored = cb.callback(statement)
+                    if (restored) {
+                        const removeIndex = program.body.indexOf(statement)
+                        if (removeIndex >= 0) {
+                            program.body.splice(removeIndex, 1)
+                            program.body.push(restored.statement)
+                            program.tokens!.push(...restored.tokens)
+                            restored.statement.parent = program
+                            callbacks.delete(cb)
+                            break
+                        }
+                    }
+                }
+            }
+        }
+        if (callbacks.size) {
+            const [cb] = callbacks
+            const loc = linesAndColumns.getLocFromIndex(cb.range[0])
+            throw new ParseError(
+                "Could not parse <script setup>. Failed to restore ExportNamedDeclaration.",
+                undefined,
+                cb.range[0],
+                loc.line,
+                loc.column,
+            )
+        }
+    }
+}
+
 type ScriptSetupCodeBlocks = {
     codeBlocks: CodeBlocks
-    // The location of the code of the import statements in `<script setup>`.
-    scriptSetupImportRange?: [number, number]
     // The location of the code of the statements in `<script setup>`.
-    scriptSetupBlockRange?: [number, number]
+    scriptSetupBlockRange: [number, number]
+    // Used to restore ExportNamedDeclaration.
+    restoreASTCallbacks: RestoreASTCallbacks
 }
+type ScriptSetupModuleCodeBlocks =
+    | ScriptSetupCodeBlocks
+    | {
+          codeBlocks: CodeBlocks
+          scriptSetupBlockRange?: undefined
+          restoreASTCallbacks?: undefined
+      }
 
 /**
  * Checks whether the given script element is `<script setup>`.
@@ -78,6 +174,24 @@ export function isScriptSetup(script: VElement): boolean {
     return script.startTag.attributes.some(
         (attr) => !attr.directive && attr.key.name === "setup",
     )
+}
+
+function parseScript(
+    code: string,
+    parserOptions: ParserOptions,
+    locationCalculator: LocationCalculator,
+) {
+    try {
+        return parseScriptBase(code, parserOptions)
+    } catch (err) {
+        const perr = ParseError.normalize(err)
+        if (perr) {
+            // console.log(code)
+            fixErrorLocation(perr, locationCalculator)
+            throw perr
+        }
+        throw err
+    }
 }
 
 /**
@@ -99,14 +213,14 @@ export function parseScriptSetupElements(
     const parserOptions: ParserOptions = getScriptSetupParserOptions(
         originalParserOptions,
     )
-    const scriptSetupCodeBlocks = getScriptsCodeBlocks(
+    const scriptSetupModuleCodeBlocks = getScriptSetupModuleCodeBlocks(
         scriptSetupElement,
         scriptElement,
         code,
         linesAndColumns,
         parserOptions,
     )
-    if (!scriptSetupCodeBlocks) {
+    if (!scriptSetupModuleCodeBlocks) {
         return parseScriptFragment(
             "",
             simpleOffsetLocationCalculator(
@@ -124,7 +238,8 @@ export function parseScriptSetupElements(
                     ? (block) => offset < block.range[1]
                     : (block) => offset <= block.range[1]
 
-            for (const block of scriptSetupCodeBlocks.codeBlocks.remapBlocks) {
+            for (const block of scriptSetupModuleCodeBlocks.codeBlocks
+                .remapBlocks) {
                 if (test(block)) {
                     return block.offset
                 }
@@ -134,26 +249,29 @@ export function parseScriptSetupElements(
         getLocFromIndex: linesAndColumns.getLocFromIndex.bind(linesAndColumns),
     }
 
-    let result
-    try {
-        result = parseScript(
-            scriptSetupCodeBlocks.codeBlocks.code,
-            parserOptions,
-        )
-    } catch (err) {
-        const perr = ParseError.normalize(err)
-        if (perr) {
-            fixErrorLocation(perr, locationCalculator)
-            throw perr
-        }
-        throw err
-    }
+    const result = parseScript(
+        scriptSetupModuleCodeBlocks.codeBlocks.code,
+        parserOptions,
+        locationCalculator,
+    )
 
     /* Remap ASTs */
-    remapAST(result, scriptSetupCodeBlocks)
+    const scriptSetupStatements = remapAST(result, scriptSetupModuleCodeBlocks)
 
     /* Remap locations */
-    remapLocationAndTokens(result, scriptSetupCodeBlocks, locationCalculator)
+    remapLocationAndTokens(
+        result,
+        scriptSetupModuleCodeBlocks,
+        locationCalculator,
+    )
+
+    if (scriptSetupModuleCodeBlocks.restoreASTCallbacks) {
+        scriptSetupModuleCodeBlocks.restoreASTCallbacks.restore(
+            result.ast,
+            scriptSetupStatements,
+            linesAndColumns,
+        )
+    }
 
     // Adjust AST and tokens
     if (result.ast.tokens != null) {
@@ -260,14 +378,50 @@ export function parseScriptSetupElements(
  * let a
  * }
  * ```
+ *
+ * Example 3:
+ *
+ * ```vue
+ * <script>
+ * export let count = 42
+ * export let count2 = 42
+ * </script>
+ * <script setup>
+ * import MyComponent1 from './MyComponent1.vue'
+ * let count = 42
+ * export {count as ns}
+ * export let count2 = 42
+ * count2++
+ * </script>
+ * ```
+ *
+ * ↓
+ *
+ * ```js
+ * export let count = 42
+ * export let count2 = 42
+ * ;
+ * import MyComponent1 from './MyComponent1.vue';
+ * {
+ * let count = 42;
+ * let a
+ * ;
+ * ({count})
+ * ;
+ * let count2 = 42
+ * ;
+ * count2++
+ * ;
+ * }
+ * ```
  */
-function getScriptsCodeBlocks(
+function getScriptSetupModuleCodeBlocks(
     scriptSetupElement: VElement,
     scriptElement: VElement,
     sfcCode: string,
     linesAndColumns: LinesAndColumns,
     parserOptions: ParserOptions,
-): ScriptSetupCodeBlocks | null {
+): ScriptSetupModuleCodeBlocks | null {
     const scriptSetupCodeBlocks = getScriptSetupCodeBlocks(
         scriptSetupElement,
         sfcCode,
@@ -295,17 +449,11 @@ function getScriptsCodeBlocks(
     codeBlocks.appendCodeBlocks(scriptSetupCodeBlocks.codeBlocks)
     return {
         codeBlocks,
-        scriptSetupImportRange:
-            scriptSetupCodeBlocks.scriptSetupImportRange && [
-                scriptSetupCodeBlocks.scriptSetupImportRange[0] +
-                    scriptSetupOffset,
-                scriptSetupCodeBlocks.scriptSetupImportRange[1] +
-                    scriptSetupOffset,
-            ],
-        scriptSetupBlockRange: scriptSetupCodeBlocks.scriptSetupBlockRange && [
+        scriptSetupBlockRange: [
             scriptSetupCodeBlocks.scriptSetupBlockRange[0] + scriptSetupOffset,
             scriptSetupCodeBlocks.scriptSetupBlockRange[1] + scriptSetupOffset,
         ],
+        restoreASTCallbacks: scriptSetupCodeBlocks.restoreASTCallbacks,
     }
 }
 
@@ -325,101 +473,302 @@ function getScriptSetupCodeBlocks(
         return null
     }
 
-    const [scriptStartOffset, scriptEndOffset] = textNode.range
-    const scriptCode = sfcCode.slice(scriptStartOffset, scriptEndOffset)
+    const [scriptSetupStartOffset, scriptSetupEndOffset] = textNode.range
+    const scriptCode = sfcCode.slice(
+        scriptSetupStartOffset,
+        scriptSetupEndOffset,
+    )
 
-    let result
-    try {
-        result = parseScript(scriptCode, parserOptions)
-    } catch (err) {
-        const perr = ParseError.normalize(err)
-        if (perr) {
-            fixErrorLocation(
-                perr,
-                simpleOffsetLocationCalculator(
-                    scriptStartOffset,
-                    linesAndColumns,
-                ),
-            )
-            throw perr
-        }
-        throw err
-    }
+    const offsetLocationCalculator = simpleOffsetLocationCalculator(
+        scriptSetupStartOffset,
+        linesAndColumns,
+    )
+
+    const result = parseScript(
+        scriptCode,
+        parserOptions,
+        offsetLocationCalculator,
+    )
+
     const { ast } = result
 
+    // Holds the `import` and re-`export` statements.
+    // All import and re-`export` statements are hoisted to the top.
     const importCodeBlocks = new CodeBlocks()
+    // Holds statements other than `import`, re-`export` and `export default` statements.
+    // This is moved to a block statement to avoid conflicts with variables of the same name in `<script>`.
     const statementCodeBlocks = new CodeBlocks()
+    // Holds `export default` statements.
+    // All `export default` statements are move to the bottom.
+    const exportDefaultCodeBlocks = new CodeBlocks()
+    // It holds the information to restore the transformation source code of the export statements held in `statementCodeBlocks`.
+    const restoreASTCallbacks = new RestoreASTCallbacks()
 
     let astOffset = 0
-    for (const body of ast.body) {
-        if (body.type === "ImportDeclaration") {
-            let start = body.range[0]
-            let end = body.range[1]
-            traverseNodes(body, {
-                visitorKeys: result.visitorKeys,
-                enterNode(n) {
-                    start = Math.min(start, n.range[0])
-                    end = Math.max(end, n.range[1])
-                },
-                leaveNode() {
-                    // Do nothing.
-                },
-            })
-            if (astOffset < start) {
-                statementCodeBlocks.append(
-                    scriptCode.slice(astOffset, start),
-                    scriptStartOffset + astOffset,
-                )
-                statementCodeBlocks.appendSplitPunctuators(";")
-            }
 
-            importCodeBlocks.append(
+    /**
+     * Append the given range of code to the given codeBlocks.
+     */
+    function processAppend(codeBlocks: CodeBlocks, start: number, end: number) {
+        if (start < end) {
+            codeBlocks.append(
                 scriptCode.slice(start, end),
-                scriptStartOffset + start,
+                scriptSetupStartOffset + start,
             )
-            importCodeBlocks.appendSplitPunctuators(";")
             astOffset = end
         }
     }
-    if (astOffset < scriptEndOffset) {
-        statementCodeBlocks.append(
-            scriptCode.slice(astOffset, scriptEndOffset),
-            scriptStartOffset + astOffset,
-        )
+
+    /**
+     * Append the partial statements up to the start position to `statementCodeBlocks`.
+     */
+    function processStatementCodeBlock(start: number) {
+        if (astOffset < start) {
+            processAppend(statementCodeBlocks, astOffset, start)
+            statementCodeBlocks.appendSplitPunctuators(";")
+        }
     }
 
-    const scriptSetupImportRange: [number, number] = [
-        0,
-        importCodeBlocks.length,
-    ]
-    const scriptSetupBlockRangeStart = importCodeBlocks.length
-    importCodeBlocks.appendSplitPunctuators("{")
-    importCodeBlocks.appendCodeBlocks(statementCodeBlocks)
-    importCodeBlocks.appendSplitPunctuators("}")
+    /**
+     * Append the given range of import or export statement to the given codeBlocks.
+     */
+    function processModuleCodeBlock(
+        codeBlocks: CodeBlocks,
+        start: number,
+        end: number,
+    ) {
+        processAppend(codeBlocks, start, end)
+        codeBlocks.appendSplitPunctuators(";")
+    }
 
+    for (const body of ast.body) {
+        if (
+            body.type === "ImportDeclaration" ||
+            body.type === "ExportAllDeclaration" ||
+            (body.type === "ExportNamedDeclaration" && body.source != null)
+        ) {
+            const [start, end] = getNodeFullRange(body)
+            processStatementCodeBlock(start)
+            processModuleCodeBlock(importCodeBlocks, start, end)
+        } else if (body.type === "ExportDefaultDeclaration") {
+            const [start, end] = getNodeFullRange(body)
+            processStatementCodeBlock(start)
+            processModuleCodeBlock(exportDefaultCodeBlocks, start, end)
+        } else if (body.type === "ExportNamedDeclaration") {
+            // Transform ExportNamedDeclaration
+            // The transformed statement ASTs are restored by RestoreASTCallbacks.
+            // e.g.
+            // - `export let v = 42` -> `let v = 42`
+            // - `export {foo, bar as Bar}` -> `({foo, bar})`
+
+            const [start, end] = getNodeFullRange(body)
+            processStatementCodeBlock(start)
+
+            const tokens = ast.tokens!
+            const exportTokenIndex = tokens.findIndex(
+                (t) => t.range[0] === body.range[0],
+            )
+            const exportToken = tokens[exportTokenIndex]
+            if (exportToken && exportToken.value === "export") {
+                processAppend(
+                    statementCodeBlocks,
+                    astOffset,
+                    exportToken.range[0],
+                ) // Maybe decorator
+                if (body.declaration) {
+                    processModuleCodeBlock(
+                        statementCodeBlocks,
+                        exportToken.range[1],
+                        end,
+                    )
+
+                    restoreASTCallbacks.addCallback(
+                        scriptSetupStartOffset,
+                        [start, end],
+                        (statement) => {
+                            if (statement.type !== body.declaration!.type) {
+                                return null
+                            }
+                            fixNodeLocations(
+                                body,
+                                result.visitorKeys,
+                                offsetLocationCalculator,
+                            )
+                            fixLocation(exportToken, offsetLocationCalculator)
+                            body.declaration = statement
+                            statement.parent = body
+                            return {
+                                statement: body,
+                                tokens: [exportToken],
+                            }
+                        },
+                    )
+                } else {
+                    statementCodeBlocks.appendSplitPunctuators("(")
+                    const restoreTokens: Token[] = [exportToken]
+                    let startOffset = exportToken.range[1]
+                    for (const spec of body.specifiers) {
+                        if (spec.local.range[0] < spec.exported.range[0]) {
+                            // {a as b}
+                            const localTokenIndex = tokens.findIndex(
+                                (t) => t.range[0] === spec.local.range[0],
+                                exportTokenIndex,
+                            )
+                            checkToken(tokens[localTokenIndex], spec.local.name)
+                            const asToken = tokens[localTokenIndex + 1]
+                            checkToken(asToken, "as")
+                            restoreTokens.push(asToken)
+                            const exportedToken = tokens[localTokenIndex + 2]
+                            checkToken(exportedToken, spec.exported.name)
+                            restoreTokens.push(exportedToken)
+                            processAppend(
+                                statementCodeBlocks,
+                                startOffset,
+                                asToken.range[0],
+                            )
+                            processAppend(
+                                statementCodeBlocks,
+                                asToken.range[1],
+                                exportedToken.range[0],
+                            )
+                            startOffset = exportedToken.range[1]
+                        }
+                    }
+                    processAppend(statementCodeBlocks, startOffset, end)
+                    statementCodeBlocks.appendSplitPunctuators(")")
+                    statementCodeBlocks.appendSplitPunctuators(";")
+
+                    restoreASTCallbacks.addCallback(
+                        scriptSetupStartOffset,
+                        [start, end],
+                        (statement) => {
+                            if (
+                                statement.type !== "ExpressionStatement" ||
+                                statement.expression.type !== "ObjectExpression"
+                            ) {
+                                return null
+                            }
+                            // preprocess and check
+                            const locals: ESLintIdentifier[] = []
+                            for (const prop of statement.expression
+                                .properties) {
+                                if (
+                                    prop.type !== "Property" ||
+                                    prop.value.type !== "Identifier"
+                                ) {
+                                    return null
+                                }
+                                locals.push(prop.value)
+                            }
+                            if (body.specifiers.length !== locals.length) {
+                                return null
+                            }
+                            const map = new Map<
+                                ESLintExportSpecifier,
+                                ESLintIdentifier
+                            >()
+                            for (
+                                let index = 0;
+                                index < body.specifiers.length;
+                                index++
+                            ) {
+                                const spec = body.specifiers[index]
+                                const local = locals[index]
+                                if (spec.local.name !== local.name) {
+                                    return null
+                                }
+                                map.set(spec, local)
+                            }
+
+                            // restore
+                            fixNodeLocations(
+                                body,
+                                result.visitorKeys,
+                                offsetLocationCalculator,
+                            )
+                            for (const token of restoreTokens) {
+                                fixLocation(token, offsetLocationCalculator)
+                            }
+                            for (const [spec, local] of map) {
+                                spec.local = local
+                                local.parent = spec
+                            }
+                            return {
+                                statement: body,
+                                tokens: restoreTokens,
+                            }
+                        },
+                    )
+                }
+            } else {
+                processModuleCodeBlock(statementCodeBlocks, start, end)
+            }
+        }
+    }
+    processStatementCodeBlock(scriptSetupEndOffset)
+
+    // Creates a code block that combines import, statement block, and export default.
+    const codeBlocks = new CodeBlocks()
+
+    codeBlocks.appendCodeBlocks(importCodeBlocks)
+    const scriptSetupBlockRangeStart = codeBlocks.length
+    codeBlocks.appendSplitPunctuators("{")
+    codeBlocks.appendCodeBlocks(statementCodeBlocks)
+    codeBlocks.appendSplitPunctuators("}")
+    const scriptSetupBlockRangeEnd = codeBlocks.length
+    codeBlocks.appendCodeBlocks(exportDefaultCodeBlocks)
     return {
-        codeBlocks: importCodeBlocks,
-        scriptSetupImportRange,
+        codeBlocks,
         scriptSetupBlockRange: [
             scriptSetupBlockRangeStart,
-            importCodeBlocks.length,
+            scriptSetupBlockRangeEnd,
         ],
+        restoreASTCallbacks,
+    }
+
+    function getNodeFullRange(n: ESLintNode) {
+        let start = n.range[0]
+        let end = n.range[1]
+        traverseNodes(n, {
+            visitorKeys: result.visitorKeys,
+            enterNode(c) {
+                start = Math.min(start, c.range[0])
+                end = Math.max(end, c.range[1])
+            },
+            leaveNode() {
+                // Do nothing.
+            },
+        })
+        return [start, end] as const
+    }
+
+    function checkToken(token: Token, value: string) {
+        if (token.value === value) {
+            return
+        }
+
+        const perr = new ParseError(
+            `Could not parse <script setup>. Expected "${value}", but it was "${token.value}".`,
+            undefined,
+            token.range[0],
+            token.loc.start.line,
+            token.loc.start.column,
+        )
+        fixErrorLocation(perr, offsetLocationCalculator)
+        throw perr
     }
 }
 
 function remapAST(
     result: ESLintExtendedProgram,
-    {
-        scriptSetupImportRange,
-        scriptSetupBlockRange,
-        codeBlocks,
-    }: ScriptSetupCodeBlocks,
-) {
-    if (!scriptSetupImportRange || !scriptSetupBlockRange) {
-        return
+    { scriptSetupBlockRange, codeBlocks }: ScriptSetupModuleCodeBlocks,
+): ESLintStatement[] {
+    if (!scriptSetupBlockRange) {
+        return []
     }
 
     let scriptSetupBlock: ESLintBlockStatement | null = null
+    const scriptSetupStatements: ESLintStatement[] = []
     for (let index = result.ast.body.length - 1; index >= 0; index--) {
         const body = result.ast.body[index]
 
@@ -436,13 +785,12 @@ function remapAST(
                     )
                 }
                 scriptSetupBlock = body
-                result.ast.body.splice(
-                    index,
-                    1,
+                scriptSetupStatements.push(
                     ...body.body.filter(
                         (b) => !isSplitPunctuatorsEmptyStatement(b),
                     ),
                 )
+                result.ast.body.splice(index, 1, ...scriptSetupStatements)
             }
         } else if (body.type === "EmptyStatement") {
             if (isSplitPunctuatorsEmptyStatement(body)) {
@@ -459,6 +807,8 @@ function remapAST(
         )!
         remapScope(result.scopeManager, blockScope)
     }
+
+    return scriptSetupStatements
 
     function isSplitPunctuatorsEmptyStatement(body: ESLintStatement) {
         return (
@@ -510,28 +860,13 @@ function remapAST(
 
 function remapLocationAndTokens(
     result: ESLintExtendedProgram,
-    { codeBlocks }: ScriptSetupCodeBlocks,
+    { codeBlocks }: ScriptSetupModuleCodeBlocks,
     locationCalculator: LocationCalculator,
 ) {
-    traverseNodes(result.ast, {
-        visitorKeys: result.visitorKeys,
-        enterNode(node) {
-            while (codeBlocks.splitPunctuators.includes(node.range[1] - 1)) {
-                node.range[1]--
-            }
-            while (
-                node.end != null &&
-                codeBlocks.splitPunctuators.includes(node.end - 1)
-            ) {
-                node.end--
-            }
-        },
-        leaveNode() {
-            // Do nothing.
-        },
-    })
-
     const tokens = result.ast.tokens || []
+
+    const endMap = new Map<number, number>()
+    const buffer: number[] = []
     for (let index = tokens.length - 1; index >= 0; index--) {
         const token = tokens[index]
 
@@ -541,9 +876,34 @@ function remapLocationAndTokens(
         ) {
             // remove
             tokens.splice(index, 1)
+            buffer.push(token.range[1])
             continue
+        } else {
+            for (const end of buffer) {
+                endMap.set(end, token.range[1])
+            }
+            buffer.length = 0
         }
     }
+
+    traverseNodes(result.ast, {
+        visitorKeys: result.visitorKeys,
+        enterNode(node) {
+            const rangeEnd = endMap.get(node.range[1])
+            if (rangeEnd != null) {
+                node.range[1] = rangeEnd
+            }
+            if (node.end) {
+                const end = endMap.get(node.end)
+                if (end != null) {
+                    node.end = rangeEnd
+                }
+            }
+        },
+        leaveNode() {
+            // Do nothing.
+        },
+    })
 
     fixLocations(result, locationCalculator)
 }

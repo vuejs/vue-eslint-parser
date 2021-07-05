@@ -719,4 +719,50 @@ describe("Basic tests", () => {
             assert.strictEqual(messages[0].message, "'c' is not defined.")
         })
     })
+    describe("<script setup>", () => {
+        it("should notify named export", () => {
+            const code = `
+            <script setup>let b; export {
+                b
+            }</script>`
+            const config = {
+                parser: PARSER_PATH,
+                parserOptions: { sourceType: "module" },
+            }
+            const linter = new Linter()
+
+            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
+
+            const messages = linter.verify(code, config)
+
+            assert.strictEqual(messages.length, 1)
+            assert.strictEqual(
+                messages[0].message,
+                "Parsing error: Variable defined within `<script setup>` cannot be named export."
+            )
+            assert.strictEqual(messages[0].line, 3)
+        })
+        it("should notify named export with multiple <script>", () => {
+            const code = `
+            <script></script><script setup>let b; export {
+                b
+            }</script>`
+            const config = {
+                parser: PARSER_PATH,
+                parserOptions: { sourceType: "module" },
+            }
+            const linter = new Linter()
+
+            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
+
+            const messages = linter.verify(code, config)
+
+            assert.strictEqual(messages.length, 1)
+            assert.strictEqual(
+                messages[0].message,
+                "Parsing error: Variable defined within `<script setup>` cannot be named export."
+            )
+            assert.strictEqual(messages[0].line, 3)
+        })
+    })
 })

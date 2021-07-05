@@ -310,6 +310,7 @@ export interface ESLintExportNamedDeclaration extends HasLocation, HasParent {
 
 export interface ESLintExportSpecifier extends HasLocation, HasParent {
     type: "ExportSpecifier"
+    local: ESLintIdentifier
     exported: ESLintIdentifier
 }
 

@@ -228,6 +228,7 @@ for (const name of TARGETS) {
             ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
             : {}
     )
+    // console.log("Start:", name)
     const actual = parser.parseForESLint(source, options)
     const tokenRanges = getAllTokens(actual.ast).map((t) =>
         source.slice(t.range[0], t.range[1])
