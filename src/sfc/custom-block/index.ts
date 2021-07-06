@@ -16,6 +16,7 @@ import { getEcmaVersionIfUseEspree } from "../../common/espree"
 import { fixErrorLocation, fixLocations } from "../../common/fix-locations"
 import type { LocationCalculatorForHtml } from "../../common/location-calculator"
 import type { ParserOptions } from "../../common/parser-options"
+import { DEFAULT_ECMA_VERSION } from "../../script-setup/parser-options"
 
 export interface ESLintCustomBlockParser {
     parse(code: string, options: any): any
@@ -160,7 +161,7 @@ function parseCustomBlockFragment(
 ): ESLintExtendedProgram {
     try {
         const result = parseBlock(code, parser, {
-            ecmaVersion: 2017,
+            ecmaVersion: DEFAULT_ECMA_VERSION,
             loc: true,
             range: true,
             raw: true,

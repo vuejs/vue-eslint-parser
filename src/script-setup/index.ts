@@ -167,15 +167,6 @@ type ScriptSetupModuleCodeBlocks =
           restoreASTCallbacks?: undefined
       }
 
-/**
- * Checks whether the given script element is `<script setup>`.
- */
-export function isScriptSetup(script: VElement): boolean {
-    return script.startTag.attributes.some(
-        (attr) => !attr.directive && attr.key.name === "setup",
-    )
-}
-
 function parseScript(
     code: string,
     parserOptions: ParserOptions,

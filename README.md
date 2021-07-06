@@ -87,6 +87,28 @@ For example:
 }
 ```
 
+You can also specify an object and change the parser separately for `<script lang="...">`.
+
+```jsonc
+{
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "parser": {
+             // Script parser for `<script>`
+            "js": "espree",
+
+             // Script parser for `<script lang="ts">`
+            "ts": "@typescript-eslint/parser",
+
+             // Script parser for vue directives (e.g. `v-if=` or `:attribute=`)
+             // and vue interpolations (e.g. `{{variable}}`).
+             // If not specified, the parser determined by `<script lang ="...">` is used.
+            "<template>": "espree",
+        }
+    }
+}
+```
+
 If the `parserOptions.parser` is `false`, the `vue-eslint-parser` skips parsing `<script>` tags completely.
 This is useful for people who use the language ESLint community doesn't provide custom parser implementation.
 

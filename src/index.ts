@@ -10,9 +10,17 @@ import { HTMLParser, HTMLTokenizer } from "./html"
 import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
 import type { ParserOptions } from "./common/parser-options"
-import { isScriptSetup, parseScriptSetupElements } from "./script-setup"
+import { getScriptParser } from "./common/parser-options"
+import { parseScriptSetupElements } from "./script-setup"
 import { LinesAndColumns } from "./common/lines-and-columns"
 import type { VElement } from "./ast"
+import { DEFAULT_ECMA_VERSION } from "./script-setup/parser-options"
+import {
+    getLang,
+    isScriptElement,
+    isScriptSetupElement,
+    isTemplateElement,
+} from "./common/ast-utils"
 
 const STARTS_WITH_LT = /^\s*</u
 
@@ -28,89 +36,44 @@ function isVueFile(code: string, options: ParserOptions): boolean {
 }
 
 /**
- * Check whether the node is a `<template>` element.
- * @param node The node to check.
- * @returns `true` if the node is a `<template>` element.
- */
-function isTemplateElement(node: AST.VNode): node is AST.VElement {
-    return node.type === "VElement" && node.name === "template"
-}
-
-/**
- * Check whether the node is a `<script>` element.
- * @param node The node to check.
- * @returns `true` if the node is a `<script>` element.
- */
-function isScriptElement(node: AST.VNode): node is AST.VElement {
-    return node.type === "VElement" && node.name === "script"
-}
-
-/**
- * Check whether the attribute node is a `lang` attribute.
- * @param attribute The attribute node to check.
- * @returns `true` if the attribute node is a `lang` attribute.
- */
-function isLang(
-    attribute: AST.VAttribute | AST.VDirective,
-): attribute is AST.VAttribute {
-    return attribute.directive === false && attribute.key.name === "lang"
-}
-
-/**
- * Get the `lang` attribute value from a given element.
- * @param element The element to get.
- * @param defaultLang The default value of the `lang` attribute.
- * @returns The `lang` attribute value.
- */
-function getLang(
-    element: AST.VElement | undefined,
-    defaultLang: string,
-): string {
-    const langAttr = element && element.startTag.attributes.find(isLang)
-    const lang = langAttr && langAttr.value && langAttr.value.value
-    return lang || defaultLang
-}
-
-/**
  * Parse the given source code.
  * @param code The source code to parse.
- * @param options The parser options.
+ * @param parserOptions The parser options.
  * @returns The parsing result.
  */
 export function parseForESLint(
     code: string,
-    options: any,
+    parserOptions: any,
 ): AST.ESLintExtendedProgram {
-    //eslint-disable-next-line no-param-reassign
-    options = Object.assign(
+    const options: ParserOptions = Object.assign(
         {
             comment: true,
             loc: true,
             range: true,
             tokens: true,
         },
-        options || {},
+        parserOptions || {},
     )
-
-    const optionsWithEcmaVersion = {
-        ...options,
-        ecmaVersion: options.ecmaVersion || 2017,
-    }
 
     let result: AST.ESLintExtendedProgram
     let document: AST.VDocumentFragment | null
     let locationCalculator: LocationCalculatorForHtml | null
     if (!isVueFile(code, options)) {
-        result = parseScript(code, optionsWithEcmaVersion)
+        result = parseScript(code, {
+            ...options,
+            ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
+            parser: getScriptParser(options.parser, null, "script"),
+        })
         document = null
         locationCalculator = null
     } else {
+        const optionsForTemplate = {
+            ...options,
+            ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
+        }
         const skipParsingScript = options.parser === false
-        const tokenizer = new HTMLTokenizer(code, optionsWithEcmaVersion)
-        const rootAST = new HTMLParser(
-            tokenizer,
-            optionsWithEcmaVersion,
-        ).parse()
+        const tokenizer = new HTMLTokenizer(code, optionsForTemplate)
+        const rootAST = new HTMLParser(tokenizer, optionsForTemplate).parse()
 
         locationCalculator = new LocationCalculatorForHtml(
             tokenizer.gaps,
@@ -118,7 +81,7 @@ export function parseForESLint(
         )
         const scripts = rootAST.children.filter(isScriptElement)
         const template = rootAST.children.find(isTemplateElement)
-        const templateLang = getLang(template, "html")
+        const templateLang = getLang(template) || "html"
         const concreteInfo: AST.HasConcreteInfo = {
             tokens: rootAST.tokens,
             comments: rootAST.comments,
@@ -129,22 +92,32 @@ export function parseForESLint(
                 ? Object.assign(template, concreteInfo)
                 : undefined
 
+        const scriptParser = getScriptParser(options.parser, rootAST, "script")
         let scriptSetup: VElement | undefined
         if (skipParsingScript || !scripts.length) {
-            result = parseScript("", optionsWithEcmaVersion)
+            result = parseScript("", {
+                ...options,
+                ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
+            })
         } else if (
             scripts.length === 2 &&
-            (scriptSetup = scripts.find(isScriptSetup))
+            (scriptSetup = scripts.find(isScriptSetupElement))
         ) {
             result = parseScriptSetupElements(
                 scriptSetup,
                 scripts.find((e) => e !== scriptSetup)!,
                 code,
                 new LinesAndColumns(tokenizer.lineTerminators),
-                options,
+                {
+                    ...options,
+                    parser: scriptParser,
+                },
             )
         } else {
-            result = parseScriptElement(scripts[0], locationCalculator, options)
+            result = parseScriptElement(scripts[0], locationCalculator, {
+                ...options,
+                parser: scriptParser,
+            })
         }
 
         result.ast.templateBody = templateBody

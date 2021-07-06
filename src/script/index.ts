@@ -54,8 +54,11 @@ import {
     fixLocation,
     fixLocations,
 } from "../common/fix-locations"
-import { isScriptSetup } from "../script-setup"
-import { getScriptSetupParserOptions } from "../script-setup/parser-options"
+import {
+    DEFAULT_ECMA_VERSION,
+    getScriptSetupParserOptions,
+} from "../script-setup/parser-options"
+import { isScriptSetupElement } from "../common/ast-utils"
 
 // [1] = aliases.
 // [2] = delimiter.
@@ -569,11 +572,12 @@ export function parseScriptElement(
     globalLocationCalculator: LocationCalculatorForHtml,
     originalParserOptions: ParserOptions,
 ): ESLintExtendedProgram {
-    const parserOptions: ParserOptions = isScriptSetup(node)
+    const parserOptions: ParserOptions = isScriptSetupElement(node)
         ? getScriptSetupParserOptions(originalParserOptions)
         : {
               ...originalParserOptions,
-              ecmaVersion: originalParserOptions.ecmaVersion || 2017,
+              ecmaVersion:
+                  originalParserOptions.ecmaVersion || DEFAULT_ECMA_VERSION,
           }
 
     const text = node.children[0]
