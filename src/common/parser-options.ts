@@ -1,4 +1,6 @@
 import * as path from "path"
+import type { VDocumentFragment } from "../ast"
+import { getLang, isScriptElement, isScriptSetupElement } from "./ast-utils"
 
 export interface ParserOptions {
     // vue-eslint-parser options
@@ -41,4 +43,45 @@ export function isSFCFile(parserOptions: ParserOptions) {
         return true
     }
     return path.extname(parserOptions.filePath || "unknown.vue") === ".vue"
+}
+
+/**
+ * Gets the parser name from the given lang or script element.
+ */
+export function getScriptParser(
+    parser: boolean | string | Record<string, string | undefined> | undefined,
+    doc: VDocumentFragment | null,
+    block: "script" | "template",
+): string | undefined {
+    if (parser && typeof parser === "object") {
+        if (block === "template") {
+            const parserForTemplate = parser["<template>"]
+            if (typeof parserForTemplate === "string") {
+                return parserForTemplate
+            }
+        }
+        const lang = getScriptLang()
+        if (lang) {
+            const parserForLang = parser[lang]
+            if (typeof parserForLang === "string") {
+                return parserForLang
+            }
+        }
+        return parser.js
+    }
+    return typeof parser === "string" ? parser : undefined
+
+    function getScriptLang() {
+        if (doc) {
+            const scripts = doc.children.filter(isScriptElement)
+            const script =
+                scripts.length === 2
+                    ? scripts.find(isScriptSetupElement)
+                    : scripts[0]
+            if (script) {
+                return getLang(script)
+            }
+        }
+        return null
+    }
 }

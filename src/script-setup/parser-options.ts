@@ -1,6 +1,9 @@
 import { lte } from "semver"
 import { getEcmaVersionIfUseEspree, getEspreeFromUser } from "../common/espree"
 import type { ParserOptions } from "../common/parser-options"
+
+export const DEFAULT_ECMA_VERSION = 2017
+
 /**
  * Get parser options for <script setup>
  */
@@ -23,5 +26,5 @@ function getDefaultEcmaVersion(def: number) {
         // Script setup requires top level await support, so default the ecma version to 2022.
         return getEspreeFromUser().latestEcmaVersion!
     }
-    return Math.max(def, 2017)
+    return Math.max(def, DEFAULT_ECMA_VERSION)
 }

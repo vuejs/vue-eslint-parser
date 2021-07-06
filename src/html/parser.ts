@@ -46,7 +46,7 @@ import type {
 import { IntermediateTokenizer } from "./intermediate-tokenizer"
 import type { Tokenizer } from "./tokenizer"
 import type { ParserOptions } from "../common/parser-options"
-import { isSFCFile } from "../common/parser-options"
+import { isSFCFile, getScriptParser } from "../common/parser-options"
 
 const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
 const DT_DD = /^d[dt]$/u
@@ -162,11 +162,13 @@ function propagateEndLocation(node: VDocumentFragment | VElement): void {
 export class Parser {
     private tokenizer: IntermediateTokenizer
     private locationCalculator: LocationCalculatorForHtml
-    private parserOptions: ParserOptions
+    private baseParserOptions: ParserOptions
     private isSFC: boolean
     private document: VDocumentFragment
     private elementStack: VElement[]
     private vPreElement: VElement | null
+    private postProcessesForScript: ((parserOptions: ParserOptions) => void)[] =
+        []
 
     /**
      * The source code text.
@@ -243,7 +245,7 @@ export class Parser {
             tokenizer.gaps,
             tokenizer.lineTerminators,
         )
-        this.parserOptions = parserOptions
+        this.baseParserOptions = parserOptions
         this.isSFC = isSFCFile(parserOptions)
         this.document = {
             type: "VDocumentFragment",
@@ -260,6 +262,8 @@ export class Parser {
         }
         this.elementStack = []
         this.vPreElement = null
+
+        this.postProcessesForScript = []
     }
 
     /**
@@ -274,6 +278,18 @@ export class Parser {
 
         this.popElementStackUntil(0)
         propagateEndLocation(this.document)
+
+        const parserOptions = {
+            ...this.baseParserOptions,
+            parser: getScriptParser(
+                this.baseParserOptions.parser,
+                this.document,
+                "template",
+            ),
+        }
+        for (const proc of this.postProcessesForScript) {
+            proc(parserOptions)
+        }
 
         return this.document
     }
@@ -429,12 +445,14 @@ export class Parser {
                 attrName === "slot-scope" ||
                 (tagName === "template" && attrName === "scope"))
         ) {
-            convertToDirective(
-                this.text,
-                this.parserOptions,
-                this.locationCalculator,
-                node,
-            )
+            this.postProcessesForScript.push((parserOptions) => {
+                convertToDirective(
+                    this.text,
+                    parserOptions,
+                    this.locationCalculator,
+                    node,
+                )
+            })
             return
         }
 
@@ -499,19 +517,21 @@ export class Parser {
         }
 
         // Resolve references.
-        for (const attribute of element.startTag.attributes) {
-            if (attribute.directive) {
-                if (
-                    attribute.key.argument != null &&
-                    attribute.key.argument.type === "VExpressionContainer"
-                ) {
-                    resolveReferences(attribute.key.argument)
-                }
-                if (attribute.value != null) {
-                    resolveReferences(attribute.value)
+        this.postProcessesForScript.push(() => {
+            for (const attribute of element.startTag.attributes) {
+                if (attribute.directive) {
+                    if (
+                        attribute.key.argument != null &&
+                        attribute.key.argument.type === "VExpressionContainer"
+                    ) {
+                        resolveReferences(attribute.key.argument)
+                    }
+                    if (attribute.value != null) {
+                        resolveReferences(attribute.value)
+                    }
                 }
             }
-        }
+        })
 
         // Check whether the self-closing is valid.
         const isVoid =
@@ -639,17 +659,18 @@ export class Parser {
             expression: null,
             references: [],
         }
-        processMustache(
-            this.parserOptions,
-            this.locationCalculator,
-            container,
-            token,
-        )
-
         // Set relationship.
         parent.children.push(container)
 
-        // Resolve references.
-        resolveReferences(container)
+        this.postProcessesForScript.push((parserOptions) => {
+            processMustache(
+                parserOptions,
+                this.locationCalculator,
+                container,
+                token,
+            )
+            // Resolve references.
+            resolveReferences(container)
+        })
     }
 }
