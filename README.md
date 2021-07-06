@@ -89,7 +89,7 @@ For example:
 
 You can also specify an object and change the parser separately for `<script lang="...">`.
 
-```json
+```jsonc
 {
     "parser": "vue-eslint-parser",
     "parserOptions": {
