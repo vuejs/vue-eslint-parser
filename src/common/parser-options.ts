@@ -46,7 +46,7 @@ export function isSFCFile(parserOptions: ParserOptions) {
 }
 
 /**
- * Gets the parser name from the given lang or script element.
+ * Gets the script parser name from the given SFC document fragment.
  */
 export function getScriptParser(
     parser: boolean | string | Record<string, string | undefined> | undefined,
