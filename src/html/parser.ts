@@ -290,6 +290,7 @@ export class Parser {
         for (const proc of this.postProcessesForScript) {
             proc(parserOptions)
         }
+        this.postProcessesForScript = []
 
         return this.document
     }
