@@ -1,5 +1,6 @@
 import type {
     ESLintExtendedProgram,
+    ESLintNode,
     HasLocation,
     LocationRange,
     Node,
@@ -21,12 +22,27 @@ export function fixLocations(
     result: ESLintExtendedProgram,
     locationCalculator: LocationCalculator,
 ): void {
+    fixNodeLocations(result.ast, result.visitorKeys, locationCalculator)
+
+    for (const token of result.ast.tokens || []) {
+        fixLocation(token, locationCalculator)
+    }
+    for (const comment of result.ast.comments || []) {
+        fixLocation(comment, locationCalculator)
+    }
+}
+
+export function fixNodeLocations(
+    rootNode: ESLintNode,
+    visitorKeys: ESLintExtendedProgram["visitorKeys"],
+    locationCalculator: LocationCalculator,
+): void {
     // There are cases which the same node instance appears twice in the tree.
     // E.g. `let {a} = {}` // This `a` appears twice at `Property#key` and `Property#value`.
     const traversed = new Map<Node | number[] | LocationRange, Node>()
 
-    traverseNodes(result.ast, {
-        visitorKeys: result.visitorKeys,
+    traverseNodes(rootNode, {
+        visitorKeys,
 
         enterNode(node, parent) {
             if (!traversed.has(node)) {
@@ -65,13 +81,6 @@ export function fixLocations(
             // Do nothing.
         },
     })
-
-    for (const token of result.ast.tokens || []) {
-        fixLocation(token, locationCalculator)
-    }
-    for (const comment of result.ast.comments || []) {
-        fixLocation(comment, locationCalculator)
-    }
 }
 
 /**
