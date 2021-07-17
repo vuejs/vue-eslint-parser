@@ -1,11 +1,11 @@
 [
     {
         "type": "VDocumentFragment",
-        "text": "<style>\n  .text{\n    color: v-bind(  color  );\n    font-size: v-bind(  'font.size'  );\n    border-color: v-bind(  \"border ( 'color' ) \"  );;\n    background-color: v-bind(  \n        background\n        .\n        color\n    );\n  }\n</style>\n",
+        "text": "<style>\n  .text{\n    color: v-bind(  color  );\n    font-size: v-bind(  '  font.size  '  );\n    border-color: v-bind(  \"  border ( 'color' ) \"  );;\n    background-color: v-bind(  \n        background\n        .\n        color\n    );\n  }\n</style>\n",
         "children": [
             {
                 "type": "VElement",
-                "text": "<style>\n  .text{\n    color: v-bind(  color  );\n    font-size: v-bind(  'font.size'  );\n    border-color: v-bind(  \"border ( 'color' ) \"  );;\n    background-color: v-bind(  \n        background\n        .\n        color\n    );\n  }\n</style>",
+                "text": "<style>\n  .text{\n    color: v-bind(  color  );\n    font-size: v-bind(  '  font.size  '  );\n    border-color: v-bind(  \"  border ( 'color' ) \"  );;\n    background-color: v-bind(  \n        background\n        .\n        color\n    );\n  }\n</style>",
                 "children": [
                     {
                         "type": "VStartTag",
@@ -35,7 +35,7 @@
                     },
                     {
                         "type": "VExpressionContainer",
-                        "text": "v-bind(  'font.size'  )",
+                        "text": "v-bind(  '  font.size  '  )",
                         "children": [
                             {
                                 "type": "MemberExpression",
@@ -62,7 +62,7 @@
                     },
                     {
                         "type": "VExpressionContainer",
-                        "text": "v-bind(  \"border ( 'color' ) \"  )",
+                        "text": "v-bind(  \"  border ( 'color' ) \"  )",
                         "children": [
                             {
                                 "type": "CallExpression",
