@@ -1,16 +1,33 @@
 [
     {
         "type": "VDocumentFragment",
-        "text": "<style>\n  .text{\n    color: v-bind(  color  );\n    font-size: v-bind(  'font.size'  );\n    border-color: v-bind(  \"border ( 'color' ) \"  );;\n    background-color: v-bind(  \n        background\n        .\n        color\n    );\n  }\n</style>\n",
+        "text": "<style lang=\"scss\">\n  .text{\n    color: v-bind(color);\n  }\n  .text{\n    color: v-bind(\"colors[42]\");\n  }\n  .text{\n    color: v-bind('getColor()');\n  }\n  .str-and-comments{\n    content: \"v-bind('getColor()')\";\n    content: \"v-bind('getColor()')\\\"v-bind(color)\";\n    // color: v-bind(color);\n    /* color: v-bind(color); */\n    color: /**/v-bind(color);\n  }\n</style>\n",
         "children": [
             {
                 "type": "VElement",
-                "text": "<style>\n  .text{\n    color: v-bind(  color  );\n    font-size: v-bind(  'font.size'  );\n    border-color: v-bind(  \"border ( 'color' ) \"  );;\n    background-color: v-bind(  \n        background\n        .\n        color\n    );\n  }\n</style>",
+                "text": "<style lang=\"scss\">\n  .text{\n    color: v-bind(color);\n  }\n  .text{\n    color: v-bind(\"colors[42]\");\n  }\n  .text{\n    color: v-bind('getColor()');\n  }\n  .str-and-comments{\n    content: \"v-bind('getColor()')\";\n    content: \"v-bind('getColor()')\\\"v-bind(color)\";\n    // color: v-bind(color);\n    /* color: v-bind(color); */\n    color: /**/v-bind(color);\n  }\n</style>",
                 "children": [
                     {
                         "type": "VStartTag",
-                        "text": "<style>",
-                        "children": []
+                        "text": "<style lang=\"scss\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "lang=\"scss\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "lang",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"scss\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
                     },
                     {
                         "type": "VText",
@@ -19,7 +36,7 @@
                     },
                     {
                         "type": "VExpressionContainer",
-                        "text": "v-bind(  color  )",
+                        "text": "v-bind(color)",
                         "children": [
                             {
                                 "type": "Identifier",
@@ -30,52 +47,25 @@
                     },
                     {
                         "type": "VText",
-                        "text": ";\n    font-size: ",
+                        "text": ";\n  }\n  .text{\n    color: ",
                         "children": []
                     },
                     {
                         "type": "VExpressionContainer",
-                        "text": "v-bind(  'font.size'  )",
+                        "text": "v-bind(\"colors[42]\")",
                         "children": [
                             {
                                 "type": "MemberExpression",
-                                "text": "font.size",
+                                "text": "colors[42]",
                                 "children": [
                                     {
                                         "type": "Identifier",
-                                        "text": "font",
-                                        "children": []
-                                    },
-                                    {
-                                        "type": "Identifier",
-                                        "text": "size",
-                                        "children": []
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "type": "VText",
-                        "text": ";\n    border-color: ",
-                        "children": []
-                    },
-                    {
-                        "type": "VExpressionContainer",
-                        "text": "v-bind(  \"border ( 'color' ) \"  )",
-                        "children": [
-                            {
-                                "type": "CallExpression",
-                                "text": "border ( 'color' )",
-                                "children": [
-                                    {
-                                        "type": "Identifier",
-                                        "text": "border",
+                                        "text": "colors",
                                         "children": []
                                     },
                                     {
                                         "type": "Literal",
-                                        "text": "'color'",
+                                        "text": "42",
                                         "children": []
                                     }
                                 ]
@@ -84,28 +74,39 @@
                     },
                     {
                         "type": "VText",
-                        "text": ";;\n    background-color: ",
+                        "text": ";\n  }\n  .text{\n    color: ",
                         "children": []
                     },
                     {
                         "type": "VExpressionContainer",
-                        "text": "v-bind(  \n        background\n        .\n        color\n    )",
+                        "text": "v-bind('getColor()')",
                         "children": [
                             {
-                                "type": "MemberExpression",
-                                "text": "background\n        .\n        color",
+                                "type": "CallExpression",
+                                "text": "getColor()",
                                 "children": [
                                     {
                                         "type": "Identifier",
-                                        "text": "background",
-                                        "children": []
-                                    },
-                                    {
-                                        "type": "Identifier",
-                                        "text": "color",
+                                        "text": "getColor",
                                         "children": []
                                     }
                                 ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": ";\n  }\n  .str-and-comments{\n    content: \"v-bind('getColor()')\";\n    content: \"v-bind('getColor()')\\\"v-bind(color)\";\n    // color: v-bind(color);\n    /* color: v-bind(color); */\n    color: /**/",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind(color)",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "color",
+                                "children": []
                             }
                         ]
                     },

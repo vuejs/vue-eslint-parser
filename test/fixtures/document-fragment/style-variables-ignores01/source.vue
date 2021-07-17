@@ -1,5 +1,4 @@
 <script setup>
-  /* eslint script-setup-uses-vars: 1 */
   const color = 'red'
 </script>
 

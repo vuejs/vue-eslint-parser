@@ -1,11 +1,11 @@
 [
     {
         "type": "VDocumentFragment",
-        "text": "<script setup>\n  /* eslint script-setup-uses-vars: 1 */\n  const color = 'red'\n</script>\n\n<style lang=\"scss\">\n  .v-bind .color {\n    color: 'v-bind(color)';\n    background-color: 'v-bind(color)';\n  }\n  /* v-bind(color) */\n  // v-bind(color)\n</style>\n",
+        "text": "<script setup>\n  const color = 'red'\n</script>\n\n<style>\n  .v-bind .color {\n    color: // v-bind(color);\n  }\n</style>\n",
         "children": [
             {
                 "type": "VElement",
-                "text": "<script setup>\n  /* eslint script-setup-uses-vars: 1 */\n  const color = 'red'\n</script>",
+                "text": "<script setup>\n  const color = 'red'\n</script>",
                 "children": [
                     {
                         "type": "VStartTag",
@@ -26,7 +26,7 @@
                     },
                     {
                         "type": "VText",
-                        "text": "\n  /* eslint script-setup-uses-vars: 1 */\n  const color = 'red'\n",
+                        "text": "\n  const color = 'red'\n",
                         "children": []
                     },
                     {
@@ -43,33 +43,32 @@
             },
             {
                 "type": "VElement",
-                "text": "<style lang=\"scss\">\n  .v-bind .color {\n    color: 'v-bind(color)';\n    background-color: 'v-bind(color)';\n  }\n  /* v-bind(color) */\n  // v-bind(color)\n</style>",
+                "text": "<style>\n  .v-bind .color {\n    color: // v-bind(color);\n  }\n</style>",
                 "children": [
                     {
                         "type": "VStartTag",
-                        "text": "<style lang=\"scss\">",
+                        "text": "<style>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  .v-bind .color {\n    color: // ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind(color)",
                         "children": [
                             {
-                                "type": "VAttribute",
-                                "text": "lang=\"scss\"",
-                                "children": [
-                                    {
-                                        "type": "VIdentifier",
-                                        "text": "lang",
-                                        "children": []
-                                    },
-                                    {
-                                        "type": "VLiteral",
-                                        "text": "\"scss\"",
-                                        "children": []
-                                    }
-                                ]
+                                "type": "Identifier",
+                                "text": "color",
+                                "children": []
                             }
                         ]
                     },
                     {
                         "type": "VText",
-                        "text": "\n  .v-bind .color {\n    color: 'v-bind(color)';\n    background-color: 'v-bind(color)';\n  }\n  /* v-bind(color) */\n  // v-bind(color)\n",
+                        "text": ";\n  }\n",
                         "children": []
                     },
                     {

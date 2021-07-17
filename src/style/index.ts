@@ -7,7 +7,7 @@ import type {
     VText,
 } from "../ast"
 import { ParseError } from "../ast"
-import { getOwnerDocument } from "../common/ast-utils"
+import { getLang, getOwnerDocument } from "../common/ast-utils"
 import { debug } from "../common/debug"
 import { insertError } from "../common/error-utils"
 import type { LocationCalculatorForHtml } from "../common/location-calculator"
@@ -44,6 +44,9 @@ export function parseStyleElements(
             style as VStyleElement,
             globalLocationCalculator,
             parserOptions,
+            {
+                inlineComment: (getLang(style) || "css") !== "css",
+            },
         )
     }
 }
@@ -52,6 +55,7 @@ function parseStyle(
     style: VStyleElement,
     locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
+    cssOptions: { inlineComment?: boolean },
 ) {
     if (style.children.length !== 1) {
         return
@@ -71,6 +75,7 @@ function parseStyle(
     for (const { range, expr, exprOffset, quote } of iterateVBind(
         textNode.range[0],
         text,
+        cssOptions,
     )) {
         const container: VExpressionContainer = {
             type: "VExpressionContainer",
@@ -179,7 +184,6 @@ function parseStyle(
                 ...ret.tokens,
                 ...afterTokens,
             ])
-
             insertComments(document, ret.comments)
 
             for (const variable of ret.variables) {
@@ -216,41 +220,29 @@ type VBindLocations = {
     quote: '"' | "'" | null
 }
 
-// eslint-disable-next-line complexity
+/**
+ * Iterate the `v-bind()` information.
+ */
 function* iterateVBind(
     offset: number,
     text: string,
+    cssOptions: { inlineComment?: boolean },
 ): IterableIterator<VBindLocations> {
-    const re =
-        /"|'|\/\*|\/\/|\bv-bind\(\s*(?:'([^']+)'|"([^"]+)"|([^'"][^)]*))\s*\)/gu
+    const re = cssOptions.inlineComment
+        ? /"|'|\/\*|\/\/|\bv-bind\(\s*(?:'([^']+)'|"([^"]+)"|([^'"][^)]*))\s*\)/gu
+        : /"|'|\/\*|\bv-bind\(\s*(?:'([^']+)'|"([^"]+)"|([^'"][^)]*))\s*\)/gu
     let match
     while ((match = re.exec(text))) {
         const startOrVBind = match[0]
         if (startOrVBind === '"' || startOrVBind === "'") {
             // skip string
-            for (let index = re.lastIndex; index < text.length; index++) {
-                const c = text[index]
-                if (c === "\\") {
-                    index++ // escaping
-                    continue
-                }
-                if (c === startOrVBind) {
-                    re.lastIndex = index + 1
-                    break
-                }
-            }
-        } else if (startOrVBind === "/*") {
+            re.lastIndex = skipString(startOrVBind, re.lastIndex)
+        } else if (startOrVBind === "/*" || startOrVBind === "//") {
             // skip comment
-            const index = text.indexOf("*/", re.lastIndex)
-            if (index >= re.lastIndex) {
-                re.lastIndex = index
-            }
-        } else if (startOrVBind === "//") {
-            // skip inline comment
-            const index = text.indexOf("\n", re.lastIndex)
-            if (index >= re.lastIndex) {
-                re.lastIndex = index
-            }
+            re.lastIndex = skipComment(
+                startOrVBind === "/*" ? "block" : "line",
+                re.lastIndex,
+            )
         } else {
             // v-bind
             const vBind = startOrVBind
@@ -269,5 +261,24 @@ function* iterateVBind(
                 quote,
             }
         }
+    }
+
+    function skipString(quote: string, nextIndex: number): number {
+        for (let index = nextIndex; index < text.length; index++) {
+            const c = text[index]
+            if (c === "\\") {
+                index++ // escaping
+                continue
+            }
+            if (c === quote) {
+                return index + 1
+            }
+        }
+        return nextIndex
+    }
+
+    function skipComment(kind: "block" | "line", nextIndex: number): number {
+        const index = text.indexOf(kind === "block" ? "*/" : "\n", nextIndex)
+        return Math.max(index, nextIndex)
     }
 }
