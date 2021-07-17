@@ -124,7 +124,7 @@ interface VFilter <: Node {
 }
 ```
 
-- This is mustaches or directive values or style variables.
+- This is mustaches or directive values or `v-bind()` in `<style>`.
 - If syntax errors exist, `VExpressionContainer#expression` is `null`.
 - If it's an empty mustache, `VExpressionContainer#expression` is `null`. (e.g., `{{ /* a comment */ }}`)
 - `Reference` is objects but not `Node`. Those are external references which are in the expression.
