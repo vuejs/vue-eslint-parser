@@ -313,10 +313,10 @@
             "value": "("
         },
         {
-            "type": "HTMLText",
+            "type": "HTMLRawText",
             "range": [
                 35,
-                46
+                40
             ],
             "loc": {
                 "start": {
@@ -325,10 +325,46 @@
                 },
                 "end": {
                     "line": 3,
+                    "column": 23
+                }
+            },
+            "value": "color"
+        },
+        {
+            "type": "HTMLWhitespace",
+            "range": [
+                40,
+                41
+            ],
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 23
+                },
+                "end": {
+                    "line": 3,
+                    "column": 24
+                }
+            },
+            "value": " "
+        },
+        {
+            "type": "HTMLRawText",
+            "range": [
+                41,
+                46
+            ],
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 24
+                },
+                "end": {
+                    "line": 3,
                     "column": 29
                 }
             },
-            "value": "color error"
+            "value": "error"
         },
         {
             "type": "Punctuator",

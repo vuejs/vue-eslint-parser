@@ -21,6 +21,8 @@ import { parseExpression } from "../script"
 import { DEFAULT_ECMA_VERSION } from "../script-setup/parser-options"
 import { resolveReferences } from "../template"
 
+type CSSParseOption = { inlineComment?: boolean }
+
 /**
  * Parse the source code of the given `<style>` elements.
  * @param elements The `<style>` elements to parse.
@@ -55,7 +57,7 @@ function parseStyle(
     style: VStyleElement,
     locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
-    cssOptions: { inlineComment?: boolean },
+    cssOptions: CSSParseOption,
 ) {
     if (style.children.length !== 1) {
         return
@@ -72,11 +74,27 @@ function parseStyle(
     const document = getOwnerDocument(style)
 
     let textStart = 0
-    for (const { range, expr, exprOffset, quote } of iterateVBind(
+    for (const { range, expr, exprOffset, quote, comments } of iterateVBind(
         textNode.range[0],
         text,
         cssOptions,
     )) {
+        insertComments(
+            document,
+            comments.map((c) => ({
+                type: c.type,
+                range: [
+                    locationCalculator.getOffsetWithGap(c.range[0]),
+                    locationCalculator.getOffsetWithGap(c.range[1]),
+                ],
+                loc: {
+                    start: locationCalculator.getLocation(c.range[0]),
+                    end: locationCalculator.getLocation(c.range[1]),
+                },
+                value: c.value,
+            })),
+        )
+
         const container: VExpressionContainer = {
             type: "VExpressionContainer",
             range: [
@@ -143,6 +161,24 @@ function parseStyle(
                 ),
             )
         }
+        const beforeLast = beforeTokens[beforeTokens.length - 1]
+        replaceAndSplitTokens(
+            document,
+            {
+                range: [container.range[0], beforeLast.range[1]],
+                loc: { start: container.loc.start, end: beforeLast.loc.end },
+            },
+            beforeTokens,
+        )
+        const afterFirst = afterTokens[0]
+        replaceAndSplitTokens(
+            document,
+            {
+                range: [afterFirst.range[0], container.range[1]],
+                loc: { start: afterFirst.loc.start, end: container.loc.end },
+            },
+            afterTokens,
+        )
 
         const lastChild = style.children[style.children.length - 1]
         style.children.push(container)
@@ -179,11 +215,17 @@ function parseStyle(
                 container.expression = ret.expression
                 container.references = ret.references
             }
-            replaceAndSplitTokens(document, container, [
-                ...beforeTokens,
-                ...ret.tokens,
-                ...afterTokens,
-            ])
+            replaceAndSplitTokens(
+                document,
+                {
+                    range: [beforeLast.range[1], afterFirst.range[0]],
+                    loc: {
+                        start: beforeLast.loc.end,
+                        end: afterFirst.loc.start,
+                    },
+                },
+                ret.tokens,
+            )
             insertComments(document, ret.comments)
 
             for (const variable of ret.variables) {
@@ -191,17 +233,6 @@ function parseStyle(
             }
             resolveReferences(container)
         } catch (err) {
-            replaceAndSplitTokens(document, container, [
-                ...beforeTokens,
-                createSimpleToken(
-                    "HTMLText",
-                    beforeTokens[beforeTokens.length - 1].range[1],
-                    afterTokens[0].range[0],
-                    expr,
-                    locationCalculator,
-                ),
-                ...afterTokens,
-            ])
             debug("[style] Parse error: %s", err)
 
             if (ParseError.isParseError(err)) {
@@ -218,6 +249,11 @@ type VBindLocations = {
     expr: string
     exprOffset: number
     quote: '"' | "'" | null
+    comments: {
+        type: string
+        range: OffsetRange
+        value: string
+    }[]
 }
 
 /**
@@ -226,59 +262,151 @@ type VBindLocations = {
 function* iterateVBind(
     offset: number,
     text: string,
-    cssOptions: { inlineComment?: boolean },
+    cssOptions: CSSParseOption,
 ): IterableIterator<VBindLocations> {
     const re = cssOptions.inlineComment
-        ? /"|'|\/\*|\/\/|\bv-bind\(\s*(?:'([^']+)'|"([^"]+)"|([^'"][^)]*))\s*\)/gu
-        : /"|'|\/\*|\bv-bind\(\s*(?:'([^']+)'|"([^"]+)"|([^'"][^)]*))\s*\)/gu
+        ? /"|'|\/\*|\/\/|\bv-bind\(/gu
+        : /"|'|\/\*|\bv-bind\(/gu
     let match
     while ((match = re.exec(text))) {
         const startOrVBind = match[0]
         if (startOrVBind === '"' || startOrVBind === "'") {
             // skip string
-            re.lastIndex = skipString(startOrVBind, re.lastIndex)
+            re.lastIndex = skipString(text, startOrVBind, re.lastIndex)
         } else if (startOrVBind === "/*" || startOrVBind === "//") {
             // skip comment
             re.lastIndex = skipComment(
+                text,
                 startOrVBind === "/*" ? "block" : "line",
                 re.lastIndex,
             )
         } else {
             // v-bind
-            const vBind = startOrVBind
-            const quote = match[1] ? "'" : match[2] ? '"' : null
-            const expr = match[1] || match[2] || match[3]
             const start = match.index + offset
-            const end = re.lastIndex + offset
-            const exprOffset =
-                start +
-                vBind.indexOf(quote || match[3], 7 /* v-bind( */) +
-                (quote ? 1 /* quote */ : 0)
-            yield {
-                range: [start, end],
-                expr,
-                exprOffset,
-                quote,
-            }
-        }
-    }
-
-    function skipString(quote: string, nextIndex: number): number {
-        for (let index = nextIndex; index < text.length; index++) {
-            const c = text[index]
-            if (c === "\\") {
-                index++ // escaping
+            const arg = extractArg(text, re.lastIndex, cssOptions)
+            if (!arg) {
                 continue
             }
-            if (c === quote) {
-                return index + 1
+            yield {
+                range: [start, arg.end + offset],
+                expr: arg.expr,
+                exprOffset: arg.exprOffset + offset,
+                quote: arg.quote,
+                comments: arg.comments.map((c) => ({
+                    ...c,
+                    range: [c.range[0] + offset, c.range[1] + offset],
+                })),
+            }
+            re.lastIndex = arg.end
+        }
+    }
+}
+
+function extractArg(
+    text: string,
+    nextIndex: number,
+    cssOptions: CSSParseOption,
+): {
+    expr: string
+    exprOffset: number
+    quote: '"' | "'" | null
+    end: number
+    comments: {
+        type: string
+        range: OffsetRange
+        value: string
+    }[]
+} | null {
+    ;/\S/gu.exec(text)
+    const re = cssOptions.inlineComment ? /"|'|\/\*|\/\/|\)/gu : /"|'|\/\*|\)/gu
+    const startTokenIndex = (re.lastIndex = skipSpaces(text, nextIndex))
+    let match
+    const stringRanges: OffsetRange[] = []
+    const comments: {
+        type: string
+        range: OffsetRange
+        value: string
+    }[] = []
+    while ((match = re.exec(text))) {
+        const startOrVBind = match[0]
+        if (startOrVBind === '"' || startOrVBind === "'") {
+            const start = match.index
+            const end = (re.lastIndex = skipString(
+                text,
+                startOrVBind,
+                re.lastIndex,
+            ))
+            stringRanges.push([start, end])
+        } else if (startOrVBind === "/*" || startOrVBind === "//") {
+            const block = startOrVBind === "/*"
+            const start = match.index
+            const end = (re.lastIndex = skipComment(
+                text,
+                block ? "block" : "line",
+                re.lastIndex,
+            ))
+            comments.push({
+                type: block ? "Block" : "Line",
+                range: [start, end],
+                value: block
+                    ? text.slice(start + 2, end - 2)
+                    : text.slice(start + 2, end - 1),
+            })
+        } else {
+            // close paren
+            if (stringRanges.length === 1) {
+                const range = stringRanges[0]
+                const exprRange: OffsetRange = [range[0] + 1, range[1] - 1]
+                return {
+                    expr: text.slice(...exprRange),
+                    exprOffset: exprRange[0],
+                    quote: text[range[0]] as '"' | "'",
+                    end: re.lastIndex,
+                    comments,
+                }
+            }
+
+            return {
+                expr: text.slice(startTokenIndex, match.index).trim(),
+                exprOffset: startTokenIndex,
+                quote: null,
+                end: re.lastIndex,
+                comments: [],
             }
         }
-        return nextIndex
     }
+    return null
+}
 
-    function skipComment(kind: "block" | "line", nextIndex: number): number {
-        const index = text.indexOf(kind === "block" ? "*/" : "\n", nextIndex)
-        return Math.max(index, nextIndex)
+function skipString(text: string, quote: string, nextIndex: number): number {
+    for (let index = nextIndex; index < text.length; index++) {
+        const c = text[index]
+        if (c === "\\") {
+            index++ // escaping
+            continue
+        }
+        if (c === quote) {
+            return index + 1
+        }
     }
+    return nextIndex
+}
+
+function skipComment(
+    text: string,
+    kind: "block" | "line",
+    nextIndex: number,
+): number {
+    const index = text.indexOf(kind === "block" ? "*/" : "\n", nextIndex)
+    return Math.max(index, nextIndex)
+}
+
+function skipSpaces(text: string, nextIndex: number): number {
+    for (let index = nextIndex; index < text.length; index++) {
+        const c = text[index]
+        if (c.trim()) {
+            return index
+        }
+    }
+    return text.length
 }
