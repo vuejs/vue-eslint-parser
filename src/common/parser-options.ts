@@ -8,7 +8,7 @@ export interface ParserOptions {
     vueFeatures?: {
         interpolationAsNonHTML?: boolean // default false
         filter?: boolean // default true
-        styleVariables?: boolean // default true
+        styleCSSVariableInjection?: boolean // default true
     }
 
     // espree options

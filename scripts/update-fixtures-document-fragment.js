@@ -34,7 +34,7 @@ function replacer(key, value) {
         return undefined
     }
     if (key === "errors" && Array.isArray(value)) {
-        return value.map(e => ({
+        return value.map((e) => ({
             message: e.message,
             index: e.index,
             lineNumber: e.lineNumber,
@@ -51,13 +51,18 @@ function replacer(key, value) {
 for (const name of TARGETS) {
     const sourceFileName = fs
         .readdirSync(path.join(ROOT, name))
-        .find(f => f.startsWith("source."))
+        .find((f) => f.startsWith("source."))
     const sourcePath = path.join(ROOT, `${name}/${sourceFileName}`)
+    const optionsPath = path.join(ROOT, `${name}/parser-options.json`)
     const source = fs.readFileSync(sourcePath, "utf8")
-    const result = parser.parseForESLint(
-        source,
-        Object.assign({ filePath: sourcePath }, PARSER_OPTIONS)
+    const options = Object.assign(
+        { filePath: sourcePath },
+        PARSER_OPTIONS,
+        fs.existsSync(optionsPath)
+            ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
+            : {}
     )
+    const result = parser.parseForESLint(source, options)
     const actual = result.services.getDocumentFragment()
 
     const resultPath = path.join(ROOT, `${name}/document-fragment.json`)
@@ -66,7 +71,7 @@ for (const name of TARGETS) {
 
     console.log("Update:", name)
 
-    const tokenRanges = getAllTokens(actual).map(t =>
+    const tokenRanges = getAllTokens(actual).map((t) =>
         source.slice(t.range[0], t.range[1])
     )
     const tree = getTree(source, actual)

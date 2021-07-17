@@ -122,7 +122,7 @@ export function parseForESLint(
             })
         }
 
-        if (options.vueFeatures?.styleVariables ?? true) {
+        if (options.vueFeatures?.styleCSSVariableInjection ?? true) {
             const styles = rootAST.children.filter(isStyleElement)
             parseStyleElements(styles, locationCalculator, {
                 ...options,
