@@ -1,5 +1,6 @@
 import type {
     OffsetRange,
+    Token,
     VElement,
     VExpressionContainer,
     VStyleElement,
@@ -85,6 +86,82 @@ function parseStyle(
             expression: null,
             references: [],
         }
+
+        const beforeTokens: Token[] = [
+            createSimpleToken(
+                "HTMLText",
+                container.range[0],
+                container.range[0] + 6 /* v-bind */,
+                "v-bind",
+                locationCalculator,
+            ),
+            createSimpleToken(
+                "Punctuator",
+                container.range[0] + 6 /* v-bind */,
+                container.range[0] + 7,
+                "(",
+                locationCalculator,
+            ),
+        ]
+        const afterTokens: Token[] = [
+            createSimpleToken(
+                "Punctuator",
+                container.range[1] - 1,
+                container.range[1],
+                ")",
+                locationCalculator,
+            ),
+        ]
+        if (quote) {
+            const openStart = locationCalculator.getOffsetWithGap(
+                exprOffset - 1,
+            )
+            beforeTokens.push(
+                createSimpleToken(
+                    "Punctuator",
+                    openStart,
+                    openStart + 1,
+                    quote,
+                    locationCalculator,
+                ),
+            )
+            const closeStart = locationCalculator.getOffsetWithGap(
+                exprOffset + expr.length,
+            )
+            afterTokens.unshift(
+                createSimpleToken(
+                    "Punctuator",
+                    closeStart,
+                    closeStart + 1,
+                    quote,
+                    locationCalculator,
+                ),
+            )
+        }
+
+        const lastChild = style.children[style.children.length - 1]
+        style.children.push(container)
+        if (lastChild.type === "VText") {
+            const newTextNode: VText = {
+                type: "VText",
+                range: [container.range[1], lastChild.range[1]],
+                loc: {
+                    start: { ...container.loc.end },
+                    end: { ...lastChild.loc.end },
+                },
+                parent: style,
+                value: text.slice(range[1] - textNode.range[0]),
+            }
+            style.children.push(newTextNode)
+
+            lastChild.range[1] = container.range[0]
+            lastChild.loc.end = { ...container.loc.start }
+            lastChild.value = text.slice(
+                textStart,
+                range[0] - textNode.range[0],
+            )
+            textStart = range[1] - textNode.range[0]
+        }
         try {
             const ret = parseExpression(
                 expr,
@@ -96,98 +173,31 @@ function parseStyle(
                 ret.expression.parent = container
                 container.expression = ret.expression
                 container.references = ret.references
-                ret.tokens.unshift(
-                    createSimpleToken(
-                        "HTMLText",
-                        container.range[0],
-                        container.range[0] + 6 /* v-bind */,
-                        "v-bind",
-                        locationCalculator,
-                    ),
-                    createSimpleToken(
-                        "Punctuator",
-                        container.range[0] + 6 /* v-bind */,
-                        container.range[0] + 7,
-                        "(",
-                        locationCalculator,
-                    ),
-                    ...(quote
-                        ? [
-                              (() => {
-                                  const start =
-                                      locationCalculator.getOffsetWithGap(
-                                          exprOffset - 1,
-                                      )
-                                  return createSimpleToken(
-                                      "Punctuator",
-                                      start,
-                                      start + 1,
-                                      quote,
-                                      locationCalculator,
-                                  )
-                              })(),
-                          ]
-                        : []),
-                )
-                ret.tokens.push(
-                    ...(quote
-                        ? [
-                              (() => {
-                                  const start =
-                                      locationCalculator.getOffsetWithGap(
-                                          exprOffset + expr.length,
-                                      )
-                                  return createSimpleToken(
-                                      "Punctuator",
-                                      start,
-                                      start + 1,
-                                      quote,
-                                      locationCalculator,
-                                  )
-                              })(),
-                          ]
-                        : []),
-                    createSimpleToken(
-                        "Punctuator",
-                        container.range[1] - 1,
-                        container.range[1],
-                        ")",
-                        locationCalculator,
-                    ),
-                )
-
-                replaceAndSplitTokens(document, container, ret.tokens)
             }
+            replaceAndSplitTokens(document, container, [
+                ...beforeTokens,
+                ...ret.tokens,
+                ...afterTokens,
+            ])
 
             insertComments(document, ret.comments)
-
-            const lastChild = style.children[style.children.length - 1]
-            style.children.push(container)
 
             for (const variable of ret.variables) {
                 style.variables.push(variable)
             }
             resolveReferences(container)
-
-            if (lastChild.type === "VText") {
-                const newTextNode: VText = {
-                    type: "VText",
-                    range: [container.range[1], lastChild.range[1]],
-                    loc: {
-                        start: { ...container.loc.end },
-                        end: { ...lastChild.loc.end },
-                    },
-                    parent: style,
-                    value: text.slice(range[1]),
-                }
-                style.children.push(newTextNode)
-
-                lastChild.range[1] = container.range[0]
-                lastChild.loc.end = { ...container.loc.start }
-                lastChild.value = text.slice(textStart, range[0])
-                textStart = range[1]
-            }
         } catch (err) {
+            replaceAndSplitTokens(document, container, [
+                ...beforeTokens,
+                createSimpleToken(
+                    "HTMLText",
+                    beforeTokens[beforeTokens.length - 1].range[1],
+                    afterTokens[0].range[0],
+                    expr,
+                    locationCalculator,
+                ),
+                ...afterTokens,
+            ])
             debug("[style] Parse error: %s", err)
 
             if (ParseError.isParseError(err)) {
@@ -221,8 +231,9 @@ function* iterateVBind(
             for (let index = re.lastIndex; index < text.length; index++) {
                 const c = text[index]
                 if (c === "\\") {
+                    index++ // escaping
                     continue
-                } // escaping
+                }
                 if (c === startOrVBind) {
                     re.lastIndex = index + 1
                     break

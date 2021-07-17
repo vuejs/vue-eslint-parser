@@ -2205,7 +2205,7 @@
                             "column": 11
                         }
                     },
-                    "value": "\n  .text {\n    color: v-bind(color);\n\n    /* expressions (wrap in quotes) */\n    font-size: v-bind('font.size');\n  }\n"
+                    "value": "\n  .text {\n    color: "
                 },
                 {
                     "type": "VExpressionContainer",
@@ -2285,7 +2285,7 @@
                             "column": 15
                         }
                     },
-                    "value": ""
+                    "value": ";\n\n    /* expressions (wrap in quotes) */\n    font-size: "
                 },
                 {
                     "type": "VExpressionContainer",
@@ -2405,7 +2405,7 @@
                             "column": 0
                         }
                     },
-                    "value": ""
+                    "value": ";\n  }\n"
                 }
             ],
             "endTag": {
