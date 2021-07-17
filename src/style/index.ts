@@ -226,7 +226,7 @@ function* iterateVBind(
     let match
     while ((match = re.exec(text))) {
         const startOrVBind = match[0]
-        if (startOrVBind === '"' || startOrVBind === '"') {
+        if (startOrVBind === '"' || startOrVBind === "'") {
             // skip string
             for (let index = re.lastIndex; index < text.length; index++) {
                 const c = text[index]
