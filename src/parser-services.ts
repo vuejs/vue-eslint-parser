@@ -400,14 +400,13 @@ export function define(
          * @returns The token store of template body.
          */
         getTemplateBodyTokenStore(): TokenStore {
-            const ast = rootAST.templateBody
-            const key = ast || stores
+            const key = document || stores
             let store = stores.get(key)
 
             if (!store) {
                 store =
-                    ast != null
-                        ? new TokenStore(ast.tokens, ast.comments)
+                    document != null
+                        ? new TokenStore(document.tokens, document.comments)
                         : new TokenStore([], [])
                 stores.set(key, store)
             }
