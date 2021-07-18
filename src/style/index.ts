@@ -1,6 +1,7 @@
 import type {
     OffsetRange,
     Token,
+    VDocumentFragment,
     VElement,
     VExpressionContainer,
     VStyleElement,
@@ -42,7 +43,7 @@ export function parseStyleElements(
 
     for (const style of elements) {
         ;(style as VStyleElement).style = true
-        parseStyle(
+        parseStyleElement(
             style as VStyleElement,
             globalLocationCalculator,
             parserOptions,
@@ -53,9 +54,9 @@ export function parseStyleElements(
     }
 }
 
-function parseStyle(
+function parseStyleElement(
     style: VStyleElement,
-    locationCalculator: LocationCalculatorForHtml,
+    globalLocationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
     cssOptions: CSSParseOption,
 ) {
@@ -66,33 +67,50 @@ function parseStyle(
     if (textNode.type !== "VText") {
         return
     }
-    const text = textNode.value
-    if (!text.includes("v-bind(")) {
+    const code = textNode.value
+    // short circuit
+    if (!code.includes("v-bind(")) {
         return
     }
 
+    const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
+        textNode.range[0],
+    )
     const document = getOwnerDocument(style)
+    parseStyle(
+        document,
+        style,
+        code,
+        locationCalculator,
+        parserOptions,
+        cssOptions,
+    )
+}
 
+function parseStyle(
+    document: VDocumentFragment | null,
+    style: VStyleElement,
+    code: string,
+    locationCalculator: LocationCalculatorForHtml,
+    parserOptions: ParserOptions,
+    cssOptions: CSSParseOption,
+) {
     let textStart = 0
     for (const { range, expr, exprOffset, quote, comments } of iterateVBind(
-        textNode.range[0],
-        text,
+        code,
         cssOptions,
     )) {
         insertComments(
             document,
-            comments.map((c) => ({
-                type: c.type,
-                range: [
+            comments.map((c) =>
+                createSimpleToken(
+                    c.type,
                     locationCalculator.getOffsetWithGap(c.range[0]),
                     locationCalculator.getOffsetWithGap(c.range[1]),
-                ],
-                loc: {
-                    start: locationCalculator.getLocation(c.range[0]),
-                    end: locationCalculator.getLocation(c.range[1]),
-                },
-                value: c.value,
-            })),
+                    c.value,
+                    locationCalculator,
+                ),
+            ),
         )
 
         const container: VExpressionContainer = {
@@ -191,17 +209,14 @@ function parseStyle(
                     end: { ...lastChild.loc.end },
                 },
                 parent: style,
-                value: text.slice(range[1] - textNode.range[0]),
+                value: code.slice(range[1]),
             }
             style.children.push(newTextNode)
 
             lastChild.range[1] = container.range[0]
             lastChild.loc.end = { ...container.loc.start }
-            lastChild.value = text.slice(
-                textStart,
-                range[0] - textNode.range[0],
-            )
-            textStart = range[1] - textNode.range[0]
+            lastChild.value = code.slice(textStart, range[0])
+            textStart = range[1]
         }
         try {
             const ret = parseExpression(
@@ -260,50 +275,46 @@ type VBindLocations = {
  * Iterate the `v-bind()` information.
  */
 function* iterateVBind(
-    offset: number,
-    text: string,
+    code: string,
     cssOptions: CSSParseOption,
 ): IterableIterator<VBindLocations> {
     const re = cssOptions.inlineComment
-        ? /"|'|\/\*|\/\/|\bv-bind\(/gu
+        ? /"|'|\/[*/]|\bv-bind\(/gu
         : /"|'|\/\*|\bv-bind\(/gu
     let match
-    while ((match = re.exec(text))) {
+    while ((match = re.exec(code))) {
         const startOrVBind = match[0]
         if (startOrVBind === '"' || startOrVBind === "'") {
             // skip string
-            re.lastIndex = skipString(text, startOrVBind, re.lastIndex)
+            re.lastIndex = skipString(code, startOrVBind, re.lastIndex)
         } else if (startOrVBind === "/*" || startOrVBind === "//") {
             // skip comment
             re.lastIndex = skipComment(
-                text,
+                code,
                 startOrVBind === "/*" ? "block" : "line",
                 re.lastIndex,
             )
         } else {
             // v-bind
-            const start = match.index + offset
-            const arg = extractArg(text, re.lastIndex, cssOptions)
+            const start = match.index
+            const arg = parseVBindArg(code, re.lastIndex, cssOptions)
             if (!arg) {
                 continue
             }
             yield {
-                range: [start, arg.end + offset],
+                range: [start, arg.end],
                 expr: arg.expr,
-                exprOffset: arg.exprOffset + offset,
+                exprOffset: arg.exprOffset,
                 quote: arg.quote,
-                comments: arg.comments.map((c) => ({
-                    ...c,
-                    range: [c.range[0] + offset, c.range[1] + offset],
-                })),
+                comments: arg.comments,
             }
             re.lastIndex = arg.end
         }
     }
 }
 
-function extractArg(
-    text: string,
+function parseVBindArg(
+    code: string,
     nextIndex: number,
     cssOptions: CSSParseOption,
 ): {
@@ -317,9 +328,8 @@ function extractArg(
         value: string
     }[]
 } | null {
-    ;/\S/gu.exec(text)
-    const re = cssOptions.inlineComment ? /"|'|\/\*|\/\/|\)/gu : /"|'|\/\*|\)/gu
-    const startTokenIndex = (re.lastIndex = skipSpaces(text, nextIndex))
+    const re = cssOptions.inlineComment ? /"|'|\/[*/]|\)/gu : /"|'|\/\*|\)/gu
+    const startTokenIndex = (re.lastIndex = skipSpaces(code, nextIndex))
     let match
     const stringRanges: OffsetRange[] = []
     const comments: {
@@ -327,12 +337,12 @@ function extractArg(
         range: OffsetRange
         value: string
     }[] = []
-    while ((match = re.exec(text))) {
+    while ((match = re.exec(code))) {
         const startOrVBind = match[0]
         if (startOrVBind === '"' || startOrVBind === "'") {
             const start = match.index
             const end = (re.lastIndex = skipString(
-                text,
+                code,
                 startOrVBind,
                 re.lastIndex,
             ))
@@ -341,7 +351,7 @@ function extractArg(
             const block = startOrVBind === "/*"
             const start = match.index
             const end = (re.lastIndex = skipComment(
-                text,
+                code,
                 block ? "block" : "line",
                 re.lastIndex,
             ))
@@ -349,25 +359,26 @@ function extractArg(
                 type: block ? "Block" : "Line",
                 range: [start, end],
                 value: block
-                    ? text.slice(start + 2, end - 2)
-                    : text.slice(start + 2, end - 1),
+                    ? code.slice(start + 2, end - 2)
+                    : code.slice(start + 2, end - 1),
             })
         } else {
-            // close paren
+            // closing paren
             if (stringRanges.length === 1) {
+                // for v-bind( 'expr' ), and v-bind( /**/ 'expr' /**/ )
                 const range = stringRanges[0]
                 const exprRange: OffsetRange = [range[0] + 1, range[1] - 1]
                 return {
-                    expr: text.slice(...exprRange),
+                    expr: code.slice(...exprRange),
                     exprOffset: exprRange[0],
-                    quote: text[range[0]] as '"' | "'",
+                    quote: code[range[0]] as '"' | "'",
                     end: re.lastIndex,
                     comments,
                 }
             }
 
             return {
-                expr: text.slice(startTokenIndex, match.index).trim(),
+                expr: code.slice(startTokenIndex, match.index).trim(),
                 exprOffset: startTokenIndex,
                 quote: null,
                 end: re.lastIndex,
@@ -378,9 +389,9 @@ function extractArg(
     return null
 }
 
-function skipString(text: string, quote: string, nextIndex: number): number {
-    for (let index = nextIndex; index < text.length; index++) {
-        const c = text[index]
+function skipString(code: string, quote: '"' | "'", nextIndex: number): number {
+    for (let index = nextIndex; index < code.length; index++) {
+        const c = code[index]
         if (c === "\\") {
             index++ // escaping
             continue
@@ -389,24 +400,28 @@ function skipString(text: string, quote: string, nextIndex: number): number {
             return index + 1
         }
     }
-    return nextIndex
+    return code.length
 }
 
 function skipComment(
-    text: string,
+    code: string,
     kind: "block" | "line",
     nextIndex: number,
 ): number {
-    const index = text.indexOf(kind === "block" ? "*/" : "\n", nextIndex)
-    return Math.max(index, nextIndex)
+    const closing = kind === "block" ? "*/" : "\n"
+    const index = code.indexOf(closing, nextIndex)
+    if (index >= nextIndex) {
+        return index + closing.length
+    }
+    return code.length
 }
 
-function skipSpaces(text: string, nextIndex: number): number {
-    for (let index = nextIndex; index < text.length; index++) {
-        const c = text[index]
+function skipSpaces(code: string, nextIndex: number): number {
+    for (let index = nextIndex; index < code.length; index++) {
+        const c = code[index]
         if (c.trim()) {
             return index
         }
     }
-    return text.length
+    return code.length
 }
