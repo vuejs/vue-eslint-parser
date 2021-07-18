@@ -26,7 +26,7 @@ import {
 } from "./sfc/custom-block"
 import type { ParserOptions } from "./common/parser-options"
 import { isSFCFile } from "./common/parser-options"
-import { getLang, isStyleElement } from "./common/ast-utils"
+import { getLang } from "./common/ast-utils"
 
 //------------------------------------------------------------------------------
 // Helpers
