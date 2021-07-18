@@ -234,7 +234,8 @@ export function define(
                     } finally {
                         // eslint-disable-next-line @mysticatea/ts/ban-ts-ignore
                         // @ts-ignore
-                        scriptVisitor[styleTriggerSelector] = programExitHandler
+                        scriptVisitor[documentTriggerSelector] =
+                            programExitHandler
                         documentEmitters.delete(documentTriggerSelector)
                     }
                 }
