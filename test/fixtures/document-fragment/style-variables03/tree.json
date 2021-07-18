@@ -1,0 +1,99 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<style>\n  .text {\n    color:v-bind(color);\n  }\n</style>\n\n<style scoped>\n  .text {\n    color: v-bind(color);}\n</style>",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<style>\n  .text {\n    color:v-bind(color);\n  }\n</style>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<style>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  .text {\n    color:",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind(color)",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "color",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": ";\n  }\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</style>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<style scoped>\n  .text {\n    color: v-bind(color);}\n</style>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<style scoped>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "scoped",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "scoped",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  .text {\n    color: ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind(color)",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "color",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": ";}\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</style>",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]

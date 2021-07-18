@@ -121,7 +121,7 @@ export class LocationCalculatorForHtml
      * @returns The location of the index.
      */
     public getLocation(index: number): Location {
-        return this.getLocFromIndex(this.baseOffset + index + this.shiftOffset)
+        return this.getLocFromIndex(this.getOffsetWithGap(index))
     }
 
     /**
@@ -130,13 +130,7 @@ export class LocationCalculatorForHtml
      * @returns The offset of the index.
      */
     public getOffsetWithGap(index: number): number {
-        const shiftOffset = this.shiftOffset
-        return (
-            this.baseOffset +
-            index +
-            shiftOffset +
-            this._getGap(index + shiftOffset)
-        )
+        return index + this.getFixOffset(index)
     }
 
     /**
@@ -146,6 +140,6 @@ export class LocationCalculatorForHtml
     public getFixOffset(offset: number): number {
         const shiftOffset = this.shiftOffset
         const gap = this._getGap(offset + shiftOffset)
-        return this.baseOffset + Math.max(0, gap) + shiftOffset
+        return this.baseOffset + gap + shiftOffset
     }
 }

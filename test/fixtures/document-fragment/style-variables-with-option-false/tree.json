@@ -1,0 +1,129 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<template>\n  <div class=\"text\">hello</div>\n</template>\n\n<script>\n  export default {\n    data() {\n      return {\n        color: 'red',\n        font: {\n          size: '2em',\n        },\n      }\n    },\n  }\n</script>\n\n<style>\n  .text {\n    color: v-bind(color);\n\n    /* expressions (wrap in quotes) */\n    font-size: v-bind('font.size');\n  }\n</style>\n",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<template>\n  <div class=\"text\">hello</div>\n</template>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<template>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<div class=\"text\">hello</div>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<div class=\"text\">",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "class=\"text\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "class",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VLiteral",
+                                                "text": "\"text\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VText",
+                                "text": "hello",
+                                "children": []
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</div>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</template>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<script>\n  export default {\n    data() {\n      return {\n        color: 'red',\n        font: {\n          size: '2em',\n        },\n      }\n    },\n  }\n</script>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<script>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  export default {\n    data() {\n      return {\n        color: 'red',\n        font: {\n          size: '2em',\n        },\n      }\n    },\n  }\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</script>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<style>\n  .text {\n    color: v-bind(color);\n\n    /* expressions (wrap in quotes) */\n    font-size: v-bind('font.size');\n  }\n</style>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<style>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  .text {\n    color: v-bind(color);\n\n    /* expressions (wrap in quotes) */\n    font-size: v-bind('font.size');\n  }\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</style>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            }
+        ]
+    }
+]

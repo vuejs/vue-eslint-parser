@@ -22,11 +22,11 @@ import type {
 import {
     createCustomBlockSharedContext,
     getCustomBlocks,
-    getLang,
     parseCustomBlockElement,
 } from "./sfc/custom-block"
 import type { ParserOptions } from "./common/parser-options"
 import { isSFCFile } from "./common/parser-options"
+import { getLang } from "./common/ast-utils"
 
 //------------------------------------------------------------------------------
 // Helpers

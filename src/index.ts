@@ -19,8 +19,10 @@ import {
     getLang,
     isScriptElement,
     isScriptSetupElement,
+    isStyleElement,
     isTemplateElement,
 } from "./common/ast-utils"
+import { parseStyleElements } from "./style"
 
 const STARTS_WITH_LT = /^\s*</u
 
@@ -117,6 +119,14 @@ export function parseForESLint(
             result = parseScriptElement(scripts[0], locationCalculator, {
                 ...options,
                 parser: scriptParser,
+            })
+        }
+
+        if (options.vueFeatures?.styleCSSVariableInjection ?? true) {
+            const styles = rootAST.children.filter(isStyleElement)
+            parseStyleElements(styles, locationCalculator, {
+                ...options,
+                parser: getScriptParser(options.parser, rootAST, "template"),
             })
         }
 

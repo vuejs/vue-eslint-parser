@@ -1,0 +1,44 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<style>\n  .text{\n    color: v-bind(color error);\n  }\n</style>\n",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<style>\n  .text{\n    color: v-bind(color error);\n  }\n</style>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<style>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  .text{\n    color: ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind(color error)",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": ";\n  }\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</style>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            }
+        ]
+    }
+]

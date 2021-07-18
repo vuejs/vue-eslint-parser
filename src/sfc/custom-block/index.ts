@@ -4,7 +4,6 @@ import type {
     ESLintExtendedProgram,
     Node,
     OffsetRange,
-    VAttribute,
     VDocumentFragment,
     VElement,
     VExpressionContainer,
@@ -67,15 +66,6 @@ export function getCustomBlocks(
                       block.name !== "style",
               )
         : []
-}
-
-export function getLang(customBlock: VElement) {
-    return (
-        customBlock.startTag.attributes.find(
-            (attr): attr is VAttribute =>
-                !attr.directive && attr.key.name === "lang",
-        )?.value?.value || null
-    )
 }
 
 /**

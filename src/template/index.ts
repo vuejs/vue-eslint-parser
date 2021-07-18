@@ -3,8 +3,6 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import sortedIndexBy from "lodash/sortedIndexBy"
-import sortedLastIndexBy from "lodash/sortedLastIndexBy"
 import type { ParserOptions } from "../common/parser-options"
 import { isSFCFile } from "../common/parser-options"
 import type {
@@ -35,6 +33,13 @@ import {
     parseVOnExpression,
     parseSlotScopeExpression,
 } from "../script"
+import {
+    createSimpleToken,
+    insertComments,
+    replaceTokens,
+} from "../common/token-utils"
+import { getOwnerDocument } from "../common/ast-utils"
+import { insertError } from "../common/error-utils"
 
 const shorthandSign = /^[.:@#]/u
 const shorthandNameMap = { ":": "bind", ".": "bind", "@": "on", "#": "slot" }
@@ -49,45 +54,6 @@ function getTagName(
     isSFC: boolean,
 ) {
     return isSFC ? startTagOrElement.rawName : startTagOrElement.name
-}
-
-/**
- * Get the belonging document of the given node.
- * @param leafNode The node to get.
- * @returns The belonging document.
- */
-function getOwnerDocument(leafNode: VNode): VDocumentFragment | null {
-    let node: VNode | null = leafNode
-    while (node != null && node.type !== "VDocumentFragment") {
-        node = node.parent
-    }
-    return node
-}
-
-/**
- * Create a simple token.
- * @param type The type of new token.
- * @param start The offset of the start position of new token.
- * @param end The offset of the end position of new token.
- * @param value The value of new token.
- * @returns The new token.
- */
-function createSimpleToken(
-    type: string,
-    start: number,
-    end: number,
-    value: string,
-    globalLocationCalculator: LocationCalculatorForHtml,
-): Token {
-    return {
-        type,
-        range: [start, end],
-        loc: {
-            start: globalLocationCalculator.getLocation(start),
-            end: globalLocationCalculator.getLocation(end),
-        },
-        value,
-    }
 }
 
 /**
@@ -422,91 +388,6 @@ function createDirectiveKey(
     )
 
     return directiveKey
-}
-
-interface HasRange {
-    range: [number, number]
-}
-
-/**
- * Get `x.range[0]`.
- * @param x The object to get.
- * @returns `x.range[0]`.
- */
-function byRange0(x: HasRange): number {
-    return x.range[0]
-}
-
-/**
- * Get `x.range[1]`.
- * @param x The object to get.
- * @returns `x.range[1]`.
- */
-function byRange1(x: HasRange): number {
-    return x.range[1]
-}
-
-/**
- * Get `x.pos`.
- * @param x The object to get.
- * @returns `x.pos`.
- */
-function byIndex(x: ParseError): number {
-    return x.index
-}
-
-/**
- * Replace the tokens in the given range.
- * @param document The document that the node is belonging to.
- * @param node The node to specify the range of replacement.
- * @param newTokens The new tokens.
- */
-function replaceTokens(
-    document: VDocumentFragment | null,
-    node: HasRange,
-    newTokens: Token[],
-): void {
-    if (document == null) {
-        return
-    }
-
-    const index = sortedIndexBy(document.tokens, node, byRange0)
-    const count = sortedLastIndexBy(document.tokens, node, byRange1) - index
-    document.tokens.splice(index, count, ...newTokens)
-}
-
-/**
- * Insert the given comment tokens.
- * @param document The document that the node is belonging to.
- * @param newComments The comments to insert.
- */
-function insertComments(
-    document: VDocumentFragment | null,
-    newComments: Token[],
-): void {
-    if (document == null || newComments.length === 0) {
-        return
-    }
-
-    const index = sortedIndexBy(document.comments, newComments[0], byRange0)
-    document.comments.splice(index, 0, ...newComments)
-}
-
-/**
- * Insert the given error.
- * @param document The document that the node is belonging to.
- * @param error The error to insert.
- */
-function insertError(
-    document: VDocumentFragment | null,
-    error: ParseError,
-): void {
-    if (document == null) {
-        return
-    }
-
-    const index = sortedIndexBy(document.errors, error, byIndex)
-    document.errors.splice(index, 0, error)
 }
 
 /**

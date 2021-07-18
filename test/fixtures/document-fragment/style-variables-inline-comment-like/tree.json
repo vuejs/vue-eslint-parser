@@ -1,0 +1,88 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<script setup>\n  const color = 'red'\n</script>\n\n<style>\n  .v-bind .color {\n    color: // v-bind(color);\n  }\n</style>\n",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<script setup>\n  const color = 'red'\n</script>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<script setup>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "setup",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "setup",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  const color = 'red'\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</script>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<style>\n  .v-bind .color {\n    color: // v-bind(color);\n  }\n</style>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<style>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  .v-bind .color {\n    color: // ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind(color)",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "color",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": ";\n  }\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</style>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            }
+        ]
+    }
+]

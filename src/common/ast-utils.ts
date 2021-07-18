@@ -1,4 +1,10 @@
-import type { VAttribute, VDirective, VElement, VNode } from "../ast"
+import type {
+    VAttribute,
+    VDirective,
+    VDocumentFragment,
+    VElement,
+    VNode,
+} from "../ast"
 
 /**
  * Check whether the node is a `<script>` element.
@@ -28,6 +34,28 @@ export function isScriptSetupElement(script: VElement): boolean {
  */
 export function isTemplateElement(node: VNode): node is VElement {
     return node.type === "VElement" && node.name === "template"
+}
+
+/**
+ * Check whether the node is a `<style>` element.
+ * @param node The node to check.
+ * @returns `true` if the node is a `<style>` element.
+ */
+export function isStyleElement(node: VNode): node is VElement {
+    return node.type === "VElement" && node.name === "style"
+}
+
+/**
+ * Get the belonging document of the given node.
+ * @param leafNode The node to get.
+ * @returns The belonging document.
+ */
+export function getOwnerDocument(leafNode: VNode): VDocumentFragment | null {
+    let node: VNode | null = leafNode
+    while (node != null && node.type !== "VDocumentFragment") {
+        node = node.parent
+    }
+    return node
 }
 
 /**

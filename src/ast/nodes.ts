@@ -859,5 +859,15 @@ export interface VDocumentFragment
         HasConcreteInfo {
     type: "VDocumentFragment"
     parent: null
-    children: (VElement | VText | VExpressionContainer)[]
+    children: (VElement | VText | VExpressionContainer | VStyleElement)[]
+}
+
+/**
+ * Style element nodes.
+ */
+export interface VStyleElement extends VElement {
+    type: "VElement"
+    name: "style"
+    style: true
+    children: (VText | VExpressionContainer)[]
 }

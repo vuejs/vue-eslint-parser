@@ -124,6 +124,7 @@ For example:
         "vueFeatures": {
             "filter": true,
             "interpolationAsNonHTML": false,
+            "styleCSSVariableInjection": true,
         }
     }
 }
@@ -188,6 +189,12 @@ The following template can be parsed well.
 ```
 
 But, it cannot be parsed with Vue 2.
+
+### parserOptions.vueFeatures.styleCSSVariableInjection
+
+If set to `true`, to parse expressions in `v-bind` CSS functions inside `<style>` tags. `v-bind()` is parsed into the `VExpressionContainer` AST node and held in the `VElement` of `<style>`. Default is `true`.
+
+See also to [here](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0043-sfc-style-variables.md).
 
 ## 🎇 Usage for custom rules / plugins
 
