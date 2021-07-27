@@ -35,7 +35,7 @@ describe("parserServices.defineDocumentVisitor tests", () => {
     font: v-bind(forbidden)
 }
 .call {
-    font: v-bind(foo())
+    font: v-bind('foo()')
 }
 .ok {
     font: v-bind(ok)
