@@ -2,7 +2,7 @@
     "type": "VDocumentFragment",
     "range": [
         0,
-        324
+        291
     ],
     "loc": {
         "start": {
@@ -19,7 +19,7 @@
             "type": "VElement",
             "range": [
                 0,
-                323
+                290
             ],
             "loc": {
                 "start": {
@@ -258,7 +258,7 @@
                     "type": "VText",
                     "range": [
                         128,
-                        181
+                        148
                     ],
                     "loc": {
                         "start": {
@@ -270,13 +270,13 @@
                             "column": 18
                         }
                     },
-                    "value": "; /* vue 3.1 may not work well. */\n    border-color: "
+                    "value": ";\n    border-color: "
                 },
                 {
                     "type": "VExpressionContainer",
                     "range": [
-                        181,
-                        224
+                        148,
+                        191
                     ],
                     "loc": {
                         "start": {
@@ -290,8 +290,8 @@
                     },
                     "expression": {
                         "type": "CallExpression",
-                        "start": 191,
-                        "end": 206,
+                        "start": 158,
+                        "end": 173,
                         "loc": {
                             "start": {
                                 "line": 5,
@@ -303,13 +303,13 @@
                             }
                         },
                         "range": [
-                            191,
-                            206
+                            158,
+                            173
                         ],
                         "callee": {
                             "type": "Identifier",
-                            "start": 191,
-                            "end": 197,
+                            "start": 158,
+                            "end": 164,
                             "loc": {
                                 "start": {
                                     "line": 5,
@@ -321,16 +321,16 @@
                                 }
                             },
                             "range": [
-                                191,
-                                197
+                                158,
+                                164
                             ],
                             "name": "border"
                         },
                         "arguments": [
                             {
                                 "type": "Literal",
-                                "start": 198,
-                                "end": 205,
+                                "start": 165,
+                                "end": 172,
                                 "loc": {
                                     "start": {
                                         "line": 5,
@@ -342,8 +342,8 @@
                                     }
                                 },
                                 "range": [
-                                    198,
-                                    205
+                                    165,
+                                    172
                                 ],
                                 "value": "color",
                                 "raw": "'color'"
@@ -354,8 +354,8 @@
                         {
                             "id": {
                                 "type": "Identifier",
-                                "start": 191,
-                                "end": 197,
+                                "start": 158,
+                                "end": 164,
                                 "loc": {
                                     "start": {
                                         "line": 5,
@@ -367,8 +367,8 @@
                                     }
                                 },
                                 "range": [
-                                    191,
-                                    197
+                                    158,
+                                    164
                                 ],
                                 "name": "border"
                             },
@@ -379,8 +379,8 @@
                 {
                     "type": "VText",
                     "range": [
-                        224,
-                        248
+                        191,
+                        215
                     ],
                     "loc": {
                         "start": {
@@ -397,8 +397,8 @@
                 {
                     "type": "VExpressionContainer",
                     "range": [
-                        248,
-                        309
+                        215,
+                        276
                     ],
                     "loc": {
                         "start": {
@@ -412,8 +412,8 @@
                     },
                     "expression": {
                         "type": "MemberExpression",
-                        "start": 258,
-                        "end": 288,
+                        "start": 225,
+                        "end": 255,
                         "loc": {
                             "start": {
                                 "line": 7,
@@ -425,13 +425,13 @@
                             }
                         },
                         "range": [
-                            258,
-                            288
+                            225,
+                            255
                         ],
                         "object": {
                             "type": "Identifier",
-                            "start": 258,
-                            "end": 268,
+                            "start": 225,
+                            "end": 235,
                             "loc": {
                                 "start": {
                                     "line": 7,
@@ -443,15 +443,15 @@
                                 }
                             },
                             "range": [
-                                258,
-                                268
+                                225,
+                                235
                             ],
                             "name": "background"
                         },
                         "property": {
                             "type": "Identifier",
-                            "start": 283,
-                            "end": 288,
+                            "start": 250,
+                            "end": 255,
                             "loc": {
                                 "start": {
                                     "line": 7,
@@ -463,8 +463,8 @@
                                 }
                             },
                             "range": [
-                                283,
-                                288
+                                250,
+                                255
                             ],
                             "name": "color"
                         },
@@ -474,8 +474,8 @@
                         {
                             "id": {
                                 "type": "Identifier",
-                                "start": 258,
-                                "end": 268,
+                                "start": 225,
+                                "end": 235,
                                 "loc": {
                                     "start": {
                                         "line": 7,
@@ -487,8 +487,8 @@
                                     }
                                 },
                                 "range": [
-                                    258,
-                                    268
+                                    225,
+                                    235
                                 ],
                                 "name": "background"
                             },
@@ -499,8 +499,8 @@
                 {
                     "type": "VText",
                     "range": [
-                        309,
-                        315
+                        276,
+                        282
                     ],
                     "loc": {
                         "start": {
@@ -518,8 +518,8 @@
             "endTag": {
                 "type": "VEndTag",
                 "range": [
-                    315,
-                    323
+                    282,
+                    290
                 ],
                 "loc": {
                     "start": {
@@ -538,8 +538,8 @@
         {
             "type": "VText",
             "range": [
-                323,
-                324
+                290,
+                291
             ],
             "loc": {
                 "start": {
@@ -682,7 +682,7 @@
             "value": " "
         },
         {
-            "type": "HTMLText",
+            "type": "HTMLRawText",
             "range": [
                 28,
                 34
@@ -828,7 +828,7 @@
             "value": " "
         },
         {
-            "type": "HTMLText",
+            "type": "HTMLRawText",
             "range": [
                 76,
                 82
@@ -999,300 +999,12 @@
             "type": "HTMLWhitespace",
             "range": [
                 129,
-                130
+                134
             ],
             "loc": {
                 "start": {
                     "line": 4,
                     "column": 68
-                },
-                "end": {
-                    "line": 4,
-                    "column": 69
-                }
-            },
-            "value": " "
-        },
-        {
-            "type": "HTMLRawText",
-            "range": [
-                130,
-                132
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 69
-                },
-                "end": {
-                    "line": 4,
-                    "column": 71
-                }
-            },
-            "value": "/*"
-        },
-        {
-            "type": "HTMLWhitespace",
-            "range": [
-                132,
-                133
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 71
-                },
-                "end": {
-                    "line": 4,
-                    "column": 72
-                }
-            },
-            "value": " "
-        },
-        {
-            "type": "HTMLRawText",
-            "range": [
-                133,
-                136
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 72
-                },
-                "end": {
-                    "line": 4,
-                    "column": 75
-                }
-            },
-            "value": "vue"
-        },
-        {
-            "type": "HTMLWhitespace",
-            "range": [
-                136,
-                137
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 75
-                },
-                "end": {
-                    "line": 4,
-                    "column": 76
-                }
-            },
-            "value": " "
-        },
-        {
-            "type": "HTMLRawText",
-            "range": [
-                137,
-                140
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 76
-                },
-                "end": {
-                    "line": 4,
-                    "column": 79
-                }
-            },
-            "value": "3.1"
-        },
-        {
-            "type": "HTMLWhitespace",
-            "range": [
-                140,
-                141
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 79
-                },
-                "end": {
-                    "line": 4,
-                    "column": 80
-                }
-            },
-            "value": " "
-        },
-        {
-            "type": "HTMLRawText",
-            "range": [
-                141,
-                144
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 80
-                },
-                "end": {
-                    "line": 4,
-                    "column": 83
-                }
-            },
-            "value": "may"
-        },
-        {
-            "type": "HTMLWhitespace",
-            "range": [
-                144,
-                145
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 83
-                },
-                "end": {
-                    "line": 4,
-                    "column": 84
-                }
-            },
-            "value": " "
-        },
-        {
-            "type": "HTMLRawText",
-            "range": [
-                145,
-                148
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 84
-                },
-                "end": {
-                    "line": 4,
-                    "column": 87
-                }
-            },
-            "value": "not"
-        },
-        {
-            "type": "HTMLWhitespace",
-            "range": [
-                148,
-                149
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 87
-                },
-                "end": {
-                    "line": 4,
-                    "column": 88
-                }
-            },
-            "value": " "
-        },
-        {
-            "type": "HTMLRawText",
-            "range": [
-                149,
-                153
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 88
-                },
-                "end": {
-                    "line": 4,
-                    "column": 92
-                }
-            },
-            "value": "work"
-        },
-        {
-            "type": "HTMLWhitespace",
-            "range": [
-                153,
-                154
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 92
-                },
-                "end": {
-                    "line": 4,
-                    "column": 93
-                }
-            },
-            "value": " "
-        },
-        {
-            "type": "HTMLRawText",
-            "range": [
-                154,
-                159
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 93
-                },
-                "end": {
-                    "line": 4,
-                    "column": 98
-                }
-            },
-            "value": "well."
-        },
-        {
-            "type": "HTMLWhitespace",
-            "range": [
-                159,
-                160
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 98
-                },
-                "end": {
-                    "line": 4,
-                    "column": 99
-                }
-            },
-            "value": " "
-        },
-        {
-            "type": "HTMLRawText",
-            "range": [
-                160,
-                162
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 99
-                },
-                "end": {
-                    "line": 4,
-                    "column": 101
-                }
-            },
-            "value": "*/"
-        },
-        {
-            "type": "HTMLWhitespace",
-            "range": [
-                162,
-                167
-            ],
-            "loc": {
-                "start": {
-                    "line": 4,
-                    "column": 101
                 },
                 "end": {
                     "line": 5,
@@ -1304,8 +1016,8 @@
         {
             "type": "HTMLRawText",
             "range": [
-                167,
-                180
+                134,
+                147
             ],
             "loc": {
                 "start": {
@@ -1322,8 +1034,8 @@
         {
             "type": "HTMLWhitespace",
             "range": [
-                180,
-                181
+                147,
+                148
             ],
             "loc": {
                 "start": {
@@ -1338,10 +1050,10 @@
             "value": " "
         },
         {
-            "type": "HTMLText",
+            "type": "HTMLRawText",
             "range": [
-                181,
-                187
+                148,
+                154
             ],
             "loc": {
                 "start": {
@@ -1358,8 +1070,8 @@
         {
             "type": "Punctuator",
             "range": [
-                187,
-                188
+                154,
+                155
             ],
             "loc": {
                 "start": {
@@ -1376,8 +1088,8 @@
         {
             "type": "Punctuator",
             "range": [
-                190,
-                191
+                157,
+                158
             ],
             "loc": {
                 "start": {
@@ -1394,8 +1106,8 @@
         {
             "type": "Identifier",
             "value": "border",
-            "start": 191,
-            "end": 197,
+            "start": 158,
+            "end": 164,
             "loc": {
                 "start": {
                     "line": 5,
@@ -1407,15 +1119,15 @@
                 }
             },
             "range": [
-                191,
-                197
+                158,
+                164
             ]
         },
         {
             "type": "Punctuator",
             "value": "(",
-            "start": 197,
-            "end": 198,
+            "start": 164,
+            "end": 165,
             "loc": {
                 "start": {
                     "line": 5,
@@ -1427,15 +1139,15 @@
                 }
             },
             "range": [
-                197,
-                198
+                164,
+                165
             ]
         },
         {
             "type": "String",
             "value": "'color'",
-            "start": 198,
-            "end": 205,
+            "start": 165,
+            "end": 172,
             "loc": {
                 "start": {
                     "line": 5,
@@ -1447,15 +1159,15 @@
                 }
             },
             "range": [
-                198,
-                205
+                165,
+                172
             ]
         },
         {
             "type": "Punctuator",
             "value": ")",
-            "start": 205,
-            "end": 206,
+            "start": 172,
+            "end": 173,
             "loc": {
                 "start": {
                     "line": 5,
@@ -1467,15 +1179,15 @@
                 }
             },
             "range": [
-                205,
-                206
+                172,
+                173
             ]
         },
         {
             "type": "Punctuator",
             "range": [
-                222,
-                223
+                189,
+                190
             ],
             "loc": {
                 "start": {
@@ -1492,8 +1204,8 @@
         {
             "type": "Punctuator",
             "range": [
-                223,
-                224
+                190,
+                191
             ],
             "loc": {
                 "start": {
@@ -1510,8 +1222,8 @@
         {
             "type": "HTMLRawText",
             "range": [
-                224,
-                225
+                191,
+                192
             ],
             "loc": {
                 "start": {
@@ -1528,8 +1240,8 @@
         {
             "type": "HTMLWhitespace",
             "range": [
-                225,
-                230
+                192,
+                197
             ],
             "loc": {
                 "start": {
@@ -1546,8 +1258,8 @@
         {
             "type": "HTMLRawText",
             "range": [
-                230,
-                247
+                197,
+                214
             ],
             "loc": {
                 "start": {
@@ -1564,8 +1276,8 @@
         {
             "type": "HTMLWhitespace",
             "range": [
-                247,
-                248
+                214,
+                215
             ],
             "loc": {
                 "start": {
@@ -1580,10 +1292,10 @@
             "value": " "
         },
         {
-            "type": "HTMLText",
+            "type": "HTMLRawText",
             "range": [
-                248,
-                254
+                215,
+                221
             ],
             "loc": {
                 "start": {
@@ -1600,8 +1312,8 @@
         {
             "type": "Punctuator",
             "range": [
-                254,
-                255
+                221,
+                222
             ],
             "loc": {
                 "start": {
@@ -1618,8 +1330,8 @@
         {
             "type": "Punctuator",
             "range": [
-                257,
-                258
+                224,
+                225
             ],
             "loc": {
                 "start": {
@@ -1636,8 +1348,8 @@
         {
             "type": "Identifier",
             "value": "background",
-            "start": 258,
-            "end": 268,
+            "start": 225,
+            "end": 235,
             "loc": {
                 "start": {
                     "line": 7,
@@ -1649,15 +1361,15 @@
                 }
             },
             "range": [
-                258,
-                268
+                225,
+                235
             ]
         },
         {
             "type": "Punctuator",
             "value": ".",
-            "start": 268,
-            "end": 269,
+            "start": 235,
+            "end": 236,
             "loc": {
                 "start": {
                     "line": 7,
@@ -1669,15 +1381,15 @@
                 }
             },
             "range": [
-                268,
-                269
+                235,
+                236
             ]
         },
         {
             "type": "Identifier",
             "value": "color",
-            "start": 283,
-            "end": 288,
+            "start": 250,
+            "end": 255,
             "loc": {
                 "start": {
                     "line": 7,
@@ -1689,15 +1401,15 @@
                 }
             },
             "range": [
-                283,
-                288
+                250,
+                255
             ]
         },
         {
             "type": "Punctuator",
             "range": [
-                302,
-                303
+                269,
+                270
             ],
             "loc": {
                 "start": {
@@ -1714,8 +1426,8 @@
         {
             "type": "Punctuator",
             "range": [
-                308,
-                309
+                275,
+                276
             ],
             "loc": {
                 "start": {
@@ -1732,8 +1444,8 @@
         {
             "type": "HTMLRawText",
             "range": [
-                309,
-                310
+                276,
+                277
             ],
             "loc": {
                 "start": {
@@ -1750,8 +1462,8 @@
         {
             "type": "HTMLWhitespace",
             "range": [
-                310,
-                313
+                277,
+                280
             ],
             "loc": {
                 "start": {
@@ -1768,8 +1480,8 @@
         {
             "type": "HTMLRawText",
             "range": [
-                313,
-                314
+                280,
+                281
             ],
             "loc": {
                 "start": {
@@ -1786,8 +1498,8 @@
         {
             "type": "HTMLWhitespace",
             "range": [
-                314,
-                315
+                281,
+                282
             ],
             "loc": {
                 "start": {
@@ -1804,8 +1516,8 @@
         {
             "type": "HTMLEndTagOpen",
             "range": [
-                315,
-                322
+                282,
+                289
             ],
             "loc": {
                 "start": {
@@ -1822,8 +1534,8 @@
         {
             "type": "HTMLTagClose",
             "range": [
-                322,
-                323
+                289,
+                290
             ],
             "loc": {
                 "start": {
@@ -1840,8 +1552,8 @@
         {
             "type": "HTMLWhitespace",
             "range": [
-                323,
-                324
+                290,
+                291
             ],
             "loc": {
                 "start": {
@@ -1916,11 +1628,11 @@
         {
             "type": "Line",
             "value": " comment4",
-            "start": 206,
-            "end": 217,
+            "start": 173,
+            "end": 184,
             "range": [
-                206,
-                217
+                173,
+                184
             ],
             "loc": {
                 "start": {
@@ -1936,11 +1648,11 @@
         {
             "type": "Block",
             "value": "comment5",
-            "start": 270,
-            "end": 282,
+            "start": 237,
+            "end": 249,
             "range": [
-                270,
-                282
+                237,
+                249
             ],
             "loc": {
                 "start": {
@@ -1956,11 +1668,11 @@
         {
             "type": "Block",
             "value": "comment6",
-            "start": 289,
-            "end": 301,
+            "start": 256,
+            "end": 268,
             "range": [
-                289,
-                301
+                256,
+                268
             ],
             "loc": {
                 "start": {

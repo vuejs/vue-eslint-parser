@@ -69,7 +69,7 @@ function parseStyleElement(
     }
     const code = textNode.value
     // short circuit
-    if (!code.includes("v-bind(")) {
+    if (!/v-bind(?:\(|\/)/u.test(code)) {
         return
     }
 
@@ -96,10 +96,14 @@ function parseStyle(
     cssOptions: CSSParseOption,
 ) {
     let textStart = 0
-    for (const { range, expr, exprOffset, quote, comments } of iterateVBind(
-        code,
-        cssOptions,
-    )) {
+    for (const {
+        range,
+        expr,
+        exprOffset,
+        quote,
+        openingParenOffset,
+        comments,
+    } of iterateVBind(code, cssOptions)) {
         insertComments(
             document,
             comments.map((c) =>
@@ -128,9 +132,11 @@ function parseStyle(
             references: [],
         }
 
+        const openingParenStart =
+            locationCalculator.getOffsetWithGap(openingParenOffset)
         const beforeTokens: Token[] = [
             createSimpleToken(
-                "HTMLText",
+                "HTMLRawText",
                 container.range[0],
                 container.range[0] + 6 /* v-bind */,
                 "v-bind",
@@ -138,8 +144,8 @@ function parseStyle(
             ),
             createSimpleToken(
                 "Punctuator",
-                container.range[0] + 6 /* v-bind */,
-                container.range[0] + 7,
+                openingParenStart,
+                openingParenStart + 1,
                 "(",
                 locationCalculator,
             ),
@@ -259,11 +265,31 @@ function parseStyle(
     }
 }
 
+function isQuote(c: string): c is '"' | "'" {
+    return c === '"' || c === "'"
+}
+
+function isCommentStart(c: string): c is "/*" | "//" {
+    return c === "/*" || c === "//"
+}
+
+const COMMENT = {
+    "/*": {
+        type: "Block" as const,
+        closing: "*/" as const,
+    },
+    "//": {
+        type: "Line" as const,
+        closing: "\n" as const,
+    },
+}
+
 type VBindLocations = {
     range: OffsetRange
     expr: string
     exprOffset: number
     quote: '"' | "'" | null
+    openingParenOffset: number
     comments: {
         type: string
         range: OffsetRange
@@ -279,25 +305,37 @@ function* iterateVBind(
     cssOptions: CSSParseOption,
 ): IterableIterator<VBindLocations> {
     const re = cssOptions.inlineComment
-        ? /"|'|\/[*/]|\bv-bind\(/gu
-        : /"|'|\/\*|\bv-bind\(/gu
+        ? /"|'|\/[*/]|\bv-bind/gu
+        : /"|'|\/\*|\bv-bind/gu
     let match
     while ((match = re.exec(code))) {
-        const startOrVBind = match[0]
-        if (startOrVBind === '"' || startOrVBind === "'") {
+        const startToken = match[0]
+        if (isQuote(startToken)) {
             // skip string
-            re.lastIndex = skipString(code, startOrVBind, re.lastIndex)
-        } else if (startOrVBind === "/*" || startOrVBind === "//") {
+            re.lastIndex = skipString(code, startToken, re.lastIndex)
+        } else if (isCommentStart(startToken)) {
             // skip comment
             re.lastIndex = skipComment(
                 code,
-                startOrVBind === "/*" ? "block" : "line",
+                COMMENT[startToken].closing,
                 re.lastIndex,
             )
         } else {
             // v-bind
+            const openingParen = findVBindOpeningParen(
+                code,
+                re.lastIndex,
+                cssOptions,
+            )
+            if (!openingParen) {
+                continue
+            }
             const start = match.index
-            const arg = parseVBindArg(code, re.lastIndex, cssOptions)
+            const arg = parseVBindArg(
+                code,
+                openingParen.openingParenOffset + 1,
+                cssOptions,
+            )
             if (!arg) {
                 continue
             }
@@ -306,11 +344,64 @@ function* iterateVBind(
                 expr: arg.expr,
                 exprOffset: arg.exprOffset,
                 quote: arg.quote,
-                comments: arg.comments,
+                openingParenOffset: openingParen.openingParenOffset,
+                comments: [...openingParen.comments, ...arg.comments],
             }
             re.lastIndex = arg.end
         }
     }
+}
+
+function findVBindOpeningParen(
+    code: string,
+    nextIndex: number,
+    cssOptions: CSSParseOption,
+): {
+    openingParenOffset: number
+    comments: {
+        type: string
+        range: OffsetRange
+        value: string
+    }[]
+} | null {
+    const re = cssOptions.inlineComment ? /\/[*/]|[\s\S]/gu : /\/\*|[\s\S]/gu
+    re.lastIndex = nextIndex
+    let match
+    const comments: {
+        type: string
+        range: OffsetRange
+        value: string
+    }[] = []
+    while ((match = re.exec(code))) {
+        const token = match[0]
+        if (token === "(") {
+            return {
+                openingParenOffset: match.index,
+                comments,
+            }
+        } else if (isCommentStart(token)) {
+            // Comment between `v-bind` and opening paren.
+            const comment = COMMENT[token]
+            const start = match.index
+            const end = (re.lastIndex = skipComment(
+                code,
+                comment.closing,
+                re.lastIndex,
+            ))
+            comments.push({
+                type: comment.type,
+                range: [start, end],
+                value: code.slice(
+                    start + token.length,
+                    end - comment.closing.length,
+                ),
+            })
+            continue
+        }
+        // There were no opening parens.
+        return null
+    }
+    return null
 }
 
 function parseVBindArg(
@@ -338,29 +429,26 @@ function parseVBindArg(
         value: string
     }[] = []
     while ((match = re.exec(code))) {
-        const startOrVBind = match[0]
-        if (startOrVBind === '"' || startOrVBind === "'") {
+        const token = match[0]
+        if (isQuote(token)) {
             const start = match.index
-            const end = (re.lastIndex = skipString(
-                code,
-                startOrVBind,
-                re.lastIndex,
-            ))
+            const end = (re.lastIndex = skipString(code, token, re.lastIndex))
             stringRanges.push([start, end])
-        } else if (startOrVBind === "/*" || startOrVBind === "//") {
-            const block = startOrVBind === "/*"
+        } else if (isCommentStart(token)) {
+            const comment = COMMENT[token]
             const start = match.index
             const end = (re.lastIndex = skipComment(
                 code,
-                block ? "block" : "line",
+                comment.closing,
                 re.lastIndex,
             ))
             comments.push({
-                type: block ? "Block" : "Line",
+                type: comment.type,
                 range: [start, end],
-                value: block
-                    ? code.slice(start + 2, end - 2)
-                    : code.slice(start + 2, end - 1),
+                value: code.slice(
+                    start + token.length,
+                    end - comment.closing.length,
+                ),
             })
         } else {
             // closing paren
@@ -405,10 +493,9 @@ function skipString(code: string, quote: '"' | "'", nextIndex: number): number {
 
 function skipComment(
     code: string,
-    kind: "block" | "line",
+    closing: "*/" | "\n",
     nextIndex: number,
 ): number {
-    const closing = kind === "block" ? "*/" : "\n"
     const index = code.indexOf(closing, nextIndex)
     if (index >= nextIndex) {
         return index + closing.length
