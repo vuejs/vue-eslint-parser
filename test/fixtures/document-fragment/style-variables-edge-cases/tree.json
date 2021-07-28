@@ -1,11 +1,11 @@
 [
     {
         "type": "VDocumentFragment",
-        "text": "<style>\n  .text{\n    color: v-bind(  color /* comment1 */ );\n    font-size: v-bind( /* comment2 */ 'font.size'  /* comment3 */ ); /* vue 3.1 may not work well. */\n    border-color: v-bind(  \"border('color')// comment4\n    \");\n    background-color: v-bind(  \"background. /*comment5*/ color /*comment6*/ \"\n    );\n  }\n</style>\n",
+        "text": "<style>\n  .text{\n    color: v-bind(  color /* comment1 */ );\n    font-size: v-bind( /* comment2 */ 'font.size'  /* comment3 */ );\n    border-color: v-bind(  \"border('color')// comment4\n    \");\n    background-color: v-bind(  \"background. /*comment5*/ color /*comment6*/ \"\n    );\n  }\n</style>\n",
         "children": [
             {
                 "type": "VElement",
-                "text": "<style>\n  .text{\n    color: v-bind(  color /* comment1 */ );\n    font-size: v-bind( /* comment2 */ 'font.size'  /* comment3 */ ); /* vue 3.1 may not work well. */\n    border-color: v-bind(  \"border('color')// comment4\n    \");\n    background-color: v-bind(  \"background. /*comment5*/ color /*comment6*/ \"\n    );\n  }\n</style>",
+                "text": "<style>\n  .text{\n    color: v-bind(  color /* comment1 */ );\n    font-size: v-bind( /* comment2 */ 'font.size'  /* comment3 */ );\n    border-color: v-bind(  \"border('color')// comment4\n    \");\n    background-color: v-bind(  \"background. /*comment5*/ color /*comment6*/ \"\n    );\n  }\n</style>",
                 "children": [
                     {
                         "type": "VStartTag",
@@ -57,7 +57,7 @@
                     },
                     {
                         "type": "VText",
-                        "text": "; /* vue 3.1 may not work well. */\n    border-color: ",
+                        "text": ";\n    border-color: ",
                         "children": []
                     },
                     {
