@@ -1,6 +1,8 @@
 extends:
   - plugin:@mysticatea/es2015
   - plugin:@mysticatea/+node
+  - plugin:node-dependencies/recommended
+  - plugin:jsonc/recommended-with-jsonc
 globals: {
   root: "off"
 }
@@ -19,6 +21,9 @@ overrides:
         - error
         - allowModules:
           - estree
+  - files: "package.json"
+    rules:
+      '@mysticatea/prettier': off
 
 settings:
   node:
