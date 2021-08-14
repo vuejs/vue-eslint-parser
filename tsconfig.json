@@ -12,9 +12,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "inlineSources": true,
-        "lib": [
-            "es2015"
-        ],
+        "lib": ["es2015"],
         "module": "commonjs",
         "moduleResolution": "node",
         "newLine": "LF",
@@ -37,7 +35,5 @@
         "strictNullChecks": true,
         "target": "es2015"
     },
-    "include": [
-        "src/**/*.ts"
-    ]
+    "include": ["src/**/*.ts"]
 }
