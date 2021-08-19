@@ -40,7 +40,7 @@ function sh(command) {
     if (installedVersion.startsWith("5.")) {
         await sh("npm install eslint-utils@1.4.0")
     }
-    await sh("npm install")
+    await sh("npm install --legacy-peer-deps")
 })().catch((error) => {
     console.error(error)
     process.exitCode = 1
