@@ -27,6 +27,25 @@ const ORIGINAL_FIXTURE_DIR = path.join(__dirname, "fixtures")
 const FIXTURE_DIR = path.join(__dirname, "temp")
 const PARSER_PATH = path.resolve(__dirname, "../src/index.ts")
 
+const BABEL_PARSER_OPTIONS = semver.satisfies(ESLint.version, "<8")
+    ? {
+          parser: "babel-eslint",
+      }
+    : {
+          parser: "@babel/eslint-parser",
+          requireConfigFile: false,
+          babelOptions: {
+              plugins: [
+                  "@babel/plugin-syntax-typescript",
+                  [
+                      "@babel/plugin-syntax-decorators",
+                      {
+                          decoratorsBeforeExport: true,
+                      },
+                  ],
+              ],
+          },
+      }
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
@@ -110,7 +129,7 @@ describe("Basic tests", () => {
             const report = await cli.lintFiles(["empty.vue"])
             const messages = report[0].messages
 
-            assert(messages.length === 0)
+            assert.deepStrictEqual(messages, [])
         })
     })
 
@@ -128,7 +147,7 @@ describe("Basic tests", () => {
             const report = await cli.lintFiles(["no-script.vue"])
             const messages = report[0].messages
 
-            assert(messages.length === 0)
+            assert.deepStrictEqual(messages, [])
         })
     })
 
@@ -146,7 +165,7 @@ describe("Basic tests", () => {
             const report = await cli.lintFiles(["empty-script.vue"])
             const messages = report[0].messages
 
-            assert(messages.length === 0)
+            assert.deepStrictEqual(messages, [])
         })
     })
 
@@ -164,7 +183,7 @@ describe("Basic tests", () => {
             const report = await cli.lintFiles(["no-end-script-tag.vue"])
             const messages = report[0].messages
 
-            assert(messages.length === 0)
+            assert.deepStrictEqual(messages, [])
         })
     })
 
@@ -228,7 +247,7 @@ describe("Basic tests", () => {
             const report = await cli.lintFiles(["crlf.vue"])
             const messages = report[0].messages
 
-            assert(messages.length === 0)
+            assert.deepStrictEqual(messages, [])
         })
     })
 
@@ -240,7 +259,7 @@ describe("Basic tests", () => {
                     env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     parserOptions: {
-                        parser: "babel-eslint",
+                        ...BABEL_PARSER_OPTIONS,
                         sourceType: "module",
                     },
                     rules: { semi: ["error", "never"] },
@@ -250,7 +269,7 @@ describe("Basic tests", () => {
             const report = await cli.lintFiles(["typed.js"])
             const messages = report[0].messages
 
-            assert(messages.length === 0)
+            assert.deepStrictEqual(messages, [])
         })
 
         if (semver.gte(process.version, "10.0.0")) {
@@ -270,7 +289,7 @@ describe("Basic tests", () => {
                 const report = await cli.lintFiles(["typed.js"])
                 const messages = report[0].messages
 
-                assert(messages.length === 0)
+                assert.deepStrictEqual(messages, [])
             })
         }
     })
@@ -283,7 +302,7 @@ describe("Basic tests", () => {
                     env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     parserOptions: {
-                        parser: "babel-eslint",
+                        ...BABEL_PARSER_OPTIONS,
                         sourceType: "module",
                     },
                     rules: { semi: ["error", "never"] },
@@ -293,7 +312,7 @@ describe("Basic tests", () => {
             const report = await cli.lintFiles(["typed.vue"])
             const messages = report[0].messages
 
-            assert(messages.length === 0)
+            assert.deepStrictEqual(messages, [])
         })
 
         if (semver.gte(process.version, "10.0.0")) {
@@ -313,7 +332,7 @@ describe("Basic tests", () => {
                 const report = await cli.lintFiles(["typed.vue"])
                 const messages = report[0].messages
 
-                assert(messages.length === 0)
+                assert.deepStrictEqual(messages, [])
             })
         }
 
@@ -325,7 +344,7 @@ describe("Basic tests", () => {
                     env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     parserOptions: {
-                        parser: "babel-eslint",
+                        ...BABEL_PARSER_OPTIONS,
                         sourceType: "module",
                     },
                     rules: { semi: ["error", "always"] },
@@ -417,7 +436,7 @@ describe("Basic tests", () => {
             const report = await cli.lintFiles(["svg-attrs-colon.vue"])
             const messages = report[0].messages
 
-            assert(messages.length === 0)
+            assert.deepStrictEqual(messages, [])
         })
 
         it("parses camelCased attributes", async () => {
@@ -432,7 +451,7 @@ describe("Basic tests", () => {
             const report = await cli.lintFiles(["svg-attrs-camel-case.vue"])
             const messages = report[0].messages
 
-            assert(messages.length === 0)
+            assert.deepStrictEqual(messages, [])
         })
     })
 
@@ -444,7 +463,7 @@ describe("Basic tests", () => {
                     env: { browser: true, node: true },
                     parser: PARSER_PATH,
                     parserOptions: {
-                        parser: "babel-eslint",
+                        ...BABEL_PARSER_OPTIONS,
                         sourceType: "module",
                         ecmaVersion: 2017,
                     },
@@ -459,7 +478,7 @@ describe("Basic tests", () => {
             ])
             const messages = report[0].messages
 
-            assert(messages.length === 0)
+            assert.deepStrictEqual(messages, [])
         })
     })
 
@@ -607,7 +626,7 @@ describe("Basic tests", () => {
             )
             const indexOfDecorator = code.indexOf("@Component")
             const ast = parse(code, {
-                parser: "babel-eslint",
+                ...BABEL_PARSER_OPTIONS,
                 ecmaVersion: 2017,
                 sourceType: "module",
 

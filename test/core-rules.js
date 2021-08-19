@@ -104,8 +104,15 @@ function modifyPattern(ruleId, pattern) {
 
     // Ignore for now
     if (
-        ruleId === "newline-per-chained-call" &&
-        pattern.code === "foo.bar()['foo' + \u2029 + 'bar']()"
+        (ruleId === "newline-per-chained-call" &&
+            pattern.code === "foo.bar()['foo' + \u2029 + 'bar']()") ||
+        (ruleId === "no-nonoctal-decimal-escape" &&
+            pattern.code === "'\\\r\n\\9'" &&
+            // The location is reported as a fixed value: { line: 1, column: 0 }.
+            ruleId === "consistent-return" &&
+            pattern.parserOptions &&
+            pattern.parserOptions.ecmaFeatures &&
+            pattern.parserOptions.ecmaFeatures.globalReturn === true)
     ) {
         return null
     }
@@ -148,6 +155,22 @@ function modifyPattern(ruleId, pattern) {
                         error.endColumn === undefined
                     ) {
                         error.endColumn = 1
+                    }
+                }
+
+                // `no-shadow` rule is special a bit.
+                if (ruleId === "no-shadow") {
+                    // The data that the rule gives to the message contains the location.
+                    if (
+                        error.data &&
+                        error.data &&
+                        Object.hasOwnProperty.call(
+                            error.data,
+                            "shadowedLine"
+                        ) &&
+                        typeof error.data.shadowedLine === "number"
+                    ) {
+                        error.data.shadowedLine++
                     }
                 }
 
