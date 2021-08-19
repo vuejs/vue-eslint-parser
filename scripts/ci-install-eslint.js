@@ -12,7 +12,7 @@ function sh(command) {
     return new Promise((resolve, reject) => {
         spawn(command, [], { shell: true, stdio: "inherit" })
             .on("error", reject)
-            .on("exit", exitCode => {
+            .on("exit", (exitCode) => {
                 if (exitCode) {
                     reject(new Error(`Exit with non-zero ${exitCode}`))
                 } else {
@@ -32,7 +32,7 @@ function sh(command) {
     await sh(`npm install eslint@${requestedVersionSpec}`)
 
     // Install ESLint submodule of the requested version
-    const installedVersion = require("eslint").CLIEngine.version
+    const installedVersion = require("eslint/package.json").version
     cd("test/fixtures/eslint")
     if (!installedVersion.startsWith("7.")) {
         await sh(`git checkout v${installedVersion}`)
@@ -41,7 +41,7 @@ function sh(command) {
         await sh("npm install eslint-utils@1.4.0")
     }
     await sh("npm install")
-})().catch(error => {
+})().catch((error) => {
     console.error(error)
     process.exitCode = 1
 })
