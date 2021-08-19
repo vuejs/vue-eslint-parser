@@ -1,5 +1,13 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
+  "requireConfigFile": false,
+  "babelOptions": {
+    "plugins": [
+      [
+        "@babel/plugin-syntax-pipeline-operator", { "proposal": "minimal" }
+      ]
+    ]
+  },
   "vueFeatures": {
     "filter": false
   }
