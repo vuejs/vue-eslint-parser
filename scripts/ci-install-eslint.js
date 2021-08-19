@@ -29,7 +29,7 @@ function sh(command) {
         : `^${requestedVersion}`
 
     // Install ESLint of the requested version
-    await sh(`npm install eslint@${requestedVersionSpec}`)
+    await sh(`npm install eslint@${requestedVersionSpec} --legacy-peer-deps`)
 
     // Install ESLint submodule of the requested version
     const installedVersion = require("eslint/package.json").version
