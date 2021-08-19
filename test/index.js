@@ -15,8 +15,8 @@ const fs = require("fs-extra")
 const semver = require("semver")
 const parse = require("../src").parse
 const parseForESLint = require("../src").parseForESLint
-const eslint = require("./fixtures/eslint")
-const CLIEngine = eslint.CLIEngine
+const eslint = require("./lib/eslint-compat")(require("./fixtures/eslint"))
+const ESLint = eslint.ESLint
 const Linter = eslint.Linter
 
 //------------------------------------------------------------------------------
@@ -48,16 +48,18 @@ describe("Basic tests", () => {
     })
 
     describe("About fixtures/hello.vue", () => {
-        it("should notify 2 'semi' errors", () => {
-            const cli = new CLIEngine({
+        it("should notify 2 'semi' errors", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                rules: { semi: "error" },
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    rules: { semi: "error" },
+                },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["hello.vue"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["hello.vue"])
+            const messages = report[0].messages
 
             assert(messages.length === 2)
             assert(messages[0].ruleId === "semi")
@@ -68,16 +70,18 @@ describe("Basic tests", () => {
             assert(messages[1].column === 2)
         })
 
-        it("should fix 2 'semi' errors with --fix option", () => {
-            const cli = new CLIEngine({
+        it("should fix 2 'semi' errors with --fix option", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
                 fix: true,
-                parser: PARSER_PATH,
-                rules: { semi: "error" },
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    rules: { semi: "error" },
+                },
                 useEslintrc: false,
             })
-            CLIEngine.outputFixes(cli.executeOnFiles(["hello.vue"]))
+            await ESLint.outputFixes(cli.lintFiles(["hello.vue"]))
 
             const actual = fs.readFileSync(
                 path.join(FIXTURE_DIR, "hello.vue"),
@@ -93,80 +97,90 @@ describe("Basic tests", () => {
     })
 
     describe("About fixtures/empty.vue", () => {
-        it("should notify no error", () => {
-            const cli = new CLIEngine({
+        it("should notify no error", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                rules: { semi: "error" },
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    rules: { semi: "error" },
+                },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["empty.vue"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["empty.vue"])
+            const messages = report[0].messages
 
             assert(messages.length === 0)
         })
     })
 
     describe("About fixtures/no-script.vue", () => {
-        it("should notify no error", () => {
-            const cli = new CLIEngine({
+        it("should notify no error", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                rules: { semi: "error" },
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    rules: { semi: "error" },
+                },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["no-script.vue"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["no-script.vue"])
+            const messages = report[0].messages
 
             assert(messages.length === 0)
         })
     })
 
     describe("About fixtures/empty-script.vue", () => {
-        it("should notify no error", () => {
-            const cli = new CLIEngine({
+        it("should notify no error", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                rules: { semi: "error" },
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    rules: { semi: "error" },
+                },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["empty-script.vue"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["empty-script.vue"])
+            const messages = report[0].messages
 
             assert(messages.length === 0)
         })
     })
 
     describe("About fixtures/no-end-script-tag.vue", () => {
-        it("should notify no error", () => {
-            const cli = new CLIEngine({
+        it("should notify no error", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                rules: { semi: "error" },
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    rules: { semi: "error" },
+                },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["no-end-script-tag.vue"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["no-end-script-tag.vue"])
+            const messages = report[0].messages
 
             assert(messages.length === 0)
         })
     })
 
     describe("About fixtures/notvue.js", () => {
-        it("should notify a 'semi' error", () => {
-            const cli = new CLIEngine({
+        it("should notify a 'semi' error", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                rules: { semi: "error" },
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    rules: { semi: "error" },
+                },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["notvue.js"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["notvue.js"])
+            const messages = report[0].messages
 
             assert(messages.length === 1)
             assert(messages[0].ruleId === "semi")
@@ -174,16 +188,18 @@ describe("Basic tests", () => {
             assert(messages[0].column === 21)
         })
 
-        it("should fix a 'semi' error with --fix option", () => {
-            const cli = new CLIEngine({
+        it("should fix a 'semi' error with --fix option", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
                 fix: true,
-                parser: PARSER_PATH,
-                rules: { semi: "error" },
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    rules: { semi: "error" },
+                },
                 useEslintrc: false,
             })
-            CLIEngine.outputFixes(cli.executeOnFiles(["notvue.js"]))
+            await ESLint.outputFixes(await cli.lintFiles(["notvue.js"]))
 
             const actual = fs.readFileSync(
                 path.join(FIXTURE_DIR, "notvue.js"),
@@ -199,54 +215,60 @@ describe("Basic tests", () => {
     })
 
     describe("About fixtures/crlf.vue", () => {
-        it("should notify no 'indent' error", () => {
-            const cli = new CLIEngine({
+        it("should notify no 'indent' error", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                rules: { indent: "error" },
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    rules: { indent: "error" },
+                },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["crlf.vue"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["crlf.vue"])
+            const messages = report[0].messages
 
             assert(messages.length === 0)
         })
     })
 
     describe("About fixtures/typed.js", () => {
-        it("should notify no error with 'babel-eslint'", () => {
-            const cli = new CLIEngine({
+        it("should notify no error with 'babel-eslint'", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                parserOptions: {
-                    parser: "babel-eslint",
-                    sourceType: "module",
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    parserOptions: {
+                        parser: "babel-eslint",
+                        sourceType: "module",
+                    },
+                    rules: { semi: ["error", "never"] },
                 },
-                rules: { semi: ["error", "never"] },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["typed.js"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["typed.js"])
+            const messages = report[0].messages
 
             assert(messages.length === 0)
         })
 
         if (semver.gte(process.version, "10.0.0")) {
-            it("should notify no error with '@typescript-eslint/parser'", () => {
-                const cli = new CLIEngine({
+            it("should notify no error with '@typescript-eslint/parser'", async () => {
+                const cli = new ESLint({
                     cwd: FIXTURE_DIR,
-                    envs: ["es6", "node"],
-                    parser: PARSER_PATH,
-                    parserOptions: {
-                        parser: "@typescript-eslint/parser",
+                    overrideConfig: {
+                        envs: ["es6", "node"],
+                        parser: PARSER_PATH,
+                        parserOptions: {
+                            parser: "@typescript-eslint/parser",
+                        },
+                        rules: { semi: ["error", "never"] },
                     },
-                    rules: { semi: ["error", "never"] },
                     useEslintrc: false,
                 })
-                const report = cli.executeOnFiles(["typed.js"])
-                const messages = report.results[0].messages
+                const report = await cli.lintFiles(["typed.js"])
+                const messages = report[0].messages
 
                 assert(messages.length === 0)
             })
@@ -254,57 +276,63 @@ describe("Basic tests", () => {
     })
 
     describe("About fixtures/typed.vue", () => {
-        it("should notify no error with 'babel-eslint'", () => {
-            const cli = new CLIEngine({
+        it("should notify no error with 'babel-eslint'", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
-                parserOptions: {
-                    parser: "babel-eslint",
-                    sourceType: "module",
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    parserOptions: {
+                        parser: "babel-eslint",
+                        sourceType: "module",
+                    },
+                    rules: { semi: ["error", "never"] },
                 },
-                rules: { semi: ["error", "never"] },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["typed.vue"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["typed.vue"])
+            const messages = report[0].messages
 
             assert(messages.length === 0)
         })
 
         if (semver.gte(process.version, "10.0.0")) {
-            it("should notify no error with '@typescript-eslint/parser'", () => {
-                const cli = new CLIEngine({
+            it("should notify no error with '@typescript-eslint/parser'", async () => {
+                const cli = new ESLint({
                     cwd: FIXTURE_DIR,
-                    envs: ["es6", "node"],
-                    parser: PARSER_PATH,
-                    parserOptions: {
-                        parser: "@typescript-eslint/parser",
+                    overrideConfig: {
+                        envs: ["es6", "node"],
+                        parser: PARSER_PATH,
+                        parserOptions: {
+                            parser: "@typescript-eslint/parser",
+                        },
+                        rules: { semi: ["error", "never"] },
                     },
-                    rules: { semi: ["error", "never"] },
                     useEslintrc: false,
                 })
-                const report = cli.executeOnFiles(["typed.vue"])
-                const messages = report.results[0].messages
+                const report = await cli.lintFiles(["typed.vue"])
+                const messages = report[0].messages
 
                 assert(messages.length === 0)
             })
         }
 
-        it("should fix 'semi' errors with --fix option with 'babel-eslint'", () => {
-            const cli = new CLIEngine({
+        it("should fix 'semi' errors with --fix option with 'babel-eslint'", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
                 fix: true,
-                parser: PARSER_PATH,
-                parserOptions: {
-                    parser: "babel-eslint",
-                    sourceType: "module",
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                    parserOptions: {
+                        parser: "babel-eslint",
+                        sourceType: "module",
+                    },
+                    rules: { semi: ["error", "always"] },
                 },
-                rules: { semi: ["error", "always"] },
                 useEslintrc: false,
             })
-            CLIEngine.outputFixes(cli.executeOnFiles(["typed.vue"]))
+            await ESLint.outputFixes(await cli.lintFiles(["typed.vue"]))
 
             const actual = fs.readFileSync(
                 path.join(FIXTURE_DIR, "typed.vue"),
@@ -319,19 +347,21 @@ describe("Basic tests", () => {
         })
 
         if (semver.gte(process.version, "10.0.0")) {
-            it("should fix 'semi' errors with --fix option with '@typescript-eslint/parser'", () => {
-                const cli = new CLIEngine({
+            it("should fix 'semi' errors with --fix option with '@typescript-eslint/parser'", async () => {
+                const cli = new ESLint({
                     cwd: FIXTURE_DIR,
-                    envs: ["es6", "node"],
                     fix: true,
-                    parser: PARSER_PATH,
-                    parserOptions: {
-                        parser: "@typescript-eslint/parser",
+                    overrideConfig: {
+                        envs: ["es6", "node"],
+                        parser: PARSER_PATH,
+                        parserOptions: {
+                            parser: "@typescript-eslint/parser",
+                        },
+                        rules: { semi: ["error", "always"] },
                     },
-                    rules: { semi: ["error", "always"] },
                     useEslintrc: false,
                 })
-                CLIEngine.outputFixes(cli.executeOnFiles(["typed.vue"]))
+                await ESLint.outputFixes(await cli.lintFiles(["typed.vue"]))
 
                 const actual = fs.readFileSync(
                     path.join(FIXTURE_DIR, "typed.vue"),
@@ -349,19 +379,21 @@ describe("Basic tests", () => {
 
     if (semver.gte(process.version, "10.0.0")) {
         describe("About fixtures/ts-scope-manager.vue", () => {
-            it("should calculate the correct location with '@typescript-eslint/parser'", () => {
-                const cli = new CLIEngine({
+            it("should calculate the correct location with '@typescript-eslint/parser'", async () => {
+                const cli = new ESLint({
                     cwd: FIXTURE_DIR,
-                    envs: ["es6", "node"],
-                    parser: PARSER_PATH,
-                    parserOptions: {
-                        parser: "@typescript-eslint/parser",
+                    overrideConfig: {
+                        envs: ["es6", "node"],
+                        parser: PARSER_PATH,
+                        parserOptions: {
+                            parser: "@typescript-eslint/parser",
+                        },
+                        rules: { "no-unused-vars": ["error"] },
                     },
-                    rules: { "no-unused-vars": ["error"] },
                     useEslintrc: false,
                 })
-                const report = cli.executeOnFiles(["ts-scope-manager.vue"])
-                const messages = report.results[0].messages
+                const report = await cli.lintFiles(["ts-scope-manager.vue"])
+                const messages = report[0].messages
 
                 assert.strictEqual(messages.length, 1)
                 assert.deepStrictEqual(messages[0].line, 8)
@@ -373,53 +405,59 @@ describe("Basic tests", () => {
     }
 
     describe("About fixtures/svg-attrs.vue", () => {
-        it("parses attributes with colons", () => {
-            const cli = new CLIEngine({
+        it("parses attributes with colons", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["svg-attrs-colon.vue"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["svg-attrs-colon.vue"])
+            const messages = report[0].messages
 
             assert(messages.length === 0)
         })
 
-        it("parses camelCased attributes", () => {
-            const cli = new CLIEngine({
+        it("parses camelCased attributes", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                envs: ["es6", "node"],
-                parser: PARSER_PATH,
+                overrideConfig: {
+                    envs: ["es6", "node"],
+                    parser: PARSER_PATH,
+                },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles(["svg-attrs-camel-case.vue"])
-            const messages = report.results[0].messages
+            const report = await cli.lintFiles(["svg-attrs-camel-case.vue"])
+            const messages = report[0].messages
 
             assert(messages.length === 0)
         })
     })
 
     describe("About fixtures/location-issue-with-babel-eslint.vue", () => {
-        it("Identifiers in import declarations should has correct location.", () => {
-            const cli = new CLIEngine({
+        it("Identifiers in import declarations should has correct location.", async () => {
+            const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 envs: ["browser", "node"],
-                parser: PARSER_PATH,
-                parserOptions: {
-                    parser: "babel-eslint",
-                    sourceType: "module",
-                    ecmaVersion: 2017,
-                },
-                rules: {
-                    "no-use-before-define": "error",
+                overrideConfig: {
+                    parser: PARSER_PATH,
+                    parserOptions: {
+                        parser: "babel-eslint",
+                        sourceType: "module",
+                        ecmaVersion: 2017,
+                    },
+                    rules: {
+                        "no-use-before-define": "error",
+                    },
                 },
                 useEslintrc: false,
             })
-            const report = cli.executeOnFiles([
+            const report = await cli.lintFiles([
                 "location-issue-with-babel-eslint.vue",
             ])
-            const messages = report.results[0].messages
+            const messages = report[0].messages
 
             assert(messages.length === 0)
         })
