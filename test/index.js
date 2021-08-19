@@ -52,7 +52,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     rules: { semi: "error" },
                 },
@@ -75,7 +75,7 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 fix: true,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     rules: { semi: "error" },
                 },
@@ -101,7 +101,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     rules: { semi: "error" },
                 },
@@ -119,7 +119,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     rules: { semi: "error" },
                 },
@@ -137,7 +137,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     rules: { semi: "error" },
                 },
@@ -155,7 +155,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     rules: { semi: "error" },
                 },
@@ -173,7 +173,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     rules: { semi: "error" },
                 },
@@ -193,7 +193,7 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 fix: true,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     rules: { semi: "error" },
                 },
@@ -219,7 +219,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     rules: { indent: "error" },
                 },
@@ -237,7 +237,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     parserOptions: {
                         parser: "babel-eslint",
@@ -258,7 +258,7 @@ describe("Basic tests", () => {
                 const cli = new ESLint({
                     cwd: FIXTURE_DIR,
                     overrideConfig: {
-                        env: ["es6", "node"],
+                        env: { es6: true, node: true },
                         parser: PARSER_PATH,
                         parserOptions: {
                             parser: "@typescript-eslint/parser",
@@ -280,7 +280,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     parserOptions: {
                         parser: "babel-eslint",
@@ -301,7 +301,7 @@ describe("Basic tests", () => {
                 const cli = new ESLint({
                     cwd: FIXTURE_DIR,
                     overrideConfig: {
-                        env: ["es6", "node"],
+                        env: { es6: true, node: true },
                         parser: PARSER_PATH,
                         parserOptions: {
                             parser: "@typescript-eslint/parser",
@@ -322,7 +322,7 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 fix: true,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                     parserOptions: {
                         parser: "babel-eslint",
@@ -352,7 +352,7 @@ describe("Basic tests", () => {
                     cwd: FIXTURE_DIR,
                     fix: true,
                     overrideConfig: {
-                        env: ["es6", "node"],
+                        env: { es6: true, node: true },
                         parser: PARSER_PATH,
                         parserOptions: {
                             parser: "@typescript-eslint/parser",
@@ -383,7 +383,7 @@ describe("Basic tests", () => {
                 const cli = new ESLint({
                     cwd: FIXTURE_DIR,
                     overrideConfig: {
-                        env: ["es6", "node"],
+                        env: { es6: true, node: true },
                         parser: PARSER_PATH,
                         parserOptions: {
                             parser: "@typescript-eslint/parser",
@@ -409,7 +409,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                 },
                 useEslintrc: false,
@@ -424,7 +424,7 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: ["es6", "node"],
+                    env: { es6: true, node: true },
                     parser: PARSER_PATH,
                 },
                 useEslintrc: false,
@@ -440,7 +440,7 @@ describe("Basic tests", () => {
         it("Identifiers in import declarations should has correct location.", async () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                env: ["browser", "node"],
+                env: { browser: true, node: true },
                 overrideConfig: {
                     parser: PARSER_PATH,
                     parserOptions: {

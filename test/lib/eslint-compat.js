@@ -49,7 +49,9 @@ function getESLintClassForV6(eslint) {
                 configFile: overrideConfigFile,
                 ...otherOptions,
 
-                envs: env,
+                envs: Object.entries(env)
+                    .filter(([, v]) => v)
+                    .map(([k]) => k),
                 globals: globals
                     ? Object.keys(globals).filter((n) => globals[n])
                     : undefined,
