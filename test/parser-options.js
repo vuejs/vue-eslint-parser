@@ -5,7 +5,6 @@
 "use strict"
 
 const assert = require("assert")
-const { rules } = require("@mysticatea/eslint-plugin")
 const { parseForESLint } = require("../src")
 const eslint = require("./fixtures/eslint")
 const Linter = eslint.Linter
@@ -14,10 +13,18 @@ describe("parserOptions", () => {
     describe("parser", () => {
         const linter = new Linter()
         linter.defineParser("vue-eslint-parser", { parseForESLint })
-        linter.defineRule(
-            "vue/valid-template-root",
-            rules["vue/valid-template-root"]
-        )
+        linter.defineRule("vue/template-test", {
+            create(context) {
+                return {
+                    Program(node) {
+                        const element = node.templateBody
+                        if (element != null) {
+                            context.report({ node, message: "test" })
+                        }
+                    },
+                }
+            },
+        })
 
         it("false then skip parsing '<script>'.", () => {
             const code = `<template>Hello</template>
@@ -28,13 +35,13 @@ describe("parserOptions", () => {
                     parser: false,
                 },
                 rules: {
-                    "vue/valid-template-root": "error",
+                    "vue/template-test": "error",
                 },
             }
             const messages = linter.verify(code, config, "test.vue")
 
             assert.strictEqual(messages.length, 1)
-            assert.strictEqual(messages[0].ruleId, "vue/valid-template-root")
+            assert.strictEqual(messages[0].ruleId, "vue/template-test")
         })
 
         it("Fail in <script setup> without sourceType.", () => {
@@ -43,9 +50,7 @@ describe("parserOptions", () => {
             const config = {
                 parser: "vue-eslint-parser",
                 parserOptions: {},
-                rules: {
-                    "vue/valid-template-root": "error",
-                },
+                rules: {},
             }
             const messages = linter.verify(code, config, "test.vue")
 
