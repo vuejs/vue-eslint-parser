@@ -81,7 +81,7 @@ describe("Basic tests", () => {
                 },
                 useEslintrc: false,
             })
-            await ESLint.outputFixes(cli.lintFiles(["hello.vue"]))
+            await ESLint.outputFixes(await cli.lintFiles(["hello.vue"]))
 
             const actual = fs.readFileSync(
                 path.join(FIXTURE_DIR, "hello.vue"),
@@ -440,8 +440,8 @@ describe("Basic tests", () => {
         it("Identifiers in import declarations should has correct location.", async () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
-                env: { browser: true, node: true },
                 overrideConfig: {
+                    env: { browser: true, node: true },
                     parser: PARSER_PATH,
                     parserOptions: {
                         parser: "babel-eslint",
