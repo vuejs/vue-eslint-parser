@@ -27,6 +27,7 @@ function getESLintClassForV6(eslint) {
                     plugins,
                     globals,
                     rules,
+                    env,
                     ...overrideConfig
                 } = {
                     plugins: [],
@@ -48,6 +49,7 @@ function getESLintClassForV6(eslint) {
                 configFile: overrideConfigFile,
                 ...otherOptions,
 
+                envs: env,
                 globals: globals
                     ? Object.keys(globals).filter((n) => globals[n])
                     : undefined,
