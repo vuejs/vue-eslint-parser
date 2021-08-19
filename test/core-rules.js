@@ -107,9 +107,9 @@ function modifyPattern(ruleId, pattern) {
         (ruleId === "newline-per-chained-call" &&
             pattern.code === "foo.bar()['foo' + \u2029 + 'bar']()") ||
         (ruleId === "no-nonoctal-decimal-escape" &&
-            pattern.code === "'\\\r\n\\9'" &&
-            // The location is reported as a fixed value: { line: 1, column: 0 }.
-            ruleId === "consistent-return" &&
+            pattern.code === "'\\\r\n\\9'") ||
+        // The location is reported as a fixed value: { line: 1, column: 0 }.
+        (ruleId === "consistent-return" &&
             pattern.parserOptions &&
             pattern.parserOptions.ecmaFeatures &&
             pattern.parserOptions.ecmaFeatures.globalReturn === true)
