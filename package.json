@@ -22,6 +22,11 @@
     "semver": "^6.3.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/eslint-parser": "^7.15.0",
+    "@babel/plugin-syntax-decorators": "^7.14.5",
+    "@babel/plugin-syntax-pipeline-operator": "^7.15.0",
+    "@babel/plugin-syntax-typescript": "^7.14.5",
     "@mysticatea/eslint-plugin": "^13.0.0",
     "@types/debug": "0.0.30",
     "@types/eslint": "^7.2.6",
@@ -67,7 +72,7 @@
     "pretest": "run-s build lint",
     "test": "npm run -s test:mocha",
     "test:mocha": "nyc mocha \"test/*.js\" --reporter dot --timeout 60000",
-    "test:debug": "mocha --inspect --require ts-node/register/transpile-only \"test/*.js\" --reporter dot --timeout 60000",
+    "test:debug": "mocha --require ts-node/register/transpile-only \"test/*.js\" --reporter dot --timeout 60000",
     "preupdate-fixtures": "npm run -s build",
     "update-fixtures": "node scripts/update-fixtures-ast.js && node scripts/update-fixtures-document-fragment.js",
     "preversion": "npm test",

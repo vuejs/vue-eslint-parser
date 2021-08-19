@@ -190,8 +190,11 @@ describe("Template AST", () => {
 
         if (
             Object.entries(requirements).some(([pkgName, pkgVersion]) => {
-                const pkg = require(`${pkgName}/package.json`)
-                return !semver.satisfies(pkg.version, pkgVersion)
+                const version =
+                    pkgName === "node"
+                        ? process.version
+                        : require(`${pkgName}/package.json`).version
+                return !semver.satisfies(version, pkgVersion)
             })
         ) {
             continue
