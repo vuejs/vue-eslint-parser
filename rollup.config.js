@@ -5,6 +5,7 @@
  */
 import resolve from "rollup-plugin-node-resolve"
 import sourcemaps from "rollup-plugin-sourcemaps"
+import commonjs from "rollup-plugin-commonjs"
 
 const pkg = require("./package.json")
 const deps = new Set(
@@ -23,6 +24,6 @@ export default {
  * See LICENSE file in root directory for full license.
  */`,
     },
-    plugins: [sourcemaps(), resolve()],
+    plugins: [sourcemaps(), resolve(), commonjs()],
     external: id => deps.has(id) || id.startsWith("lodash"),
 }

@@ -10,7 +10,13 @@
     "index.*"
   ],
   "peerDependencies": {
-    "eslint": ">=5.0.0"
+    "eslint": ">=5.0.0",
+    "pug-lexer": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "pug-lexer": {
+      "optional": true
+    }
   },
   "dependencies": {
     "debug": "^4.1.1",
@@ -52,8 +58,10 @@
     "nyc": "^14.0.0",
     "opener": "^1.5.1",
     "prettier": "^2.3.1",
+    "pug-lexer": "^5.0.1",
     "rimraf": "^2.6.3",
     "rollup": "^1.1.2",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "ts-node": "^8.1.0",
