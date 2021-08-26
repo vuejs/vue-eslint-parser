@@ -7,7 +7,6 @@ import * as path from "path"
 import * as AST from "./ast"
 import { LocationCalculatorForHtml } from "./common/location-calculator"
 import { HTMLParser, HTMLTokenizer } from "./html"
-import { PugParser, PugTokenizer } from "./pug"
 import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
 import type { ParserOptions } from "./common/parser-options"
@@ -88,15 +87,9 @@ export function parseForESLint(
             ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
         }
         const skipParsingScript = options.parser === false
-        let tokenizer: HTMLTokenizer | PugTokenizer
-        let rootAST: AST.VDocumentFragment
-        if (/^\<template\s+lang\=["']pug["']\>/i.test(code)) {
-            tokenizer = new PugTokenizer(code, optionsForTemplate)
-            rootAST = new PugParser(tokenizer, optionsForTemplate).parse()
-        } else {
-            tokenizer = new HTMLTokenizer(code, optionsForTemplate)
-            rootAST = new HTMLParser(tokenizer as HTMLTokenizer, optionsForTemplate).parse()
-        }
+        const tokenizer = new HTMLTokenizer(code, optionsForTemplate)
+        const rootAST = new HTMLParser(tokenizer, optionsForTemplate).parse()
+
         locationCalculator = new LocationCalculatorForHtml(
             tokenizer.gaps,
             tokenizer.lineTerminators,
