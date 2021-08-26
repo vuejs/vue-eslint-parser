@@ -1,3 +1,3 @@
 <template lang="pug">
-    Hello!
+p {{ greeting }} World!
 </template>
