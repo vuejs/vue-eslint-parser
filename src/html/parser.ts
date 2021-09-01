@@ -46,7 +46,11 @@ import type {
 import { IntermediateTokenizer } from "./intermediate-tokenizer"
 import type { Tokenizer } from "./tokenizer"
 import type { ParserOptions } from "../common/parser-options"
-import { isSFCFile, getScriptParser } from "../common/parser-options"
+import {
+    isSFCFile,
+    getScriptParser,
+    getParserLangFromSFC,
+} from "../common/parser-options"
 
 const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
 const DT_DD = /^d[dt]$/u
@@ -279,12 +283,16 @@ export class Parser {
         this.popElementStackUntil(0)
         propagateEndLocation(this.document)
 
+        const doc = this.document
+
         const parserOptions = {
             ...this.baseParserOptions,
             parser: getScriptParser(
                 this.baseParserOptions.parser,
-                this.document,
-                "template",
+                function* () {
+                    yield "<template>"
+                    yield getParserLangFromSFC(doc)
+                },
             ),
         }
         for (const proc of this.postProcessesForScript) {
@@ -292,7 +300,7 @@ export class Parser {
         }
         this.postProcessesForScript = []
 
-        return this.document
+        return doc
     }
 
     /**

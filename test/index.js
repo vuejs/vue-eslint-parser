@@ -291,6 +291,27 @@ describe("Basic tests", () => {
 
                 assert.deepStrictEqual(messages, [])
             })
+
+            it("should notify no error with multiple parser with '@typescript-eslint/parser'", async () => {
+                const cli = new ESLint({
+                    cwd: FIXTURE_DIR,
+                    overrideConfig: {
+                        env: { es6: true, node: true },
+                        parser: PARSER_PATH,
+                        parserOptions: {
+                            parser: {
+                                ts: "@typescript-eslint/parser",
+                            },
+                        },
+                        rules: { semi: ["error", "never"] },
+                    },
+                    useEslintrc: false,
+                })
+                const report = await cli.lintFiles(["typed.ts"])
+                const messages = report[0].messages
+
+                assert.deepStrictEqual(messages, [])
+            })
         }
     })
 
