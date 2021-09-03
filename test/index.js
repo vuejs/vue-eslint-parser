@@ -307,10 +307,10 @@ describe("Basic tests", () => {
                     },
                     useEslintrc: false,
                 })
-                const report = await cli.lintFiles(["typed.ts"])
-                const messages = report[0].messages
+                const report = await cli.lintFiles(["typed.ts", "typed.tsx"])
 
-                assert.deepStrictEqual(messages, [])
+                assert.deepStrictEqual(report[0].messages, [])
+                assert.deepStrictEqual(report[1].messages, [])
             })
         }
     })

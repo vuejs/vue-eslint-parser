@@ -64,11 +64,20 @@ export function parseForESLint(
         result = parseScript(code, {
             ...options,
             ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
-            parser: getScriptParser(options.parser, () =>
-                (path.extname(options.filePath || "unknown.js") || "")
+            parser: getScriptParser(options.parser, () => {
+                const ext = (
+                    path
+                        .extname(options.filePath || "unknown.js")
+                        .toLowerCase() || ""
+                )
                     // remove dot
-                    .slice(1),
-            ),
+                    .slice(1)
+                if (/^[jt]sx$/u.test(ext)) {
+                    return [ext, ext.slice(0, -1)]
+                }
+
+                return ext
+            }),
         })
         document = null
         locationCalculator = null
