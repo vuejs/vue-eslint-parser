@@ -47,23 +47,22 @@ export function isSFCFile(parserOptions: ParserOptions) {
 }
 
 /**
- * Gets the script parser name from the given SFC document fragment.
+ * Gets the script parser name from the given parser lang.
  */
 export function getScriptParser(
     parser: boolean | string | Record<string, string | undefined> | undefined,
-    doc: VDocumentFragment | null,
-    block: "script" | "template",
+    getParserLang: () => string | null | Iterable<string | null>,
 ): string | undefined {
     if (parser && typeof parser === "object") {
-        if (block === "template") {
-            const parserForTemplate = parser["<template>"]
-            if (typeof parserForTemplate === "string") {
-                return parserForTemplate
-            }
-        }
-        const lang = getScriptLang()
-        if (lang) {
-            const parserForLang = parser[lang]
+        const parserLang = getParserLang()
+        const parserLangs =
+            parserLang == null
+                ? []
+                : typeof parserLang === "string"
+                ? [parserLang]
+                : parserLang
+        for (const lang of parserLangs) {
+            const parserForLang = lang && parser[lang]
             if (typeof parserForLang === "string") {
                 return parserForLang
             }
@@ -71,18 +70,17 @@ export function getScriptParser(
         return parser.js
     }
     return typeof parser === "string" ? parser : undefined
+}
 
-    function getScriptLang() {
-        if (doc) {
-            const scripts = doc.children.filter(isScriptElement)
-            const script =
-                scripts.length === 2
-                    ? scripts.find(isScriptSetupElement)
-                    : scripts[0]
-            if (script) {
-                return getLang(script)
-            }
+export function getParserLangFromSFC(doc: VDocumentFragment): string | null {
+    if (doc) {
+        const scripts = doc.children.filter(isScriptElement)
+        const script =
+            (scripts.length === 2 && scripts.find(isScriptSetupElement)) ||
+            scripts[0]
+        if (script) {
+            return getLang(script)
         }
-        return null
     }
+    return null
 }

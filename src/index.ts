@@ -10,7 +10,7 @@ import { HTMLParser, HTMLTokenizer } from "./html"
 import { parseScript, parseScriptElement } from "./script"
 import * as services from "./parser-services"
 import type { ParserOptions } from "./common/parser-options"
-import { getScriptParser } from "./common/parser-options"
+import { getScriptParser, getParserLangFromSFC } from "./common/parser-options"
 import { parseScriptSetupElements } from "./script-setup"
 import { LinesAndColumns } from "./common/lines-and-columns"
 import type { VElement } from "./ast"
@@ -64,7 +64,20 @@ export function parseForESLint(
         result = parseScript(code, {
             ...options,
             ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
-            parser: getScriptParser(options.parser, null, "script"),
+            parser: getScriptParser(options.parser, () => {
+                const ext = (
+                    path
+                        .extname(options.filePath || "unknown.js")
+                        .toLowerCase() || ""
+                )
+                    // remove dot
+                    .slice(1)
+                if (/^[jt]sx$/u.test(ext)) {
+                    return [ext, ext.slice(0, -1)]
+                }
+
+                return ext
+            }),
         })
         document = null
         locationCalculator = null
@@ -94,7 +107,9 @@ export function parseForESLint(
                 ? Object.assign(template, concreteInfo)
                 : undefined
 
-        const scriptParser = getScriptParser(options.parser, rootAST, "script")
+        const scriptParser = getScriptParser(options.parser, () =>
+            getParserLangFromSFC(rootAST),
+        )
         let scriptSetup: VElement | undefined
         if (skipParsingScript || !scripts.length) {
             result = parseScript("", {
@@ -126,7 +141,10 @@ export function parseForESLint(
             const styles = rootAST.children.filter(isStyleElement)
             parseStyleElements(styles, locationCalculator, {
                 ...options,
-                parser: getScriptParser(options.parser, rootAST, "template"),
+                parser: getScriptParser(options.parser, function* () {
+                    yield "<template>"
+                    yield getParserLangFromSFC(rootAST)
+                }),
             })
         }
 
