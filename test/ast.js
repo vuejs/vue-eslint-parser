@@ -175,6 +175,7 @@ describe("Template AST", () => {
         const sourcePath = path.join(ROOT, `${name}/source.vue`)
         const optionsPath = path.join(ROOT, `${name}/parser-options.json`)
         const requirementsPath = path.join(ROOT, `${name}/requirements.json`)
+        const servicesPath = path.join(ROOT, `${name}/services.json`)
         const source = fs.readFileSync(sourcePath, "utf8")
         const parserOptions = fs.existsSync(optionsPath)
             ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
@@ -182,6 +183,9 @@ describe("Template AST", () => {
         const requirements = fs.existsSync(requirementsPath)
             ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
             : {}
+        const services = fs.existsSync(servicesPath)
+            ? JSON.parse(fs.readFileSync(servicesPath, "utf8"))
+            : null
         const options = Object.assign(
             { filePath: sourcePath },
             PARSER_OPTIONS,
@@ -293,6 +297,15 @@ describe("Template AST", () => {
             it("should have correct parent properties.", () => {
                 validateParent(source, parserOptions)
             })
+
+            if (services) {
+                it("should have correct services.", () => {
+                    assert.deepStrictEqual(
+                        Object.keys(actual.services).sort(),
+                        services
+                    )
+                })
+            }
         })
     }
 })
