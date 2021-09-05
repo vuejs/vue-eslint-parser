@@ -223,6 +223,7 @@ for (const name of TARGETS) {
     const tokenRangesPath = path.join(ROOT, `${name}/token-ranges.json`)
     const treePath = path.join(ROOT, `${name}/tree.json`)
     const scopePath = path.join(ROOT, `${name}/scope.json`)
+    const servicesPath = path.join(ROOT, `${name}/services.json`)
     const source = fs.readFileSync(sourcePath, "utf8")
     const options = Object.assign(
         { filePath: sourcePath },
@@ -247,6 +248,12 @@ for (const name of TARGETS) {
         fs.writeFileSync(
             scopePath,
             scopeToJSON(actual.scopeManager || analyze(actual.ast, options))
+        )
+    }
+    if (fs.existsSync(servicesPath)) {
+        fs.writeFileSync(
+            servicesPath,
+            JSON.stringify(Object.keys(actual.services).sort(), null, 4)
         )
     }
 }

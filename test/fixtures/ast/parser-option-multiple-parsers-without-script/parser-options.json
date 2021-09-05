@@ -1,0 +1,11 @@
+{
+  "sourceType": "module",
+  "parser": {
+    "js": "@typescript-eslint/parser",
+    "ts": "espree"
+  },
+  "vueFeatures": {
+    "interpolationAsNonHTML": true,
+    "filter": false
+  }
+}

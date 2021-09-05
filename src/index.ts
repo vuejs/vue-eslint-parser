@@ -115,6 +115,7 @@ export function parseForESLint(
             result = parseScript("", {
                 ...options,
                 ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
+                parser: scriptParser,
             })
         } else if (
             scripts.length === 2 &&
