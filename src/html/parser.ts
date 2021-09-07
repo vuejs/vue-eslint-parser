@@ -305,12 +305,14 @@ export class Parser {
             // Process pug
             const match =
                 /<template\s+lang="pug">(?<content>.*)<\/template>/isu.exec(
-                    this.text
+                    this.text,
                 )
             if (match && match.groups && match.groups.content) {
                 doc.pugTokens = lex(match.groups.content)
             }
-        } catch { /* ignore */ }
+        } catch {
+            /* ignore */
+        }
 
         return doc
     }

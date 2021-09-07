@@ -103,7 +103,8 @@ export function parseForESLint(
             errors: rootAST.errors,
         }
         const templateBody =
-            template != null && (templateLang === "html" || templateLang === "pug")
+            template != null &&
+            (templateLang === "html" || templateLang === "pug")
                 ? Object.assign(template, concreteInfo)
                 : undefined
 
