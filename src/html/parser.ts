@@ -51,7 +51,7 @@ import {
     getScriptParser,
     getParserLangFromSFC,
 } from "../common/parser-options"
-import lex from "pug-lexer";
+import lex from "pug-lexer"
 
 const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
 const DT_DD = /^d[dt]$/u
@@ -303,11 +303,14 @@ export class Parser {
 
         try {
             // Process pug
-            const match = /<template\s+lang="pug">(?<content>.*)<\/template>/isu.exec(this.text)
+            const match =
+                /<template\s+lang="pug">(?<content>.*)<\/template>/isu.exec(
+                    this.text
+                )
             if (match && match.groups && match.groups.content) {
                 doc.pugTokens = lex(match.groups.content)
             }
-        } catch {}
+        } catch { /* ignore */ }
 
         return doc
     }
