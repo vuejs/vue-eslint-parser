@@ -302,13 +302,13 @@ export class Parser {
         }
         this.postProcessesForScript = []
 
-        // Process pug
-        const match = /<template\s+lang="pug">(?<content>.*)<\/template>/isu.exec(this.text)
-        if (match && match.groups && match.groups.content) {
-            const pugTokens = lex(match.groups.content)
-            console.log(pugTokens);
-
-        }
+        try {
+            // Process pug
+            const match = /<template\s+lang="pug">(?<content>.*)<\/template>/isu.exec(this.text)
+            if (match && match.groups && match.groups.content) {
+                doc.pugTokens = lex(match.groups.content)
+            }
+        } catch {}
 
         return doc
     }

@@ -3,6 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
+import type { Token as PugToken } from "pug-lexer"
 import type { ScopeManager } from "eslint-scope"
 import type { ParseError } from "./errors"
 import type { HasLocation } from "./locations"
@@ -860,6 +861,7 @@ export interface VDocumentFragment
     type: "VDocumentFragment"
     parent: null
     children: (VElement | VText | VExpressionContainer | VStyleElement)[]
+    pugTokens?: PugToken[]
 }
 
 /**

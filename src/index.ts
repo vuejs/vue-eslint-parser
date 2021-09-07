@@ -106,8 +106,6 @@ export function parseForESLint(
             template != null && (templateLang === "html" || templateLang === "pug")
                 ? Object.assign(template, concreteInfo)
                 : undefined
-        // if (templateLang === "pug")
-        //   console.log(templateBody)
 
         const scriptParser = getScriptParser(options.parser, () =>
             getParserLangFromSFC(rootAST),
