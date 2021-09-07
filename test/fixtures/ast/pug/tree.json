@@ -1,1 +1,56 @@
-[]
+[
+    {
+        "type": "VElement",
+        "text": "<template lang=\"pug\">\np {{ greeting }} World!\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template lang=\"pug\">",
+                "children": [
+                    {
+                        "type": "VAttribute",
+                        "text": "lang=\"pug\"",
+                        "children": [
+                            {
+                                "type": "VIdentifier",
+                                "text": "lang",
+                                "children": []
+                            },
+                            {
+                                "type": "VLiteral",
+                                "text": "\"pug\"",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\np ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{ greeting }}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "greeting",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": " World!\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
