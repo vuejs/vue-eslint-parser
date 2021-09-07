@@ -51,7 +51,6 @@ import {
     getScriptParser,
     getParserLangFromSFC,
 } from "../common/parser-options"
-// import type { Token } from "pug-lexer";
 import lex from "pug-lexer";
 
 const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
