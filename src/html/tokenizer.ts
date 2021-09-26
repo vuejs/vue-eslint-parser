@@ -1852,7 +1852,7 @@ export class Tokenizer {
             this.appendTokenValue(LEFT_CURLY_BRACKET, null)
             this.appendTokenValue(LEFT_CURLY_BRACKET, null)
 
-            if (!this.parserOptions.vueFeatures?.interpolationAsNonHTML) {
+            if (!(this.parserOptions.vueFeatures?.interpolationAsNonHTML ?? true)) {
                 return this.returnState
             }
 

@@ -123,7 +123,7 @@ For example:
     "parserOptions": {
         "vueFeatures": {
             "filter": true,
-            "interpolationAsNonHTML": false,
+            "interpolationAsNonHTML": true,
             "styleCSSVariableInjection": true,
         }
     }
@@ -165,7 +165,7 @@ However, the following template that are valid in Vue 2 cannot be parsed.
 
 ### parserOptions.vueFeatures.interpolationAsNonHTML
 
-You can use `parserOptions.vueFeatures.interpolationAsNonHTML` property to specify whether to parse the interpolation as HTML. If you specify `true`, the parser handles the interpolation as non-HTML (However, you can use HTML escaping in the interpolation).
+You can use `parserOptions.vueFeatures.interpolationAsNonHTML` property to specify whether to parse the interpolation as HTML. If you specify `true`, the parser handles the interpolation as non-HTML (However, you can use HTML escaping in the interpolation). Default is `true`.
 For example:
 
 ```json

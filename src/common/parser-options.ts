@@ -6,7 +6,7 @@ export interface ParserOptions {
     // vue-eslint-parser options
     parser?: boolean | string
     vueFeatures?: {
-        interpolationAsNonHTML?: boolean // default false
+        interpolationAsNonHTML?: boolean // default true
         filter?: boolean // default true
         styleCSSVariableInjection?: boolean // default true
     }
