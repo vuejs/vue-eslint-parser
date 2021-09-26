@@ -4,7 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import type { VisitorKeys } from "eslint-visitor-keys"
-import Evk from "eslint-visitor-keys"
+import * as Evk from "eslint-visitor-keys"
 import type { Node } from "./nodes"
 
 //------------------------------------------------------------------------------

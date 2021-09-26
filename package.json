@@ -3,23 +3,23 @@
   "version": "7.11.0",
   "description": "The ESLint custom parser for `.vue` files.",
   "engines": {
-    "node": ">=8.10"
+    "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
   },
   "main": "index.js",
   "files": [
     "index.*"
   ],
   "peerDependencies": {
-    "eslint": ">=5.0.0"
+    "eslint": ">=6.0.0"
   },
   "dependencies": {
-    "debug": "^4.1.1",
-    "eslint-scope": "^5.1.1",
-    "eslint-visitor-keys": "^1.1.0",
-    "espree": "^6.2.1",
+    "debug": "^4.3.2",
+    "eslint-scope": "^6.0.0",
+    "eslint-visitor-keys": "^3.0.0",
+    "espree": "^9.0.0",
     "esquery": "^1.4.0",
     "lodash": "^4.17.21",
-    "semver": "^6.3.0"
+    "semver": "^7.3.5"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
@@ -27,7 +27,6 @@
     "@babel/plugin-syntax-decorators": "^7.14.5",
     "@babel/plugin-syntax-pipeline-operator": "^7.15.0",
     "@babel/plugin-syntax-typescript": "^7.14.5",
-    "@mysticatea/eslint-plugin": "^13.0.0",
     "@types/debug": "0.0.30",
     "@types/eslint": "^7.2.6",
     "@types/estree": "0.0.45",
@@ -35,16 +34,18 @@
     "@types/mocha": "^5.2.4",
     "@types/node": "^10.12.21",
     "@types/semver": "^7.3.6",
-    "@typescript-eslint/eslint-plugin": "^4.9.1",
-    "@typescript-eslint/parser": "^4.14.0",
-    "babel-eslint": "^10.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.0.0-0",
+    "@typescript-eslint/parser": "^5.0.0-0",
     "chokidar": "^2.0.4",
     "codecov": "^3.1.0",
     "cross-spawn": "^6.0.5",
     "dts-bundle": "^0.7.3",
-    "eslint": "^7.0.0",
+    "eslint": "^8.0.0-0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-jsonc": "^1.4.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-node-dependencies": "^0.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "fs-extra": "^7.0.1",
     "jsonc-eslint-parser": "^0.6.0",
     "mocha": "^6.1.4",

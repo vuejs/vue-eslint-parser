@@ -88,13 +88,13 @@ function getTree(source, parserOptions) {
                         type: node.type,
                         text: source.slice(node.range[0], node.range[1]),
                         children: [],
-                    })
+                    }),
                 )
             },
             "*:exit"() {
                 current = stack.pop()
             },
-        })
+        }),
     )
     linter.verify(
         source,
@@ -104,7 +104,7 @@ function getTree(source, parserOptions) {
             rules: { maketree: "error" },
         },
         undefined,
-        true
+        true,
     )
 
     return root.children
@@ -140,11 +140,11 @@ function validateParent(source, parserOptions) {
                         node.parent === parent,
                         `The parent of ${nodeToString(
                             node,
-                            source
+                            source,
                         )} should be ${nodeToString(
                             parent,
-                            source
-                        )}, but got ${nodeToString(node.parent, source)}`
+                            source,
+                        )}, but got ${nodeToString(node.parent, source)}`,
                     )
                 }
                 stack.push(node)
@@ -152,7 +152,7 @@ function validateParent(source, parserOptions) {
             "*:exit"() {
                 stack.pop()
             },
-        })
+        }),
     )
     linter.verify(
         source,
@@ -162,7 +162,7 @@ function validateParent(source, parserOptions) {
             rules: { validateparent: "error" },
         },
         undefined,
-        true
+        true,
     )
 }
 
@@ -189,7 +189,7 @@ describe("Template AST", () => {
         const options = Object.assign(
             { filePath: sourcePath },
             PARSER_OPTIONS,
-            parserOptions
+            parserOptions,
         )
 
         if (
@@ -213,7 +213,7 @@ describe("Template AST", () => {
 
                 assert.strictEqual(
                     JSON.stringify(actual.ast, replacer, 4),
-                    expected
+                    expected,
                 )
             })
 
@@ -221,7 +221,7 @@ describe("Template AST", () => {
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
                 const expectedText = fs.readFileSync(resultPath, "utf8")
                 const tokens = getAllTokens(actual.ast).map((t) =>
-                    source.slice(t.range[0], t.range[1])
+                    source.slice(t.range[0], t.range[1]),
                 )
                 const actualText = JSON.stringify(tokens, null, 4)
 
@@ -232,7 +232,7 @@ describe("Template AST", () => {
                 const sourceForWin = source.replace(/\r?\n/gu, "\r\n")
                 const actualForWin = parser.parseForESLint(
                     sourceForWin,
-                    options
+                    options,
                 )
 
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
@@ -240,7 +240,7 @@ describe("Template AST", () => {
                 const tokens = getAllTokens(actualForWin.ast).map((t) =>
                     sourceForWin
                         .slice(t.range[0], t.range[1])
-                        .replace(/\r?\n/gu, "\n")
+                        .replace(/\r?\n/gu, "\n"),
                 )
                 const actualText = JSON.stringify(tokens, null, 4)
 
@@ -257,7 +257,7 @@ describe("Template AST", () => {
                     const column1 = token.loc.end.column
                     const expected = source.slice(
                         token.range[0],
-                        token.range[1]
+                        token.range[1],
                     )
 
                     let text = ""
@@ -277,10 +277,10 @@ describe("Template AST", () => {
                         `${JSON.stringify(
                             token,
                             null,
-                            4
+                            4,
                         )} expected ${JSON.stringify(
-                            expected
-                        )}, but got ${JSON.stringify(text)}`
+                            expected,
+                        )}, but got ${JSON.stringify(text)}`,
                     )
                 }
             })
@@ -302,7 +302,7 @@ describe("Template AST", () => {
                 it("should have correct services.", () => {
                     assert.deepStrictEqual(
                         Object.keys(actual.services).sort(),
-                        services
+                        services,
                     )
                 })
             }

@@ -215,8 +215,6 @@ export class Parser {
     /**
      * The current flag of expression enabled.
      */
-    // eslint-disable-next-line @mysticatea/ts/ban-ts-ignore
-    // @ts-ignore
     private get expressionEnabled(): boolean {
         return this.tokenizer.expressionEnabled
     }

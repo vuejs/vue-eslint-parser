@@ -527,7 +527,7 @@ export interface ExpressionParseResult<T extends Node> {
 
 function loadParser(parser: string) {
     if (parser !== "espree") {
-        // eslint-disable-next-line @mysticatea/ts/no-require-imports
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         return require(parser)
     }
     return getEspreeFromUser()

@@ -166,7 +166,7 @@ function modifyPattern(ruleId, pattern) {
                         error.data &&
                         Object.hasOwnProperty.call(
                             error.data,
-                            "shadowedLine"
+                            "shadowedLine",
                         ) &&
                         typeof error.data.shadowedLine === "number"
                     ) {
