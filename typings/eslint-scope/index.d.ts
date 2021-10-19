@@ -75,8 +75,8 @@ export interface Reference {
     isWriteOnly(): boolean
 }
 
-declare const eslintScope: {
-    analyze(ast: object, options?: AnalysisOptions): ScopeManager
-    version: string
-}
-export default eslintScope
+export declare const analyze: (
+    ast: object,
+    options?: AnalysisOptions,
+) => ScopeManager
+export declare const version: string

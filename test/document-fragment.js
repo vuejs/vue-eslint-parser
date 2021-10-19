@@ -63,7 +63,7 @@ describe("services.getDocumentFragment", () => {
         const options = Object.assign(
             { filePath: sourcePath },
             PARSER_OPTIONS,
-            parserOptions
+            parserOptions,
         )
         const result = parser.parseForESLint(source, options)
         const actual = result.services.getDocumentFragment()
@@ -72,13 +72,13 @@ describe("services.getDocumentFragment", () => {
             it("should be parsed to valid document fragment.", () => {
                 const resultPath = path.join(
                     ROOT,
-                    `${name}/document-fragment.json`
+                    `${name}/document-fragment.json`,
                 )
                 const expected = fs.readFileSync(resultPath, "utf8")
 
                 assert.strictEqual(
                     JSON.stringify(actual, replacer, 4),
-                    expected
+                    expected,
                 )
             })
 
@@ -86,7 +86,7 @@ describe("services.getDocumentFragment", () => {
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
                 const expectedText = fs.readFileSync(resultPath, "utf8")
                 const tokens = getAllTokens(actual).map((t) =>
-                    source.slice(t.range[0], t.range[1])
+                    source.slice(t.range[0], t.range[1]),
                 )
                 const actualText = JSON.stringify(tokens, null, 4)
 

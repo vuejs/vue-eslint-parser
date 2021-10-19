@@ -117,25 +117,25 @@ function createLinter(target = "json") {
         context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
             target,
             ...noNumberLiteralRule,
-        })
+        }),
     )
     linter.defineRule("test-no-forbidden-key", (context) =>
         context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
             target,
             ...noNoForbiddenKeyRule,
-        })
+        }),
     )
     linter.defineRule("test-no-parsing-error", (context) =>
         context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
             target,
             ...noParsingErrorRule,
-        })
+        }),
     )
     linter.defineRule("test-no-parsing-error", (context) =>
         context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
             target,
             ...noParsingErrorRule,
-        })
+        }),
     )
     linter.defineRule("test-no-program-exit", (context) =>
         context.parserServices.defineCustomBlocksVisitor(
@@ -145,8 +145,8 @@ function createLinter(target = "json") {
                 target,
                 ...noProgramExitRule,
             },
-            noProgramExitRule.create(context)
-        )
+            noProgramExitRule.create(context),
+        ),
     )
 
     return linter
@@ -257,7 +257,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
         const linter = createLinter(
             (lang, block) =>
                 (lang === "json" && lang === "json5") ||
-                (!lang && block.name === "i18n")
+                (!lang && block.name === "i18n"),
         )
 
         const messages1 = linter.verify(code, LINTER_CONFIG)
@@ -265,7 +265,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
         assert.strictEqual(messages1.length, 0)
         const messages2 = linter.verify(
             `${code}<i18n>123</i18n>`,
-            LINTER_CONFIG
+            LINTER_CONFIG,
         )
 
         assert.strictEqual(messages2.length, 1)
@@ -306,7 +306,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
         assert.strictEqual(messages[1].column, 19)
         assert.strictEqual(
             messages[2].message,
-            "Expected to be an expression, but got empty."
+            "Expected to be an expression, but got empty.",
         )
         assert.strictEqual(messages[2].line, 6)
         assert.strictEqual(messages[2].column, 19)
@@ -333,8 +333,8 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
                 {
                     target: "yaml",
                     ...noParsingErrorRule,
-                }
-            )
+                },
+            ),
         )
 
         const messages = linter.verify(code, {
@@ -398,7 +398,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
                                 const error =
                                     ctx.parserServices.parseCustomBlockElement(
                                         jsonParser,
-                                        { jsonSyntax: "json" }
+                                        { jsonSyntax: "json" },
                                     ).error
                                 ctx.report({
                                     node,
@@ -411,8 +411,8 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
                             },
                         }
                     },
-                }
-            )
+                },
+            ),
         )
 
         const messages = linter.verify(code, {
@@ -426,7 +426,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
         assert.strictEqual(messages.length, 1)
         assert.strictEqual(
             messages[0].message,
-            '{"lineNumber":3,"column":16,"message":"Unexpected comment."}'
+            '{"lineNumber":3,"column":16,"message":"Unexpected comment."}',
         )
     })
 
@@ -444,8 +444,8 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
                 {
                     target: "json",
                     create: siblingSelectorRule.create,
-                }
-            )
+                },
+            ),
         )
         const messages = linter.verify(code, {
             ...LINTER_CONFIG,
@@ -482,14 +482,14 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
                                         message: JSON.stringify(
                                             customBlockContext
                                                 .getAncestors()
-                                                .map((n) => n.type)
+                                                .map((n) => n.type),
                                         ),
                                     })
                                 },
                             }
                         },
-                    }
-                )
+                    },
+                ),
             )
 
             const messages = linter.verify(code, {
@@ -503,7 +503,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
             assert.strictEqual(messages.length, 1)
             assert.strictEqual(
                 messages[0].message,
-                '["Program","JSONExpressionStatement","JSONObjectExpression","JSONProperty","JSONObjectExpression","JSONProperty"]'
+                '["Program","JSONExpressionStatement","JSONObjectExpression","JSONProperty","JSONObjectExpression","JSONProperty"]',
             )
         })
         it("should work getSourceCode().", () => {
@@ -527,14 +527,14 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
                                         message: JSON.stringify(
                                             customBlockContext
                                                 .getSourceCode()
-                                                .getLocFromIndex(node.range[0])
+                                                .getLocFromIndex(node.range[0]),
                                         ),
                                     })
                                 },
                             }
                         },
-                    }
-                )
+                    },
+                ),
             )
 
             const messages = linter.verify(code, {
@@ -570,7 +570,7 @@ let a = 42;
                             create(customBlockContext) {
                                 return rule.create(customBlockContext)
                             },
-                        }
+                        },
                     )
                 },
             })
@@ -585,15 +585,15 @@ let a = 42;
                                 return {
                                     Literal() {
                                         customBlockContext.markVariableAsUsed(
-                                            "a"
+                                            "a",
                                         )
                                         customBlockContext.markVariableAsUsed(
-                                            "b"
+                                            "b",
                                         )
                                     },
                                 }
                             },
-                        }
+                        },
                     )
                 },
             })
@@ -609,7 +609,7 @@ let a = 42;
             assert.strictEqual(messages1.length, 1)
             assert.strictEqual(
                 messages1[0].message,
-                "'a' is assigned a value but never used."
+                "'a' is assigned a value but never used.",
             )
 
             const messages2 = linter.verify(code, {
@@ -645,7 +645,7 @@ function a(arg) {
                             create(customBlockContext) {
                                 return rule.create(customBlockContext)
                             },
-                        }
+                        },
                     )
                 },
             })
@@ -661,7 +661,7 @@ function a(arg) {
             assert.strictEqual(messages1.length, 1)
             assert.strictEqual(
                 messages1[0].message,
-                "Assignment to function parameter 'arg'."
+                "Assignment to function parameter 'arg'.",
             )
         })
     })

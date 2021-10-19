@@ -36,7 +36,7 @@ describe("[references] expression containers", () => {
         before(() => {
             ast = parse(
                 code,
-                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
             ).ast
         })
 
@@ -48,11 +48,11 @@ describe("[references] expression containers", () => {
             assert(directive.value.references != null)
             assert(
                 directive.value.references[0].id ===
-                    directive.value.expression.left
+                    directive.value.expression.left,
             )
             assert(
                 directive.value.references[1].id ===
-                    directive.value.expression.right
+                    directive.value.expression.right,
             )
         })
     })
@@ -64,7 +64,7 @@ describe("[references] expression containers", () => {
         before(() => {
             ast = parse(
                 code,
-                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
             ).ast
         })
 
@@ -85,7 +85,7 @@ describe("[references] expression containers", () => {
         before(() => {
             ast = parse(
                 code,
-                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
             ).ast
         })
 
@@ -98,7 +98,7 @@ describe("[references] expression containers", () => {
             assert(directive.value.references.length === 1)
             assert(
                 directive.value.references[0].id ===
-                    directive.value.expression.body[0].expression.callee
+                    directive.value.expression.body[0].expression.callee,
             )
         })
     })
@@ -112,7 +112,7 @@ describe("[variables] elements", () => {
         before(() => {
             ast = parse(
                 code,
-                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
             ).ast
         })
 
@@ -123,12 +123,12 @@ describe("[variables] elements", () => {
             assert(element.type === "VElement")
             assert(element.variables.length === 1)
             assert(
-                element.variables[0].id === directive.value.expression.left[0]
+                element.variables[0].id === directive.value.expression.left[0],
             )
             assert(directive.value.references.length === 1)
             assert(
                 directive.value.references[0].id ===
-                    directive.value.expression.right
+                    directive.value.expression.right,
             )
         })
     })
@@ -140,7 +140,7 @@ describe("[variables] elements", () => {
         before(() => {
             ast = parse(
                 code,
-                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
             ).ast
         })
 
@@ -151,15 +151,15 @@ describe("[variables] elements", () => {
             assert(element.type === "VElement")
             assert(element.variables.length === 2)
             assert(
-                element.variables[0].id === directive.value.expression.left[0]
+                element.variables[0].id === directive.value.expression.left[0],
             )
             assert(
-                element.variables[1].id === directive.value.expression.left[1]
+                element.variables[1].id === directive.value.expression.left[1],
             )
             assert(directive.value.references.length === 1)
             assert(
                 directive.value.references[0].id ===
-                    directive.value.expression.right
+                    directive.value.expression.right,
             )
         })
     })
@@ -171,7 +171,7 @@ describe("[variables] elements", () => {
         before(() => {
             ast = parse(
                 code,
-                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+                Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
             ).ast
         })
 
@@ -206,7 +206,7 @@ describe("Variables of v-for and references", () => {
     before(() => {
         const ast = parse(
             code,
-            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
         ).ast
         variables = ast.templateBody.children[0].variables
         vForReferences =
@@ -243,7 +243,7 @@ describe("Variables of v-for and references", () => {
         for (const variable of variables) {
             assert(
                 Object.getOwnPropertyDescriptor(variable, "references")
-                    .enumerable === false
+                    .enumerable === false,
             )
         }
     })
@@ -254,11 +254,11 @@ describe("Variables of v-for and references", () => {
             vBindKeyReferences,
             mustacheReferences1,
             mustacheReferences2,
-            mustacheReferences3
+            mustacheReferences3,
         )) {
             assert(
                 Object.getOwnPropertyDescriptor(reference, "variable")
-                    .enumerable === false
+                    .enumerable === false,
             )
         }
     })
@@ -276,7 +276,7 @@ describe("Variables of template-scope and references", () => {
     before(() => {
         const ast = parse(
             code,
-            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
         ).ast
         variables = ast.templateBody.children[0].variables
         vBindKeyReferences =
@@ -309,7 +309,7 @@ describe("Variables of template-scope and references", () => {
         for (const variable of variables) {
             assert(
                 Object.getOwnPropertyDescriptor(variable, "references")
-                    .enumerable === false
+                    .enumerable === false,
             )
         }
     })
@@ -319,11 +319,11 @@ describe("Variables of template-scope and references", () => {
             vBindKeyReferences,
             mustacheReferences1,
             mustacheReferences2,
-            mustacheReferences3
+            mustacheReferences3,
         )) {
             assert(
                 Object.getOwnPropertyDescriptor(reference, "variable")
-                    .enumerable === false
+                    .enumerable === false,
             )
         }
     })
@@ -338,7 +338,7 @@ describe("Variables of v-for and references of dynamic arguments", () => {
     before(() => {
         const ast = parse(
             code,
-            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
         ).ast
         variables = ast.templateBody.children[0].variables
         vForReferences =

@@ -57,12 +57,15 @@ function getESLintClassForV6(eslint) {
                     : undefined,
                 plugins: plugins || [],
                 rules: rules
-                    ? Object.entries(rules).reduce((o, [ruleId, opt]) => {
-                          if (opt) {
-                              o[ruleId] = opt
-                          }
-                          return o
-                      }, /** @type {NonNullable<eslint.CLIEngine.Options["rules"]>} */ ({}))
+                    ? Object.entries(rules).reduce(
+                          (o, [ruleId, opt]) => {
+                              if (opt) {
+                                  o[ruleId] = opt
+                              }
+                              return o
+                          },
+                          /** @type {NonNullable<eslint.CLIEngine.Options["rules"]>} */ {},
+                      )
                     : undefined,
                 ...overrideConfig,
             }
@@ -81,7 +84,7 @@ function getESLintClassForV6(eslint) {
         async lintText(...params) {
             const result = this.engine.executeOnText(
                 params[0],
-                params[1].filePath
+                params[1].filePath,
             )
             return result.results
         }
@@ -93,7 +96,7 @@ function getESLintClassForV6(eslint) {
         // eslint-disable-next-line require-await -- ignore
         async lintFiles(...params) {
             const result = this.engine.executeOnFiles(
-                Array.isArray(params[0]) ? params[0] : [params[0]]
+                Array.isArray(params[0]) ? params[0] : [params[0]],
             )
             return result.results
         }
@@ -111,6 +114,6 @@ function getESLintClassForV6(eslint) {
     }
 
     /** @type {typeof eslint.ESLint} */
-    const eslintClass = /** @type {any} */ (ESLintForV6)
+    const eslintClass = /** @type {any} */ ESLintForV6
     return eslintClass
 }

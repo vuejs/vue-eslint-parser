@@ -112,6 +112,9 @@ export function parseCustomBlockElement(
             parserOptions,
         )
     } catch (e) {
+        if (!(e instanceof Error)) {
+            throw e
+        }
         return {
             error: e,
             ast: {
@@ -221,7 +224,7 @@ export function createCustomBlockSharedContext({
             getAncestors: () => getAncestors(currentNode),
 
             getDeclaredVariables: (...args: any[]) =>
-                // @ts-expect-error
+                // @ts-expect-error -- ignore
                 getScopeManager().getDeclaredVariables(...args),
             getScope: () => getScope(getScopeManager(), currentNode),
             markVariableAsUsed: (name: string) =>
@@ -256,7 +259,7 @@ export function createCustomBlockSharedContext({
     function getSourceCode() {
         return (
             sourceCode ||
-            // eslint-disable-next-line @mysticatea/ts/no-require-imports
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
             (sourceCode = new (require("eslint").SourceCode)({
                 text,
                 ast: parsedResult.ast,
@@ -365,7 +368,7 @@ function markVariableAsUsed(
         )
 
         if (variable) {
-            // @ts-expect-error
+            // @ts-expect-error -- ignore
             variable.eslintUsed = true
             return true
         }

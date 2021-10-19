@@ -27,25 +27,21 @@ const ORIGINAL_FIXTURE_DIR = path.join(__dirname, "fixtures")
 const FIXTURE_DIR = path.join(__dirname, "temp")
 const PARSER_PATH = path.resolve(__dirname, "../src/index.ts")
 
-const BABEL_PARSER_OPTIONS = semver.satisfies(ESLint.version, "<8")
-    ? {
-          parser: "babel-eslint",
-      }
-    : {
-          parser: "@babel/eslint-parser",
-          requireConfigFile: false,
-          babelOptions: {
-              plugins: [
-                  "@babel/plugin-syntax-typescript",
-                  [
-                      "@babel/plugin-syntax-decorators",
-                      {
-                          decoratorsBeforeExport: true,
-                      },
-                  ],
-              ],
-          },
-      }
+const BABEL_PARSER_OPTIONS = {
+    parser: "@babel/eslint-parser",
+    requireConfigFile: false,
+    babelOptions: {
+        plugins: [
+            "@babel/plugin-syntax-typescript",
+            [
+                "@babel/plugin-syntax-decorators",
+                {
+                    decoratorsBeforeExport: true,
+                },
+            ],
+        ],
+    },
+}
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
@@ -104,11 +100,11 @@ describe("Basic tests", () => {
 
             const actual = fs.readFileSync(
                 path.join(FIXTURE_DIR, "hello.vue"),
-                "utf8"
+                "utf8",
             )
             const expected = fs.readFileSync(
                 path.join(FIXTURE_DIR, "hello.vue.fixed"),
-                "utf8"
+                "utf8",
             )
 
             assert(actual === expected)
@@ -222,11 +218,11 @@ describe("Basic tests", () => {
 
             const actual = fs.readFileSync(
                 path.join(FIXTURE_DIR, "notvue.js"),
-                "utf8"
+                "utf8",
             )
             const expected = fs.readFileSync(
                 path.join(FIXTURE_DIR, "notvue.js.fixed"),
-                "utf8"
+                "utf8",
             )
 
             assert(actual === expected)
@@ -252,7 +248,7 @@ describe("Basic tests", () => {
     })
 
     describe("About fixtures/typed.js", () => {
-        it("should notify no error with 'babel-eslint'", async () => {
+        it("should notify no error with '@babel/eslint-parser'", async () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
@@ -316,7 +312,7 @@ describe("Basic tests", () => {
     })
 
     describe("About fixtures/typed.vue", () => {
-        it("should notify no error with 'babel-eslint'", async () => {
+        it("should notify no error with '@babel/eslint-parser'", async () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
@@ -357,7 +353,7 @@ describe("Basic tests", () => {
             })
         }
 
-        it("should fix 'semi' errors with --fix option with 'babel-eslint'", async () => {
+        it("should fix 'semi' errors with --fix option with '@babel/eslint-parser'", async () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 fix: true,
@@ -376,11 +372,11 @@ describe("Basic tests", () => {
 
             const actual = fs.readFileSync(
                 path.join(FIXTURE_DIR, "typed.vue"),
-                "utf8"
+                "utf8",
             )
             const expected = fs.readFileSync(
                 path.join(FIXTURE_DIR, "typed.vue.fixed"),
-                "utf8"
+                "utf8",
             )
 
             assert(actual === expected)
@@ -405,11 +401,11 @@ describe("Basic tests", () => {
 
                 const actual = fs.readFileSync(
                     path.join(FIXTURE_DIR, "typed.vue"),
-                    "utf8"
+                    "utf8",
                 )
                 const expected = fs.readFileSync(
                     path.join(FIXTURE_DIR, "typed.vue.fixed"),
-                    "utf8"
+                    "utf8",
                 )
 
                 assert(actual === expected)
@@ -516,7 +512,7 @@ describe("Basic tests", () => {
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in RCDATA state.", () => {
             const ast = parse(
-                "<template><textarea>\u0000</textarea></template>"
+                "<template><textarea>\u0000</textarea></template>",
             )
             const text = ast.templateBody.children[0].children[0]
             const errors = ast.templateBody.errors
@@ -609,7 +605,7 @@ describe("Basic tests", () => {
             assert.strictEqual(errors.length, 1)
             assert.strictEqual(
                 errors[0].code,
-                "unexpected-question-mark-instead-of-tag-name"
+                "unexpected-question-mark-instead-of-tag-name",
             )
         })
 
@@ -627,14 +623,14 @@ describe("Basic tests", () => {
         it("should exist if the source code is a Vue SFC file.", () => {
             assert.notStrictEqual(
                 parseForESLint("test", { filePath: "test.vue" }).services,
-                undefined
+                undefined,
             )
         })
 
         it("should exist even if the source code is not Vue SFC file.", () => {
             assert.notStrictEqual(
                 parseForESLint("test", { filePath: "test.js" }).services,
-                undefined
+                undefined,
             )
         })
     })
@@ -643,7 +639,7 @@ describe("Basic tests", () => {
         it("should make the correct location of decorators", () => {
             const code = fs.readFileSync(
                 path.join(FIXTURE_DIR, "issue21.vue"),
-                "utf8"
+                "utf8",
             )
             const indexOfDecorator = code.indexOf("@Component")
             const ast = parse(code, {
@@ -659,7 +655,7 @@ describe("Basic tests", () => {
             assert.strictEqual(ast.body[2].range[0], indexOfDecorator)
             assert.strictEqual(
                 ast.body[2].decorators[0].range[0],
-                indexOfDecorator
+                indexOfDecorator,
             )
         })
     })
@@ -681,7 +677,7 @@ describe("Basic tests", () => {
                     "VElement[name='div']"(node) {
                         context.report({ node, message: "OK" })
                     },
-                })
+                }),
             )
 
             const messages1 = linter.verify(code, config)
@@ -709,7 +705,7 @@ describe("Basic tests", () => {
                     "* ~ *"(node) {
                         context.report({ node, message: "OK" })
                     },
-                })
+                }),
             )
 
             const messages1 = linter.verify(code, config)
@@ -758,7 +754,7 @@ describe("Basic tests", () => {
             assert.strictEqual(messages.length, 1)
             assert.strictEqual(
                 messages[0].message,
-                "Parsing error: Unterminated template literal"
+                "Parsing error: Unterminated template literal",
             )
         })
         it("should notify parsing error #3", () => {
@@ -775,7 +771,7 @@ describe("Basic tests", () => {
             assert.strictEqual(messages.length, 1)
             assert.strictEqual(
                 messages[0].message,
-                "Parsing error: Unterminated string constant"
+                "Parsing error: Unterminated string constant",
             )
         })
         it("should notify 1 no-undef error", () => {

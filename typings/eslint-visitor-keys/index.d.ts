@@ -5,12 +5,9 @@
  */
 
 export type VisitorKeys = Readonly<{
-    [type: string]: ReadonlyArray<string> | undefined
+    [type: string]: readonly string[] | undefined
 }>
 
-declare const evk: {
-    KEYS: VisitorKeys,
-    getKeys(node: { type: string }): ReadonlyArray<string>,
-    unionWith(keys: VisitorKeys): VisitorKeys
-}
-export default evk
+export declare const KEYS: VisitorKeys
+export declare const getKeys: (node: { type: string }) => readonly string[]
+export declare const unionWith: (keys: VisitorKeys) => VisitorKeys

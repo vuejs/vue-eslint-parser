@@ -54,7 +54,7 @@ describe("services.getTemplateBodyTokenStore", () => {
     before(() => {
         const result = parse(
             code,
-            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS)
+            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
         )
         ast = result.ast
         tokens = result.services.getTemplateBodyTokenStore()

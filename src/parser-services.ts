@@ -175,8 +175,7 @@ export function define(
                             generator,
                         )
                     } finally {
-                        // eslint-disable-next-line @mysticatea/ts/ban-ts-ignore
-                        // @ts-ignore
+                        // @ts-expect-error -- ignore
                         scriptVisitor[templateBodyTriggerSelector] =
                             programExitHandler
                         templateBodyEmitters.delete(templateBodyTriggerSelector)
@@ -232,8 +231,6 @@ export function define(
                         })
                         traverseNodes(document, generator)
                     } finally {
-                        // eslint-disable-next-line @mysticatea/ts/ban-ts-ignore
-                        // @ts-ignore
                         scriptVisitor[documentTriggerSelector] =
                             programExitHandler
                         documentEmitters.delete(documentTriggerSelector)
@@ -337,8 +334,7 @@ export function define(
                                 const ctx = {
                                     ...customBlockContext,
                                 }
-                                // eslint-disable-next-line @mysticatea/ts/ban-ts-ignore
-                                // @ts-ignore -- custom context
+                                // @ts-expect-error -- custom context
                                 ctx.__proto__ = factory.context
 
                                 const visitor = factory.create(
@@ -370,8 +366,6 @@ export function define(
                             })
                         }
                     } finally {
-                        // eslint-disable-next-line @mysticatea/ts/ban-ts-ignore
-                        // @ts-ignore
                         scriptVisitor["Program:exit"] = programExitHandler
                         customBlocksEmitters.delete(key)
                     }

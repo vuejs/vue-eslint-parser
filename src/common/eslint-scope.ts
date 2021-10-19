@@ -1,4 +1,4 @@
-import escope from "eslint-scope"
+import * as escope from "eslint-scope"
 import { getLinterRequire } from "./linter-require"
 import { lte } from "semver"
 

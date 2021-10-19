@@ -17,7 +17,7 @@ function parentMain() {
                 .on("exit", (code) =>
                     code
                         ? done(new Error(`Exited with non-zero: ${code}`))
-                        : done()
+                        : done(),
                 )
         })
         it("should load espree from the ESLint location.", (done) => {
@@ -28,7 +28,7 @@ function parentMain() {
                 .on("exit", (code) =>
                     code
                         ? done(new Error(`Exited with non-zero: ${code}`))
-                        : done()
+                        : done(),
                 )
         })
         it("should load espree from the user location.", (done) => {
@@ -45,7 +45,7 @@ function parentMain() {
                     .on("exit", (code) =>
                         code
                             ? done(new Error(`Exited with non-zero: ${code}`))
-                            : done()
+                            : done(),
                     )
             } finally {
                 process.chdir(originalCwd)
@@ -68,7 +68,7 @@ function childMain1() {
     linter.verify(
         "<script>'hello'</script>",
         { parser: "vue-eslint-parser" },
-        { filename: "a.vue" }
+        { filename: "a.vue" },
     )
 
     const afterEsprees = Object.keys(require.cache).filter(isEspreePath)
@@ -76,7 +76,7 @@ function childMain1() {
     assert.strictEqual(
         afterEsprees.length,
         beforeEsprees.length,
-        "espree should be loaded from the expected place"
+        "espree should be loaded from the expected place",
     )
 }
 
@@ -99,12 +99,12 @@ function childMain2() {
                 sourceType: "module",
             },
         },
-        { filename: "a.vue" }
+        { filename: "a.vue" },
     )
     assert.strictEqual(
         result.length,
         0,
-        "espree should be loaded from the fixtures/espree-v8"
+        "espree should be loaded from the fixtures/espree-v8",
     )
 }
 
