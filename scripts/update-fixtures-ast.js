@@ -86,7 +86,7 @@ function getTree(source, ast) {
                     type: node.type,
                     text: source.slice(node.range[0], node.range[1]),
                     children: [],
-                })
+                }),
             )
         },
         leaveNode() {
@@ -127,7 +127,7 @@ function scopeToJSON(scopeManager) {
                 reference.resolved &&
                     reference.resolved.defs &&
                     reference.resolved.defs[0] &&
-                    reference.resolved.defs[0].name
+                    reference.resolved.defs[0].name,
             ),
             init: reference.init || null,
         }
@@ -206,6 +206,9 @@ for (const name of TARGETS) {
     const requirements = fs.existsSync(requirementsPath)
         ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
         : {}
+    if (name.includes("svg-attrs-colon")) {
+        debugger
+    }
     if (
         Object.entries(requirements).some(([pkgName, pkgVersion]) => {
             const version =
@@ -225,17 +228,18 @@ for (const name of TARGETS) {
     const scopePath = path.join(ROOT, `${name}/scope.json`)
     const servicesPath = path.join(ROOT, `${name}/services.json`)
     const source = fs.readFileSync(sourcePath, "utf8")
+    const parserOptions = fs.existsSync(optionsPath)
+        ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
+        : {}
     const options = Object.assign(
         { filePath: sourcePath },
         PARSER_OPTIONS,
-        fs.existsSync(optionsPath)
-            ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
-            : {}
+        parserOptions,
     )
     // console.log("Start:", name)
     const actual = parser.parseForESLint(source, options)
     const tokenRanges = getAllTokens(actual.ast).map((t) =>
-        source.slice(t.range[0], t.range[1])
+        source.slice(t.range[0], t.range[1]),
     )
     const tree = getTree(source, actual.ast)
 
@@ -247,13 +251,13 @@ for (const name of TARGETS) {
     if (fs.existsSync(scopePath)) {
         fs.writeFileSync(
             scopePath,
-            scopeToJSON(actual.scopeManager || analyze(actual.ast, options))
+            scopeToJSON(actual.scopeManager || analyze(actual.ast, options)),
         )
     }
     if (fs.existsSync(servicesPath)) {
         fs.writeFileSync(
             servicesPath,
-            JSON.stringify(Object.keys(actual.services).sort(), null, 4)
+            JSON.stringify(Object.keys(actual.services).sort(), null, 4),
         )
     }
 }

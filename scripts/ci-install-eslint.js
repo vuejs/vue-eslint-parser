@@ -34,7 +34,7 @@ function sh(command) {
     // Install ESLint submodule of the requested version
     const installedVersion = require("eslint/package.json").version
     cd("test/fixtures/eslint")
-    if (!installedVersion.startsWith("7.")) {
+    if (!installedVersion.startsWith("8.")) {
         await sh(`git checkout v${installedVersion}`)
     }
     if (installedVersion.startsWith("5.")) {

@@ -29,7 +29,7 @@ jobs:
     name: Test
     strategy:
       matrix:
-        eslint: [7, '8.0.0-0']
+        eslint: [7, 8]
         node: [14, 16]
         os: [ubuntu-latest]
         include:
