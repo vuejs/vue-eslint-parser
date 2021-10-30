@@ -206,9 +206,6 @@ for (const name of TARGETS) {
     const requirements = fs.existsSync(requirementsPath)
         ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
         : {}
-    if (name.includes("svg-attrs-colon")) {
-        debugger
-    }
     if (
         Object.entries(requirements).some(([pkgName, pkgVersion]) => {
             const version =
