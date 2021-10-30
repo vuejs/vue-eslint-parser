@@ -1,0 +1,82 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <div class=\"f-c\" style=\"height: 100%;\">\n  </div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div class=\"f-c\" style=\"height: 100%;\">\n  </div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div class=\"f-c\" style=\"height: 100%;\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "class=\"f-c\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "class",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"f-c\"",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "style=\"height: 100%;\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "style",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"height: 100%;\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

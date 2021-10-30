@@ -289,6 +289,28 @@ export function parseScriptSetupElements(
     }
     result.ast.body.sort((a, b) => a.range[0] - b.range[0])
 
+    const programStartOffset = result.ast.body.reduce(
+        (start, node) => Math.min(start, node.range[0]),
+        result.ast.range[0],
+    )
+    result.ast.range[0] = programStartOffset
+    result.ast.loc.start =
+        locationCalculator.getLocFromIndex(programStartOffset)
+    if (result.ast.start != null) {
+        result.ast.start = [scriptSetupElement, scriptElement].reduce(
+            (start, node) => {
+                const textNode = node.children[0]
+                return Math.min(
+                    start,
+                    textNode != null && textNode.type === "VText"
+                        ? textNode.range[0]
+                        : node.startTag.range[1],
+                )
+            },
+            result.ast.start,
+        )
+    }
+
     const programEndOffset = result.ast.body.reduce(
         (end, node) => Math.max(end, node.range[1]),
         0,
@@ -303,7 +325,7 @@ export function parseScriptSetupElements(
                     end,
                     textNode != null && textNode.type === "VText"
                         ? textNode.range[1]
-                        : node.endTag?.range[1] ?? node.range[1],
+                        : node.endTag?.range[0] ?? node.range[1],
                 )
             },
             0,
