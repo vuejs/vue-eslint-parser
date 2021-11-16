@@ -4,8 +4,7 @@ export const createRequire: (filename: string) => (modname: string) => any =
     // Added in v12.2.0
     (Module as any).createRequire ||
     // Added in v10.12.0, but deprecated in v12.2.0.
-    // eslint-disable-next-line node/no-deprecated-api
-    Module.createRequireFromPath ||
+    (Module as any).createRequireFromPath ||
     // Polyfill - This is not executed on the tests on node@>=10.
     /* istanbul ignore next */
     ((modname) => {
