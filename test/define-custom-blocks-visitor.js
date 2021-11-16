@@ -298,10 +298,13 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
         const messages = linter.verify(code, LINTER_CONFIG)
 
         assert.strictEqual(messages.length, 3)
-        assert.strictEqual(messages[0].message, "Unexpected token :")
+        assert.strictEqual(messages[0].message, "Unexpected token ':'.")
         assert.strictEqual(messages[0].line, 3)
         assert.strictEqual(messages[0].column, 6)
-        assert.strictEqual(messages[1].message, "Unexpected end of expression.")
+        assert.strictEqual(
+            messages[1].message,
+            "Expected to be an expression, but got empty.",
+        )
         assert.strictEqual(messages[1].line, 5)
         assert.strictEqual(messages[1].column, 19)
         assert.strictEqual(
