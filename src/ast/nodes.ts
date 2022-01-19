@@ -348,6 +348,7 @@ export type ESLintExpression =
     | ESLintMetaProperty
     | ESLintIdentifier
     | ESLintAwaitExpression
+    | ESLintChainExpression
 
 export interface ESLintIdentifier extends HasLocation, HasParent {
     type: "Identifier"
@@ -493,6 +494,7 @@ export interface ESLintConditionalExpression extends HasLocation, HasParent {
 
 export interface ESLintCallExpression extends HasLocation, HasParent {
     type: "CallExpression"
+    optional: boolean
     callee: ESLintExpression | ESLintSuper
     arguments: (ESLintExpression | ESLintSpreadElement)[]
 }
@@ -509,6 +511,7 @@ export interface ESLintNewExpression extends HasLocation, HasParent {
 
 export interface ESLintMemberExpression extends HasLocation, HasParent {
     type: "MemberExpression"
+    optional: boolean
     computed: boolean
     object: ESLintExpression | ESLintSuper
     property: ESLintExpression
@@ -602,6 +605,11 @@ export interface ESLintAssignmentPattern extends HasLocation, HasParent {
     type: "AssignmentPattern"
     left: ESLintPattern
     right: ESLintExpression
+}
+
+export interface ESLintChainExpression extends HasLocation, HasParent {
+    type: "ChainExpression"
+    expression: ESLintExpression
 }
 
 /**
