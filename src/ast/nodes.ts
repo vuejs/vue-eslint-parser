@@ -392,6 +392,7 @@ export interface ESLintIdentifier extends HasLocation, HasParent {
 interface ESLintLiteralBase extends HasLocation, HasParent {
     type: "Literal"
     value: string | boolean | null | number | RegExp | bigint
+    raw: string
     regex?: {
         pattern: string
         flags: string

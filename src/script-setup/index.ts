@@ -637,7 +637,9 @@ function getScriptSetupCodeBlocks(
                             const exportedToken = tokens[localTokenIndex + 2]
                             checkToken(
                                 exportedToken,
-                                (spec.exported as ESLintIdentifier).name,
+                                spec.exported.type === "Identifier"
+                                    ? spec.exported.name
+                                    : spec.exported.raw,
                             )
                             restoreTokens.push(exportedToken)
                             processAppend(
@@ -693,12 +695,6 @@ function getScriptSetupCodeBlocks(
                             ) {
                                 const spec = body.specifiers[index]
                                 const local = locals[index]
-                                if (
-                                    (spec.local as ESLintIdentifier).name !==
-                                    local.name
-                                ) {
-                                    return null
-                                }
                                 map.set(spec, local)
                             }
 
