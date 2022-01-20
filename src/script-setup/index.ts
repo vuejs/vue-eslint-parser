@@ -627,12 +627,18 @@ function getScriptSetupCodeBlocks(
                                 (t) => t.range[0] === spec.local.range[0],
                                 exportTokenIndex,
                             )
-                            checkToken(tokens[localTokenIndex], spec.local.name)
+                            checkToken(
+                                tokens[localTokenIndex],
+                                (spec.local as ESLintIdentifier).name,
+                            )
                             const asToken = tokens[localTokenIndex + 1]
                             checkToken(asToken, "as")
                             restoreTokens.push(asToken)
                             const exportedToken = tokens[localTokenIndex + 2]
-                            checkToken(exportedToken, spec.exported.name)
+                            checkToken(
+                                exportedToken,
+                                (spec.exported as ESLintIdentifier).name,
+                            )
                             restoreTokens.push(exportedToken)
                             processAppend(
                                 statementCodeBlocks,
@@ -687,7 +693,10 @@ function getScriptSetupCodeBlocks(
                             ) {
                                 const spec = body.specifiers[index]
                                 const local = locals[index]
-                                if (spec.local.name !== local.name) {
+                                if (
+                                    (spec.local as ESLintIdentifier).name !==
+                                    local.name
+                                ) {
                                     return null
                                 }
                                 map.set(spec, local)

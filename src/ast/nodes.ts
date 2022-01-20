@@ -55,8 +55,12 @@ export type ESLintNode =
     | ESLintPattern
     | ESLintClassBody
     | ESLintMethodDefinition
+    | ESLintPropertyDefinition
+    | ESLintStaticBlock
+    | ESLintPrivateIdentifier
     | ESLintModuleDeclaration
     | ESLintModuleSpecifier
+    | ESLintImportExpression
     | ESLintLegacyRestProperty
 
 /**
@@ -165,6 +169,7 @@ export interface ESLintForOfStatement extends HasLocation, HasParent {
     left: ESLintVariableDeclaration | ESLintPattern
     right: ESLintExpression
     body: ESLintStatement
+    await: boolean
 }
 
 export interface ESLintLabeledStatement extends HasLocation, HasParent {
@@ -202,7 +207,7 @@ export interface ESLintTryStatement extends HasLocation, HasParent {
 
 export interface ESLintCatchClause extends HasLocation, HasParent {
     type: "CatchClause"
-    param: ESLintPattern
+    param: ESLintPattern | null
     body: ESLintBlockStatement
 }
 
@@ -251,7 +256,11 @@ export interface ESLintClassDeclaration extends HasLocation, HasParent {
 
 export interface ESLintClassBody extends HasLocation, HasParent {
     type: "ClassBody"
-    body: ESLintMethodDefinition[]
+    body: (
+        | ESLintMethodDefinition
+        | ESLintPropertyDefinition
+        | ESLintStaticBlock
+    )[]
 }
 
 export interface ESLintMethodDefinition extends HasLocation, HasParent {
@@ -259,8 +268,28 @@ export interface ESLintMethodDefinition extends HasLocation, HasParent {
     kind: "constructor" | "method" | "get" | "set"
     computed: boolean
     static: boolean
-    key: ESLintExpression
+    key: ESLintExpression | ESLintPrivateIdentifier
     value: ESLintFunctionExpression
+}
+export interface ESLintPropertyDefinition extends HasLocation, HasParent {
+    type: "PropertyDefinition"
+    computed: boolean
+    static: boolean
+    key: ESLintExpression | ESLintPrivateIdentifier
+    value: ESLintExpression | null
+}
+
+export interface ESLintStaticBlock
+    extends HasLocation,
+        HasParent,
+        Omit<ESLintBlockStatement, "type"> {
+    type: "StaticBlock"
+    body: ESLintStatement[]
+}
+
+export interface ESLintPrivateIdentifier extends HasLocation, HasParent {
+    type: "PrivateIdentifier"
+    name: string
 }
 
 export type ESLintModuleDeclaration =
@@ -287,7 +316,7 @@ export interface ESLintImportDeclaration extends HasLocation, HasParent {
 
 export interface ESLintImportSpecifier extends HasLocation, HasParent {
     type: "ImportSpecifier"
-    imported: ESLintIdentifier
+    imported: ESLintIdentifier | ESLintStringLiteral
     local: ESLintIdentifier
 }
 
@@ -301,6 +330,11 @@ export interface ESLintImportNamespaceSpecifier extends HasLocation, HasParent {
     local: ESLintIdentifier
 }
 
+export interface ESLintImportExpression extends HasLocation, HasParent {
+    type: "ImportExpression"
+    source: ESLintExpression
+}
+
 export interface ESLintExportNamedDeclaration extends HasLocation, HasParent {
     type: "ExportNamedDeclaration"
     declaration?: ESLintDeclaration | null
@@ -310,8 +344,8 @@ export interface ESLintExportNamedDeclaration extends HasLocation, HasParent {
 
 export interface ESLintExportSpecifier extends HasLocation, HasParent {
     type: "ExportSpecifier"
-    local: ESLintIdentifier
-    exported: ESLintIdentifier
+    local: ESLintIdentifier | ESLintStringLiteral
+    exported: ESLintIdentifier | ESLintStringLiteral
 }
 
 export interface ESLintExportDefaultDeclaration extends HasLocation, HasParent {
@@ -321,6 +355,7 @@ export interface ESLintExportDefaultDeclaration extends HasLocation, HasParent {
 
 export interface ESLintExportAllDeclaration extends HasLocation, HasParent {
     type: "ExportAllDeclaration"
+    exported: ESLintIdentifier | ESLintStringLiteral | null
     source: ESLintLiteral
 }
 
@@ -354,15 +389,55 @@ export interface ESLintIdentifier extends HasLocation, HasParent {
     type: "Identifier"
     name: string
 }
-
-export interface ESLintLiteral extends HasLocation, HasParent {
+interface ESLintLiteralBase extends HasLocation, HasParent {
     type: "Literal"
-    value: string | boolean | null | number | RegExp
+    value: string | boolean | null | number | RegExp | bigint
     regex?: {
         pattern: string
         flags: string
     }
+    bigint?: string
 }
+export interface ESLintStringLiteral extends ESLintLiteralBase {
+    value: string
+    regex?: undefined
+    bigint?: undefined
+}
+export interface ESLintBooleanLiteral extends ESLintLiteralBase {
+    value: boolean
+    regex?: undefined
+    bigint?: undefined
+}
+export interface ESLintNullLiteral extends ESLintLiteralBase {
+    value: null
+    regex?: undefined
+    bigint?: undefined
+}
+export interface ESLintNumberLiteral extends ESLintLiteralBase {
+    value: number
+    regex?: undefined
+    bigint?: undefined
+}
+export interface ESLintRegExpLiteral extends ESLintLiteralBase {
+    value: null | RegExp
+    regex: {
+        pattern: string
+        flags: string
+    }
+    bigint?: undefined
+}
+export interface ESLintBigIntLiteral extends ESLintLiteralBase {
+    value: null | bigint
+    regex?: undefined
+    bigint: string
+}
+export type ESLintLiteral =
+    | ESLintStringLiteral
+    | ESLintBooleanLiteral
+    | ESLintNullLiteral
+    | ESLintNumberLiteral
+    | ESLintRegExpLiteral
+    | ESLintBigIntLiteral
 
 export interface ESLintThisExpression extends HasLocation, HasParent {
     type: "ThisExpression"
@@ -447,7 +522,7 @@ export interface ESLintBinaryExpression extends HasLocation, HasParent {
         | "&"
         | "in"
         | "instanceof"
-    left: ESLintExpression
+    left: ESLintExpression | ESLintPrivateIdentifier
     right: ESLintExpression
 }
 
@@ -467,6 +542,9 @@ export interface ESLintAssignmentExpression extends HasLocation, HasParent {
         | "|="
         | "^="
         | "&="
+        | "||="
+        | "&&="
+        | "??="
     left: ESLintPattern
     right: ESLintExpression
 }
@@ -480,7 +558,7 @@ export interface ESLintUpdateExpression extends HasLocation, HasParent {
 
 export interface ESLintLogicalExpression extends HasLocation, HasParent {
     type: "LogicalExpression"
-    operator: "||" | "&&"
+    operator: "||" | "&&" | "??"
     left: ESLintExpression
     right: ESLintExpression
 }
@@ -514,7 +592,7 @@ export interface ESLintMemberExpression extends HasLocation, HasParent {
     optional: boolean
     computed: boolean
     object: ESLintExpression | ESLintSuper
-    property: ESLintExpression
+    property: ESLintExpression | ESLintPrivateIdentifier
 }
 
 export interface ESLintYieldExpression extends HasLocation, HasParent {
@@ -544,7 +622,7 @@ export interface ESLintTemplateElement extends HasLocation, HasParent {
     type: "TemplateElement"
     tail: boolean
     value: {
-        cooked: string
+        cooked: string | null
         raw: string
     }
 }
@@ -607,9 +685,11 @@ export interface ESLintAssignmentPattern extends HasLocation, HasParent {
     right: ESLintExpression
 }
 
+export type ESLintChainElement = ESLintCallExpression | ESLintMemberExpression
+
 export interface ESLintChainExpression extends HasLocation, HasParent {
     type: "ChainExpression"
-    expression: ESLintExpression
+    expression: ESLintChainElement
 }
 
 /**
