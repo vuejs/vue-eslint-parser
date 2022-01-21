@@ -1,0 +1,83 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<style>\ndiv {\n  width: calc(v-bind((a + b) / 2 + 'px' ) - 3px);\n}\np {\n  /* missing close */\n  width: v-bind(((a + b)) / (2 * a)\n}\n</style>\n",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<style>\ndiv {\n  width: calc(v-bind((a + b) / 2 + 'px' ) - 3px);\n}\np {\n  /* missing close */\n  width: v-bind(((a + b)) / (2 * a)\n}\n</style>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<style>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\ndiv {\n  width: calc(",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind((a + b) / 2 + 'px' )",
+                        "children": [
+                            {
+                                "type": "BinaryExpression",
+                                "text": "(a + b) / 2 + 'px'",
+                                "children": [
+                                    {
+                                        "type": "BinaryExpression",
+                                        "text": "(a + b) / 2",
+                                        "children": [
+                                            {
+                                                "type": "BinaryExpression",
+                                                "text": "a + b",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "Literal",
+                                                "text": "2",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "Literal",
+                                        "text": "'px'",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": " - 3px);\n}\np {\n  /* missing close */\n  width: v-bind(((a + b)) / (2 * a)\n}\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</style>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            }
+        ]
+    }
+]

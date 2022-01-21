@@ -514,7 +514,7 @@ overrides:
         - error
       no-sequences:
         - error
-      no-shadow:
+      "@typescript-eslint/no-shadow":
         - error
         - builtinGlobals: true
           hoist: functions
