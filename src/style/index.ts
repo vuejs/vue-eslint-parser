@@ -21,8 +21,27 @@ import {
 import { parseExpression } from "../script"
 import { DEFAULT_ECMA_VERSION } from "../script-setup/parser-options"
 import { resolveReferences } from "../template"
+import type {
+    CSSCommentToken,
+    CSSPunctuatorToken,
+    CSSToken,
+    CSSTokenizeOption,
+} from "./tokenizer"
+import { CSSTokenType, CSSTokenizer } from "./tokenizer"
 
-type CSSParseOption = { inlineComment?: boolean }
+class CSSTokenScanner {
+    private reconsuming: CSSToken[] = []
+    private tokenizer: CSSTokenizer
+    public constructor(text: string, options: CSSTokenizeOption) {
+        this.tokenizer = new CSSTokenizer(text, 0, options)
+    }
+    public nextToken(): CSSToken | null {
+        return this.reconsuming.shift() || this.tokenizer.nextToken()
+    }
+    public reconsume(...tokens: CSSToken[]) {
+        this.reconsuming.push(...tokens)
+    }
+}
 
 /**
  * Parse the source code of the given `<style>` elements.
@@ -58,7 +77,7 @@ function parseStyleElement(
     style: VStyleElement,
     globalLocationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
-    cssOptions: CSSParseOption,
+    cssOptions: CSSTokenizeOption,
 ) {
     if (style.children.length !== 1) {
         return
@@ -69,7 +88,7 @@ function parseStyleElement(
     }
     const code = textNode.value
     // short circuit
-    if (!/v-bind(?:\(|\/)/u.test(code)) {
+    if (!/v-bind\s*(?:\(|\/)/u.test(code)) {
         return
     }
 
@@ -93,13 +112,12 @@ function parseStyle(
     code: string,
     locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
-    cssOptions: CSSParseOption,
+    cssOptions: CSSTokenizeOption,
 ) {
     let textStart = 0
     for (const {
         range,
-        expr,
-        exprOffset,
+        exprRange,
         quote,
         openingParenOffset,
         comments,
@@ -161,7 +179,7 @@ function parseStyle(
         ]
         if (quote) {
             const openStart = locationCalculator.getOffsetWithGap(
-                exprOffset - 1,
+                exprRange[0] - 1,
             )
             beforeTokens.push(
                 createSimpleToken(
@@ -172,9 +190,7 @@ function parseStyle(
                     locationCalculator,
                 ),
             )
-            const closeStart = locationCalculator.getOffsetWithGap(
-                exprOffset + expr.length,
-            )
+            const closeStart = locationCalculator.getOffsetWithGap(exprRange[1])
             afterTokens.unshift(
                 createSimpleToken(
                     "Punctuator",
@@ -226,8 +242,8 @@ function parseStyle(
         }
         try {
             const ret = parseExpression(
-                expr,
-                locationCalculator.getSubCalculatorShift(exprOffset),
+                code.slice(...exprRange),
+                locationCalculator.getSubCalculatorShift(exprRange[0]),
                 parserOptions,
                 { allowEmpty: false, allowFilters: false },
             )
@@ -265,36 +281,12 @@ function parseStyle(
     }
 }
 
-function isQuote(c: string): c is '"' | "'" {
-    return c === '"' || c === "'"
-}
-
-function isCommentStart(c: string): c is "/*" | "//" {
-    return c === "/*" || c === "//"
-}
-
-const COMMENT = {
-    "/*": {
-        type: "Block" as const,
-        closing: "*/" as const,
-    },
-    "//": {
-        type: "Line" as const,
-        closing: "\n" as const,
-    },
-}
-
 type VBindLocations = {
     range: OffsetRange
-    expr: string
-    exprOffset: number
+    exprRange: OffsetRange
     quote: '"' | "'" | null
     openingParenOffset: number
-    comments: {
-        type: string
-        range: OffsetRange
-        value: string
-    }[]
+    comments: CSSCommentToken[]
 }
 
 /**
@@ -302,213 +294,111 @@ type VBindLocations = {
  */
 function* iterateVBind(
     code: string,
-    cssOptions: CSSParseOption,
+    cssOptions: CSSTokenizeOption,
 ): IterableIterator<VBindLocations> {
-    const re = cssOptions.inlineComment
-        ? /"|'|\/[*/]|\bv-bind/gu
-        : /"|'|\/\*|\bv-bind/gu
-    let match
-    while ((match = re.exec(code))) {
-        const startToken = match[0]
-        if (isQuote(startToken)) {
-            // skip string
-            re.lastIndex = skipString(code, startToken, re.lastIndex)
-        } else if (isCommentStart(startToken)) {
-            // skip comment
-            re.lastIndex = skipComment(
-                code,
-                COMMENT[startToken].closing,
-                re.lastIndex,
-            )
-        } else {
-            // v-bind
-            const openingParen = findVBindOpeningParen(
-                code,
-                re.lastIndex,
-                cssOptions,
-            )
-            if (!openingParen) {
-                continue
-            }
-            const start = match.index
-            const arg = parseVBindArg(
-                code,
-                openingParen.openingParenOffset + 1,
-                cssOptions,
-            )
-            if (!arg) {
-                continue
-            }
-            yield {
-                range: [start, arg.end],
-                expr: arg.expr,
-                exprOffset: arg.exprOffset,
-                quote: arg.quote,
-                openingParenOffset: openingParen.openingParenOffset,
-                comments: [...openingParen.comments, ...arg.comments],
-            }
-            re.lastIndex = arg.end
+    const tokenizer = new CSSTokenScanner(code, cssOptions)
+
+    let token
+    while ((token = tokenizer.nextToken())) {
+        if (token.type !== CSSTokenType.Word || token.value !== "v-bind") {
+            continue
+        }
+        const openingParen = findVBindOpeningParen(tokenizer)
+        if (!openingParen) {
+            continue
+        }
+        const arg = parseVBindArg(tokenizer)
+        if (!arg) {
+            continue
+        }
+        yield {
+            range: [token.range[0], arg.closingParen.range[1]],
+            exprRange: arg.exprRange,
+            quote: arg.quote,
+            openingParenOffset: openingParen.openingParen.range[0],
+            comments: [...openingParen.comments, ...arg.comments],
         }
     }
 }
 
-function findVBindOpeningParen(
-    code: string,
-    nextIndex: number,
-    cssOptions: CSSParseOption,
-): {
-    openingParenOffset: number
-    comments: {
-        type: string
-        range: OffsetRange
-        value: string
-    }[]
+function findVBindOpeningParen(tokenizer: CSSTokenScanner): {
+    openingParen: CSSPunctuatorToken
+    comments: CSSCommentToken[]
 } | null {
-    const re = cssOptions.inlineComment ? /\/[*/]|[\s\S]/gu : /\/\*|[\s\S]/gu
-    re.lastIndex = nextIndex
-    let match
-    const comments: {
-        type: string
-        range: OffsetRange
-        value: string
-    }[] = []
-    while ((match = re.exec(code))) {
-        const token = match[0]
-        if (token === "(") {
+    const comments: CSSCommentToken[] = []
+    let token
+    while ((token = tokenizer.nextToken())) {
+        if (token.type === CSSTokenType.Punctuator && token.value === "(") {
             return {
-                openingParenOffset: match.index,
+                openingParen: token,
                 comments,
             }
-        } else if (isCommentStart(token)) {
+        } else if (isComment(token)) {
             // Comment between `v-bind` and opening paren.
-            const comment = COMMENT[token]
-            const start = match.index
-            const end = (re.lastIndex = skipComment(
-                code,
-                comment.closing,
-                re.lastIndex,
-            ))
-            comments.push({
-                type: comment.type,
-                range: [start, end],
-                value: code.slice(
-                    start + token.length,
-                    end - comment.closing.length,
-                ),
-            })
+            comments.push(token)
             continue
         }
+        tokenizer.reconsume(...comments, token)
         // There were no opening parens.
         return null
     }
     return null
 }
 
-function parseVBindArg(
-    code: string,
-    nextIndex: number,
-    cssOptions: CSSParseOption,
-): {
-    expr: string
-    exprOffset: number
+function parseVBindArg(tokenizer: CSSTokenScanner): {
+    exprRange: OffsetRange
     quote: '"' | "'" | null
-    end: number
-    comments: {
-        type: string
-        range: OffsetRange
-        value: string
-    }[]
+    closingParen: CSSPunctuatorToken
+    comments: CSSCommentToken[]
 } | null {
-    const re = cssOptions.inlineComment ? /"|'|\/[*/]|\)/gu : /"|'|\/\*|\)/gu
-    const startTokenIndex = (re.lastIndex = skipSpaces(code, nextIndex))
-    let match
-    const stringRanges: OffsetRange[] = []
-    const comments: {
-        type: string
-        range: OffsetRange
-        value: string
-    }[] = []
-    while ((match = re.exec(code))) {
-        const token = match[0]
-        if (isQuote(token)) {
-            const start = match.index
-            const end = (re.lastIndex = skipString(code, token, re.lastIndex))
-            stringRanges.push([start, end])
-        } else if (isCommentStart(token)) {
-            const comment = COMMENT[token]
-            const start = match.index
-            const end = (re.lastIndex = skipComment(
-                code,
-                comment.closing,
-                re.lastIndex,
-            ))
-            comments.push({
-                type: comment.type,
-                range: [start, end],
-                value: code.slice(
-                    start + token.length,
-                    end - comment.closing.length,
-                ),
-            })
-        } else {
-            // closing paren
-            if (stringRanges.length === 1) {
-                // for v-bind( 'expr' ), and v-bind( /**/ 'expr' /**/ )
-                const range = stringRanges[0]
-                const exprRange: OffsetRange = [range[0] + 1, range[1] - 1]
+    const tokensBuffer: CSSToken[] = []
+    const comments: CSSCommentToken[] = []
+    const tokens: CSSToken[] = []
+    const closeTokenStack: string[] = []
+    let token
+    while ((token = tokenizer.nextToken())) {
+        if (token.type === CSSTokenType.Punctuator) {
+            if (token.value === ")" && !closeTokenStack.length) {
+                if (
+                    tokens.length === 1 &&
+                    tokens[0].type === CSSTokenType.Quoted
+                ) {
+                    // for v-bind( 'expr' ), and v-bind( /**/ 'expr' /**/ )
+                    const quotedToken = tokens[0]
+                    return {
+                        exprRange: quotedToken.valueRange,
+                        quote: quotedToken.quote,
+                        closingParen: token,
+                        comments,
+                    }
+                }
+                const startToken = tokensBuffer[0] || token
                 return {
-                    expr: code.slice(...exprRange),
-                    exprOffset: exprRange[0],
-                    quote: code[range[0]] as '"' | "'",
-                    end: re.lastIndex,
-                    comments,
+                    exprRange: [startToken.range[0], token.range[0]],
+                    quote: null,
+                    closingParen: token,
+                    comments: [],
                 }
             }
 
-            return {
-                expr: code.slice(startTokenIndex, match.index).trim(),
-                exprOffset: startTokenIndex,
-                quote: null,
-                end: re.lastIndex,
-                comments: [],
+            if (token.value === closeTokenStack[0]) {
+                closeTokenStack.shift()
+            } else if (token.value === "(") {
+                closeTokenStack.unshift(")")
             }
         }
+
+        tokensBuffer.push(token)
+        if (isComment(token)) {
+            comments.push(token)
+        } else {
+            tokens.push(token)
+        }
     }
+    tokenizer.reconsume(...tokensBuffer)
     return null
 }
 
-function skipString(code: string, quote: '"' | "'", nextIndex: number): number {
-    for (let index = nextIndex; index < code.length; index++) {
-        const c = code[index]
-        if (c === "\\") {
-            index++ // escaping
-            continue
-        }
-        if (c === quote) {
-            return index + 1
-        }
-    }
-    return code.length
-}
-
-function skipComment(
-    code: string,
-    closing: "*/" | "\n",
-    nextIndex: number,
-): number {
-    const index = code.indexOf(closing, nextIndex)
-    if (index >= nextIndex) {
-        return index + closing.length
-    }
-    return code.length
-}
-
-function skipSpaces(code: string, nextIndex: number): number {
-    for (let index = nextIndex; index < code.length; index++) {
-        const c = code[index]
-        if (c.trim()) {
-            return index
-        }
-    }
-    return code.length
+function isComment(token: CSSToken): token is CSSCommentToken {
+    return token.type === CSSTokenType.Block || token.type === CSSTokenType.Line
 }

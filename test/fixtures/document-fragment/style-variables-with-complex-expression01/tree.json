@@ -1,0 +1,181 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<style>\ndiv {\n  color: v-bind((a + b) / 2 + 'px' );\n}\ndiv {\n  color: v-bind    ((a + b) / 2 + 'px' );\n}\np {\n  color: v-bind(((a + b)) / (2 * a));\n}\n</style>\n",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<style>\ndiv {\n  color: v-bind((a + b) / 2 + 'px' );\n}\ndiv {\n  color: v-bind    ((a + b) / 2 + 'px' );\n}\np {\n  color: v-bind(((a + b)) / (2 * a));\n}\n</style>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<style>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\ndiv {\n  color: ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind((a + b) / 2 + 'px' )",
+                        "children": [
+                            {
+                                "type": "BinaryExpression",
+                                "text": "(a + b) / 2 + 'px'",
+                                "children": [
+                                    {
+                                        "type": "BinaryExpression",
+                                        "text": "(a + b) / 2",
+                                        "children": [
+                                            {
+                                                "type": "BinaryExpression",
+                                                "text": "a + b",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "Literal",
+                                                "text": "2",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "Literal",
+                                        "text": "'px'",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": ";\n}\ndiv {\n  color: ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind    ((a + b) / 2 + 'px' )",
+                        "children": [
+                            {
+                                "type": "BinaryExpression",
+                                "text": "(a + b) / 2 + 'px'",
+                                "children": [
+                                    {
+                                        "type": "BinaryExpression",
+                                        "text": "(a + b) / 2",
+                                        "children": [
+                                            {
+                                                "type": "BinaryExpression",
+                                                "text": "a + b",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "a",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "b",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "Literal",
+                                                "text": "2",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "Literal",
+                                        "text": "'px'",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": ";\n}\np {\n  color: ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind(((a + b)) / (2 * a))",
+                        "children": [
+                            {
+                                "type": "BinaryExpression",
+                                "text": "((a + b)) / (2 * a)",
+                                "children": [
+                                    {
+                                        "type": "BinaryExpression",
+                                        "text": "a + b",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "a",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "Identifier",
+                                                "text": "b",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "BinaryExpression",
+                                        "text": "2 * a",
+                                        "children": [
+                                            {
+                                                "type": "Literal",
+                                                "text": "2",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "Identifier",
+                                                "text": "a",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": ";\n}\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</style>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            }
+        ]
+    }
+]
