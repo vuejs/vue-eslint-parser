@@ -23,17 +23,17 @@ import { DEFAULT_ECMA_VERSION } from "../script-setup/parser-options"
 import { resolveReferences } from "../template"
 import type {
     CSSCommentToken,
-    CSSParseOption,
     CSSPunctuatorToken,
     CSSToken,
+    CSSTokenizeOption,
 } from "./tokenizer"
 import { CSSTokenType, CSSTokenizer } from "./tokenizer"
 
 class CSSTokenScanner {
     private reconsuming: CSSToken[] = []
     private tokenizer: CSSTokenizer
-    public constructor(text: string, parserOptions: CSSParseOption) {
-        this.tokenizer = new CSSTokenizer(text, 0, parserOptions)
+    public constructor(text: string, options: CSSTokenizeOption) {
+        this.tokenizer = new CSSTokenizer(text, 0, options)
     }
     public nextToken(): CSSToken | null {
         return this.reconsuming.shift() || this.tokenizer.nextToken()
@@ -77,7 +77,7 @@ function parseStyleElement(
     style: VStyleElement,
     globalLocationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
-    cssOptions: CSSParseOption,
+    cssOptions: CSSTokenizeOption,
 ) {
     if (style.children.length !== 1) {
         return
@@ -112,7 +112,7 @@ function parseStyle(
     code: string,
     locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
-    cssOptions: CSSParseOption,
+    cssOptions: CSSTokenizeOption,
 ) {
     let textStart = 0
     for (const {
@@ -294,7 +294,7 @@ type VBindLocations = {
  */
 function* iterateVBind(
     code: string,
-    cssOptions: CSSParseOption,
+    cssOptions: CSSTokenizeOption,
 ): IterableIterator<VBindLocations> {
     const tokenizer = new CSSTokenScanner(code, cssOptions)
 
