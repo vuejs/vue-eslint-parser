@@ -27,6 +27,7 @@ const PARSER_OPTIONS = {
     loc: true,
     range: true,
     tokens: true,
+    eslintScopeManager: true,
 }
 
 /**

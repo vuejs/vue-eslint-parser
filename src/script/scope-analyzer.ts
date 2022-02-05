@@ -86,15 +86,10 @@ function getForScope(scope: escopeTypes.Scope): escopeTypes.Scope {
     return child.block === scope.block ? child.childScopes[0] : child
 }
 
-/**
- *
- * @param ast
- * @param parserOptions
- */
-function analyze(
+export function analyzeScope(
     ast: ESLintProgram,
     parserOptions: ParserOptions,
-): escopeTypes.Scope {
+): escopeTypes.ScopeManager {
     const ecmaVersion = getEcmaVersionIfUseEspree(parserOptions) || 2022
     const ecmaFeatures = parserOptions.ecmaFeatures || {}
     const sourceType = parserOptions.sourceType || "script"
@@ -107,7 +102,19 @@ function analyze(
         fallback: getFallbackKeys,
     })
 
-    return result.globalScope
+    return result
+}
+
+/**
+ *
+ * @param ast
+ * @param parserOptions
+ */
+function analyze(
+    ast: ESLintProgram,
+    parserOptions: ParserOptions,
+): escopeTypes.Scope {
+    return analyzeScope(ast, parserOptions).globalScope
 }
 
 /**
