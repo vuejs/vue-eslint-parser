@@ -76,7 +76,9 @@ describe("Integration tests", () => {
                     .filter((res) => res.messages.length)
                     .map((res) => {
                         return {
-                            filePath: res.filePath.replace(cwd, ""),
+                            filePath: res.filePath
+                                .replace(cwd, "")
+                                .replace(/\\/gu, "/"),
                             messages: res.messages.map((msg) => {
                                 return {
                                     ruleId: msg.ruleId,
