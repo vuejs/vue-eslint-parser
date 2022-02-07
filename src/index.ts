@@ -24,6 +24,7 @@ import {
 } from "./common/ast-utils"
 import { parseStyleElements } from "./style"
 import { analyzeScope } from "./script/scope-analyzer"
+import { analyzeScriptSetupScope } from "./script-setup/script-setup-scope-analyzer"
 
 const STARTS_WITH_LT = /^\s*</u
 
@@ -161,9 +162,17 @@ function parseAsSFC(code: string, options: ParserOptions) {
     }
     result.ast.templateBody = templateBody
 
-    if (options.eslintScopeManager && scripts.some(isScriptSetupElement)) {
-        if (!result.scopeManager) {
-            result.scopeManager = analyzeScope(result.ast, options)
+    if (options.eslintScopeManager) {
+        if (scripts.some(isScriptSetupElement)) {
+            if (!result.scopeManager) {
+                result.scopeManager = analyzeScope(result.ast, options)
+            }
+            analyzeScriptSetupScope(
+                result.scopeManager,
+                templateBody,
+                rootAST,
+                options,
+            )
         }
     }
 

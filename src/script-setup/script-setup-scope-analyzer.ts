@@ -1,0 +1,235 @@
+import * as escopeTypes from "eslint-scope"
+import type { ParserOptions } from "../common/parser-options"
+import type {
+    VAttribute,
+    VDirective,
+    VDocumentFragment,
+    VElement,
+    VExpressionContainer,
+    VText,
+} from "../ast"
+import { traverseNodes } from "../ast"
+
+const BUILTIN_COMPONENTS = new Set([
+    "template",
+    "slot",
+    "component",
+    "Component",
+    "transition",
+    "Transition",
+    "transition-group",
+    "TransitionGroup",
+    "keep-alive",
+    "KeepAlive",
+    "teleport",
+    "Teleport",
+    "suspense",
+    "Suspense",
+])
+
+const BUILTIN_DIRECTIVES = new Set([
+    "bind",
+    "on",
+    "text",
+    "html",
+    "show",
+    "if",
+    "else",
+    "else-if",
+    "for",
+    "model",
+    "slot",
+    "pre",
+    "cloak",
+    "once",
+    "memo",
+    "is",
+])
+
+/**
+ * @see https://github.com/vuejs/core/blob/48de8a42b7fed7a03f7f1ff5d53d6a704252cafe/packages/shared/src/domTagConfig.ts#L5-L28
+ */
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Element
+const HTML_TAGS =
+    "html,body,base,head,link,meta,style,title,address,article,aside,footer," +
+    "header,h1,h2,h3,h4,h5,h6,nav,section,div,dd,dl,dt,figcaption," +
+    "figure,picture,hr,img,li,main,ol,p,pre,ul,a,b,abbr,bdi,bdo,br,cite,code," +
+    "data,dfn,em,i,kbd,mark,q,rp,rt,ruby,s,samp,small,span,strong,sub,sup," +
+    "time,u,var,wbr,area,audio,map,track,video,embed,object,param,source," +
+    "canvas,script,noscript,del,ins,caption,col,colgroup,table,thead,tbody,td," +
+    "th,tr,button,datalist,fieldset,form,input,label,legend,meter,optgroup," +
+    "option,output,progress,select,textarea,details,dialog,menu," +
+    "summary,template,blockquote,iframe,tfoot"
+
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Element
+const SVG_TAGS =
+    "svg,animate,animateMotion,animateTransform,circle,clipPath,color-profile," +
+    "defs,desc,discard,ellipse,feBlend,feColorMatrix,feComponentTransfer," +
+    "feComposite,feConvolveMatrix,feDiffuseLighting,feDisplacementMap," +
+    "feDistanceLight,feDropShadow,feFlood,feFuncA,feFuncB,feFuncG,feFuncR," +
+    "feGaussianBlur,feImage,feMerge,feMergeNode,feMorphology,feOffset," +
+    "fePointLight,feSpecularLighting,feSpotLight,feTile,feTurbulence,filter," +
+    "foreignObject,g,hatch,hatchpath,image,line,linearGradient,marker,mask," +
+    "mesh,meshgradient,meshpatch,meshrow,metadata,mpath,path,pattern," +
+    "polygon,polyline,radialGradient,rect,set,solidcolor,stop,switch,symbol," +
+    "text,textPath,title,tspan,unknown,use,view"
+
+const NATIVE_TAGS = new Set([...HTML_TAGS.split(","), ...SVG_TAGS.split(",")])
+
+export function analyzeScriptSetupScope(
+    scopeManager: escopeTypes.ScopeManager,
+    templateBody: VElement | undefined,
+    df: VDocumentFragment,
+    _parserOptions: ParserOptions,
+): void {
+    const scriptVariables = new Map<string, escopeTypes.Variable>()
+    const globalScope = scopeManager.globalScope
+    if (globalScope) {
+        for (const variable of globalScope.variables) {
+            scriptVariables.set(variable.name, variable)
+        }
+        const moduleScope = globalScope.childScopes.find(
+            (scope) => scope.type === "module",
+        )
+        for (const variable of (moduleScope && moduleScope.variables) || []) {
+            scriptVariables.set(variable.name, variable)
+        }
+    }
+
+    const markedVariables = new Set<string>()
+
+    /**
+     * `casing.camelCase()` converts the beginning to lowercase,
+     * but does not convert the case of the beginning character when converting with Vue3.
+     * @see https://github.com/vuejs/vue-next/blob/48de8a42b7fed7a03f7f1ff5d53d6a704252cafe/packages/shared/src/index.ts#L109
+     */
+    function camelize(str: string) {
+        return str.replace(/-(\w)/gu, (_, c) => (c ? c.toUpperCase() : ""))
+    }
+
+    function capitalize(str: string) {
+        return str[0].toUpperCase() + str.slice(1)
+    }
+
+    /**
+     * @see https://github.com/vuejs/vue-next/blob/48de8a42b7fed7a03f7f1ff5d53d6a704252cafe/packages/compiler-core/src/transforms/transformElement.ts#L335
+     */
+    function markSetupReferenceVariableAsUsed(name: string) {
+        if (scriptVariables.has(name)) {
+            markVariableAsUsed(name)
+            return true
+        }
+        const camelName = camelize(name)
+        if (scriptVariables.has(camelName)) {
+            markVariableAsUsed(camelName)
+            return true
+        }
+        const pascalName = capitalize(camelName)
+        if (scriptVariables.has(pascalName)) {
+            markVariableAsUsed(pascalName)
+            return true
+        }
+        return false
+    }
+
+    function markVariableAsUsed(name: string) {
+        const variable = scriptVariables.get(name)
+        if (!variable) {
+            return
+        }
+        if (markedVariables.has(name)) {
+            return
+        }
+        markedVariables.add(name)
+
+        const reference = new escopeTypes.Reference()
+        ;(reference as any).vueVirtualReference = true
+        reference.from = variable.scope
+        reference.identifier = variable.identifiers[0]
+        reference.isWrite = () => false
+        reference.isWriteOnly = () => false
+        reference.isRead = () => true
+        reference.isReadOnly = () => true
+        reference.isReadWrite = () => false
+        reference.isValueReference = true
+
+        variable.references.push(reference)
+        reference.resolved = variable
+    }
+
+    function processVExpressionContainer(node: VExpressionContainer) {
+        for (const reference of node.references.filter(
+            (ref) => ref.variable == null,
+        )) {
+            markVariableAsUsed(reference.id.name)
+        }
+    }
+
+    function processVElement(node: VElement) {
+        if (
+            (node.rawName === node.name && NATIVE_TAGS.has(node.rawName)) ||
+            BUILTIN_COMPONENTS.has(node.rawName)
+        ) {
+            return
+        }
+        if (!markSetupReferenceVariableAsUsed(node.rawName)) {
+            // Check namespace
+            // https://github.com/vuejs/vue-next/blob/48de8a42b7fed7a03f7f1ff5d53d6a704252cafe/packages/compiler-core/src/transforms/transformElement.ts#L306
+            const dotIndex = node.rawName.indexOf(".")
+            if (dotIndex > 0) {
+                markSetupReferenceVariableAsUsed(
+                    node.rawName.slice(0, dotIndex),
+                )
+            }
+        }
+    }
+
+    function processVAttribute(node: VAttribute | VDirective) {
+        if (node.directive) {
+            if (BUILTIN_DIRECTIVES.has(node.key.name.name)) {
+                return
+            }
+            markSetupReferenceVariableAsUsed(`v-${node.key.name.rawName}`)
+        } else if (node.key.name === "ref" && node.value) {
+            markVariableAsUsed(node.value.value)
+        }
+    }
+
+    if (templateBody) {
+        // Analyze `<template>`
+        traverseNodes(templateBody, {
+            enterNode(node) {
+                if (node.type === "VExpressionContainer") {
+                    processVExpressionContainer(node)
+                } else if (node.type === "VElement") {
+                    processVElement(node)
+                } else if (node.type === "VAttribute") {
+                    processVAttribute(node)
+                }
+            },
+            leaveNode() {
+                /* noop */
+            },
+        })
+    }
+
+    // Analyze CSS v-bind()
+    for (const style of df.children
+        .filter(isVElement)
+        .filter((e) => e.name === "style")) {
+        for (const node of style.children) {
+            if (node.type === "VExpressionContainer") {
+                processVExpressionContainer(node)
+            }
+        }
+    }
+}
+
+/**
+ * Checks whether the given node is VElement.
+ */
+function isVElement(
+    node: VElement | VExpressionContainer | VText,
+): node is VElement {
+    return node.type === "VElement"
+}
