@@ -24,7 +24,7 @@ import {
 } from "./common/ast-utils"
 import { parseStyleElements } from "./style"
 import { analyzeScope } from "./script/scope-analyzer"
-import { analyzeScriptSetupScope } from "./script-setup/script-setup-scope-analyzer"
+import { analyzeScriptSetupScope } from "./script-setup/scope-analyzer"
 
 const STARTS_WITH_LT = /^\s*</u
 
