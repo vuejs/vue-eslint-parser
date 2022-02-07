@@ -1,6 +1,31 @@
 [
     {
-        "filePath": "/no-unused-vars-invalid/component-names.vue",
+        "filePath": "/no-undef/invalid/define-expose.vue",
+        "messages": [
+            {
+                "ruleId": "no-undef",
+                "line": 8,
+                "message": "'defineExpose' is not defined."
+            }
+        ]
+    },
+    {
+        "filePath": "/no-undef/invalid/define-props-and-emits.vue",
+        "messages": [
+            {
+                "ruleId": "no-undef",
+                "line": 3,
+                "message": "'defineProps' is not defined."
+            },
+            {
+                "ruleId": "no-undef",
+                "line": 7,
+                "message": "'defineEmits' is not defined."
+            }
+        ]
+    },
+    {
+        "filePath": "/no-unused-vars/invalid/component-names.vue",
         "messages": [
             {
                 "ruleId": "no-unused-vars",
@@ -10,7 +35,7 @@
         ]
     },
     {
-        "filePath": "/no-unused-vars-invalid/css-v-bind.vue",
+        "filePath": "/no-unused-vars/invalid/css-v-bind.vue",
         "messages": [
             {
                 "ruleId": "no-unused-vars",
@@ -20,7 +45,7 @@
         ]
     },
     {
-        "filePath": "/no-unused-vars-invalid/invalid-scope.vue",
+        "filePath": "/no-unused-vars/invalid/invalid-scope.vue",
         "messages": [
             {
                 "ruleId": "no-unused-vars",
@@ -30,7 +55,7 @@
         ]
     },
     {
-        "filePath": "/no-unused-vars-invalid/sample.vue",
+        "filePath": "/no-unused-vars/invalid/sample.vue",
         "messages": [
             {
                 "ruleId": "no-unused-vars",
@@ -45,7 +70,7 @@
         ]
     },
     {
-        "filePath": "/no-unused-vars-invalid/with-v-for.vue",
+        "filePath": "/no-unused-vars/invalid/with-v-for.vue",
         "messages": [
             {
                 "ruleId": "no-unused-vars",
@@ -55,7 +80,7 @@
         ]
     },
     {
-        "filePath": "/no-unused-vars-invalid/without-script-setup.vue",
+        "filePath": "/no-unused-vars/invalid/without-script-setup.vue",
         "messages": [
             {
                 "ruleId": "no-unused-vars",

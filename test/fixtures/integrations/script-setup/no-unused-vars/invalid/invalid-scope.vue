@@ -1,5 +1,5 @@
 <script setup>
-    if (a) {
+    if (true) {
         const msg = 'Hello!'
     }
 </script>

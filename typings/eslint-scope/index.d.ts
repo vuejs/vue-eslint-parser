@@ -43,13 +43,13 @@ export interface Scope {
     variableScope: Scope
 }
 
-export interface Variable {
-    defs: VariableDefinition[]
-    identifiers: estree.Identifier[]
-    name: string
-    references: Reference[]
-    scope: Scope
-    stack: boolean
+export class Variable {
+    public defs: VariableDefinition[]
+    public identifiers: estree.Identifier[]
+    public name: string
+    public references: Reference[]
+    public scope: Scope
+    public stack: boolean
 }
 
 export interface VariableDefinition {

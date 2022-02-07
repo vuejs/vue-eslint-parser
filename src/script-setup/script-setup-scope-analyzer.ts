@@ -1,4 +1,4 @@
-import * as escopeTypes from "eslint-scope"
+import type * as escopeTypes from "eslint-scope"
 import type { ParserOptions } from "../common/parser-options"
 import type {
     VAttribute,
@@ -9,6 +9,7 @@ import type {
     VText,
 } from "../ast"
 import { traverseNodes } from "../ast"
+import { getEslintScope } from "../common/eslint-scope"
 
 const BUILTIN_COMPONENTS = new Set([
     "template",
@@ -76,40 +77,86 @@ const SVG_TAGS =
 
 const NATIVE_TAGS = new Set([...HTML_TAGS.split(","), ...SVG_TAGS.split(",")])
 
+const COMPILER_MACROS_AT_ROOT = new Set([
+    "defineProps",
+    "defineEmits",
+    "defineExpose",
+    "withDefaults",
+])
+
+/**
+ * `casing.camelCase()` converts the beginning to lowercase,
+ * but does not convert the case of the beginning character when converting with Vue3.
+ * @see https://github.com/vuejs/vue-next/blob/48de8a42b7fed7a03f7f1ff5d53d6a704252cafe/packages/shared/src/index.ts#L109
+ */
+function camelize(str: string) {
+    return str.replace(/-(\w)/gu, (_, c) => (c ? c.toUpperCase() : ""))
+}
+
+function capitalize(str: string) {
+    return str[0].toUpperCase() + str.slice(1)
+}
+
+/**
+ * Analyze `<script setup>` scope.
+ * This method does the following process:
+ *
+ * 1. Add a virtual reference to the variables used in the template to mark them as used.
+ * (This is the same way typescript-eslint marks a `React` variable.)
+ *
+ * 2. If compiler macros were used, add these variables as global variables.
+ */
 export function analyzeScriptSetupScope(
     scopeManager: escopeTypes.ScopeManager,
     templateBody: VElement | undefined,
     df: VDocumentFragment,
     _parserOptions: ParserOptions,
 ): void {
+    analyzeUsedInTemplateVariables(scopeManager, templateBody, df)
+
+    analyzeCompilerMacrosVariables(scopeManager)
+}
+
+/**
+ * Checks whether the given node is VElement.
+ */
+function isVElement(
+    node: VElement | VExpressionContainer | VText,
+): node is VElement {
+    return node.type === "VElement"
+}
+
+function extractVariables(scopeManager: escopeTypes.ScopeManager) {
     const scriptVariables = new Map<string, escopeTypes.Variable>()
     const globalScope = scopeManager.globalScope
-    if (globalScope) {
-        for (const variable of globalScope.variables) {
-            scriptVariables.set(variable.name, variable)
-        }
-        const moduleScope = globalScope.childScopes.find(
-            (scope) => scope.type === "module",
-        )
-        for (const variable of (moduleScope && moduleScope.variables) || []) {
-            scriptVariables.set(variable.name, variable)
-        }
+    if (!globalScope) {
+        return scriptVariables
     }
+    for (const variable of globalScope.variables) {
+        scriptVariables.set(variable.name, variable)
+    }
+    const moduleScope = globalScope.childScopes.find(
+        (scope) => scope.type === "module",
+    )
+    for (const variable of (moduleScope && moduleScope.variables) || []) {
+        scriptVariables.set(variable.name, variable)
+    }
+    return scriptVariables
+}
+
+/**
+ * Analyze the variables used in the template.
+ * Add a virtual reference to the variables used in the template to mark them as used.
+ * (This is the same way typescript-eslint marks a `React` variable.)
+ */
+function analyzeUsedInTemplateVariables(
+    scopeManager: escopeTypes.ScopeManager,
+    templateBody: VElement | undefined,
+    df: VDocumentFragment,
+) {
+    const scriptVariables = extractVariables(scopeManager)
 
     const markedVariables = new Set<string>()
-
-    /**
-     * `casing.camelCase()` converts the beginning to lowercase,
-     * but does not convert the case of the beginning character when converting with Vue3.
-     * @see https://github.com/vuejs/vue-next/blob/48de8a42b7fed7a03f7f1ff5d53d6a704252cafe/packages/shared/src/index.ts#L109
-     */
-    function camelize(str: string) {
-        return str.replace(/-(\w)/gu, (_, c) => (c ? c.toUpperCase() : ""))
-    }
-
-    function capitalize(str: string) {
-        return str[0].toUpperCase() + str.slice(1)
-    }
 
     /**
      * @see https://github.com/vuejs/vue-next/blob/48de8a42b7fed7a03f7f1ff5d53d6a704252cafe/packages/compiler-core/src/transforms/transformElement.ts#L335
@@ -142,8 +189,8 @@ export function analyzeScriptSetupScope(
         }
         markedVariables.add(name)
 
-        const reference = new escopeTypes.Reference()
-        ;(reference as any).vueVirtualReference = true
+        const reference = new (getEslintScope().Reference)()
+        ;(reference as any).vueUsedInTemplate = true // Mark for debugging.
         reference.from = variable.scope
         reference.identifier = variable.identifiers[0]
         reference.isWrite = () => false
@@ -151,7 +198,7 @@ export function analyzeScriptSetupScope(
         reference.isRead = () => true
         reference.isReadOnly = () => true
         reference.isReadWrite = () => false
-        reference.isValueReference = true
+        reference.isValueReference = true // For typescript-eslint
 
         variable.references.push(reference)
         reference.resolved = variable
@@ -226,10 +273,54 @@ export function analyzeScriptSetupScope(
 }
 
 /**
- * Checks whether the given node is VElement.
+ * Analyze compiler macros.
+ * If compiler macros were used, add these variables as global variables.
  */
-function isVElement(
-    node: VElement | VExpressionContainer | VText,
-): node is VElement {
-    return node.type === "VElement"
+function analyzeCompilerMacrosVariables(
+    scopeManager: escopeTypes.ScopeManager,
+) {
+    const globalScope = scopeManager.globalScope
+    if (!globalScope) {
+        return
+    }
+    const usedCompilerMacros = new Map<string, escopeTypes.Reference[]>()
+    for (const reference of globalScope.through) {
+        if (COMPILER_MACROS_AT_ROOT.has(reference.identifier.name)) {
+            if (
+                reference.from.type === "global" ||
+                reference.from.type === "module"
+            ) {
+                const list = usedCompilerMacros.get(reference.identifier.name)
+                if (list) {
+                    list.push(reference)
+                } else {
+                    usedCompilerMacros.set(reference.identifier.name, [
+                        reference,
+                    ])
+                }
+            }
+        }
+    }
+
+    for (const [name, references] of usedCompilerMacros) {
+        const variable = new (getEslintScope().Variable)()
+        variable.name = name
+        variable.scope = globalScope
+        globalScope.variables.push(variable)
+        globalScope.set.set(name, variable)
+        for (const reference of references) {
+            // Links the variable and the reference.
+            reference.resolved = variable
+            variable.references.push(reference)
+        }
+    }
+
+    globalScope.through = globalScope.through.filter((reference) => {
+        const list = usedCompilerMacros.get(reference.identifier.name)
+        if (list && list.includes(reference)) {
+            // This reference is removed from `Scope#through`.
+            return false
+        }
+        return true
+    })
 }

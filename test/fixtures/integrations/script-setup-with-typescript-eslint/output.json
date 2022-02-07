@@ -1,1 +1,17 @@
-[]
+[
+    {
+        "filePath": "/no-undef/invalid/with-defaults.vue",
+        "messages": [
+            {
+                "ruleId": "no-undef",
+                "line": 8,
+                "message": "'withDefaults' is not defined."
+            },
+            {
+                "ruleId": "no-undef",
+                "line": 8,
+                "message": "'defineProps' is not defined."
+            }
+        ]
+    }
+]
