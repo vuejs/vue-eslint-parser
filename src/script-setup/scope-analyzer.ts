@@ -6,7 +6,6 @@ import type {
     VDocumentFragment,
     VElement,
     VExpressionContainer,
-    VText,
 } from "../ast"
 import { traverseNodes } from "../ast"
 import { getEslintScope } from "../common/eslint-scope"
@@ -115,15 +114,6 @@ export function analyzeScriptSetupScope(
     analyzeUsedInTemplateVariables(scopeManager, templateBody, df)
 
     analyzeCompilerMacrosVariables(scopeManager)
-}
-
-/**
- * Checks whether the given node is VElement.
- */
-function isVElement(
-    node: VElement | VExpressionContainer | VText,
-): node is VElement {
-    return node.type === "VElement"
 }
 
 function extractVariables(scopeManager: escopeTypes.ScopeManager) {
@@ -283,7 +273,24 @@ function analyzeCompilerMacrosVariables(
     if (!globalScope) {
         return
     }
-    const usedCompilerMacros = new Map<string, escopeTypes.Reference[]>()
+    const compilerMacroVariables = new Map<string, escopeTypes.Variable>()
+
+    function addCompilerMacroVariable(reference: escopeTypes.Reference) {
+        const name = reference.identifier.name
+        let variable = compilerMacroVariables.get(name)
+        if (!variable) {
+            variable = new (getEslintScope().Variable)()
+            variable.name = name
+            variable.scope = globalScope
+            globalScope.variables.push(variable)
+            globalScope.set.set(name, variable)
+            compilerMacroVariables.set(name, variable)
+        }
+        // Links the variable and the reference.
+        reference.resolved = variable
+        variable.references.push(reference)
+    }
+
     const newThrough: escopeTypes.Reference[] = []
     for (const reference of globalScope.through) {
         if (COMPILER_MACROS_AT_ROOT.has(reference.identifier.name)) {
@@ -291,32 +298,12 @@ function analyzeCompilerMacrosVariables(
                 reference.from.type === "global" ||
                 reference.from.type === "module"
             ) {
-                const list = usedCompilerMacros.get(reference.identifier.name)
-                if (list) {
-                    list.push(reference)
-                } else {
-                    usedCompilerMacros.set(reference.identifier.name, [
-                        reference,
-                    ])
-                }
+                addCompilerMacroVariable(reference)
                 // This reference is removed from `Scope#through`.
                 continue
             }
         }
         newThrough.push(reference)
-    }
-
-    for (const [name, references] of usedCompilerMacros) {
-        const variable = new (getEslintScope().Variable)()
-        variable.name = name
-        variable.scope = globalScope
-        globalScope.variables.push(variable)
-        globalScope.set.set(name, variable)
-        for (const reference of references) {
-            // Links the variable and the reference.
-            reference.resolved = variable
-            variable.references.push(reference)
-        }
     }
 
     globalScope.through = newThrough
