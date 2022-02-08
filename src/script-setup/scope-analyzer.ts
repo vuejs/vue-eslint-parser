@@ -261,12 +261,12 @@ function analyzeUsedInTemplateVariables(
     }
 
     // Analyze CSS v-bind()
-    for (const style of df.children
-        .filter(isVElement)
-        .filter((e) => e.name === "style")) {
-        for (const node of style.children) {
-            if (node.type === "VExpressionContainer") {
-                processVExpressionContainer(node)
+    for (const child of df.children) {
+        if (child.type === "VElement" && child.name === "style") {
+            for (const node of child.children) {
+                if (node.type === "VExpressionContainer") {
+                    processVExpressionContainer(node)
+                }
             }
         }
     }
@@ -284,6 +284,7 @@ function analyzeCompilerMacrosVariables(
         return
     }
     const usedCompilerMacros = new Map<string, escopeTypes.Reference[]>()
+    const newThrough: escopeTypes.Reference[] = []
     for (const reference of globalScope.through) {
         if (COMPILER_MACROS_AT_ROOT.has(reference.identifier.name)) {
             if (
@@ -298,8 +299,11 @@ function analyzeCompilerMacrosVariables(
                         reference,
                     ])
                 }
+                // This reference is removed from `Scope#through`.
+                continue
             }
         }
+        newThrough.push(reference)
     }
 
     for (const [name, references] of usedCompilerMacros) {
@@ -315,12 +319,5 @@ function analyzeCompilerMacrosVariables(
         }
     }
 
-    globalScope.through = globalScope.through.filter((reference) => {
-        const list = usedCompilerMacros.get(reference.identifier.name)
-        if (list && list.includes(reference)) {
-            // This reference is removed from `Scope#through`.
-            return false
-        }
-        return true
-    })
+    globalScope.through = newThrough
 }
