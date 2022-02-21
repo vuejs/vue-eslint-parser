@@ -170,6 +170,7 @@ export class Tokenizer {
     public readonly lineTerminators: number[]
     private readonly parserOptions: ParserOptions
     private lastCodePoint: number
+    private lastCodePointRaw: number
     private offset: number
     private column: number
     private line: number
@@ -221,7 +222,7 @@ export class Tokenizer {
         this.gaps = []
         this.lineTerminators = []
         this.parserOptions = parserOptions || {}
-        this.lastCodePoint = NULL
+        this.lastCodePoint = this.lastCodePointRaw = NULL
         this.offset = -1
         this.column = -1
         this.line = 1
@@ -307,14 +308,14 @@ export class Tokenizer {
      */
     private consumeNextCodePoint(): number {
         if (this.offset >= this.text.length) {
-            this.lastCodePoint = EOF
+            this.lastCodePoint = this.lastCodePointRaw = EOF
             return EOF
         }
 
         this.offset += this.lastCodePoint >= 0x10000 ? 2 : 1
         if (this.offset >= this.text.length) {
             this.advanceLocation()
-            this.lastCodePoint = EOF
+            this.lastCodePoint = this.lastCodePointRaw = EOF
             return EOF
         }
 
@@ -334,18 +335,19 @@ export class Tokenizer {
         }
 
         // Skip LF to convert CRLF → LF.
-        if (this.lastCodePoint === CARRIAGE_RETURN && cp === LINE_FEED) {
-            this.lastCodePoint = LINE_FEED
+        if (this.lastCodePointRaw === CARRIAGE_RETURN && cp === LINE_FEED) {
+            this.lastCodePoint = this.lastCodePointRaw = LINE_FEED
             this.gaps.push(this.offset)
             return this.consumeNextCodePoint()
         }
 
         // Update locations.
         this.advanceLocation()
-        this.lastCodePoint = cp
+        this.lastCodePoint = this.lastCodePointRaw = cp
 
         // To convert CRLF → LF.
         if (cp === CARRIAGE_RETURN) {
+            this.lastCodePoint = LINE_FEED
             return LINE_FEED
         }
 
@@ -356,7 +358,7 @@ export class Tokenizer {
      * Advance the current line and column.
      */
     private advanceLocation(): void {
-        if (this.lastCodePoint === LINE_FEED) {
+        if (this.lastCodePointRaw === LINE_FEED) {
             this.lineTerminators.push(this.offset)
             this.line += 1
             this.column = 0

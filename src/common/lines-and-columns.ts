@@ -1,5 +1,6 @@
 import sortedLastIndex from "lodash/sortedLastIndex"
 import type { Location } from "../ast"
+import type { LocationCalculator } from "./location-calculator"
 /**
  * A class for getting lines and columns location.
  */
@@ -23,5 +24,14 @@ export class LinesAndColumns {
         const line = sortedLastIndex(this.ltOffsets, index) + 1
         const column = index - (line === 1 ? 0 : this.ltOffsets[line - 2])
         return { line, column }
+    }
+
+    public createOffsetLocationCalculator(offset: number): LocationCalculator {
+        return {
+            getFixOffset() {
+                return offset
+            },
+            getLocFromIndex: this.getLocFromIndex.bind(this),
+        }
     }
 }
