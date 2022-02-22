@@ -59,6 +59,7 @@ import {
     getScriptSetupParserOptions,
 } from "../script-setup/parser-options"
 import { isScriptSetupElement } from "../common/ast-utils"
+import type { LinesAndColumns } from "../common/lines-and-columns"
 
 // [1] = aliases.
 // [2] = delimiter.
@@ -563,13 +564,15 @@ export function parseScript(
 /**
  * Parse the source code of the given `<script>` element.
  * @param node The `<script>` element to parse.
- * @param globalLocationCalculator The location calculator for fixLocations.
+ * @param sfcCode The source code of SFC.
+ * @param linesAndColumns The lines and columns location calculator.
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
 export function parseScriptElement(
     node: VElement,
-    globalLocationCalculator: LocationCalculatorForHtml,
+    sfcCode: string,
+    linesAndColumns: LinesAndColumns,
     originalParserOptions: ParserOptions,
 ): ESLintExtendedProgram {
     const parserOptions: ParserOptions = isScriptSetupElement(node)
@@ -580,13 +583,19 @@ export function parseScriptElement(
                   originalParserOptions.ecmaVersion || DEFAULT_ECMA_VERSION,
           }
 
-    const text = node.children[0]
-    const { code, offset } =
-        text != null && text.type === "VText"
-            ? { code: text.value, offset: text.range[0] }
-            : { code: "", offset: node.startTag.range[1] }
+    let code: string
+    let offset: number
+    const textNode = node.children[0]
+    if (textNode != null && textNode.type === "VText") {
+        const [scriptStartOffset, scriptEndOffset] = textNode.range
+        code = sfcCode.slice(scriptStartOffset, scriptEndOffset)
+        offset = scriptStartOffset
+    } else {
+        code = ""
+        offset = node.startTag.range[1]
+    }
     const locationCalculator =
-        globalLocationCalculator.getSubCalculatorAfter(offset)
+        linesAndColumns.createOffsetLocationCalculator(offset)
     const result = parseScriptFragment(code, locationCalculator, parserOptions)
 
     // Needs the tokens of start/end tags for `lines-around-*` rules to work

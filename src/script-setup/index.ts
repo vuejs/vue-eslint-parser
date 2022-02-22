@@ -189,7 +189,7 @@ function parseScript(
  * Parse the source code of the given `<script setup>` and `<script>` elements.
  * @param scriptSetupElement The `<script setup>` element to parse.
  * @param nodes The `<script>` elements to parse.
- * @param code The source code of SFC.
+ * @param sfcCode The source code of SFC.
  * @param linesAndColumns The lines and columns location calculator.
  * @param parserOptions The parser options.
  * @returns The result of parsing.
@@ -197,7 +197,7 @@ function parseScript(
 export function parseScriptSetupElements(
     scriptSetupElement: VElement,
     scriptElement: VElement,
-    code: string,
+    sfcCode: string,
     linesAndColumns: LinesAndColumns,
     originalParserOptions: ParserOptions,
 ): ESLintExtendedProgram {
@@ -207,16 +207,15 @@ export function parseScriptSetupElements(
     const scriptSetupModuleCodeBlocks = getScriptSetupModuleCodeBlocks(
         scriptSetupElement,
         scriptElement,
-        code,
+        sfcCode,
         linesAndColumns,
         parserOptions,
     )
     if (!scriptSetupModuleCodeBlocks) {
         return parseScriptFragment(
             "",
-            simpleOffsetLocationCalculator(
+            linesAndColumns.createOffsetLocationCalculator(
                 scriptSetupElement.startTag.range[1],
-                linesAndColumns,
             ),
             parserOptions,
         )
@@ -492,10 +491,8 @@ function getScriptSetupCodeBlocks(
         scriptSetupEndOffset,
     )
 
-    const offsetLocationCalculator = simpleOffsetLocationCalculator(
-        scriptSetupStartOffset,
-        linesAndColumns,
-    )
+    const offsetLocationCalculator =
+        linesAndColumns.createOffsetLocationCalculator(scriptSetupStartOffset)
 
     const result = parseScript(
         scriptCode,
@@ -924,16 +921,4 @@ function remapLocationAndTokens(
     })
 
     fixLocations(result, locationCalculator)
-}
-
-function simpleOffsetLocationCalculator(
-    offset: number,
-    linesAndColumns: LinesAndColumns,
-): LocationCalculator {
-    return {
-        getFixOffset() {
-            return offset
-        },
-        getLocFromIndex: linesAndColumns.getLocFromIndex.bind(linesAndColumns),
-    }
 }
