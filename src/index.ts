@@ -144,10 +144,15 @@ function parseAsSFC(code: string, options: ParserOptions) {
             },
         )
     } else {
-        result = parseScriptElement(scripts[0], locationCalculator, {
-            ...options,
-            parser: scriptParser,
-        })
+        result = parseScriptElement(
+            scripts[0],
+            code,
+            new LinesAndColumns(tokenizer.lineTerminators),
+            {
+                ...options,
+                parser: scriptParser,
+            },
+        )
     }
 
     if (options.vueFeatures?.styleCSSVariableInjection ?? true) {
