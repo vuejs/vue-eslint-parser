@@ -15,6 +15,7 @@ import type {
     VDocumentFragment,
     VElement,
     VExpressionContainer,
+    VLiteral,
 } from "../ast"
 import { NS, ParseError } from "../ast"
 import { debug } from "../common/debug"
@@ -641,6 +642,38 @@ export class Parser {
         debug("[html] Text %j", token)
 
         const parent = this.currentNode
+        if (parent.type === "VElement" && parent.name === "template") {
+            const langAttribute = parent.startTag.attributes.find(
+                (a) => a.key.name === "lang",
+            )
+            const lang = (langAttribute?.value as VLiteral).value
+            if (
+                lang &&
+                lang !== "html" &&
+                this.baseParserOptions.templateTokenizer[lang]
+            ) {
+                // eslint-disable-next-line @typescript-eslint/no-require-imports
+                const TemplateTokenizer = require(this.baseParserOptions
+                    .templateTokenizer[lang])
+                const templateTokenizer = new TemplateTokenizer(
+                    token.value,
+                    this.text,
+                    {
+                        startingLine: token.loc.start.line,
+                        startingColumn: token.loc.start.column,
+                    },
+                )
+
+                let templateToken: IntermediateToken | null = null
+                while (
+                    (templateToken = templateTokenizer.nextToken()) != null
+                ) {
+                    ;(this as any)[templateToken.type](templateToken)
+                }
+                // TODO integrate templateTokenizer.tokens/errors/comments
+                return
+            }
+        }
         parent.children.push({
             type: "VText",
             range: token.range,

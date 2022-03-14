@@ -43,6 +43,7 @@ function isVueFile(code: string, options: ParserOptions): boolean {
  * @param parserOptions The parser options.
  * @returns The parsing result.
  */
+// eslint-disable-next-line complexity
 export function parseForESLint(
     code: string,
     parserOptions: any,
@@ -97,13 +98,16 @@ export function parseForESLint(
         const scripts = rootAST.children.filter(isScriptElement)
         const template = rootAST.children.find(isTemplateElement)
         const templateLang = getLang(template) || "html"
+        const hasTemplateTokenizer =
+            parserOptions.templateTokenizer[templateLang]
         const concreteInfo: AST.HasConcreteInfo = {
             tokens: rootAST.tokens,
             comments: rootAST.comments,
             errors: rootAST.errors,
         }
         const templateBody =
-            template != null && templateLang === "html"
+            template != null &&
+            (templateLang === "html" || hasTemplateTokenizer)
                 ? Object.assign(template, concreteInfo)
                 : undefined
 
