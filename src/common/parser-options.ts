@@ -1,19 +1,6 @@
 import * as path from "path"
-import type { IntermediateToken } from "../html/intermediate-tokenizer"
 import type { VDocumentFragment } from "../ast"
 import { getLang, isScriptElement, isScriptSetupElement } from "./ast-utils"
-
-interface TemplateTokenizer {
-    nextToken(): IntermediateToken
-}
-
-interface TemplateTokenizerConstructor {
-    new (
-        templateText: string,
-        source: string,
-        options: { startingLine: number; startingColumn: number },
-    ): TemplateTokenizer
-}
 
 export interface ParserOptions {
     // vue-eslint-parser options
@@ -51,7 +38,7 @@ export interface ParserOptions {
     // others
     // [key: string]: any
 
-    templateTokenizer?: TemplateTokenizerConstructor
+    templateTokenizer?: { [key: string]: string }
 }
 
 export function isSFCFile(parserOptions: ParserOptions) {

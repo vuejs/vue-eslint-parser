@@ -650,7 +650,7 @@ export class Parser {
             if (
                 lang &&
                 lang !== "html" &&
-                this.baseParserOptions.templateTokenizer[lang]
+                this.baseParserOptions.templateTokenizer?.[lang]
             ) {
                 // eslint-disable-next-line @typescript-eslint/no-require-imports
                 const TemplateTokenizer = require(this.baseParserOptions
