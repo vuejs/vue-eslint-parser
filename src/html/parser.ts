@@ -52,6 +52,8 @@ import {
     getScriptParser,
     getParserLangFromSFC,
 } from "../common/parser-options"
+import sortedIndexBy from "lodash/sortedIndexBy"
+import sortedLastIndexBy from "lodash/sortedLastIndexBy"
 
 const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
 const DT_DD = /^d[dt]$/u
@@ -670,7 +672,24 @@ export class Parser {
                 ) {
                     ;(this as any)[templateToken.type](templateToken)
                 }
-                // TODO integrate templateTokenizer.tokens/errors/comments
+                const index = sortedIndexBy(
+                    this.tokenizer.tokens,
+                    token,
+                    (x) => x.range[0],
+                )
+                const count =
+                    sortedLastIndexBy(
+                        this.tokenizer.tokens,
+                        token,
+                        (x) => x.range[1],
+                    ) - index
+                this.tokenizer.tokens.splice(
+                    index,
+                    count,
+                    ...templateTokenizer.tokens,
+                )
+                this.tokenizer.comments.push(...templateTokenizer.comments)
+                this.tokenizer.errors.push(...templateTokenizer.errors)
                 return
             }
         }
