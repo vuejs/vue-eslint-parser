@@ -1,0 +1,92 @@
+[
+    {
+        "filePath": "/no-undef/invalid/define-expose.vue",
+        "messages": [
+            {
+                "ruleId": "no-undef",
+                "line": 8,
+                "message": "'defineExpose' is not defined."
+            }
+        ]
+    },
+    {
+        "filePath": "/no-undef/invalid/define-props-and-emits.vue",
+        "messages": [
+            {
+                "ruleId": "no-undef",
+                "line": 3,
+                "message": "'defineProps' is not defined."
+            },
+            {
+                "ruleId": "no-undef",
+                "line": 7,
+                "message": "'defineEmits' is not defined."
+            }
+        ]
+    },
+    {
+        "filePath": "/no-unused-vars/invalid/component-names.vue",
+        "messages": [
+            {
+                "ruleId": "no-unused-vars",
+                "line": 2,
+                "message": "'camelCase' is defined but never used."
+            }
+        ]
+    },
+    {
+        "filePath": "/no-unused-vars/invalid/css-v-bind.vue",
+        "messages": [
+            {
+                "ruleId": "no-unused-vars",
+                "line": 2,
+                "message": "'color' is assigned a value but never used."
+            }
+        ]
+    },
+    {
+        "filePath": "/no-unused-vars/invalid/invalid-scope.vue",
+        "messages": [
+            {
+                "ruleId": "no-unused-vars",
+                "line": 3,
+                "message": "'msg' is assigned a value but never used."
+            }
+        ]
+    },
+    {
+        "filePath": "/no-unused-vars/invalid/sample.vue",
+        "messages": [
+            {
+                "ruleId": "no-unused-vars",
+                "line": 4,
+                "message": "'Bar' is defined but never used."
+            },
+            {
+                "ruleId": "no-unused-vars",
+                "line": 17,
+                "message": "'baz' is assigned a value but never used."
+            }
+        ]
+    },
+    {
+        "filePath": "/no-unused-vars/invalid/with-v-for.vue",
+        "messages": [
+            {
+                "ruleId": "no-unused-vars",
+                "line": 2,
+                "message": "'i' is assigned a value but never used."
+            }
+        ]
+    },
+    {
+        "filePath": "/no-unused-vars/invalid/without-script-setup.vue",
+        "messages": [
+            {
+                "ruleId": "no-unused-vars",
+                "line": 2,
+                "message": "'msg' is assigned a value but never used."
+            }
+        ]
+    }
+]

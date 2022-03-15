@@ -43,13 +43,13 @@ export interface Scope {
     variableScope: Scope
 }
 
-export interface Variable {
-    defs: VariableDefinition[]
-    identifiers: estree.Identifier[]
-    name: string
-    references: Reference[]
-    scope: Scope
-    stack: boolean
+export class Variable {
+    public defs: VariableDefinition[]
+    public identifiers: estree.Identifier[]
+    public name: string
+    public references: Reference[]
+    public scope: Scope
+    public stack: boolean
 }
 
 export interface VariableDefinition {
@@ -59,20 +59,24 @@ export interface VariableDefinition {
     parent?: estree.Node
 }
 
-export interface Reference {
-    from: Scope
-    identifier: estree.Identifier
-    partial: boolean
-    resolved: Variable | null
-    tainted: boolean
-    writeExpr: estree.Expression
+export class Reference {
+    public from: Scope
+    public identifier: estree.Identifier
+    public partial: boolean
+    public resolved: Variable | null
+    public tainted: boolean
+    public writeExpr: estree.Expression
 
-    isRead(): boolean
-    isReadOnly(): boolean
-    isReadWrite(): boolean
-    isStatic(): boolean
-    isWrite(): boolean
-    isWriteOnly(): boolean
+    public isRead(): boolean
+    public isReadOnly(): boolean
+    public isReadWrite(): boolean
+    public isStatic(): boolean
+    public isWrite(): boolean
+    public isWriteOnly(): boolean
+
+    // For typescript-eslint
+    public isTypeReference: boolean
+    public isValueReference: boolean
 }
 
 export declare const analyze: (
