@@ -1,0 +1,107 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template lang=\"customLang\">\n    A-totally[:made=\"up\"] %%% templating + language %%% <=== comment ===>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template lang=\"customLang\">",
+                "children": [
+                    {
+                        "type": "VAttribute",
+                        "text": "lang=\"customLang\"",
+                        "children": [
+                            {
+                                "type": "VIdentifier",
+                                "text": "lang",
+                                "children": []
+                            },
+                            {
+                                "type": "VLiteral",
+                                "text": "\"customLang\"",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VElement",
+                "text": "A-totally[:made=\"up\"] %%% templating + language %%% ",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "A-totally[:made=\"up\"]",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":made=\"up\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":made",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "made",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"up\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "up",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": " %%% templating + language %%% ",
+                        "children": [
+                            {
+                                "type": "BinaryExpression",
+                                "text": " templating + languag",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": " templatin",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": " languag",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
