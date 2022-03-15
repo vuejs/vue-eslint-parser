@@ -99,7 +99,7 @@ export function parseForESLint(
         const template = rootAST.children.find(isTemplateElement)
         const templateLang = getLang(template) || "html"
         const hasTemplateTokenizer =
-            parserOptions.templateTokenizer[templateLang]
+            parserOptions?.templateTokenizer?.[templateLang]
         const concreteInfo: AST.HasConcreteInfo = {
             tokens: rootAST.tokens,
             comments: rootAST.comments,

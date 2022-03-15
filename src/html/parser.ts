@@ -646,7 +646,7 @@ export class Parser {
             const langAttribute = parent.startTag.attributes.find(
                 (a) => a.key.name === "lang",
             )
-            const lang = (langAttribute?.value as VLiteral).value
+            const lang = (langAttribute?.value as VLiteral)?.value
             if (
                 lang &&
                 lang !== "html" &&
