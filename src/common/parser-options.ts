@@ -35,6 +35,9 @@ export interface ParserOptions {
     range?: boolean
     tokens?: boolean
 
+    // From ESLint
+    eslintScopeManager?: boolean
+
     // others
     // [key: string]: any
 }

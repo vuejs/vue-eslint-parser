@@ -23,6 +23,8 @@ import {
     isTemplateElement,
 } from "./common/ast-utils"
 import { parseStyleElements } from "./style"
+import { analyzeScope } from "./script/scope-analyzer"
+import { analyzeScriptSetupScope } from "./script-setup/scope-analyzer"
 
 const STARTS_WITH_LT = /^\s*</u
 
@@ -61,101 +63,11 @@ export function parseForESLint(
     let document: AST.VDocumentFragment | null
     let locationCalculator: LocationCalculatorForHtml | null
     if (!isVueFile(code, options)) {
-        result = parseScript(code, {
-            ...options,
-            ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
-            parser: getScriptParser(options.parser, () => {
-                const ext = (
-                    path
-                        .extname(options.filePath || "unknown.js")
-                        .toLowerCase() || ""
-                )
-                    // remove dot
-                    .slice(1)
-                if (/^[jt]sx$/u.test(ext)) {
-                    return [ext, ext.slice(0, -1)]
-                }
-
-                return ext
-            }),
-        })
+        result = parseAsScript(code, options)
         document = null
         locationCalculator = null
     } else {
-        const optionsForTemplate = {
-            ...options,
-            ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
-        }
-        const skipParsingScript = options.parser === false
-        const tokenizer = new HTMLTokenizer(code, optionsForTemplate)
-        const rootAST = new HTMLParser(tokenizer, optionsForTemplate).parse()
-
-        locationCalculator = new LocationCalculatorForHtml(
-            tokenizer.gaps,
-            tokenizer.lineTerminators,
-        )
-        const scripts = rootAST.children.filter(isScriptElement)
-        const template = rootAST.children.find(isTemplateElement)
-        const templateLang = getLang(template) || "html"
-        const concreteInfo: AST.HasConcreteInfo = {
-            tokens: rootAST.tokens,
-            comments: rootAST.comments,
-            errors: rootAST.errors,
-        }
-        const templateBody =
-            template != null && templateLang === "html"
-                ? Object.assign(template, concreteInfo)
-                : undefined
-
-        const scriptParser = getScriptParser(options.parser, () =>
-            getParserLangFromSFC(rootAST),
-        )
-        let scriptSetup: VElement | undefined
-        if (skipParsingScript || !scripts.length) {
-            result = parseScript("", {
-                ...options,
-                ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
-                parser: scriptParser,
-            })
-        } else if (
-            scripts.length === 2 &&
-            (scriptSetup = scripts.find(isScriptSetupElement))
-        ) {
-            result = parseScriptSetupElements(
-                scriptSetup,
-                scripts.find((e) => e !== scriptSetup)!,
-                code,
-                new LinesAndColumns(tokenizer.lineTerminators),
-                {
-                    ...options,
-                    parser: scriptParser,
-                },
-            )
-        } else {
-            result = parseScriptElement(
-                scripts[0],
-                code,
-                new LinesAndColumns(tokenizer.lineTerminators),
-                {
-                    ...options,
-                    parser: scriptParser,
-                },
-            )
-        }
-
-        if (options.vueFeatures?.styleCSSVariableInjection ?? true) {
-            const styles = rootAST.children.filter(isStyleElement)
-            parseStyleElements(styles, locationCalculator, {
-                ...options,
-                parser: getScriptParser(options.parser, function* () {
-                    yield "<template>"
-                    yield getParserLangFromSFC(rootAST)
-                }),
-            })
-        }
-
-        result.ast.templateBody = templateBody
-        document = rootAST
+        ;({ result, document, locationCalculator } = parseAsSFC(code, options))
     }
 
     result.services = Object.assign(
@@ -179,3 +91,119 @@ export function parse(code: string, options: any): AST.ESLintProgram {
 }
 
 export { AST }
+
+function parseAsSFC(code: string, options: ParserOptions) {
+    const optionsForTemplate = {
+        ...options,
+        ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
+    }
+    const skipParsingScript = options.parser === false
+    const tokenizer = new HTMLTokenizer(code, optionsForTemplate)
+    const rootAST = new HTMLParser(tokenizer, optionsForTemplate).parse()
+
+    const locationCalculator = new LocationCalculatorForHtml(
+        tokenizer.gaps,
+        tokenizer.lineTerminators,
+    )
+    const scripts = rootAST.children.filter(isScriptElement)
+    const template = rootAST.children.find(isTemplateElement)
+    const templateLang = getLang(template) || "html"
+    const concreteInfo: AST.HasConcreteInfo = {
+        tokens: rootAST.tokens,
+        comments: rootAST.comments,
+        errors: rootAST.errors,
+    }
+    const templateBody =
+        template != null && templateLang === "html"
+            ? Object.assign(template, concreteInfo)
+            : undefined
+
+    const scriptParser = getScriptParser(options.parser, () =>
+        getParserLangFromSFC(rootAST),
+    )
+    let result: AST.ESLintExtendedProgram
+    let scriptSetup: VElement | undefined
+    if (skipParsingScript || !scripts.length) {
+        result = parseScript("", {
+            ...options,
+            ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
+            parser: scriptParser,
+        })
+    } else if (
+        scripts.length === 2 &&
+        (scriptSetup = scripts.find(isScriptSetupElement))
+    ) {
+        result = parseScriptSetupElements(
+            scriptSetup,
+            scripts.find((e) => e !== scriptSetup)!,
+            code,
+            new LinesAndColumns(tokenizer.lineTerminators),
+            {
+                ...options,
+                parser: scriptParser,
+            },
+        )
+    } else {
+        result = parseScriptElement(
+            scripts[0],
+            code,
+            new LinesAndColumns(tokenizer.lineTerminators),
+            {
+                ...options,
+                parser: scriptParser,
+            },
+        )
+    }
+
+    if (options.vueFeatures?.styleCSSVariableInjection ?? true) {
+        const styles = rootAST.children.filter(isStyleElement)
+        parseStyleElements(styles, locationCalculator, {
+            ...options,
+            parser: getScriptParser(options.parser, function* () {
+                yield "<template>"
+                yield getParserLangFromSFC(rootAST)
+            }),
+        })
+    }
+    result.ast.templateBody = templateBody
+
+    if (options.eslintScopeManager) {
+        if (scripts.some(isScriptSetupElement)) {
+            if (!result.scopeManager) {
+                result.scopeManager = analyzeScope(result.ast, options)
+            }
+            analyzeScriptSetupScope(
+                result.scopeManager,
+                templateBody,
+                rootAST,
+                options,
+            )
+        }
+    }
+
+    return {
+        result,
+        locationCalculator,
+        document: rootAST,
+    }
+}
+
+function parseAsScript(code: string, options: ParserOptions) {
+    return parseScript(code, {
+        ...options,
+        ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
+        parser: getScriptParser(options.parser, () => {
+            const ext = (
+                path.extname(options.filePath || "unknown.js").toLowerCase() ||
+                ""
+            )
+                // remove dot
+                .slice(1)
+            if (/^[jt]sx$/u.test(ext)) {
+                return [ext, ext.slice(0, -1)]
+            }
+
+            return ext
+        }),
+    })
+}
