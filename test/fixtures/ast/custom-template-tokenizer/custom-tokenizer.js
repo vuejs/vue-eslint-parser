@@ -2,6 +2,9 @@ const assert = require('assert')
 
 module.exports = class CustomTokenizer {
     constructor (text, code, { startingLine, startingColumn }) {
+        // set initial tokenizer states used by the parser
+        this.expressionEnabled = true
+        this.namespace = "http://www.w3.org/1999/xhtml"
         // ignore actual input and just hardcode tokens
         assert.equal(startingLine, 1)
         assert.equal(startingColumn, 28)
@@ -119,8 +122,6 @@ module.exports = class CustomTokenizer {
             loc: this.tokens[9].loc,
         }]
         this.tokenIterator = intermediateTokens[Symbol.iterator]()
-
-        console.log(this.tokens)
     }
 
     nextToken () {

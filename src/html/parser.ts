@@ -666,12 +666,19 @@ export class Parser {
                     },
                 )
 
+                // override this.tokenizer to forward expressionEnabled and state changes
+                const rootTokenizer = this.tokenizer
+                this.tokenizer = templateTokenizer
+
                 let templateToken: IntermediateToken | null = null
                 while (
                     (templateToken = templateTokenizer.nextToken()) != null
                 ) {
                     ;(this as any)[templateToken.type](templateToken)
                 }
+
+                this.tokenizer = rootTokenizer
+
                 const index = sortedIndexBy(
                     this.tokenizer.tokens,
                     token,
