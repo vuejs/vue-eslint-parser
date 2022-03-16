@@ -5,6 +5,7 @@ module.exports = class CustomTokenizer {
         // set initial tokenizer states used by the parser
         this.expressionEnabled = true
         this.namespace = "http://www.w3.org/1999/xhtml"
+        this.text = code
         // ignore actual input and just hardcode tokens
         assert.equal(startingLine, 1)
         assert.equal(startingColumn, 28)

@@ -22,13 +22,33 @@ class CustomTokenizer {
     errors: ParseError[]
 
     /**
-     * Initialize this tokenizer.
-     * @param text The contents of the <template> tag.
-     * @param code The complete code content
-     * @param {startingLine, startingColumn} The starting location of the text
+     * Used to control tokenization of {{ expressions }}. If false, don't produce VExpressionStart/End tokens
      */
-    constructor (text: string, code: string, { startingLine: number, startingColumn: number }) {
-        
+    expressionEnabled: boolean = true
+
+    /**
+     * The current namespace. Set and used by the parser. You probably can ignore this.
+     */
+    namespace: string = "http://www.w3.org/1999/xhtml"
+
+    /**
+     * The current tokenizer state. Set by the parser. You can probably ignore this.
+     */
+    state: string = "DATA"
+
+    /**
+     * The complete source code text. Used by the parser and set via the constructor.
+     */
+    text: string
+
+    /**
+     * Initialize this tokenizer.
+     * @param templateText The contents of the <template> tag.
+     * @param text The complete source code
+     * @param {startingLine, startingColumn} The starting location of the templateText. Your token positions need to include this offset.
+     */
+    constructor (templateText: string, text: string, { startingLine: number, startingColumn: number }) {
+        this.text = text
     }
 
     /**
@@ -44,3 +64,7 @@ class CustomTokenizer {
 ## Behaviour
 
 When the html parser encounters a `<template lang="...">` tag that matches a configured custom tokenizer, it will initialize a new instance of this tokenizer with the contents of the template tag. It will then call the `nextToken` method of this tokenizer until it returns `null`. After having consumed all intermediate tokens it will copy the low level tokens, comments and errors from the tokenizer instance.
+
+## Examples
+
+For a working example, see [vue-eslint-parser-template-tokenizer-pug](https://github.com/rashfael/vue-eslint-parser-template-tokenizer-pug/).
