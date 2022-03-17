@@ -16,7 +16,7 @@ module.exports = class CustomTokenizer {
             this.generateToken("\n    ", {
                 type: "CustomWhitespace"
             }),
-            this.generateToken("A-totally[", {
+            this.generateToken("A-totally", {
                 type: "CustomTagOpen",
                 value: "A-totally"
             }),
@@ -35,25 +35,21 @@ module.exports = class CustomTokenizer {
                 type: "CustomTagClose",
                 value: ""
             }),
-            this.generateToken(" %%%", {
-                type: "VExpressionStart",
-                value: "%%%"
+            this.generateToken("%%%", {
+                type: "VExpressionStart"
             }),
             this.generateToken(" templating + language ", {
-                type: "CustomText",
-                value: "templating + language"
+                type: "CustomText"
             }),
-            this.generateToken("%%% ", {
-                type: "VExpressionEnd",
-                value: "%%%"
+            this.generateToken("%%%", {
+                type: "VExpressionEnd"
             }),
             this.generateToken("", {
-                type: "CustomEndTag",
-                value: ""
+                type: "CustomEndTag"
             }),
             this.generateToken("<=== comment ===>", {
                 type: "CustomComment",
-                value: "language"
+                value: "comment"
             })
         ]
         this.comments = this.tokens.filter(token => token.type === "CustomComment")
@@ -108,7 +104,7 @@ module.exports = class CustomTokenizer {
             attributes: [attribute]
         }, {
             type: "Mustache",
-            value: "templating + language",
+            value: " templating + language ",
             range: [this.tokens[6].range[0], this.tokens[8].range[1]],
             loc: {
                 start: this.tokens[6].loc.start,
@@ -131,16 +127,17 @@ module.exports = class CustomTokenizer {
 
     // set range and loc based on text length and current offset
     generateToken (text, data) {
-        const range = [this.offset, this.offset + text.length]
+        const skip = this.text.indexOf(text, this.offset) - this.offset
+        const range = [this.offset + skip, this.offset + skip + text.length]
         this.offset = range[1]
         const loc = {
             start: {
                 line: this.line,
-                column: this.column
+                column: this.column + skip
             }
         }
         this.line += text.split('\n').length - 1
-        this.column = text.split('\n').length - 1 ? text.length - text.lastIndexOf('\n') : this.column + text.length
+        this.column = text.split('\n').length - 1 ? text.length - text.lastIndexOf('\n') - 1 : this.column + skip + text.length
         loc.end = {
             line: this.line,
             column: this.column

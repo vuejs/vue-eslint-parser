@@ -27,7 +27,7 @@
             },
             {
                 "type": "VElement",
-                "text": "A-totally[:made=\"up\"] %%% templating + language %%% ",
+                "text": "A-totally[:made=\"up\"] %%% templating + language %%%",
                 "children": [
                     {
                         "type": "VStartTag",
@@ -70,20 +70,20 @@
                     },
                     {
                         "type": "VExpressionContainer",
-                        "text": " %%% templating + language %%% ",
+                        "text": "%%% templating + language %%%",
                         "children": [
                             {
                                 "type": "BinaryExpression",
-                                "text": " templating + languag",
+                                "text": "templating + language",
                                 "children": [
                                     {
                                         "type": "Identifier",
-                                        "text": " templatin",
+                                        "text": "templating",
                                         "children": []
                                     },
                                     {
                                         "type": "Identifier",
-                                        "text": " languag",
+                                        "text": "language",
                                         "children": []
                                     }
                                 ]
