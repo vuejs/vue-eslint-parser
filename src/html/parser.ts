@@ -478,6 +478,48 @@ export class Parser {
     }
 
     /**
+     * Process the given template text token with a configured template tokenizer, based on language.
+     * @param token The template text token to process.
+     * @param lang The template language the text token should be parsed as.
+     */
+    private processTemplateText(token: Text, lang: string): void {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const TemplateTokenizer = require(this.baseParserOptions
+            .templateTokenizer![lang])
+        const templateTokenizer = new TemplateTokenizer(
+            token.value,
+            this.text,
+            {
+                startingLine: token.loc.start.line,
+                startingColumn: token.loc.start.column,
+            },
+        )
+
+        // override this.tokenizer to forward expressionEnabled and state changes
+        const rootTokenizer = this.tokenizer
+        this.tokenizer = templateTokenizer
+
+        let templateToken: IntermediateToken | null = null
+        while ((templateToken = templateTokenizer.nextToken()) != null) {
+            ;(this as any)[templateToken.type](templateToken)
+        }
+
+        this.tokenizer = rootTokenizer
+
+        const index = sortedIndexBy(
+            this.tokenizer.tokens,
+            token,
+            (x) => x.range[0],
+        )
+        const count =
+            sortedLastIndexBy(this.tokenizer.tokens, token, (x) => x.range[1]) -
+            index
+        this.tokenizer.tokens.splice(index, count, ...templateTokenizer.tokens)
+        this.tokenizer.comments.push(...templateTokenizer.comments)
+        this.tokenizer.errors.push(...templateTokenizer.errors)
+    }
+
+    /**
      * Handle the start tag token.
      * @param token The token to handle.
      */
@@ -654,49 +696,7 @@ export class Parser {
                 lang !== "html" &&
                 this.baseParserOptions.templateTokenizer?.[lang]
             ) {
-                // eslint-disable-next-line @typescript-eslint/no-require-imports
-                const TemplateTokenizer = require(this.baseParserOptions
-                    .templateTokenizer[lang])
-                const templateTokenizer = new TemplateTokenizer(
-                    token.value,
-                    this.text,
-                    {
-                        startingLine: token.loc.start.line,
-                        startingColumn: token.loc.start.column,
-                    },
-                )
-
-                // override this.tokenizer to forward expressionEnabled and state changes
-                const rootTokenizer = this.tokenizer
-                this.tokenizer = templateTokenizer
-
-                let templateToken: IntermediateToken | null = null
-                while (
-                    (templateToken = templateTokenizer.nextToken()) != null
-                ) {
-                    ;(this as any)[templateToken.type](templateToken)
-                }
-
-                this.tokenizer = rootTokenizer
-
-                const index = sortedIndexBy(
-                    this.tokenizer.tokens,
-                    token,
-                    (x) => x.range[0],
-                )
-                const count =
-                    sortedLastIndexBy(
-                        this.tokenizer.tokens,
-                        token,
-                        (x) => x.range[1],
-                    ) - index
-                this.tokenizer.tokens.splice(
-                    index,
-                    count,
-                    ...templateTokenizer.tokens,
-                )
-                this.tokenizer.comments.push(...templateTokenizer.comments)
-                this.tokenizer.errors.push(...templateTokenizer.errors)
+                this.processTemplateText(token, lang)
                 return
             }
         }
