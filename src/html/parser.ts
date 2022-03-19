@@ -686,7 +686,11 @@ export class Parser {
         debug("[html] Text %j", token)
 
         const parent = this.currentNode
-        if (parent.type === "VElement" && parent.name === "template") {
+        if (
+            token.value &&
+            parent.type === "VElement" &&
+            parent.name === "template"
+        ) {
             const langAttribute = parent.startTag.attributes.find(
                 (a) => a.key.name === "lang",
             )
