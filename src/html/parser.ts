@@ -620,11 +620,12 @@ export class Parser {
                 const lang = langAttr?.value?.value
 
                 if (elementName === "template") {
+                    this.expressionEnabled = true
                     if (lang && lang !== "html") {
                         // It is not an HTML template.
                         this.tokenizer.state = "RAWTEXT"
+                        this.expressionEnabled = false
                     }
-                    this.expressionEnabled = true
                 } else if (this.isSFC) {
                     // Element is Custom Block. e.g. <i18n>
                     // Referred to the Vue parser. See https://github.com/vuejs/vue-next/blob/cbaa3805064cb581fc2007cf63774c91d39844fe/packages/compiler-sfc/src/parse.ts#L127
@@ -684,7 +685,6 @@ export class Parser {
      */
     protected Text(token: Text): void {
         debug("[html] Text %j", token)
-
         const parent = this.currentNode
         if (
             token.value &&
