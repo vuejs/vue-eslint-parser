@@ -7,6 +7,7 @@ module.exports = class CustomTokenizer {
         this.namespace = "http://www.w3.org/1999/xhtml"
         this.text = code
         // ignore actual input and just hardcode tokens
+        assert.equal(text, `\n    A-totally[:made="up"] {{ templating + language }} <=== comment ===>\n`)
         assert.equal(startingLine, 1)
         assert.equal(startingColumn, 28)
         this.line = startingLine
@@ -35,13 +36,13 @@ module.exports = class CustomTokenizer {
                 type: "CustomTagClose",
                 value: ""
             }),
-            this.generateToken("%%%", {
+            this.generateToken("{{", {
                 type: "VExpressionStart"
             }),
             this.generateToken(" templating + language ", {
                 type: "CustomText"
             }),
-            this.generateToken("%%%", {
+            this.generateToken("}}", {
                 type: "VExpressionEnd"
             }),
             this.generateToken("", {

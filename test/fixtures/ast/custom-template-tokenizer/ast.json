@@ -24,7 +24,7 @@
         "type": "VElement",
         "range": [
             0,
-            114
+            112
         ],
         "loc": {
             "start": {
@@ -119,7 +119,7 @@
                 "type": "VElement",
                 "range": [
                     33,
-                    84
+                    82
                 ],
                 "loc": {
                     "start": {
@@ -128,7 +128,7 @@
                     },
                     "end": {
                         "line": 2,
-                        "column": 55
+                        "column": 53
                     }
                 },
                 "name": "a-totally",
@@ -286,7 +286,7 @@
                         "type": "VExpressionContainer",
                         "range": [
                             55,
-                            84
+                            82
                         ],
                         "loc": {
                             "start": {
@@ -295,65 +295,65 @@
                             },
                             "end": {
                                 "line": 2,
-                                "column": 55
+                                "column": 53
                             }
                         },
                         "expression": {
                             "type": "BinaryExpression",
-                            "start": 59,
-                            "end": 80,
+                            "start": 58,
+                            "end": 79,
                             "loc": {
                                 "start": {
                                     "line": 2,
-                                    "column": 30
+                                    "column": 29
                                 },
                                 "end": {
                                     "line": 2,
-                                    "column": 51
+                                    "column": 50
                                 }
                             },
                             "range": [
-                                59,
-                                80
+                                58,
+                                79
                             ],
                             "left": {
                                 "type": "Identifier",
-                                "start": 59,
-                                "end": 69,
+                                "start": 58,
+                                "end": 68,
                                 "loc": {
                                     "start": {
                                         "line": 2,
-                                        "column": 30
+                                        "column": 29
                                     },
                                     "end": {
                                         "line": 2,
-                                        "column": 40
+                                        "column": 39
                                     }
                                 },
                                 "range": [
-                                    59,
-                                    69
+                                    58,
+                                    68
                                 ],
                                 "name": "templating"
                             },
                             "operator": "+",
                             "right": {
                                 "type": "Identifier",
-                                "start": 72,
-                                "end": 80,
+                                "start": 71,
+                                "end": 79,
                                 "loc": {
                                     "start": {
                                         "line": 2,
-                                        "column": 43
+                                        "column": 42
                                     },
                                     "end": {
                                         "line": 2,
-                                        "column": 51
+                                        "column": 50
                                     }
                                 },
                                 "range": [
-                                    72,
-                                    80
+                                    71,
+                                    79
                                 ],
                                 "name": "language"
                             }
@@ -362,21 +362,21 @@
                             {
                                 "id": {
                                     "type": "Identifier",
-                                    "start": 59,
-                                    "end": 69,
+                                    "start": 58,
+                                    "end": 68,
                                     "loc": {
                                         "start": {
                                             "line": 2,
-                                            "column": 30
+                                            "column": 29
                                         },
                                         "end": {
                                             "line": 2,
-                                            "column": 40
+                                            "column": 39
                                         }
                                     },
                                     "range": [
-                                        59,
-                                        69
+                                        58,
+                                        68
                                     ],
                                     "name": "templating"
                                 },
@@ -385,21 +385,21 @@
                             {
                                 "id": {
                                     "type": "Identifier",
-                                    "start": 72,
-                                    "end": 80,
+                                    "start": 71,
+                                    "end": 79,
                                     "loc": {
                                         "start": {
                                             "line": 2,
-                                            "column": 43
+                                            "column": 42
                                         },
                                         "end": {
                                             "line": 2,
-                                            "column": 51
+                                            "column": 50
                                         }
                                     },
                                     "range": [
-                                        72,
-                                        80
+                                        71,
+                                        79
                                     ],
                                     "name": "language"
                                 },
@@ -411,17 +411,17 @@
                 "endTag": {
                     "type": "VEndTag",
                     "range": [
-                        84,
-                        84
+                        82,
+                        82
                     ],
                     "loc": {
                         "start": {
                             "line": 2,
-                            "column": 55
+                            "column": 53
                         },
                         "end": {
                             "line": 2,
-                            "column": 55
+                            "column": 53
                         }
                     }
                 },
@@ -431,8 +431,8 @@
         "endTag": {
             "type": "VEndTag",
             "range": [
-                103,
-                114
+                101,
+                112
             ],
             "loc": {
                 "start": {
@@ -704,7 +704,7 @@
             {
                 "range": [
                     55,
-                    58
+                    57
                 ],
                 "loc": {
                     "start": {
@@ -713,103 +713,103 @@
                     },
                     "end": {
                         "line": 2,
-                        "column": 29
+                        "column": 28
                     }
                 },
-                "value": "%%%",
+                "value": "{{",
                 "type": "VExpressionStart"
             },
             {
                 "type": "Identifier",
                 "value": "templating",
-                "start": 59,
-                "end": 69,
+                "start": 58,
+                "end": 68,
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 30
+                        "column": 29
                     },
                     "end": {
                         "line": 2,
-                        "column": 40
+                        "column": 39
                     }
                 },
                 "range": [
-                    59,
-                    69
+                    58,
+                    68
                 ]
             },
             {
                 "type": "Punctuator",
                 "value": "+",
-                "start": 70,
-                "end": 71,
+                "start": 69,
+                "end": 70,
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 41
+                        "column": 40
                     },
                     "end": {
                         "line": 2,
-                        "column": 42
+                        "column": 41
                     }
                 },
                 "range": [
-                    70,
-                    71
+                    69,
+                    70
                 ]
             },
             {
                 "type": "Identifier",
                 "value": "language",
-                "start": 72,
-                "end": 80,
+                "start": 71,
+                "end": 79,
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 43
+                        "column": 42
                     },
                     "end": {
                         "line": 2,
-                        "column": 51
+                        "column": 50
                     }
                 },
                 "range": [
-                    72,
-                    80
+                    71,
+                    79
                 ]
             },
             {
                 "range": [
-                    81,
-                    84
+                    80,
+                    82
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 52
+                        "column": 51
                     },
                     "end": {
                         "line": 2,
-                        "column": 55
+                        "column": 53
                     }
                 },
-                "value": "%%%",
+                "value": "}}",
                 "type": "VExpressionEnd"
             },
             {
                 "range": [
-                    84,
-                    84
+                    82,
+                    82
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 55
+                        "column": 53
                     },
                     "end": {
                         "line": 2,
-                        "column": 55
+                        "column": 53
                     }
                 },
                 "value": "",
@@ -818,8 +818,8 @@
             {
                 "type": "HTMLEndTagOpen",
                 "range": [
-                    103,
-                    113
+                    101,
+                    111
                 ],
                 "loc": {
                     "start": {
@@ -836,8 +836,8 @@
             {
                 "type": "HTMLTagClose",
                 "range": [
-                    113,
-                    114
+                    111,
+                    112
                 ],
                 "loc": {
                     "start": {
@@ -854,8 +854,8 @@
             {
                 "type": "HTMLWhitespace",
                 "range": [
-                    114,
-                    115
+                    112,
+                    113
                 ],
                 "loc": {
                     "start": {
@@ -873,17 +873,17 @@
         "comments": [
             {
                 "range": [
-                    85,
-                    102
+                    83,
+                    100
                 ],
                 "loc": {
                     "start": {
                         "line": 2,
-                        "column": 56
+                        "column": 54
                     },
                     "end": {
                         "line": 2,
-                        "column": 73
+                        "column": 71
                     }
                 },
                 "value": "comment",

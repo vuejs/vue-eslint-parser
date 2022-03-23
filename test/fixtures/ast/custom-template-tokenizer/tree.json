@@ -1,7 +1,7 @@
 [
     {
         "type": "VElement",
-        "text": "<template lang=\"customLang\">\n    A-totally[:made=\"up\"] %%% templating + language %%% <=== comment ===>\n</template>",
+        "text": "<template lang=\"customLang\">\n    A-totally[:made=\"up\"] {{ templating + language }} <=== comment ===>\n</template>",
         "children": [
             {
                 "type": "VStartTag",
@@ -27,7 +27,7 @@
             },
             {
                 "type": "VElement",
-                "text": "A-totally[:made=\"up\"] %%% templating + language %%%",
+                "text": "A-totally[:made=\"up\"] {{ templating + language }}",
                 "children": [
                     {
                         "type": "VStartTag",
@@ -70,7 +70,7 @@
                     },
                     {
                         "type": "VExpressionContainer",
-                        "text": "%%% templating + language %%%",
+                        "text": "{{ templating + language }}",
                         "children": [
                             {
                                 "type": "BinaryExpression",
