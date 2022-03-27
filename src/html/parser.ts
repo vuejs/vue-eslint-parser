@@ -176,6 +176,7 @@ export class Parser {
     private vPreElement: VElement | null
     private postProcessesForScript: ((parserOptions: ParserOptions) => void)[] =
         []
+    private isUsingCustomTokenizer: boolean
 
     /**
      * The source code text.
@@ -269,6 +270,8 @@ export class Parser {
         this.vPreElement = null
 
         this.postProcessesForScript = []
+
+        this.isUsingCustomTokenizer = false
     }
 
     /**
@@ -483,6 +486,7 @@ export class Parser {
      * @param lang The template language the text token should be parsed as.
      */
     private processTemplateText(token: Text, lang: string): void {
+        this.isUsingCustomTokenizer = true
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const TemplateTokenizer = require(this.baseParserOptions
             .templateTokenizer![lang])
@@ -517,6 +521,7 @@ export class Parser {
         this.tokenizer.tokens.splice(index, count, ...templateTokenizer.tokens)
         this.tokenizer.comments.push(...templateTokenizer.comments)
         this.tokenizer.errors.push(...templateTokenizer.errors)
+        this.isUsingCustomTokenizer = false
     }
 
     /**
@@ -687,6 +692,7 @@ export class Parser {
         debug("[html] Text %j", token)
         const parent = this.currentNode
         if (
+            !this.isUsingCustomTokenizer &&
             token.value &&
             parent.type === "VElement" &&
             parent.name === "template"
