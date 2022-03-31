@@ -13,7 +13,7 @@ module.exports = class CustomTokenizer {
         this.line = startingLine
         this.column = startingColumn
         this.offset = 28
-        this.tokens = [
+        const tokens = [
             this.generateToken("\n    ", {
                 type: "CustomWhitespace"
             }),
@@ -53,8 +53,8 @@ module.exports = class CustomTokenizer {
                 value: "comment"
             })
         ]
-        this.comments = this.tokens.filter(token => token.type === "CustomComment")
-        this.tokens = this.tokens.filter(token => token.type !== "CustomComment")
+        this.comments = tokens.filter(token => token.type === "CustomComment")
+        this.tokens = tokens.filter(token => !["CustomEndTag", "CustomComment"].includes(token.type))
 
         this.errors = [{
             "message": "totally-made-up-error",
@@ -67,10 +67,10 @@ module.exports = class CustomTokenizer {
             type: "VAttribute",
             parent: {},
             directive: false,
-            range: [this.tokens[2].range[0], this.tokens[4].range[1]],
+            range: [tokens[2].range[0], tokens[4].range[1]],
             loc: {
-                start: this.tokens[2].start,
-                end: this.tokens[4].end
+                start: tokens[2].start,
+                end: tokens[4].end
             }
         }
 
@@ -79,16 +79,16 @@ module.exports = class CustomTokenizer {
             parent: attribute,
             name: ":made",
             rawName: ":made",
-            range: this.tokens[2].range,
-            loc: this.tokens[2].loc
+            range: tokens[2].range,
+            loc: tokens[2].loc
         }
 
         attribute.value = {
             type: "VLiteral",
             parent: attribute,
             value: "up",
-            range: this.tokens[4].range,
-            loc: this.tokens[4].loc
+            range: tokens[4].range,
+            loc: tokens[4].loc
         }
 
         // these tokens get returned by nextToken
@@ -96,28 +96,28 @@ module.exports = class CustomTokenizer {
             type: "StartTag",
             name: "a-totally",
             rawName: "A-totally",
-            range: [this.tokens[1].range[0], this.tokens[5].range[1]],
+            range: [tokens[1].range[0], tokens[5].range[1]],
             loc: {
-                start: this.tokens[1].loc.start,
-                end: this.tokens[5].loc.end
+                start: tokens[1].loc.start,
+                end: tokens[5].loc.end
             },
             selfClosing: false,
             attributes: [attribute]
         }, {
             type: "Mustache",
             value: " templating + language ",
-            range: [this.tokens[6].range[0], this.tokens[8].range[1]],
+            range: [tokens[6].range[0], tokens[8].range[1]],
             loc: {
-                start: this.tokens[6].loc.start,
-                end: this.tokens[8].loc.end
+                start: tokens[6].loc.start,
+                end: tokens[8].loc.end
             },
-            startToken: this.tokens[6],
-            endToken: this.tokens[8]
+            startToken: tokens[6],
+            endToken: tokens[8]
         }, {
             type: "EndTag",
             name: "a-totally",
-            range: this.tokens[9].range,
-            loc: this.tokens[9].loc,
+            range: tokens[9].range,
+            loc: tokens[9].loc,
         }]
         this.tokenIterator = intermediateTokens[Symbol.iterator]()
     }
