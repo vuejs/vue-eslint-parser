@@ -3,7 +3,7 @@
   "version": "8.3.0",
   "description": "The ESLint custom parser for `.vue` files.",
   "engines": {
-    "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
+    "node": "^14.17.0 || >=16.0.0"
   },
   "main": "index.js",
   "files": [
@@ -13,13 +13,13 @@
     "eslint": ">=6.0.0"
   },
   "dependencies": {
-    "debug": "^4.3.2",
-    "eslint-scope": "^7.0.0",
-    "eslint-visitor-keys": "^3.1.0",
-    "espree": "^9.0.0",
+    "debug": "^4.3.4",
+    "eslint-scope": "^7.1.1",
+    "eslint-visitor-keys": "^3.3.0",
+    "espree": "^9.3.1",
     "esquery": "^1.4.0",
     "lodash": "^4.17.21",
-    "semver": "^7.3.5"
+    "semver": "^7.3.6"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
