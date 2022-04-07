@@ -60,14 +60,18 @@ function codeShouldBeSkipped(code) {
 /**
  * Wrap the given code with a `<script>` tag.
  *
+ * @param {string} ruleId The rule ID.
  * @param {string} code - The code to be wrapped.
  * @returns {string} The wrapped code.
  */
-function wrapCode(code) {
+function wrapCode(ruleId, code) {
     const eol = "\n"
 
     if (code.charCodeAt(0) === 0xfeff) {
         return `\uFEFF<script>${eol}${code.slice(1)}${eol}</script>`
+    }
+    if (ruleId === "prefer-regex-literals") {
+        return `<script>;${eol}${code}${eol}</script>`
     }
     return `<script>${eol}${code}${eol}</script>`
 }
@@ -86,7 +90,7 @@ function modifyPattern(ruleId, pattern) {
             return null
         }
         return {
-            code: wrapCode(pattern),
+            code: wrapCode(ruleId, pattern),
             filename: "test.vue",
             parser: PARSER_PATH,
         }
@@ -120,9 +124,9 @@ function modifyPattern(ruleId, pattern) {
     // Wrap the code by `<script>` tag.
     pattern.filename = "test.vue"
     pattern.parser = PARSER_PATH
-    pattern.code = wrapCode(pattern.code)
+    pattern.code = wrapCode(ruleId, pattern.code)
     if (pattern.output != null) {
-        pattern.output = wrapCode(pattern.output)
+        pattern.output = wrapCode(ruleId, pattern.output)
     }
 
     if (Array.isArray(pattern.errors)) {
@@ -177,7 +181,7 @@ function modifyPattern(ruleId, pattern) {
                 // Wrap the code by `<script>` tag.
                 if (Array.isArray(error.suggestions)) {
                     for (const suggestion of error.suggestions) {
-                        suggestion.output = wrapCode(suggestion.output)
+                        suggestion.output = wrapCode(ruleId, suggestion.output)
                     }
                 }
             }

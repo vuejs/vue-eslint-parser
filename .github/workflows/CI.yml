@@ -86,6 +86,8 @@ jobs:
         node-version: 16
     - name: Install Packages
       run: npm install
+    - name: Install ESLint v8
+      run: node scripts/ci-install-eslint 8.12.0
     - name: Build
       run: npm run -s build
     - name: Test
