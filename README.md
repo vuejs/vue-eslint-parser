@@ -212,6 +212,9 @@ For example to enable parsing of pug templates:
 }
 ```
 
+This option is only intended for plugin developers. **Be careful** when using this option directly, as it may change behaviour of rules you might have enabled.  
+If you just want **pug** support, use [eslint-plugin-vue-pug](https://github.com/rashfael/eslint-plugin-vue-pug) instead, which uses this option internally.
+
 See [implementing-custom-template-tokenizers.md](./docs/implementing-custom-template-tokenizers.md) for information on creating your own template tokenizer.
 
 ## 🎇 Usage for custom rules / plugins
