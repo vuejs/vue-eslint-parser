@@ -186,6 +186,16 @@ describe("Template AST", () => {
         const services = fs.existsSync(servicesPath)
             ? JSON.parse(fs.readFileSync(servicesPath, "utf8"))
             : null
+        if (parserOptions.templateTokenizer) {
+            parserOptions.templateTokenizer = Object.fromEntries(
+                Object.entries(parserOptions.templateTokenizer).map(
+                    ([key, value]) => [
+                        key,
+                        path.resolve(__dirname, "../", value),
+                    ],
+                ),
+            )
+        }
         const options = Object.assign(
             { filePath: sourcePath },
             PARSER_OPTIONS,

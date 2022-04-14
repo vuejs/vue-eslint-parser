@@ -194,6 +194,29 @@ If set to `true`, to parse expressions in `v-bind` CSS functions inside `<style>
 
 See also to [here](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0043-sfc-style-variables.md).
 
+### parserOptions.templateTokenizer
+
+You can use `parserOptions.templateTokenizer` property to specify custom tokenizers to parse `<template lang="...">` tags.
+
+For example to enable parsing of pug templates:
+
+```jsonc
+{
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "templateTokenizer": {
+             // template tokenizer for `<template lang="pug">`
+            "pug": "vue-eslint-parser-template-tokenizer-pug",
+        }
+    }
+}
+```
+
+This option is only intended for plugin developers. **Be careful** when using this option directly, as it may change behaviour of rules you might have enabled.  
+If you just want **pug** support, use [eslint-plugin-vue-pug](https://github.com/rashfael/eslint-plugin-vue-pug) instead, which uses this option internally.
+
+See [implementing-custom-template-tokenizers.md](./docs/implementing-custom-template-tokenizers.md) for information on creating your own template tokenizer.
+
 ## 🎇 Usage for custom rules / plugins
 
 - This parser provides `parserServices` to traverse `<template>`.

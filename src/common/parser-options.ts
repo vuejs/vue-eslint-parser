@@ -40,6 +40,8 @@ export interface ParserOptions {
 
     // others
     // [key: string]: any
+
+    templateTokenizer?: { [key: string]: string }
 }
 
 export function isSFCFile(parserOptions: ParserOptions) {

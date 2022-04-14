@@ -108,13 +108,14 @@ function parseAsSFC(code: string, options: ParserOptions) {
     const scripts = rootAST.children.filter(isScriptElement)
     const template = rootAST.children.find(isTemplateElement)
     const templateLang = getLang(template) || "html"
+    const hasTemplateTokenizer = options?.templateTokenizer?.[templateLang]
     const concreteInfo: AST.HasConcreteInfo = {
         tokens: rootAST.tokens,
         comments: rootAST.comments,
         errors: rootAST.errors,
     }
     const templateBody =
-        template != null && templateLang === "html"
+        template != null && (templateLang === "html" || hasTemplateTokenizer)
             ? Object.assign(template, concreteInfo)
             : undefined
 
