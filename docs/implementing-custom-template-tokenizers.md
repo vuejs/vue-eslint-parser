@@ -1,5 +1,7 @@
 # Implementing custom template tokenizers
 
+**This is an experimental feature. It may be changed or deleted without notice in the minor version.**
+
 A custom template tokenizer needs to create two types of tokens from the text it is given:
 
 - Low level [tokens](https://github.com/vuejs/vue-eslint-parser/blob/master/src/ast/tokens.ts), which can be of an [existing HTML type](https://github.com/vuejs/vue-eslint-parser/blob/master/src/html/tokenizer.ts#L59) or even new types.
