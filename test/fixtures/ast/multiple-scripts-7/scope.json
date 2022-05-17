@@ -138,6 +138,39 @@
                                 }
                             },
                             "init": true
+                        },
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 11
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 16
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 11
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 16
+                                    }
+                                }
+                            },
+                            "init": null,
+                            "vueUsedInTemplate": true
                         }
                     ]
                 },
@@ -178,7 +211,41 @@
                             "name": "MyComponent1"
                         }
                     ],
-                    "references": []
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "MyComponent1",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 7
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 19
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "MyComponent1",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 7
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 19
+                                    }
+                                }
+                            },
+                            "init": null,
+                            "vueUsedInTemplate": true
+                        }
+                    ]
                 },
                 {
                     "name": "MyComponent2",
@@ -217,7 +284,41 @@
                             "name": "MyComponent2"
                         }
                     ],
-                    "references": []
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "MyComponent2",
+                                "loc": {
+                                    "start": {
+                                        "line": 8,
+                                        "column": 7
+                                    },
+                                    "end": {
+                                        "line": 8,
+                                        "column": 19
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "MyComponent2",
+                                "loc": {
+                                    "start": {
+                                        "line": 8,
+                                        "column": 7
+                                    },
+                                    "end": {
+                                        "line": 8,
+                                        "column": 19
+                                    }
+                                }
+                            },
+                            "init": null,
+                            "vueUsedInTemplate": true
+                        }
+                    ]
                 },
                 {
                     "name": "a",

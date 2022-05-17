@@ -1,0 +1,104 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div>\n        {{ JSON.stringify({ test: 'test'}) }}\n    </div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>\n        {{ JSON.stringify({ test: 'test'}) }}\n    </div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{ JSON.stringify({ test: 'test'}) }}",
+                        "children": [
+                            {
+                                "type": "CallExpression",
+                                "text": "JSON.stringify({ test: 'test'})",
+                                "children": [
+                                    {
+                                        "type": "MemberExpression",
+                                        "text": "JSON.stringify",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "JSON",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "Identifier",
+                                                "text": "stringify",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "ObjectExpression",
+                                        "text": "{ test: 'test'}",
+                                        "children": [
+                                            {
+                                                "type": "Property",
+                                                "text": "test: 'test'",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "test",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Literal",
+                                                        "text": "'test'",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
