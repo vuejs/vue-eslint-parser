@@ -171,7 +171,7 @@ function analyzeUsedInTemplateVariables(
 
     function markVariableAsUsed(name: string) {
         const variable = scriptVariables.get(name)
-        if (!variable) {
+        if (!variable || variable.identifiers.length === 0) {
             return
         }
         if (markedVariables.has(name)) {
