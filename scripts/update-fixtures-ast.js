@@ -131,9 +131,6 @@ function scopeToJSON(scopeManager) {
                     reference.resolved.defs[0].name,
             ),
             init: reference.init || null,
-            vueUsedInTemplate: reference.vueUsedInTemplate
-                ? reference.vueUsedInTemplate
-                : undefined,
         }
     }
 
