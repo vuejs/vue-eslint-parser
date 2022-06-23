@@ -10,9 +10,13 @@ function parentMain() {
 
     describe("Loading espree from ESLint", () => {
         it("should load espree from the ESLint location.", (done) => {
-            spawn(process.execPath, [__filename, "--child1"], {
-                stdio: "inherit",
-            })
+            spawn(
+                process.execPath,
+                ["--require", "ts-node/register", __filename, "--child1"],
+                {
+                    stdio: "inherit",
+                },
+            )
                 .on("error", done)
                 .on("exit", (code) =>
                     code
@@ -21,9 +25,13 @@ function parentMain() {
                 )
         })
         it("should load espree from the ESLint location.", (done) => {
-            spawn(process.execPath, [__filename, "--child1"], {
-                stdio: "inherit",
-            })
+            spawn(
+                process.execPath,
+                ["--require", "ts-node/register", __filename, "--child1"],
+                {
+                    stdio: "inherit",
+                },
+            )
                 .on("error", done)
                 .on("exit", (code) =>
                     code
@@ -38,9 +46,13 @@ function parentMain() {
                 execSync("npm i", {
                     stdio: "inherit",
                 })
-                spawn(process.execPath, [__filename, "--child2"], {
-                    stdio: "inherit",
-                })
+                spawn(
+                    process.execPath,
+                    ["--require", "ts-node/register", __filename, "--child2"],
+                    {
+                        stdio: "inherit",
+                    },
+                )
                     .on("error", done)
                     .on("exit", (code) =>
                         code

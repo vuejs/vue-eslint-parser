@@ -1610,14 +1610,14 @@ export class Tokenizer {
         this.crStartOffset = this.offset - 1
         this.buffer = [AMPERSAND]
 
-        if (isWhitespace(cp) || cp === LESS_THAN_SIGN || cp === EOF) {
-            return this.reconsumeAs("CHARACTER_REFERENCE_END")
+        if (isDigit(cp) || isLetter(cp)) {
+            return this.reconsumeAs("NAMED_CHARACTER_REFERENCE")
         }
         if (cp === NUMBER_SIGN) {
             this.buffer.push(cp)
             return "NUMERIC_CHARACTER_REFERENCE"
         }
-        return this.reconsumeAs("NAMED_CHARACTER_REFERENCE")
+        return this.reconsumeAs("CHARACTER_REFERENCE_END")
     }
 
     /**
@@ -1818,7 +1818,7 @@ export class Tokenizer {
     }
 
     /**
-     * https://html.spec.whatwg.org/multipage/parsing.html#character-reference-end-state
+     * https://html.spec.whatwg.org/multipage/parsing.html#flush-code-points-consumed-as-a-character-reference
      * @param cp The current code point.
      * @returns The next state.
      */

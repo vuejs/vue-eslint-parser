@@ -1,0 +1,226 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <MyComponent foo=\"&\" />\n    <MyComponent foo='&' />\n    <MyComponent foo=& />\n    <MyComponent foo=& bar />\n    <MyComponent foo=&>{{a & b}}</MyComponent>\n    &\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<MyComponent foo=\"&\" />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<MyComponent foo=\"&\" />",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "foo=\"&\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"&\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<MyComponent foo='&' />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<MyComponent foo='&' />",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "foo='&'",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "'&'",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<MyComponent foo=& />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<MyComponent foo=& />",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "foo=&",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "&",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<MyComponent foo=& bar />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<MyComponent foo=& bar />",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "foo=&",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "&",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "bar",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "bar",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<MyComponent foo=&>{{a & b}}</MyComponent>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<MyComponent foo=&>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "foo=&",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "foo",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "&",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{a & b}}",
+                        "children": [
+                            {
+                                "type": "BinaryExpression",
+                                "text": "a & b",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "a",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "b",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</MyComponent>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    &\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
