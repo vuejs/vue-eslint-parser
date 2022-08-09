@@ -1,14 +1,25 @@
 import type { ESLintExtendedProgram, ESLintProgram } from "../ast"
 
+/**
+ * The type of basic ESLint custom parser.
+ * e.g. espree
+ */
 export type BasicParserObject<R = ESLintProgram> = {
     parse(code: string, options: any): R
     parseForESLint: undefined
 }
+/**
+ * The type of ESLint custom parser enhanced for ESLint.
+ * e.g. @babel/eslint-parser, @typescript-eslint/parser
+ */
 export type EnhancedParserObject<R = ESLintExtendedProgram> = {
     parseForESLint(code: string, options: any): R
     parse: undefined
 }
 
+/**
+ * The type of ESLint (custom) parsers.
+ */
 export type ParserObject<R1 = ESLintExtendedProgram, R2 = ESLintProgram> =
     | EnhancedParserObject<R1>
     | BasicParserObject<R2>
