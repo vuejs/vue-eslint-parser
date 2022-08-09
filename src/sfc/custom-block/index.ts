@@ -14,13 +14,12 @@ import { getEslintScope } from "../../common/eslint-scope"
 import { getEcmaVersionIfUseEspree } from "../../common/espree"
 import { fixErrorLocation, fixLocations } from "../../common/fix-locations"
 import type { LocationCalculatorForHtml } from "../../common/location-calculator"
+import type { ParserObject } from "../../common/parser-object"
+import { isEnhancedParserObject } from "../../common/parser-object"
 import type { ParserOptions } from "../../common/parser-options"
 import { DEFAULT_ECMA_VERSION } from "../../script-setup/parser-options"
 
-export interface ESLintCustomBlockParser {
-    parse(code: string, options: any): any
-    parseForESLint?(code: string, options: any): any
-}
+export type ESLintCustomBlockParser = ParserObject<any, any>
 
 export type CustomBlockContext = {
     getSourceCode(): SourceCode
@@ -181,10 +180,9 @@ function parseBlock(
     parser: ESLintCustomBlockParser,
     parserOptions: any,
 ): any {
-    const result: any =
-        typeof parser.parseForESLint === "function"
-            ? parser.parseForESLint(code, parserOptions)
-            : parser.parse(code, parserOptions)
+    const result = isEnhancedParserObject(parser)
+        ? parser.parseForESLint(code, parserOptions)
+        : parser.parse(code, parserOptions)
 
     if (result.ast != null) {
         return result

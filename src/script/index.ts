@@ -42,7 +42,6 @@ import {
     analyzeExternalReferences,
     analyzeVariablesAndExternalReferences,
 } from "./scope-analyzer"
-import type { ESLintCustomParser } from "../common/espree"
 import {
     getEcmaVersionIfUseEspree,
     getEspreeFromUser,
@@ -60,6 +59,8 @@ import {
 } from "../script-setup/parser-options"
 import { isScriptSetupElement } from "../common/ast-utils"
 import type { LinesAndColumns } from "../common/lines-and-columns"
+import type { ParserObject } from "../common/parser-object"
+import { isEnhancedParserObject, isParserObject } from "../common/parser-object"
 
 // [1] = aliases.
 // [2] = delimiter.
@@ -545,15 +546,16 @@ export function parseScript(
     code: string,
     parserOptions: ParserOptions,
 ): ESLintExtendedProgram {
-    const parser: ESLintCustomParser =
+    const parser: ParserObject =
         typeof parserOptions.parser === "string"
             ? loadParser(parserOptions.parser)
+            : isParserObject(parserOptions.parser)
+            ? parserOptions.parser
             : getEspreeFromEcmaVersion(parserOptions.ecmaVersion)
 
-    const result: any =
-        typeof parser.parseForESLint === "function"
-            ? parser.parseForESLint(code, parserOptions)
-            : parser.parse(code, parserOptions)
+    const result: any = isEnhancedParserObject(parser)
+        ? parser.parseForESLint(code, parserOptions)
+        : parser.parse(code, parserOptions)
 
     if (result.ast != null) {
         return result

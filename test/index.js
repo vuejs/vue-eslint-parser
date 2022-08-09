@@ -308,6 +308,46 @@ describe("Basic tests", () => {
                 assert.deepStrictEqual(report[0].messages, [])
                 assert.deepStrictEqual(report[1].messages, [])
             })
+
+            it("should notify no error with parser object with '@typescript-eslint/parser'", async () => {
+                const cli = new ESLint({
+                    cwd: FIXTURE_DIR,
+                    overrideConfig: {
+                        env: { es6: true, node: true },
+                        parser: PARSER_PATH,
+                        parserOptions: {
+                            parser: require("@typescript-eslint/parser"),
+                        },
+                        rules: { semi: ["error", "never"] },
+                    },
+                    useEslintrc: false,
+                })
+                const report = await cli.lintFiles(["typed.js"])
+                const messages = report[0].messages
+
+                assert.deepStrictEqual(messages, [])
+            })
+
+            it("should notify no error with multiple parser object with '@typescript-eslint/parser'", async () => {
+                const cli = new ESLint({
+                    cwd: FIXTURE_DIR,
+                    overrideConfig: {
+                        env: { es6: true, node: true },
+                        parser: PARSER_PATH,
+                        parserOptions: {
+                            parser: {
+                                ts: require("@typescript-eslint/parser"),
+                            },
+                        },
+                        rules: { semi: ["error", "never"] },
+                    },
+                    useEslintrc: false,
+                })
+                const report = await cli.lintFiles(["typed.ts", "typed.tsx"])
+
+                assert.deepStrictEqual(report[0].messages, [])
+                assert.deepStrictEqual(report[1].messages, [])
+            })
         }
     })
 

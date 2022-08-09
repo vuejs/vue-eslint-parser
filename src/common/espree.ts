@@ -1,4 +1,3 @@
-import type { ESLintExtendedProgram, ESLintProgram } from "../ast"
 import type { ParserOptions } from "../common/parser-options"
 import { getLinterRequire } from "./linter-require"
 // @ts-expect-error -- ignore
@@ -6,20 +5,9 @@ import * as dependencyEspree from "espree"
 import { lte, lt } from "semver"
 import { createRequire } from "./create-require"
 import path from "path"
+import type { BasicParserObject } from "./parser-object"
 
-/**
- * The interface of a result of ESLint custom parser.
- */
-export type ESLintCustomParserResult = ESLintProgram | ESLintExtendedProgram
-
-/**
- * The interface of ESLint custom parsers.
- */
-export interface ESLintCustomParser {
-    parse(code: string, options: any): ESLintCustomParserResult
-    parseForESLint?(code: string, options: any): ESLintCustomParserResult
-}
-type Espree = ESLintCustomParser & {
+type Espree = BasicParserObject & {
     latestEcmaVersion?: number
     version: string
 }
