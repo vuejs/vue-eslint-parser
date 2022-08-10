@@ -1,5 +1,6 @@
 import * as path from "path"
 import type { VDocumentFragment } from "../ast"
+import type { CustomTemplateTokenizerConstructor } from "../html/custom-tokenizer"
 import { getLang, isScriptElement, isScriptSetupElement } from "./ast-utils"
 import type { ParserObject } from "./parser-object"
 import { isParserObject } from "./parser-object"
@@ -47,7 +48,10 @@ export interface ParserOptions {
     // others
     // [key: string]: any
 
-    templateTokenizer?: { [key: string]: string }
+    templateTokenizer?: Record<
+        string,
+        string | CustomTemplateTokenizerConstructor | undefined
+    >
 }
 
 export function isSFCFile(parserOptions: ParserOptions) {
