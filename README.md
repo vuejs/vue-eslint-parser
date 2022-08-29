@@ -196,6 +196,8 @@ See also to [here](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0043-sf
 
 ### parserOptions.templateTokenizer
 
+**This is an experimental feature. It may be changed or deleted without notice in the minor version.**
+
 You can use `parserOptions.templateTokenizer` property to specify custom tokenizers to parse `<template lang="...">` tags.
 
 For example to enable parsing of pug templates:
