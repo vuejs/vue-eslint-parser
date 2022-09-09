@@ -1,10 +1,17 @@
 import * as path from "path"
 import type { VDocumentFragment } from "../ast"
+import type { CustomTemplateTokenizerConstructor } from "../html/custom-tokenizer"
 import { getLang, isScriptElement, isScriptSetupElement } from "./ast-utils"
+import type { ParserObject } from "./parser-object"
+import { isParserObject } from "./parser-object"
 
 export interface ParserOptions {
     // vue-eslint-parser options
-    parser?: boolean | string
+    parser?:
+        | boolean
+        | string
+        | ParserObject
+        | Record<string, string | ParserObject | undefined>
     vueFeatures?: {
         interpolationAsNonHTML?: boolean // default true
         filter?: boolean // default true
@@ -41,7 +48,10 @@ export interface ParserOptions {
     // others
     // [key: string]: any
 
-    templateTokenizer?: { [key: string]: string }
+    templateTokenizer?: Record<
+        string,
+        string | CustomTemplateTokenizerConstructor | undefined
+    >
 }
 
 export function isSFCFile(parserOptions: ParserOptions) {
@@ -55,9 +65,17 @@ export function isSFCFile(parserOptions: ParserOptions) {
  * Gets the script parser name from the given parser lang.
  */
 export function getScriptParser(
-    parser: boolean | string | Record<string, string | undefined> | undefined,
+    parser:
+        | boolean
+        | string
+        | ParserObject
+        | Record<string, string | ParserObject | undefined>
+        | undefined,
     getParserLang: () => string | null | Iterable<string | null>,
-): string | undefined {
+): string | ParserObject | undefined {
+    if (isParserObject(parser)) {
+        return parser
+    }
     if (parser && typeof parser === "object") {
         const parserLang = getParserLang()
         const parserLangs =
@@ -68,7 +86,10 @@ export function getScriptParser(
                 : parserLang
         for (const lang of parserLangs) {
             const parserForLang = lang && parser[lang]
-            if (typeof parserForLang === "string") {
+            if (
+                typeof parserForLang === "string" ||
+                isParserObject(parserForLang)
+            ) {
                 return parserForLang
             }
         }

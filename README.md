@@ -106,6 +106,26 @@ You can also specify an object and change the parser separately for `<script lan
 }
 ```
 
+When using JavaScript configuration (`.eslintrc.js`), you can also give the parser object directly.
+
+```js
+const tsParser = require("@typescript-eslint/parser")
+const espree = require("espree")
+
+module.exports = {
+    parser: "vue-eslint-parser",
+    parserOptions: {
+        // Single parser
+        parser: tsParser,
+        // Multiple parser
+        parser: {
+            js: espree,
+            ts: tsParser,
+        }
+    },
+}
+```
+
 If the `parserOptions.parser` is `false`, the `vue-eslint-parser` skips parsing `<script>` tags completely.
 This is useful for people who use the language ESLint community doesn't provide custom parser implementation.
 

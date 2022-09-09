@@ -54,6 +54,10 @@ import {
 } from "../common/parser-options"
 import sortedIndexBy from "lodash/sortedIndexBy"
 import sortedLastIndexBy from "lodash/sortedLastIndexBy"
+import type {
+    CustomTemplateTokenizer,
+    CustomTemplateTokenizerConstructor,
+} from "./custom-tokenizer"
 
 const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
 const DT_DD = /^d[dt]$/u
@@ -167,7 +171,7 @@ function propagateEndLocation(node: VDocumentFragment | VElement): void {
  * This is not following to the HTML spec completely because Vue.js template spec is pretty different to HTML.
  */
 export class Parser {
-    private tokenizer: IntermediateTokenizer
+    private tokenizer: IntermediateTokenizer | CustomTemplateTokenizer
     private locationCalculator: LocationCalculatorForHtml
     private baseParserOptions: ParserOptions
     private isSFC: boolean
@@ -480,12 +484,17 @@ export class Parser {
     /**
      * Process the given template text token with a configured template tokenizer, based on language.
      * @param token The template text token to process.
-     * @param lang The template language the text token should be parsed as.
+     * @param templateTokenizerOption The template tokenizer option.
      */
-    private processTemplateText(token: Text, lang: string): void {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const TemplateTokenizer = require(this.baseParserOptions
-            .templateTokenizer![lang])
+    private processTemplateText(
+        token: Text,
+        templateTokenizerOption: string | CustomTemplateTokenizerConstructor,
+    ): void {
+        const TemplateTokenizer: CustomTemplateTokenizerConstructor =
+            typeof templateTokenizerOption === "function"
+                ? templateTokenizerOption
+                : // eslint-disable-next-line @typescript-eslint/no-require-imports
+                  require(templateTokenizerOption)
         const templateTokenizer = new TemplateTokenizer(
             token.value,
             this.text,
@@ -696,13 +705,13 @@ export class Parser {
                 (a) => a.key.name === "lang",
             )
             const lang = (langAttribute?.value as VLiteral)?.value
-            if (
-                lang &&
-                lang !== "html" &&
-                this.baseParserOptions.templateTokenizer?.[lang]
-            ) {
-                this.processTemplateText(token, lang)
-                return
+            if (lang && lang !== "html") {
+                const templateTokenizerOption =
+                    this.baseParserOptions.templateTokenizer?.[lang]
+                if (templateTokenizerOption) {
+                    this.processTemplateText(token, templateTokenizerOption)
+                    return
+                }
             }
         }
         parent.children.push({
