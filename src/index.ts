@@ -25,6 +25,7 @@ import {
 import { parseStyleElements } from "./style"
 import { analyzeScope } from "./script/scope-analyzer"
 import { analyzeScriptSetupScope } from "./script-setup/scope-analyzer"
+import { createTSESLintParserForVue } from "./ts-parser"
 
 const STARTS_WITH_LT = /^\s*</u
 
@@ -91,6 +92,7 @@ export function parse(code: string, options: any): AST.ESLintProgram {
 }
 
 export { AST }
+export { createTSESLintParserForVue }
 
 function parseAsSFC(code: string, options: ParserOptions) {
     const optionsForTemplate = {
