@@ -1,0 +1,84 @@
+name: Bug report
+description: Create a report to help us improve.
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: checkboxes
+    id: sanity-checks
+    attributes:
+      label: Before You File a Bug Report Please Confirm You Have Done The Following...
+      description: If any of these required steps are not taken, we may not be able to review your issue. Help us to help you!
+      options:
+        - label: I'm using [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue).
+        - label: I'm sure the problem is a parser problem. (If you are not sure, search for the issue in [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue) repo and open the issue in [eslint-plugin-vue](https://github.com/vuejs/eslint-plugin-vue) repo if there is no solution.
+          required: true
+        - label: I have tried restarting my IDE and the issue persists.
+          required: true
+        - label: I have updated to the latest version of the packages.
+          required: true
+  - type: input
+    id: eslint-version
+    attributes:
+      label: What version of ESLint are you using?
+      placeholder: 0.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: eslint-plugin-vue-version
+    attributes:
+      label: What version of `eslint-plugin-vue` and ` vue-eslint-parser` are you using?
+      value: |
+        - vue-eslint-parser@0.0.0
+        - eslint-plugin-vue@0.0.0
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What did you do?
+      description: |
+        Please include a *minimal* reproduction case.
+      value: |
+        <details>
+        <summary>Configuration</summary>
+
+        ```
+        <!-- Paste your configuration here -->
+        ```
+        </details>
+
+        ```vue
+        <!-- Paste your code here -->
+        ```
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What did you expect to happen?
+      description: |
+        You can use Markdown in this field.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: What actually happened?
+      description: |
+        Please copy-paste the actual ESLint output. You can use Markdown in this field.
+    validations:
+      required: true
+  - type: textarea
+    id: bug-reproduction
+    attributes:
+      label: Link to Minimal Reproducible Example
+      description: |
+        Create a minimal reproduction of the problem. **A minimal reproduction is required** so that others can help debug your issue. **If a report has no reproduction, it will be closed.**  
+        [Why Reproductions are Required](https://antfu.me/posts/why-reproductions-are-required)
+      placeholder: |
+        https://github.com/[your]/[repo]
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional comments
