@@ -3,7 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import sortedLastIndex from "lodash/sortedLastIndex"
+import sortedLastIndex from "lodash.sortedlastindex"
 import type { Location } from "../ast"
 import { LinesAndColumns } from "./lines-and-columns"
 

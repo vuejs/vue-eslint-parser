@@ -3,9 +3,9 @@
  */
 import EventEmitter from "events"
 import esquery, {ESQueryOptions, Selector} from "esquery"
-import union from "lodash/union"
-import intersection from "lodash/intersection"
-import memoize from "lodash/memoize"
+import union from "lodash.union"
+import intersection from "lodash.intersection"
+import memoize from "lodash.memoize"
 import {Node} from "../ast"
 
 interface NodeSelector {

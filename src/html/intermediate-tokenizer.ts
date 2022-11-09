@@ -4,7 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import assert from "assert"
-import last from "lodash/last"
+import last from "lodash.last"
 import type {
     ErrorCode,
     HasLocation,

@@ -4,8 +4,8 @@
  * See LICENSE file in root directory for full license.
  */
 import assert from "assert"
-import last from "lodash/last"
-import findLastIndex from "lodash/findLastIndex"
+import last from "lodash.last"
+import findLastIndex from "lodash.findlastindex"
 import type {
     ErrorCode,
     HasLocation,
@@ -52,8 +52,8 @@ import {
     getScriptParser,
     getParserLangFromSFC,
 } from "../common/parser-options"
-import sortedIndexBy from "lodash/sortedIndexBy"
-import sortedLastIndexBy from "lodash/sortedLastIndexBy"
+import sortedIndexBy from "lodash.sortedindexby"
+import sortedLastIndexBy from "lodash.sortedlastindexby"
 import type {
     CustomTemplateTokenizer,
     CustomTemplateTokenizerConstructor,

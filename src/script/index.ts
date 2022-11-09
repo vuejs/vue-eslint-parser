@@ -3,9 +3,9 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import first from "lodash/first"
-import last from "lodash/last"
-import sortedIndexBy from "lodash/sortedIndexBy"
+import first from "lodash.first"
+import last from "lodash.last"
+import sortedIndexBy from "lodash.sortedindexby"
 import type {
     ESLintArrayExpression,
     ESLintArrayPattern,
