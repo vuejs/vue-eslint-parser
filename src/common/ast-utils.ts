@@ -3,6 +3,8 @@ import type {
     VDirective,
     VDocumentFragment,
     VElement,
+    VExpressionContainer,
+    VGenericTypeParameterDeclarationExpression,
     VNode,
 } from "../ast"
 
@@ -79,4 +81,36 @@ export function getLang(element: VElement | undefined): string | null {
     const langAttr = element && element.startTag.attributes.find(isLang)
     const lang = langAttr && langAttr.value && langAttr.value.value
     return lang || null
+}
+/**
+ * Check whether the given script element has `lang="ts"`.
+ * @param element The element to check.
+ * @returns The given script element has `lang="ts"`.
+ */
+export function isTSLang(element: VElement | undefined): boolean {
+    const lang = getLang(element)
+    // See https://github.com/vuejs/core/blob/28e30c819df5e4fc301c98f7be938fa13e8be3bc/packages/compiler-sfc/src/compileScript.ts#L179
+    return lang === "ts" || lang === "tsx"
+}
+
+export type GenericDirective = VDirective & {
+    value: VExpressionContainer & {
+        expression: VGenericTypeParameterDeclarationExpression
+    }
+}
+
+/**
+ * Find `generic` directive from given `<script>` element
+ */
+export function findGenericDirective(
+    element: VElement,
+): GenericDirective | null {
+    return (
+        element.startTag.attributes.find(
+            (attr): attr is GenericDirective =>
+                attr.directive &&
+                attr.value?.expression?.type ===
+                    "VGenericTypeParameterDeclarationExpression",
+        ) || null
+    )
 }

@@ -55,11 +55,12 @@ describe("services.getDocumentFragment", () => {
             .readdirSync(path.join(ROOT, name))
             .find((f) => f.startsWith("source."))
         const sourcePath = path.join(ROOT, `${name}/${sourceFileName}`)
-        const optionsPath = path.join(ROOT, `${name}/parser-options.json`)
+        const optionsPath = [
+            path.join(ROOT, `${name}/parser-options.json`),
+            path.join(ROOT, `${name}/parser-options.js`),
+        ].find((fp) => fs.existsSync(fp))
         const source = fs.readFileSync(sourcePath, "utf8")
-        const parserOptions = fs.existsSync(optionsPath)
-            ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
-            : {}
+        const parserOptions = optionsPath ? require(optionsPath) : {}
         const options = Object.assign(
             { filePath: sourcePath },
             PARSER_OPTIONS,

@@ -58,6 +58,7 @@ import type {
     CustomTemplateTokenizer,
     CustomTemplateTokenizerConstructor,
 } from "./custom-tokenizer"
+import { isScriptSetupElement, isTSLang } from "../common/ast-utils"
 
 const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
 const DT_DD = /^d[dt]$/u
@@ -178,8 +179,10 @@ export class Parser {
     private document: VDocumentFragment
     private elementStack: VElement[]
     private vPreElement: VElement | null
-    private postProcessesForScript: ((parserOptions: ParserOptions) => void)[] =
-        []
+    private postProcessesForScript: ((
+        htmlParserOptions: ParserOptions,
+        scriptParserOptions: ParserOptions,
+    ) => void)[] = []
 
     /**
      * The source code text.
@@ -290,7 +293,7 @@ export class Parser {
 
         const doc = this.document
 
-        const parserOptions = {
+        const htmlParserOptions = {
             ...this.baseParserOptions,
             parser: getScriptParser(
                 this.baseParserOptions.parser,
@@ -300,8 +303,14 @@ export class Parser {
                 },
             ),
         }
+        const scriptParserOptions = {
+            ...this.baseParserOptions,
+            parser: getScriptParser(this.baseParserOptions.parser, () =>
+                getParserLangFromSFC(doc),
+            ),
+        }
         for (const proc of this.postProcessesForScript) {
-            proc(parserOptions)
+            proc(htmlParserOptions, scriptParserOptions)
         }
         this.postProcessesForScript = []
 
@@ -449,24 +458,18 @@ export class Parser {
      * @param namespace The current namespace.
      */
     private processAttribute(node: VAttribute, namespace: Namespace): void {
-        const tagName = this.getTagName(node.parent.parent)
-        const attrName = this.getTagName(node.key)
-
-        if (
-            (this.expressionEnabled ||
-                (attrName === "v-pre" && !this.isInVPreElement)) &&
-            (DIRECTIVE_NAME.test(attrName) ||
-                attrName === "slot-scope" ||
-                (tagName === "template" && attrName === "scope"))
-        ) {
-            this.postProcessesForScript.push((parserOptions) => {
-                convertToDirective(
-                    this.text,
-                    parserOptions,
-                    this.locationCalculator,
-                    node,
-                )
-            })
+        if (this.needConvertToDirective(node)) {
+            this.postProcessesForScript.push(
+                (parserOptions, scriptParserOptions) => {
+                    convertToDirective(
+                        this.text,
+                        parserOptions,
+                        scriptParserOptions,
+                        this.locationCalculator,
+                        node,
+                    )
+                },
+            )
             return
         }
 
@@ -479,6 +482,35 @@ export class Parser {
         } else if (key === "xmlns:xlink" && value !== NS.XLink) {
             this.reportParseError(node, "x-invalid-namespace")
         }
+    }
+    /**
+     * Checks whether the given attribute node is need convert to directive.
+     * @param node The node to check
+     */
+    private needConvertToDirective(node: VAttribute) {
+        const element = node.parent.parent
+        const tagName = this.getTagName(element)
+        const attrName = this.getTagName(node.key)
+
+        if (
+            attrName === "generic" &&
+            element.parent.type === "VDocumentFragment" &&
+            isScriptSetupElement(element) &&
+            isTSLang(element)
+        ) {
+            return true
+        }
+        const expressionEnabled =
+            this.expressionEnabled ||
+            (attrName === "v-pre" && !this.isInVPreElement)
+        if (!expressionEnabled) {
+            return false
+        }
+        return (
+            DIRECTIVE_NAME.test(attrName) ||
+            attrName === "slot-scope" ||
+            (tagName === "template" && attrName === "scope")
+        )
     }
 
     /**

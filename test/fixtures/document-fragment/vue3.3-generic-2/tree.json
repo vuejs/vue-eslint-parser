@@ -1,0 +1,176 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<script>\ntype Foo = number | string\n</script>\n<script setup lang=\"ts\" generic=\"T extends Foo\">\nconst p = defineProps<{foo:T}>()\nconst foo = p.foo\nconsole.log(foo)\n</script>\n<template>\n{{foo}}\n</template>",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<script>\ntype Foo = number | string\n</script>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<script>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\ntype Foo = number | string\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</script>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<script setup lang=\"ts\" generic=\"T extends Foo\">\nconst p = defineProps<{foo:T}>()\nconst foo = p.foo\nconsole.log(foo)\n</script>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<script setup lang=\"ts\" generic=\"T extends Foo\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "setup",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "setup",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "lang=\"ts\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "lang",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"ts\"",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "generic=\"T extends Foo\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "generic",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "generic",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"T extends Foo\"",
+                                        "children": [
+                                            {
+                                                "type": "VGenericTypeParameterDeclarationExpression",
+                                                "text": "T extends Foo",
+                                                "children": [
+                                                    {
+                                                        "type": "TSTypeParameter",
+                                                        "text": "T extends Foo",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "T",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "TSTypeReference",
+                                                                "text": "Foo",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "Foo",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\nconst p = defineProps<{foo:T}>()\nconst foo = p.foo\nconsole.log(foo)\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</script>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<template>\n{{foo}}\n</template>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<template>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{foo}}",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "foo",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</template>",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]

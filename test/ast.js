@@ -173,13 +173,14 @@ function validateParent(source, parserOptions) {
 describe("Template AST", () => {
     for (const name of TARGETS) {
         const sourcePath = path.join(ROOT, `${name}/source.vue`)
-        const optionsPath = path.join(ROOT, `${name}/parser-options.json`)
+        const optionsPath = [
+            path.join(ROOT, `${name}/parser-options.json`),
+            path.join(ROOT, `${name}/parser-options.js`),
+        ].find((fp) => fs.existsSync(fp))
         const requirementsPath = path.join(ROOT, `${name}/requirements.json`)
         const servicesPath = path.join(ROOT, `${name}/services.json`)
         const source = fs.readFileSync(sourcePath, "utf8")
-        const parserOptions = fs.existsSync(optionsPath)
-            ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
-            : {}
+        const parserOptions = optionsPath ? require(optionsPath) : {}
         const requirements = fs.existsSync(requirementsPath)
             ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
             : {}

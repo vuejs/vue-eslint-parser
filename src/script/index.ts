@@ -31,6 +31,8 @@ import type {
     VOnExpression,
     VSlotScopeExpression,
     OffsetRange,
+    VGenericTypeParameterDeclarationExpression,
+    ESLintClassExpression,
 } from "../ast"
 import { ParseError } from "../ast"
 import { debug } from "../common/debug"
@@ -61,6 +63,10 @@ import { isScriptSetupElement } from "../common/ast-utils"
 import type { LinesAndColumns } from "../common/lines-and-columns"
 import type { ParserObject } from "../common/parser-object"
 import { isEnhancedParserObject, isParserObject } from "../common/parser-object"
+// eslint-disable-next-line node/no-extraneous-import -- ignore
+import type { TSESTree } from "@typescript-eslint/utils"
+import type { GenericProcessInfo } from "./generic"
+import { extractGeneric } from "./generic"
 
 // [1] = aliases.
 // [2] = delimiter.
@@ -587,6 +593,7 @@ export function parseScriptElement(
                   originalParserOptions.ecmaVersion || DEFAULT_ECMA_VERSION,
           }
 
+    let generic: GenericProcessInfo | null = null
     let code: string
     let offset: number
     const textNode = node.children[0]
@@ -594,6 +601,14 @@ export function parseScriptElement(
         const [scriptStartOffset, scriptEndOffset] = textNode.range
         code = sfcCode.slice(scriptStartOffset, scriptEndOffset)
         offset = scriptStartOffset
+        generic = extractGeneric(node)
+        if (generic) {
+            const defineTypesCode = `${generic.defineTypes
+                .map((e) => e.define)
+                .join(";")};\n`
+            code = defineTypesCode + code
+            offset -= defineTypesCode.length
+        }
     } else {
         code = ""
         offset = node.startTag.range[1]
@@ -601,7 +616,45 @@ export function parseScriptElement(
     const locationCalculator =
         linesAndColumns.createOffsetLocationCalculator(offset)
     const result = parseScriptFragment(code, locationCalculator, parserOptions)
+    if (generic) {
+        generic.postprocess({
+            result,
+            isRemoveTarget(nodeOrToken) {
+                return nodeOrToken.range[1] <= textNode.range[0]
+            },
+            getTypeDefScope(scopeManager) {
+                return (
+                    scopeManager.globalScope.childScopes.find(
+                        (s) => s.type === "module",
+                    ) ?? scopeManager.globalScope
+                )
+            },
+        })
+        const startToken = [
+            result.ast.body[0],
+            result.ast.tokens?.[0],
+            result.ast.comments?.[0],
+        ]
+            .sort((a, b) =>
+                a == null
+                    ? b == null
+                        ? 0
+                        : 1
+                    : b == null
+                    ? -1
+                    : a.range[0] - b.range[0],
+            )
+            .find((t) => Boolean(t))
 
+        // Restore Program node location
+        if (startToken && result.ast.range[0] !== startToken.range[0]) {
+            result.ast.range[0] = startToken.range[0]
+            if (result.ast.start != null) {
+                result.ast.start = startToken.start
+            }
+            result.ast.loc.start = { ...startToken.loc.start }
+        }
+    }
     // Needs the tokens of start/end tags for `lines-around-*` rules to work
     // correctly.
     if (result.ast.tokens != null) {
@@ -769,6 +822,7 @@ export function parseVForExpression(
         const comments = ast.comments || []
         const scope = analyzeVariablesAndExternalReferences(
             result,
+            "v-for",
             parserOptions,
         )
         const references = scope.references
@@ -1160,6 +1214,7 @@ export function parseSlotScopeExpression(
         const comments = ast.comments || []
         const scope = analyzeVariablesAndExternalReferences(
             result,
+            "scope",
             parserOptions,
         )
         const references = scope.references
@@ -1183,6 +1238,89 @@ export function parseSlotScopeExpression(
         tokens.shift()
         tokens.shift()
         tokens.shift()
+        tokens.pop()
+        tokens.pop()
+        tokens.pop()
+
+        return { expression, tokens, comments, references, variables }
+    } catch (err) {
+        return throwErrorAsAdjustingOutsideOfCode(err, code, locationCalculator)
+    }
+}
+
+/**
+ * Parse the source code of `generic` directive.
+ * @param code The source code of `generic` directive.
+ * @param locationCalculator The location calculator for the inline script.
+ * @param parserOptions The parser options.
+ * @returns The result of parsing.
+ */
+export function parseGenericDefinition(
+    code: string,
+    locationCalculator: LocationCalculatorForHtml,
+    parserOptions: ParserOptions,
+): ExpressionParseResult<VGenericTypeParameterDeclarationExpression> {
+    debug('[script] parse generic definition: "void function<%s>() {}"', code)
+
+    if (code.trim() === "") {
+        throwEmptyError(locationCalculator, "a type parameter")
+    }
+
+    try {
+        const result = parseScriptFragment(
+            `void function<${code}>(){}`,
+            locationCalculator.getSubCalculatorShift(-14),
+            { ...parserOptions, project: undefined },
+        )
+        const { ast } = result
+        const statement = ast.body[0] as ESLintExpressionStatement
+        const rawExpression = statement.expression as ESLintUnaryExpression
+        const classDecl = rawExpression.argument as ESLintClassExpression
+        const typeParameters = (classDecl as TSESTree.ClassExpression)
+            .typeParameters
+        const params = typeParameters?.params
+
+        if (!params || params.length === 0) {
+            return {
+                expression: null,
+                tokens: [],
+                comments: [],
+                references: [],
+                variables: [],
+            }
+        }
+
+        const tokens = ast.tokens || []
+        const comments = ast.comments || []
+        const scope = analyzeVariablesAndExternalReferences(
+            result,
+            "generic",
+            parserOptions,
+        )
+        const references = scope.references
+        const variables = scope.variables
+        const firstParam = first(params)!
+        const lastParam = last(params)!
+        const expression: VGenericTypeParameterDeclarationExpression = {
+            type: "VGenericTypeParameterDeclarationExpression",
+            range: [firstParam.range[0], lastParam.range[1]],
+            loc: { start: firstParam.loc.start, end: lastParam.loc.end },
+            parent: DUMMY_PARENT,
+            params,
+            rawParams: code,
+        }
+
+        // Modify parent.
+        for (const param of params) {
+            ;(param as any).parent = expression
+        }
+
+        // Remove `void` `function` `<` `>` `(` `)` `{` `}`.
+        tokens.shift()
+        tokens.shift()
+        tokens.shift()
+        tokens.pop()
+        tokens.pop()
         tokens.pop()
         tokens.pop()
         tokens.pop()

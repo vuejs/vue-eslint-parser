@@ -11,7 +11,7 @@
 
 const fs = require("fs")
 const path = require("path")
-const parser = require("../")
+const parser = require("../src")
 const escope = require("eslint-scope")
 const semver = require("semver")
 
@@ -222,16 +222,17 @@ for (const name of TARGETS) {
         continue
     }
     const sourcePath = path.join(ROOT, `${name}/source.vue`)
-    const optionsPath = path.join(ROOT, `${name}/parser-options.json`)
+    const optionsPath = [
+        path.join(ROOT, `${name}/parser-options.json`),
+        path.join(ROOT, `${name}/parser-options.js`),
+    ].find((fp) => fs.existsSync(fp))
     const astPath = path.join(ROOT, `${name}/ast.json`)
     const tokenRangesPath = path.join(ROOT, `${name}/token-ranges.json`)
     const treePath = path.join(ROOT, `${name}/tree.json`)
     const scopePath = path.join(ROOT, `${name}/scope.json`)
     const servicesPath = path.join(ROOT, `${name}/services.json`)
     const source = fs.readFileSync(sourcePath, "utf8")
-    const parserOptions = fs.existsSync(optionsPath)
-        ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
-        : {}
+    const parserOptions = optionsPath ? require(optionsPath) : {}
     const options = Object.assign(
         { filePath: sourcePath },
         PARSER_OPTIONS,

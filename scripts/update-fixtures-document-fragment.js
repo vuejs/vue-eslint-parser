@@ -6,7 +6,7 @@
 
 const fs = require("fs")
 const path = require("path")
-const parser = require("../")
+const parser = require("../src")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -53,14 +53,15 @@ for (const name of TARGETS) {
         .readdirSync(path.join(ROOT, name))
         .find((f) => f.startsWith("source."))
     const sourcePath = path.join(ROOT, `${name}/${sourceFileName}`)
-    const optionsPath = path.join(ROOT, `${name}/parser-options.json`)
+    const optionsPath = [
+        path.join(ROOT, `${name}/parser-options.json`),
+        path.join(ROOT, `${name}/parser-options.js`),
+    ].find((fp) => fs.existsSync(fp))
     const source = fs.readFileSync(sourcePath, "utf8")
     const options = Object.assign(
         { filePath: sourcePath },
         PARSER_OPTIONS,
-        fs.existsSync(optionsPath)
-            ? JSON.parse(fs.readFileSync(optionsPath, "utf8"))
-            : {}
+        optionsPath ? require(optionsPath) : {},
     )
     const result = parser.parseForESLint(source, options)
     const actual = result.services.getDocumentFragment()
@@ -72,7 +73,7 @@ for (const name of TARGETS) {
     console.log("Update:", name)
 
     const tokenRanges = getAllTokens(actual).map((t) =>
-        source.slice(t.range[0], t.range[1])
+        source.slice(t.range[0], t.range[1]),
     )
     const tree = getTree(source, actual)
 
@@ -106,7 +107,7 @@ function getTree(source, fgAst) {
                     type: node.type,
                     text: source.slice(node.range[0], node.range[1]),
                     children: [],
-                })
+                }),
             )
         },
         leaveNode() {

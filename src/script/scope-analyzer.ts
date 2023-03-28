@@ -72,10 +72,13 @@ function transformReference(reference: escopeTypes.Reference): Reference {
  * @param variable The source variable object.
  * @returns The transformed variable object.
  */
-function transformVariable(variable: escopeTypes.Variable): Variable {
+function transformVariable(
+    variable: escopeTypes.Variable,
+    kind: Variable["kind"],
+): Variable {
     const ret: Variable = {
         id: variable.defs[0].name as ESLintIdentifier,
-        kind: variable.scope.type === "for" ? "v-for" : "scope",
+        kind,
         references: [],
     }
     Object.defineProperty(ret, "references", { enumerable: false })
@@ -147,13 +150,14 @@ export function analyzeExternalReferences(
  */
 export function analyzeVariablesAndExternalReferences(
     parserResult: ParserResult,
+    kind: Variable["kind"],
     parserOptions: ParserOptions,
 ): { variables: Variable[]; references: Reference[] } {
     const scope = analyze(parserResult, parserOptions)
     return {
         variables: getForScope(scope)
             .variables.filter(hasDefinition)
-            .map(transformVariable),
+            .map((v) => transformVariable(v, kind)),
         references: scope.through.filter(isUnique).map(transformReference),
     }
 }

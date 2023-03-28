@@ -1,0 +1,1576 @@
+{
+    "type": "global",
+    "variables": [
+        {
+            "name": "ClassMemberDecoratorContext",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "DecoratorContext",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ClassDecoratorContext",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ClassMethodDecoratorContext",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ClassGetterDecoratorContext",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ClassSetterDecoratorContext",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ClassAccessorDecoratorContext",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ClassAccessorDecoratorTarget",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ClassAccessorDecoratorResult",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ClassFieldDecoratorContext",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ClassDecorator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "PropertyDecorator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "MethodDecorator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ParameterDecorator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Symbol",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "PropertyKey",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "PropertyDescriptor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "PropertyDescriptorMap",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Object",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ObjectConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Function",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "FunctionConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ThisParameterType",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "OmitThisParameter",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "CallableFunction",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "NewableFunction",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "IArguments",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "String",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "StringConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Boolean",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "BooleanConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Number",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "NumberConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "TemplateStringsArray",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ImportMeta",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ImportCallOptions",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ImportAssertions",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Math",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Date",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "DateConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "RegExpMatchArray",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "RegExpExecArray",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "RegExp",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "RegExpConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Error",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ErrorConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "EvalError",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "EvalErrorConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "RangeError",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "RangeErrorConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ReferenceError",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ReferenceErrorConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "SyntaxError",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "SyntaxErrorConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "TypeError",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "TypeErrorConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "URIError",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "URIErrorConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "JSON",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ReadonlyArray",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ConcatArray",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Array",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "TypedPropertyDescriptor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "PromiseConstructorLike",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "PromiseLike",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Promise",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Awaited",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ArrayLike",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Partial",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Required",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Readonly",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Pick",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Record",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Exclude",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Extract",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Omit",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "NonNullable",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Parameters",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ConstructorParameters",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ReturnType",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "InstanceType",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uppercase",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Lowercase",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Capitalize",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uncapitalize",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ThisType",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ArrayBuffer",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ArrayBufferTypes",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ArrayBufferLike",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ArrayBufferConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ArrayBufferView",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "DataView",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "DataViewConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Int8Array",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Int8ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uint8Array",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uint8ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uint8ClampedArray",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uint8ClampedArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Int16Array",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Int16ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uint16Array",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uint16ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Int32Array",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Int32ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uint32Array",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uint32ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Float32Array",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Float32ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Float64Array",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Float64ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Intl",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Map",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "MapConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ReadonlyMap",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "WeakMap",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "WeakMapConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Set",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "SetConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ReadonlySet",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "WeakSet",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "WeakSetConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "SymbolConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "IteratorYieldResult",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "IteratorReturnResult",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "IteratorResult",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Iterator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Iterable",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "IterableIterator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "PromiseConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Generator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "GeneratorFunction",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "GeneratorFunctionConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ProxyHandler",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ProxyConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Reflect",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "SharedArrayBuffer",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "SharedArrayBufferConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Atomics",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "AsyncIterator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "AsyncIterable",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "AsyncIterableIterator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "AsyncGenerator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "AsyncGeneratorFunction",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "AsyncGeneratorFunctionConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "const",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "defineProps",
+            "identifiers": [],
+            "defs": [],
+            "references": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "defineProps",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 10
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 21
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "init": null
+                }
+            ]
+        }
+    ],
+    "references": [],
+    "childScopes": [
+        {
+            "type": "module",
+            "variables": [
+                {
+                    "name": "Foo",
+                    "identifiers": [
+                        {
+                            "type": "Identifier",
+                            "name": "Foo",
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 5
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 8
+                                }
+                            }
+                        }
+                    ],
+                    "defs": [
+                        {
+                            "type": "Type",
+                            "node": {
+                                "type": "TSTypeAliasDeclaration",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 0
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 26
+                                    }
+                                }
+                            },
+                            "name": "Foo"
+                        }
+                    ],
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "Foo",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 5
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 8
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "Foo",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 5
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 8
+                                    }
+                                }
+                            },
+                            "init": null,
+                            "vueUsedInTemplate": true
+                        }
+                    ]
+                },
+                {
+                    "name": "p",
+                    "identifiers": [
+                        {
+                            "type": "Identifier",
+                            "name": "p",
+                            "loc": {
+                                "start": {
+                                    "line": 5,
+                                    "column": 6
+                                },
+                                "end": {
+                                    "line": 5,
+                                    "column": 7
+                                }
+                            }
+                        }
+                    ],
+                    "defs": [
+                        {
+                            "type": "Variable",
+                            "node": {
+                                "type": "VariableDeclarator",
+                                "loc": {
+                                    "start": {
+                                        "line": 5,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 5,
+                                        "column": 40
+                                    }
+                                }
+                            },
+                            "name": "p"
+                        }
+                    ],
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "p",
+                                "loc": {
+                                    "start": {
+                                        "line": 5,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 5,
+                                        "column": 7
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "p",
+                                "loc": {
+                                    "start": {
+                                        "line": 5,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 5,
+                                        "column": 7
+                                    }
+                                }
+                            },
+                            "init": true
+                        },
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "p",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 12
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 13
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "p",
+                                "loc": {
+                                    "start": {
+                                        "line": 5,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 5,
+                                        "column": 7
+                                    }
+                                }
+                            },
+                            "init": null
+                        }
+                    ]
+                },
+                {
+                    "name": "foo",
+                    "identifiers": [
+                        {
+                            "type": "Identifier",
+                            "name": "foo",
+                            "loc": {
+                                "start": {
+                                    "line": 6,
+                                    "column": 6
+                                },
+                                "end": {
+                                    "line": 6,
+                                    "column": 9
+                                }
+                            }
+                        }
+                    ],
+                    "defs": [
+                        {
+                            "type": "Variable",
+                            "node": {
+                                "type": "VariableDeclarator",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 17
+                                    }
+                                }
+                            },
+                            "name": "foo"
+                        }
+                    ],
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "foo",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "foo",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "init": true
+                        },
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "foo",
+                                "loc": {
+                                    "start": {
+                                        "line": 7,
+                                        "column": 12
+                                    },
+                                    "end": {
+                                        "line": 7,
+                                        "column": 15
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "foo",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "init": null
+                        },
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "foo",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "foo",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "init": null,
+                            "vueUsedInTemplate": true
+                        }
+                    ]
+                }
+            ],
+            "references": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "p",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 6
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 7
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "p",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 6
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 7
+                            }
+                        }
+                    },
+                    "init": true
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "defineProps",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 10
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 21
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "T",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 27
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 28
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": null,
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "U",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 35
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 36
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": null,
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "foo",
+                        "loc": {
+                            "start": {
+                                "line": 6,
+                                "column": 6
+                            },
+                            "end": {
+                                "line": 6,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "foo",
+                        "loc": {
+                            "start": {
+                                "line": 6,
+                                "column": 6
+                            },
+                            "end": {
+                                "line": 6,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "init": true
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "p",
+                        "loc": {
+                            "start": {
+                                "line": 6,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 6,
+                                "column": 13
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "p",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 6
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 7
+                            }
+                        }
+                    },
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "console",
+                        "loc": {
+                            "start": {
+                                "line": 7,
+                                "column": 0
+                            },
+                            "end": {
+                                "line": 7,
+                                "column": 7
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": null,
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "foo",
+                        "loc": {
+                            "start": {
+                                "line": 7,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 7,
+                                "column": 15
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "foo",
+                        "loc": {
+                            "start": {
+                                "line": 6,
+                                "column": 6
+                            },
+                            "end": {
+                                "line": 6,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "init": null
+                }
+            ],
+            "childScopes": [],
+            "through": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "defineProps",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 10
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 21
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "T",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 27
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 28
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": null,
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "U",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 35
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 36
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": null,
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "console",
+                        "loc": {
+                            "start": {
+                                "line": 7,
+                                "column": 0
+                            },
+                            "end": {
+                                "line": 7,
+                                "column": 7
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": null,
+                    "init": null
+                }
+            ]
+        }
+    ],
+    "through": [
+        {
+            "identifier": {
+                "type": "Identifier",
+                "name": "T",
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 27
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 28
+                    }
+                }
+            },
+            "from": "module",
+            "resolved": null,
+            "init": null
+        },
+        {
+            "identifier": {
+                "type": "Identifier",
+                "name": "U",
+                "loc": {
+                    "start": {
+                        "line": 5,
+                        "column": 35
+                    },
+                    "end": {
+                        "line": 5,
+                        "column": 36
+                    }
+                }
+            },
+            "from": "module",
+            "resolved": null,
+            "init": null
+        },
+        {
+            "identifier": {
+                "type": "Identifier",
+                "name": "console",
+                "loc": {
+                    "start": {
+                        "line": 7,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 7,
+                        "column": 7
+                    }
+                }
+            },
+            "from": "module",
+            "resolved": null,
+            "init": null
+        }
+    ]
+}
