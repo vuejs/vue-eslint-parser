@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "strict": true,
+        "jsx": "preserve",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "lib": ["ESNext", "DOM"],
+        "skipLibCheck": true,
+        "noEmit": true,
+        "checkJs": true,
+        "allowJs": true
+    },
+    "include": ["./vue.d.ts", "**/*.ts", "**/*.vue"]
+}
