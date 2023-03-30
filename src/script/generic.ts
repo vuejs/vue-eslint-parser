@@ -173,11 +173,8 @@ function referencesToThrough(references: Reference[], baseScope: Scope) {
  * Add all references to array
  */
 function addAllReferences(list: Reference[], elements: Reference[]): void {
-    addElementsToSortedArray(
-        list,
-        elements,
-        (a, b) => a.identifier.range![0] - b.identifier.range![0],
-    )
+    list.push(...elements)
+    list.sort((a, b) => a.identifier.range![0] - b.identifier.range![0])
 }
 
 /** Remove reference */
@@ -237,55 +234,4 @@ function removeScope(scopeManager: ScopeManager, scope: Scope): void {
     if (index >= 0) {
         scopeManager.scopes.splice(index, 1)
     }
-}
-
-/**
- * Add element to a sorted array
- */
-function addElementsToSortedArray<T>(
-    array: T[],
-    elements: T[],
-    compare: (a: T, b: T) => number,
-): void {
-    if (!elements.length) {
-        return
-    }
-    let last = elements[0]
-    let index = sortedLastIndex(array, (target) => compare(target, last))
-    for (const element of elements) {
-        if (compare(last, element) > 0) {
-            index = sortedLastIndex(array, (target) => compare(target, element))
-        }
-        let e = array[index]
-        while (e && compare(e, element) <= 0) {
-            e = array[++index]
-        }
-        array.splice(index, 0, element)
-        last = element
-    }
-}
-
-/**
- * Uses a binary search to determine the highest index at which value should be inserted into array in order to maintain its sort order.
- */
-function sortedLastIndex<T>(
-    array: T[],
-    compare: (target: T) => number,
-): number {
-    let lower = 0
-    let upper = array.length
-
-    while (lower < upper) {
-        const mid = Math.floor(lower + (upper - lower) / 2)
-        const target = compare(array[mid])
-        if (target < 0) {
-            lower = mid + 1
-        } else if (target > 0) {
-            upper = mid
-        } else {
-            return mid + 1
-        }
-    }
-
-    return upper
 }
