@@ -656,7 +656,9 @@
                                 }
                             }
                         },
-                        "mode": "r"
+                        "mode": "r",
+                        "isValueReference": true,
+                        "isTypeReference": false
                     },
                     {
                         "id": {
@@ -677,7 +679,55 @@
                                 }
                             }
                         },
-                        "mode": "r"
+                        "mode": "r",
+                        "isValueReference": true,
+                        "isTypeReference": false
+                    },
+                    {
+                        "id": {
+                            "type": "Identifier",
+                            "name": "b",
+                            "range": [
+                                17,
+                                18
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 6
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 7
+                                }
+                            }
+                        },
+                        "mode": "r",
+                        "isValueReference": false,
+                        "isTypeReference": true
+                    },
+                    {
+                        "id": {
+                            "type": "Identifier",
+                            "name": "c",
+                            "range": [
+                                19,
+                                20
+                            ],
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 8
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 9
+                                }
+                            }
+                        },
+                        "mode": "r",
+                        "isValueReference": false,
+                        "isTypeReference": true
                     }
                 ]
             },
