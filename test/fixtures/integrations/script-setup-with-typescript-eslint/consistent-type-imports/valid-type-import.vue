@@ -6,7 +6,6 @@
 
 <template>
     <HelloWorld
-      msg="You did it!"
       :foo="(val as Foo)"
     />
 </template>
