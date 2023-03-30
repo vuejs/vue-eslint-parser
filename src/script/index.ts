@@ -67,6 +67,7 @@ import { isEnhancedParserObject, isParserObject } from "../common/parser-object"
 import type { TSESTree } from "@typescript-eslint/utils"
 import type { GenericProcessInfo } from "./generic"
 import { extractGeneric } from "./generic"
+import { isUndefined } from "lodash"
 
 // [1] = aliases.
 // [2] = delimiter.
@@ -635,15 +636,8 @@ export function parseScriptElement(
             result.ast.tokens?.[0],
             result.ast.comments?.[0],
         ]
-            .sort((a, b) =>
-                a == null
-                    ? b == null
-                        ? 0
-                        : 1
-                    : b == null
-                    ? -1
-                    : a.range[0] - b.range[0],
-            )
+            .filter((e): e is NonNullable<typeof e> => Boolean(e))
+            .sort((a, b) => a.range[0] - b.range[0])
             .find((t) => Boolean(t))
 
         // Restore Program node location
