@@ -1,6 +1,7 @@
 import type * as escopeTypes from "eslint-scope"
 import type { ParserOptions } from "../common/parser-options"
 import type {
+    Reference,
     VAttribute,
     VDirective,
     VDocumentFragment,
@@ -169,7 +170,17 @@ function analyzeUsedInTemplateVariables(
         return false
     }
 
-    function markVariableAsUsed(name: string) {
+    function markVariableAsUsed(nameOrRef: string | Reference) {
+        let name: string
+        let isValueReference: boolean | undefined
+        let isTypeReference: boolean | undefined
+        if (typeof nameOrRef === "string") {
+            name = nameOrRef
+        } else {
+            name = nameOrRef.id.name
+            isValueReference = nameOrRef.isValueReference
+            isTypeReference = nameOrRef.isTypeReference
+        }
         const variable = scriptVariables.get(name)
         if (!variable || variable.identifiers.length === 0) {
             return
@@ -188,7 +199,9 @@ function analyzeUsedInTemplateVariables(
         reference.isRead = () => true
         reference.isReadOnly = () => true
         reference.isReadWrite = () => false
-        reference.isValueReference = true // For typescript-eslint
+        // For typescript-eslint
+        reference.isValueReference = isValueReference
+        reference.isTypeReference = isTypeReference
 
         variable.references.push(reference)
         reference.resolved = variable
@@ -198,7 +211,7 @@ function analyzeUsedInTemplateVariables(
         for (const reference of node.references.filter(
             (ref) => ref.variable == null,
         )) {
-            markVariableAsUsed(reference.id.name)
+            markVariableAsUsed(reference)
         }
     }
 
