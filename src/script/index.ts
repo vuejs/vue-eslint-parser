@@ -67,7 +67,6 @@ import { isEnhancedParserObject, isParserObject } from "../common/parser-object"
 import type { TSESTree } from "@typescript-eslint/utils"
 import type { GenericProcessInfo } from "./generic"
 import { extractGeneric } from "./generic"
-import { isUndefined } from "lodash"
 
 // [1] = aliases.
 // [2] = delimiter.
