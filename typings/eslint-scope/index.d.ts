@@ -75,8 +75,8 @@ export class Reference {
     public isWriteOnly(): boolean
 
     // For typescript-eslint
-    public isTypeReference: boolean
-    public isValueReference: boolean
+    public isTypeReference?: boolean
+    public isValueReference?: boolean
 }
 
 export declare const analyze: (

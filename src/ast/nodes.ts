@@ -753,6 +753,10 @@ export interface Reference {
     id: ESLintIdentifier
     mode: "rw" | "r" | "w"
     variable: Variable | null
+
+    // For typescript-eslint
+    isValueReference?: boolean
+    isTypeReference?: boolean
 }
 
 /**

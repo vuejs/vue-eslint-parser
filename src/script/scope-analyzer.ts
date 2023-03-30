@@ -15,6 +15,11 @@ import { getFallbackKeys } from "../ast"
 import { getEslintScope } from "../common/eslint-scope"
 import { getEcmaVersionIfUseEspree } from "../common/espree"
 
+type ParserResult = {
+    ast: ESLintProgram
+    scopeManager?: escopeTypes.ScopeManager
+}
+
 /**
  * Check whether the given reference is unique in the belonging array.
  * @param reference The current reference to check.
@@ -54,6 +59,8 @@ function transformReference(reference: escopeTypes.Reference): Reference {
             ? "w"
             : /* otherwise */ "rw",
         variable: null,
+        isValueReference: reference.isValueReference,
+        isTypeReference: reference.isTypeReference,
     }
     Object.defineProperty(ret, "variable", { enumerable: false })
 
@@ -106,40 +113,43 @@ export function analyzeScope(
 }
 
 /**
- *
- * @param ast
+ * Analyze the scope of the given AST.
+ * @param {ParserResult} parserResult The parser result to analyze.
  * @param parserOptions
  */
 function analyze(
-    ast: ESLintProgram,
+    parserResult: ParserResult,
     parserOptions: ParserOptions,
 ): escopeTypes.Scope {
-    return analyzeScope(ast, parserOptions).globalScope
+    const scopeManager =
+        parserResult.scopeManager ||
+        analyzeScope(parserResult.ast, parserOptions)
+    return scopeManager.globalScope
 }
 
 /**
  * Analyze the external references of the given AST.
- * @param {ASTNode} ast The root node to analyze.
+ * @param {ParserResult} parserResult The parser result to analyze.
  * @returns {Reference[]} The reference objects of external references.
  */
 export function analyzeExternalReferences(
-    ast: ESLintProgram,
+    parserResult: ParserResult,
     parserOptions: ParserOptions,
 ): Reference[] {
-    const scope = analyze(ast, parserOptions)
+    const scope = analyze(parserResult, parserOptions)
     return scope.through.filter(isUnique).map(transformReference)
 }
 
 /**
  * Analyze the external references of the given AST.
- * @param {ASTNode} ast The root node to analyze.
+ * @param {ParserResult} parserResult The parser result to analyze.
  * @returns {Reference[]} The reference objects of external references.
  */
 export function analyzeVariablesAndExternalReferences(
-    ast: ESLintProgram,
+    parserResult: ParserResult,
     parserOptions: ParserOptions,
 ): { variables: Variable[]; references: Reference[] } {
-    const scope = analyze(ast, parserOptions)
+    const scope = analyze(parserResult, parserOptions)
     return {
         variables: getForScope(scope)
             .variables.filter(hasDefinition)

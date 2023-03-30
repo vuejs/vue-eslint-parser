@@ -340,14 +340,15 @@ function parseExpressionBody(
     debug('[script] parse expression: "0(%s)"', code)
 
     try {
-        const ast = parseScriptFragment(
+        const result = parseScriptFragment(
             `0(${code})`,
             locationCalculator.getSubCalculatorShift(-2),
             parserOptions,
-        ).ast
+        )
+        const { ast } = result
         const tokens = ast.tokens || []
         const comments = ast.comments || []
-        const references = analyzeExternalReferences(ast, parserOptions)
+        const references = analyzeExternalReferences(result, parserOptions)
         const statement = ast.body[0] as ESLintExpressionStatement
         const callExpression = statement.expression as ESLintCallExpression
         const expression = callExpression.arguments[0]
@@ -461,13 +462,14 @@ function parseFilter(
 
         // Parse the arguments.
         if (argsCode != null) {
-            const { ast } = parseScriptFragment(
+            const result = parseScriptFragment(
                 `0${argsCode}`,
                 locationCalculator
                     .getSubCalculatorAfter(paren)
                     .getSubCalculatorShift(-1),
                 parserOptions,
             )
+            const { ast } = result
             const statement = ast.body[0] as ESLintExpressionStatement
             const callExpression = statement.expression
 
@@ -501,7 +503,7 @@ function parseFilter(
             }
             tokens.push(...ast.tokens!)
             comments.push(...ast.comments!)
-            references.push(...analyzeExternalReferences(ast, parserOptions))
+            references.push(...analyzeExternalReferences(result, parserOptions))
         }
 
         // Update range.
@@ -755,16 +757,20 @@ export function parseVForExpression(
             processed.iterator,
         )
 
-        const ast = parseScriptFragment(
+        const result = parseScriptFragment(
             `for(let ${processed.aliasesWithBrackets}${processed.delimiter}${processed.iterator});`,
             locationCalculator.getSubCalculatorShift(
                 processed.hasParens ? -8 : -9,
             ),
             parserOptions,
-        ).ast
+        )
+        const { ast } = result
         const tokens = ast.tokens || []
         const comments = ast.comments || []
-        const scope = analyzeVariablesAndExternalReferences(ast, parserOptions)
+        const scope = analyzeVariablesAndExternalReferences(
+            result,
+            parserOptions,
+        )
         const references = scope.references
         const variables = scope.variables
         const statement = ast.body[0] as
@@ -934,14 +940,15 @@ function parseVForAliasesForEcmaVersion5(
     locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ) {
-    const ast = parseScriptFragment(
+    const result = parseScriptFragment(
         `0(${code})`,
         locationCalculator.getSubCalculatorShift(-2),
         parserOptions,
-    ).ast
+    )
+    const { ast } = result
     const tokens = ast.tokens || []
     const comments = ast.comments || []
-    const variables = analyzeExternalReferences(ast, parserOptions).map(
+    const variables = analyzeExternalReferences(result, parserOptions).map(
         transformVariable,
     )
 
@@ -984,14 +991,15 @@ function parseVForIteratorForEcmaVersion5(
     locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
 ) {
-    const ast = parseScriptFragment(
+    const result = parseScriptFragment(
         `0(${code})`,
         locationCalculator.getSubCalculatorShift(-2),
         parserOptions,
-    ).ast
+    )
+    const { ast } = result
     const tokens = ast.tokens || []
     const comments = ast.comments || []
-    const references = analyzeExternalReferences(ast, parserOptions)
+    const references = analyzeExternalReferences(result, parserOptions)
 
     const statement = ast.body[0] as ESLintExpressionStatement
     const callExpression = statement.expression as ESLintCallExpression
@@ -1049,12 +1057,13 @@ function parseVOnExpressionBody(
     }
 
     try {
-        const ast = parseScriptFragment(
+        const result = parseScriptFragment(
             `void function($event){${code}}`,
             locationCalculator.getSubCalculatorShift(-22),
             parserOptions,
-        ).ast
-        const references = analyzeExternalReferences(ast, parserOptions)
+        )
+        const { ast } = result
+        const references = analyzeExternalReferences(result, parserOptions)
         const outermostStatement = ast.body[0] as ESLintExpressionStatement
         const functionDecl = (
             outermostStatement.expression as ESLintUnaryExpression
@@ -1126,11 +1135,12 @@ export function parseSlotScopeExpression(
     }
 
     try {
-        const ast = parseScriptFragment(
+        const result = parseScriptFragment(
             `void function(${code}) {}`,
             locationCalculator.getSubCalculatorShift(-14),
             parserOptions,
-        ).ast
+        )
+        const { ast } = result
         const statement = ast.body[0] as ESLintExpressionStatement
         const rawExpression = statement.expression as ESLintUnaryExpression
         const functionDecl = rawExpression.argument as ESLintFunctionExpression
@@ -1148,7 +1158,10 @@ export function parseSlotScopeExpression(
 
         const tokens = ast.tokens || []
         const comments = ast.comments || []
-        const scope = analyzeVariablesAndExternalReferences(ast, parserOptions)
+        const scope = analyzeVariablesAndExternalReferences(
+            result,
+            parserOptions,
+        )
         const references = scope.references
         const variables = scope.variables
         const firstParam = first(params)!
