@@ -211,6 +211,7 @@ function parseAsScript(code: string, options: ParserOptions) {
 
 export const meta = {
     name: "vue-eslint-parser",
+    // Bundled index.js is output to the same package root directory as package.json
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    version: require("../package.json"),
+    version: require("./package.json").version,
 }
