@@ -213,4 +213,4 @@ export const meta = {
     name: "vue-eslint-parser",
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     version: require("../package.json"),
-};
+}
