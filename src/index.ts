@@ -208,3 +208,9 @@ function parseAsScript(code: string, options: ParserOptions) {
         }),
     })
 }
+
+export const meta = {
+    name: "vue-eslint-parser",
+    // eslint-disable-next-line no-process-env
+    version: process.env.PACKAGE_VERSION,
+}

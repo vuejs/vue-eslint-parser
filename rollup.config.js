@@ -5,6 +5,7 @@
  */
 import resolve from "rollup-plugin-node-resolve"
 import sourcemaps from "rollup-plugin-sourcemaps"
+import replace from "rollup-plugin-replace"
 
 const pkg = require("./package.json")
 const deps = new Set(
@@ -23,6 +24,12 @@ export default {
  * See LICENSE file in root directory for full license.
  */`,
     },
-    plugins: [sourcemaps(), resolve()],
+    plugins: [
+        sourcemaps(),
+        resolve(),
+        replace({
+            "process.env.PACKAGE_VERSION": `"${pkg.version}"`,
+        }),
+    ],
     external: id => deps.has(id) || id.startsWith("lodash"),
 }
