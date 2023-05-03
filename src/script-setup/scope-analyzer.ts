@@ -205,6 +205,12 @@ function analyzeUsedInTemplateVariables(
 
         variable.references.push(reference)
         reference.resolved = variable
+
+        if (reference.isTypeReference) {
+            // @typescript-eslint/no-unused-vars treats type references at the same position as recursive references,
+            // so without this flag it will be marked as unused.
+            ;(variable as any).eslintUsed = true
+        }
     }
 
     function processVExpressionContainer(node: VExpressionContainer) {
