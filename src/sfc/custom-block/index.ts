@@ -23,6 +23,7 @@ export type ESLintCustomBlockParser = ParserObject<any, any>
 
 export type CustomBlockContext = {
     getSourceCode(): SourceCode
+    sourceCode: SourceCode
     parserServices: any
     getAncestors(): any[]
     getDeclaredVariables(node: any): any[]
@@ -251,6 +252,9 @@ export function createCustomBlockSharedContext({
                     : {}),
             },
             getSourceCode,
+            get sourceCode() {
+                return getSourceCode()
+            },
         },
     }
 
