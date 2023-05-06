@@ -667,5 +667,44 @@ function a(arg) {
                 "Assignment to function parameter 'arg'.",
             )
         })
+
+        it("should work sourceCode.", () => {
+            const code = `
+<js lang="js">
+var v = + 42
+</js>
+`
+            const linter = createLinter()
+            const rule = linter.getRules().get("space-unary-ops")
+            linter.defineRule("test-space-unary-ops", {
+                ...rule,
+                create(context) {
+                    return context.parserServices.defineCustomBlocksVisitor(
+                        context,
+                        espree,
+                        {
+                            target: "js",
+                            create(customBlockContext) {
+                                return rule.create(customBlockContext)
+                            },
+                        },
+                    )
+                },
+            })
+
+            const messages1 = linter.verify(code, {
+                ...LINTER_CONFIG,
+                rules: {
+                    ...LINTER_CONFIG.rules,
+                    "test-space-unary-ops": "error",
+                },
+            })
+
+            assert.strictEqual(messages1.length, 1)
+            assert.strictEqual(
+                messages1[0].message,
+                "Unexpected space after unary operator '+'.",
+            )
+        })
     })
 })
