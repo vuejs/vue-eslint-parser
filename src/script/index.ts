@@ -31,7 +31,7 @@ import type {
     VOnExpression,
     VSlotScopeExpression,
     OffsetRange,
-    VGenericTypeParameterDeclarationExpression,
+    VGenericExpression,
     ESLintClassExpression,
 } from "../ast"
 import { ParseError } from "../ast"
@@ -1248,11 +1248,11 @@ export function parseSlotScopeExpression(
  * @param parserOptions The parser options.
  * @returns The result of parsing.
  */
-export function parseGenericDefinition(
+export function parseGenericExpression(
     code: string,
     locationCalculator: LocationCalculatorForHtml,
     parserOptions: ParserOptions,
-): ExpressionParseResult<VGenericTypeParameterDeclarationExpression> {
+): ExpressionParseResult<VGenericExpression> {
     debug('[script] parse generic definition: "void function<%s>() {}"', code)
 
     if (code.trim() === "") {
@@ -1294,8 +1294,8 @@ export function parseGenericDefinition(
         const variables = scope.variables
         const firstParam = first(params)!
         const lastParam = last(params)!
-        const expression: VGenericTypeParameterDeclarationExpression = {
-            type: "VGenericTypeParameterDeclarationExpression",
+        const expression: VGenericExpression = {
+            type: "VGenericExpression",
             range: [firstParam.range[0], lastParam.range[1]],
             loc: { start: firstParam.loc.start, end: lastParam.loc.end },
             parent: DUMMY_PARENT,

@@ -4,7 +4,7 @@ import type {
     VDocumentFragment,
     VElement,
     VExpressionContainer,
-    VGenericTypeParameterDeclarationExpression,
+    VGenericExpression,
     VNode,
 } from "../ast"
 
@@ -95,7 +95,7 @@ export function isTSLang(element: VElement | undefined): boolean {
 
 export type GenericDirective = VDirective & {
     value: VExpressionContainer & {
-        expression: VGenericTypeParameterDeclarationExpression
+        expression: VGenericExpression
     }
 }
 
@@ -109,8 +109,7 @@ export function findGenericDirective(
         element.startTag.attributes.find(
             (attr): attr is GenericDirective =>
                 attr.directive &&
-                attr.value?.expression?.type ===
-                    "VGenericTypeParameterDeclarationExpression",
+                attr.value?.expression?.type === "VGenericExpression",
         ) || null
     )
 }

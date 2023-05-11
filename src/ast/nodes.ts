@@ -30,7 +30,7 @@ export type Node =
     | VForExpression
     | VOnExpression
     | VSlotScopeExpression
-    | VGenericTypeParameterDeclarationExpression
+    | VGenericExpression
     | VFilterSequenceExpression
     | VFilter
 
@@ -793,10 +793,8 @@ export interface VSlotScopeExpression extends HasLocation, HasParent {
 /**
  * The node of `generic` directives.
  */
-export interface VGenericTypeParameterDeclarationExpression
-    extends HasLocation,
-        HasParent {
-    type: "VGenericTypeParameterDeclarationExpression"
+export interface VGenericExpression extends HasLocation, HasParent {
+    type: "VGenericExpression"
     parent: VExpressionContainer
     params: TSESTree.TSTypeParameterDeclaration["params"]
     rawParams: string
@@ -860,7 +858,7 @@ export interface VExpressionContainer extends HasLocation, HasParent {
         | VForExpression
         | VOnExpression
         | VSlotScopeExpression
-        | VGenericTypeParameterDeclarationExpression
+        | VGenericExpression
         | null
     references: Reference[]
 }

@@ -4,7 +4,7 @@ import type {
     HasLocation,
     Token,
     VElement,
-    VGenericTypeParameterDeclarationExpression,
+    VGenericExpression,
 } from "../ast"
 // eslint-disable-next-line node/no-extraneous-import -- ignore
 import type { TSESTree } from "@typescript-eslint/utils"
@@ -18,9 +18,9 @@ import type {
 import { findGenericDirective } from "../common/ast-utils"
 
 export type GenericProcessInfo = {
-    node: VGenericTypeParameterDeclarationExpression
+    node: VGenericExpression
     defineTypes: {
-        node: VGenericTypeParameterDeclarationExpression["params"][number]
+        node: VGenericExpression["params"][number]
         define: string
     }[]
     postprocess: (context: GenericPostprocessContext) => void
@@ -119,10 +119,7 @@ export function extractGeneric(element: VElement): GenericProcessInfo | null {
     }
 }
 
-function getConstraint(
-    node: TSESTree.TypeNode,
-    expr: VGenericTypeParameterDeclarationExpression,
-) {
+function getConstraint(node: TSESTree.TypeNode, expr: VGenericExpression) {
     const start = expr.params[0].range[0]
     return expr.rawParams.slice(node.range[0] - start, node.range[1] - start)
 }

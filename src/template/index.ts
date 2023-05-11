@@ -17,7 +17,7 @@ import type {
     VExpressionContainer,
     VFilterSequenceExpression,
     VForExpression,
-    VGenericTypeParameterDeclarationExpression,
+    VGenericExpression,
     VIdentifier,
     VLiteral,
     VNode,
@@ -33,7 +33,7 @@ import {
     parseVForExpression,
     parseVOnExpression,
     parseSlotScopeExpression,
-    parseGenericDefinition,
+    parseGenericExpression,
 } from "../script"
 import {
     createSimpleToken,
@@ -419,7 +419,7 @@ function parseAttributeValue(
     | VForExpression
     | VOnExpression
     | VSlotScopeExpression
-    | VGenericTypeParameterDeclarationExpression
+    | VGenericExpression
 > {
     const firstChar = code[node.range[0]]
     const quoted = firstChar === '"' || firstChar === "'"
@@ -438,7 +438,7 @@ function parseAttributeValue(
         | VForExpression
         | VOnExpression
         | VSlotScopeExpression
-        | VGenericTypeParameterDeclarationExpression
+        | VGenericExpression
     >
     if (quoted && node.value === "") {
         result = {
@@ -474,7 +474,7 @@ function parseAttributeValue(
             { allowFilters: true },
         )
     } else if (directiveKind === "generic") {
-        result = parseGenericDefinition(
+        result = parseGenericExpression(
             node.value,
             locationCalculator,
             scriptParserOptions,
