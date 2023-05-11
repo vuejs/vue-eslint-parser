@@ -113,11 +113,11 @@ export function analyzeScriptSetupScope(
     scopeManager: escopeTypes.ScopeManager,
     templateBody: VElement | undefined,
     df: VDocumentFragment,
-    _parserOptions: ParserOptions,
+    parserOptions: ParserOptions,
 ): void {
     analyzeUsedInTemplateVariables(scopeManager, templateBody, df)
 
-    analyzeCompilerMacrosVariables(scopeManager)
+    analyzeCompilerMacrosVariables(scopeManager, parserOptions)
 }
 
 function extractVariables(scopeManager: escopeTypes.ScopeManager) {
@@ -290,11 +290,19 @@ function analyzeUsedInTemplateVariables(
  */
 function analyzeCompilerMacrosVariables(
     scopeManager: escopeTypes.ScopeManager,
+    parserOptions: ParserOptions,
 ) {
     const globalScope = scopeManager.globalScope
     if (!globalScope) {
         return
     }
+    const customMacros = new Set(
+        parserOptions.vueFeatures?.customMacros &&
+        Array.isArray(parserOptions.vueFeatures.customMacros)
+            ? parserOptions.vueFeatures.customMacros
+            : [],
+    )
+
     const compilerMacroVariables = new Map<string, escopeTypes.Variable>()
 
     function addCompilerMacroVariable(reference: escopeTypes.Reference) {
@@ -315,7 +323,10 @@ function analyzeCompilerMacrosVariables(
 
     const newThrough: escopeTypes.Reference[] = []
     for (const reference of globalScope.through) {
-        if (COMPILER_MACROS_AT_ROOT.has(reference.identifier.name)) {
+        if (
+            COMPILER_MACROS_AT_ROOT.has(reference.identifier.name) ||
+            customMacros.has(reference.identifier.name)
+        ) {
             if (
                 reference.from.type === "global" ||
                 reference.from.type === "module"

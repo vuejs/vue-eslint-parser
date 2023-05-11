@@ -5,6 +5,9 @@
     "parserOptions": {
         "parser": {
             "ts": "@typescript-eslint/parser"
+        },
+        "vueFeatures": {
+            "customMacros": ["userMacro"]
         }
     }
 }
