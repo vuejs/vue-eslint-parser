@@ -17,7 +17,7 @@ export function getScriptSetupParserOptions(
 
     return {
         ...parserOptions,
-        ecmaVersion: espreeEcmaVersion,
+        ecmaVersion: espreeEcmaVersion || parserOptions.ecmaVersion,
     }
 }
 
