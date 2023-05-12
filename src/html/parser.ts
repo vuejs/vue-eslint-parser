@@ -302,6 +302,7 @@ export class Parser {
                     yield getParserLangFromSFC(doc)
                 },
             ),
+            project: undefined,
         }
         const scriptParserOptions = {
             ...this.baseParserOptions,
