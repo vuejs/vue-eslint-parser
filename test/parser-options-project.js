@@ -63,6 +63,11 @@ describe("use `project: undefined` when parsing template script-let", () => {
                     </MyComponent>
                 </div>
             </template>
+            <style scoped>
+            .a {
+                color: v-bind(color)
+            }
+            </style>
             `,
             {
                 project: true,
