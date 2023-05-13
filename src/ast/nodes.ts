@@ -797,7 +797,7 @@ export interface VGenericExpression extends HasLocation, HasParent {
     type: "VGenericExpression"
     parent: VExpressionContainer
     params: TSESTree.TSTypeParameterDeclaration["params"]
-    rawParams: string
+    rawParams: string[]
 }
 
 /**

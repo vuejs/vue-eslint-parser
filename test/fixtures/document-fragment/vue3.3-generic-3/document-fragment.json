@@ -475,7 +475,10 @@
                                         }
                                     }
                                 ],
-                                "rawParams": "T extends Foo, U extends T"
+                                "rawParams": [
+                                    "T extends Foo",
+                                    "U extends T"
+                                ]
                             },
                             "references": [
                                 {

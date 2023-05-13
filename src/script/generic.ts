@@ -39,11 +39,12 @@ export function extractGeneric(element: VElement): GenericProcessInfo | null {
         return null
     }
     const genericNode = genericAttr.value.expression
-    const defineTypes = genericNode.params.map((t) => ({
+    const defineTypes = genericNode.params.map((t, i) => ({
         node: t,
-        define: `type ${t.name.name} = ${
-            t.constraint ? getConstraint(t.constraint, genericNode) : "unknown"
-        }`,
+        define: `type ${t.name.name} = ${getConstraint(
+            t,
+            genericNode.rawParams[i],
+        )}`,
     }))
 
     return {
@@ -119,9 +120,15 @@ export function extractGeneric(element: VElement): GenericProcessInfo | null {
     }
 }
 
-function getConstraint(node: TSESTree.TypeNode, expr: VGenericExpression) {
-    const start = expr.params[0].range[0]
-    return expr.rawParams.slice(node.range[0] - start, node.range[1] - start)
+function getConstraint(node: TSESTree.TSTypeParameter, rawParam: string) {
+    if (!node.constraint) {
+        return "unknown"
+    }
+    const start = node.range[0]
+    return rawParam.slice(
+        node.constraint.range[0] - start,
+        node.constraint.range[1] - start,
+    )
 }
 
 /** Remove variable def */

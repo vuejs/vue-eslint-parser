@@ -1300,7 +1300,12 @@ export function parseGenericExpression(
             loc: { start: firstParam.loc.start, end: lastParam.loc.end },
             parent: DUMMY_PARENT,
             params,
-            rawParams: code,
+            rawParams: params.map((param) =>
+                code.slice(
+                    param.range[0] - typeParameters.range[0] - 1,
+                    param.range[1] - typeParameters.range[0] - 1,
+                ),
+            ),
         }
 
         // Modify parent.
