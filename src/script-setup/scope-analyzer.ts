@@ -87,6 +87,9 @@ const COMPILER_MACROS_AT_ROOT = new Set([
     "defineEmits",
     "defineExpose",
     "withDefaults",
+    // Added in vue 3.3
+    "defineOptions",
+    "defineSlots",
 ])
 
 /**
@@ -115,11 +118,11 @@ export function analyzeScriptSetupScope(
     scopeManager: escopeTypes.ScopeManager,
     templateBody: VElement | undefined,
     df: VDocumentFragment,
-    _parserOptions: ParserOptions,
+    parserOptions: ParserOptions,
 ): void {
     analyzeUsedInTemplateVariables(scopeManager, templateBody, df)
 
-    analyzeScriptSetupVariables(scopeManager, df)
+    analyzeScriptSetupVariables(scopeManager, df, parserOptions)
 }
 
 function extractVariables(scopeManager: escopeTypes.ScopeManager) {
@@ -304,11 +307,18 @@ function analyzeUsedInTemplateVariables(
 function analyzeScriptSetupVariables(
     scopeManager: escopeTypes.ScopeManager,
     df: VDocumentFragment,
+    parserOptions: ParserOptions,
 ) {
     const globalScope = scopeManager.globalScope
     if (!globalScope) {
         return
     }
+    const customMacros = new Set(
+        parserOptions.vueFeatures?.customMacros &&
+        Array.isArray(parserOptions.vueFeatures.customMacros)
+            ? parserOptions.vueFeatures.customMacros
+            : [],
+    )
 
     const genericDefineNames = new Set<string>()
     const scriptElement = df.children.find(isScriptElement)
@@ -326,7 +336,10 @@ function analyzeScriptSetupVariables(
 
     const newThrough: escopeTypes.Reference[] = []
     for (const reference of globalScope.through) {
-        if (COMPILER_MACROS_AT_ROOT.has(reference.identifier.name)) {
+        if (
+            COMPILER_MACROS_AT_ROOT.has(reference.identifier.name) ||
+            customMacros.has(reference.identifier.name)
+        ) {
             if (
                 reference.from.type === "global" ||
                 reference.from.type === "module"

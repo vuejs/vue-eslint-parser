@@ -16,6 +16,7 @@ export interface ParserOptions {
         interpolationAsNonHTML?: boolean // default true
         filter?: boolean // default true
         styleCSSVariableInjection?: boolean // default true
+        customMacros?: string[]
     }
 
     // espree options
