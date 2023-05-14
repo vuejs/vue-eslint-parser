@@ -1,0 +1,139 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<script setup lang=\"ts\" generic=\"T\">\ndefineProps<{foo:T}>()\n</script>\n<template>\n{{foo}}\n</template>",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<script setup lang=\"ts\" generic=\"T\">\ndefineProps<{foo:T}>()\n</script>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<script setup lang=\"ts\" generic=\"T\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "setup",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "setup",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "lang=\"ts\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "lang",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"ts\"",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "generic=\"T\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "generic",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "generic",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"T\"",
+                                        "children": [
+                                            {
+                                                "type": "VGenericExpression",
+                                                "text": "T",
+                                                "children": [
+                                                    {
+                                                        "type": "TSTypeParameter",
+                                                        "text": "T",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "T",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\ndefineProps<{foo:T}>()\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</script>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<template>\n{{foo}}\n</template>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<template>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{foo}}",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "foo",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</template>",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -7,6 +7,8 @@ import type { ScopeManager } from "eslint-scope"
 import type { ParseError } from "./errors"
 import type { HasLocation } from "./locations"
 import type { Token } from "./tokens"
+// eslint-disable-next-line node/no-extraneous-import -- ignore
+import type { TSESTree } from "@typescript-eslint/utils"
 
 //------------------------------------------------------------------------------
 // Common
@@ -28,6 +30,7 @@ export type Node =
     | VForExpression
     | VOnExpression
     | VSlotScopeExpression
+    | VGenericExpression
     | VFilterSequenceExpression
     | VFilter
 
@@ -742,7 +745,7 @@ export type Namespace =
  */
 export interface Variable {
     id: ESLintIdentifier
-    kind: "v-for" | "scope"
+    kind: "v-for" | "scope" | "generic"
     references: Reference[]
 }
 
@@ -785,6 +788,16 @@ export interface VSlotScopeExpression extends HasLocation, HasParent {
     type: "VSlotScopeExpression"
     parent: VExpressionContainer
     params: ESLintPattern[]
+}
+
+/**
+ * The node of `generic` directives.
+ */
+export interface VGenericExpression extends HasLocation, HasParent {
+    type: "VGenericExpression"
+    parent: VExpressionContainer
+    params: TSESTree.TSTypeParameterDeclaration["params"]
+    rawParams: string[]
 }
 
 /**
@@ -845,6 +858,7 @@ export interface VExpressionContainer extends HasLocation, HasParent {
         | VForExpression
         | VOnExpression
         | VSlotScopeExpression
+        | VGenericExpression
         | null
     references: Reference[]
 }

@@ -17,6 +17,7 @@ import type {
     VExpressionContainer,
     VFilterSequenceExpression,
     VForExpression,
+    VGenericExpression,
     VIdentifier,
     VLiteral,
     VNode,
@@ -32,13 +33,18 @@ import {
     parseVForExpression,
     parseVOnExpression,
     parseSlotScopeExpression,
+    parseGenericExpression,
 } from "../script"
 import {
     createSimpleToken,
     insertComments,
     replaceTokens,
 } from "../common/token-utils"
-import { getOwnerDocument } from "../common/ast-utils"
+import {
+    getOwnerDocument,
+    isScriptSetupElement,
+    isTSLang,
+} from "../common/ast-utils"
 import { insertError } from "../common/error-utils"
 
 const shorthandSign = /^[.:@#]/u
@@ -402,9 +408,10 @@ function createDirectiveKey(
 function parseAttributeValue(
     code: string,
     parserOptions: ParserOptions,
+    scriptParserOptions: ParserOptions,
     globalLocationCalculator: LocationCalculatorForHtml,
     node: VLiteral,
-    tagName: string,
+    element: VElement,
     directiveKey: VDirectiveKey,
 ): ExpressionParseResult<
     | ESLintExpression
@@ -412,13 +419,18 @@ function parseAttributeValue(
     | VForExpression
     | VOnExpression
     | VSlotScopeExpression
+    | VGenericExpression
 > {
     const firstChar = code[node.range[0]]
     const quoted = firstChar === '"' || firstChar === "'"
     const locationCalculator = globalLocationCalculator.getSubCalculatorAfter(
         node.range[0] + (quoted ? 1 : 0),
     )
-    const directiveName = directiveKey.name.name
+    const directiveKind = getStandardDirectiveKind(
+        parserOptions,
+        element,
+        directiveKey,
+    )
 
     let result: ExpressionParseResult<
         | ESLintExpression
@@ -426,6 +438,7 @@ function parseAttributeValue(
         | VForExpression
         | VOnExpression
         | VSlotScopeExpression
+        | VGenericExpression
     >
     if (quoted && node.value === "") {
         result = {
@@ -435,34 +448,36 @@ function parseAttributeValue(
             variables: [],
             references: [],
         }
-    } else if (directiveName === "for") {
+    } else if (directiveKind === "for") {
         result = parseVForExpression(
             node.value,
             locationCalculator,
             parserOptions,
         )
-    } else if (directiveName === "on" && directiveKey.argument != null) {
+    } else if (directiveKind === "on" && directiveKey.argument != null) {
         result = parseVOnExpression(
             node.value,
             locationCalculator,
             parserOptions,
         )
-    } else if (
-        directiveName === "slot" ||
-        directiveName === "slot-scope" ||
-        (tagName === "template" && directiveName === "scope")
-    ) {
+    } else if (directiveKind === "slot") {
         result = parseSlotScopeExpression(
             node.value,
             locationCalculator,
             parserOptions,
         )
-    } else if (directiveName === "bind") {
+    } else if (directiveKind === "bind") {
         result = parseExpression(
             node.value,
             locationCalculator,
             parserOptions,
             { allowFilters: true },
+        )
+    } else if (directiveKind === "generic") {
+        result = parseGenericExpression(
+            node.value,
+            locationCalculator,
+            scriptParserOptions,
         )
     } else {
         result = parseExpression(node.value, locationCalculator, parserOptions)
@@ -491,6 +506,38 @@ function parseAttributeValue(
     }
 
     return result
+}
+
+function getStandardDirectiveKind(
+    parserOptions: ParserOptions,
+    element: VElement,
+    directiveKey: VDirectiveKey,
+) {
+    const directiveName = directiveKey.name.name
+
+    if (directiveName === "for") {
+        return "for"
+    } else if (directiveName === "on") {
+        return "on"
+    } else if (
+        directiveName === "slot" ||
+        directiveName === "slot-scope" ||
+        (directiveName === "scope" &&
+            getTagName(element, isSFCFile(parserOptions)) === "template")
+    ) {
+        return "slot"
+    } else if (directiveName === "bind") {
+        return "bind"
+    } else if (
+        directiveName === "generic" &&
+        element.parent.type === "VDocumentFragment" &&
+        getTagName(element, isSFCFile(parserOptions)) === "script" &&
+        isScriptSetupElement(element) &&
+        isTSLang(element)
+    ) {
+        return "generic"
+    }
+    return null
 }
 
 /**
@@ -534,6 +581,7 @@ export interface Mustache {
 export function convertToDirective(
     code: string,
     parserOptions: ParserOptions,
+    scriptParserOptions: ParserOptions,
     locationCalculator: LocationCalculatorForHtml,
     node: VAttribute,
 ): void {
@@ -585,9 +633,10 @@ export function convertToDirective(
         const ret = parseAttributeValue(
             code,
             parserOptions,
+            scriptParserOptions,
             locationCalculator,
             node.value,
-            getTagName(node.parent.parent, isSFCFile(parserOptions)),
+            node.parent.parent,
             directive.key,
         )
 

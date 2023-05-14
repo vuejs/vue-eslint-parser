@@ -5,6 +5,7 @@
 import type { ScopeManager, Scope } from "eslint-scope"
 import type {
     ESLintBlockStatement,
+    ESLintExportNamedDeclaration,
     ESLintExportSpecifier,
     ESLintExtendedProgram,
     ESLintIdentifier,
@@ -26,6 +27,7 @@ import type { LinesAndColumns } from "../common/lines-and-columns"
 import type { LocationCalculator } from "../common/location-calculator"
 import type { ParserOptions } from "../common/parser-options"
 import { parseScript as parseScriptBase, parseScriptFragment } from "../script"
+import { extractGeneric } from "../script/generic"
 import { getScriptSetupParserOptions } from "./parser-options"
 
 type RemapBlock = {
@@ -53,7 +55,7 @@ class CodeBlocks {
     }
     public append(codeLet: string, originalOffset: number) {
         const rangeStart = this.code.length
-        this.code += codeLet.trimRight()
+        this.code += codeLet.trimEnd()
         this.remapBlocks.push({
             range: [rangeStart, this.code.length],
             offset: originalOffset - rangeStart,
@@ -152,10 +154,17 @@ class RestoreASTCallbacks {
     }
 }
 
+type Postprocess = (
+    result: ESLintExtendedProgram,
+    context: { scriptSetupBlockRange: [number, number] },
+) => void
+
 type ScriptSetupCodeBlocks = {
     codeBlocks: CodeBlocks
     // The location of the code of the statements in `<script setup>`.
     scriptSetupBlockRange: [number, number]
+    // Post process
+    postprocess: Postprocess
     // Used to restore ExportNamedDeclaration.
     restoreASTCallbacks: RestoreASTCallbacks
 }
@@ -164,13 +173,14 @@ type ScriptSetupModuleCodeBlocks =
     | {
           codeBlocks: CodeBlocks
           scriptSetupBlockRange?: undefined
+          postprocess?: undefined
           restoreASTCallbacks?: undefined
       }
 
 function parseScript(
     code: string,
     parserOptions: ParserOptions,
-    locationCalculator: LocationCalculator,
+    locationCalculatorForError: LocationCalculator,
 ) {
     try {
         return parseScriptBase(code, parserOptions)
@@ -178,7 +188,7 @@ function parseScript(
         const perr = ParseError.normalize(err)
         if (perr) {
             // console.log(code)
-            fixErrorLocation(perr, locationCalculator)
+            fixErrorLocation(perr, locationCalculatorForError)
             throw perr
         }
         throw err
@@ -225,8 +235,10 @@ export function parseScriptSetupElements(
         getFixOffset(offset, kind) {
             const test: (block: RemapBlock) => boolean =
                 kind === "start"
-                    ? (block) => offset < block.range[1]
-                    : (block) => offset <= block.range[1]
+                    ? (block) =>
+                          block.range[0] <= offset && offset < block.range[1]
+                    : (block) =>
+                          block.range[0] < offset && offset <= block.range[1]
 
             for (const block of scriptSetupModuleCodeBlocks.codeBlocks
                 .remapBlocks) {
@@ -244,6 +256,12 @@ export function parseScriptSetupElements(
         parserOptions,
         locationCalculator,
     )
+    if (scriptSetupModuleCodeBlocks.postprocess) {
+        scriptSetupModuleCodeBlocks.postprocess(result, {
+            scriptSetupBlockRange:
+                scriptSetupModuleCodeBlocks.scriptSetupBlockRange,
+        })
+    }
 
     /* Remap ASTs */
     const scriptSetupStatements = remapAST(result, scriptSetupModuleCodeBlocks)
@@ -465,6 +483,7 @@ function getScriptSetupModuleCodeBlocks(
             scriptSetupCodeBlocks.scriptSetupBlockRange[0] + scriptSetupOffset,
             scriptSetupCodeBlocks.scriptSetupBlockRange[1] + scriptSetupOffset,
         ],
+        postprocess: scriptSetupCodeBlocks.postprocess,
         restoreASTCallbacks: scriptSetupCodeBlocks.restoreASTCallbacks,
     }
 }
@@ -514,41 +533,186 @@ function getScriptSetupCodeBlocks(
     // It holds the information to restore the transformation source code of the export statements held in `statementCodeBlocks`.
     const restoreASTCallbacks = new RestoreASTCallbacks()
 
-    let astOffset = 0
+    let usedOffset = 0
 
     /**
-     * Append the given range of code to the given codeBlocks.
+     * Consume and append the given range of code to the given codeBlocks.
      */
-    function processAppend(codeBlocks: CodeBlocks, start: number, end: number) {
+    function append(codeBlocks: CodeBlocks, start: number, end: number) {
         if (start < end) {
             codeBlocks.append(
                 scriptCode.slice(start, end),
                 scriptSetupStartOffset + start,
             )
-            astOffset = end
+            usedOffset = end
+            return true
         }
-    }
-
-    /**
-     * Append the partial statements up to the start position to `statementCodeBlocks`.
-     */
-    function processStatementCodeBlock(start: number) {
-        if (astOffset < start) {
-            processAppend(statementCodeBlocks, astOffset, start)
-            statementCodeBlocks.appendSplitPunctuators(";")
-        }
+        return false
     }
 
     /**
      * Append the given range of import or export statement to the given codeBlocks.
      */
-    function processModuleCodeBlock(
+    function appendRangeAsStatement(
         codeBlocks: CodeBlocks,
         start: number,
         end: number,
     ) {
-        processAppend(codeBlocks, start, end)
-        codeBlocks.appendSplitPunctuators(";")
+        if (append(codeBlocks, start, end)) {
+            codeBlocks.appendSplitPunctuators(";")
+        }
+    }
+
+    function transformExportNamed(body: ESLintExportNamedDeclaration) {
+        const [start, end] = getNodeFullRange(body)
+        // Consume code up to the start position.
+        appendRangeAsStatement(statementCodeBlocks, usedOffset, start)
+
+        const tokens = ast.tokens!
+        const exportTokenIndex = tokens.findIndex(
+            (t) => t.range[0] === body.range[0],
+        )
+        const exportToken = tokens[exportTokenIndex]
+        if (exportToken && exportToken.value === "export") {
+            // Consume code up to the start position of `export`.
+            // The code may contain legacy decorators.
+            append(statementCodeBlocks, usedOffset, exportToken.range[0])
+            if (body.declaration) {
+                // Append declaration section (Skip `export` token)
+                appendRangeAsStatement(
+                    statementCodeBlocks,
+                    exportToken.range[1],
+                    end,
+                )
+
+                restoreASTCallbacks.addCallback(
+                    scriptSetupStartOffset,
+                    [start, end],
+                    (statement) => {
+                        if (statement.type !== body.declaration!.type) {
+                            return null
+                        }
+                        fixNodeLocations(
+                            body,
+                            result.visitorKeys,
+                            offsetLocationCalculator,
+                        )
+                        fixLocation(exportToken, offsetLocationCalculator)
+                        body.declaration = statement
+                        statement.parent = body
+                        return {
+                            statement: body,
+                            tokens: [exportToken],
+                        }
+                    },
+                )
+            } else {
+                // Append the code that converted specifiers to destructuring.
+                statementCodeBlocks.appendSplitPunctuators("(")
+                const restoreTokens: Token[] = [exportToken]
+                let startOffset = exportToken.range[1]
+                for (const spec of body.specifiers) {
+                    if (spec.local.range[0] < spec.exported.range[0]) {
+                        // {a as b}
+                        const localTokenIndex = tokens.findIndex(
+                            (t) => t.range[0] === spec.local.range[0],
+                            exportTokenIndex,
+                        )
+                        checkToken(
+                            tokens[localTokenIndex],
+                            (spec.local as ESLintIdentifier).name,
+                        )
+                        const asToken = tokens[localTokenIndex + 1]
+                        checkToken(asToken, "as")
+                        restoreTokens.push(asToken)
+                        const exportedToken = tokens[localTokenIndex + 2]
+                        checkToken(
+                            exportedToken,
+                            spec.exported.type === "Identifier"
+                                ? spec.exported.name
+                                : spec.exported.raw,
+                        )
+                        restoreTokens.push(exportedToken)
+                        // Skip `as` token
+                        append(
+                            statementCodeBlocks,
+                            startOffset,
+                            asToken.range[0],
+                        )
+                        append(
+                            statementCodeBlocks,
+                            asToken.range[1],
+                            exportedToken.range[0],
+                        )
+                        startOffset = exportedToken.range[1]
+                    }
+                }
+                append(statementCodeBlocks, startOffset, end)
+                statementCodeBlocks.appendSplitPunctuators(")")
+                statementCodeBlocks.appendSplitPunctuators(";")
+
+                restoreASTCallbacks.addCallback(
+                    scriptSetupStartOffset,
+                    [start, end],
+                    (statement) => {
+                        if (
+                            statement.type !== "ExpressionStatement" ||
+                            statement.expression.type !== "ObjectExpression"
+                        ) {
+                            return null
+                        }
+                        // preprocess and check
+                        const locals: ESLintIdentifier[] = []
+                        for (const prop of statement.expression.properties) {
+                            if (
+                                prop.type !== "Property" ||
+                                prop.value.type !== "Identifier"
+                            ) {
+                                return null
+                            }
+                            locals.push(prop.value)
+                        }
+                        if (body.specifiers.length !== locals.length) {
+                            return null
+                        }
+                        const map = new Map<
+                            ESLintExportSpecifier,
+                            ESLintIdentifier
+                        >()
+                        for (
+                            let index = 0;
+                            index < body.specifiers.length;
+                            index++
+                        ) {
+                            const spec = body.specifiers[index]
+                            const local = locals[index]
+                            map.set(spec, local)
+                        }
+
+                        // restore
+                        fixNodeLocations(
+                            body,
+                            result.visitorKeys,
+                            offsetLocationCalculator,
+                        )
+                        for (const token of restoreTokens) {
+                            fixLocation(token, offsetLocationCalculator)
+                        }
+                        for (const [spec, local] of map) {
+                            spec.local = local
+                            local.parent = spec
+                        }
+                        return {
+                            statement: body,
+                            tokens: restoreTokens,
+                        }
+                    },
+                )
+            }
+        } else {
+            // Unknown format
+            appendRangeAsStatement(statementCodeBlocks, usedOffset, end)
+        }
     }
 
     for (const body of ast.body) {
@@ -558,176 +722,89 @@ function getScriptSetupCodeBlocks(
             (body.type === "ExportNamedDeclaration" && body.source != null)
         ) {
             const [start, end] = getNodeFullRange(body)
-            processStatementCodeBlock(start)
-            processModuleCodeBlock(importCodeBlocks, start, end)
+            // Consume code up to the start position.
+            appendRangeAsStatement(statementCodeBlocks, usedOffset, start)
+            // Append declaration
+            appendRangeAsStatement(importCodeBlocks, start, end)
         } else if (body.type === "ExportDefaultDeclaration") {
             const [start, end] = getNodeFullRange(body)
-            processStatementCodeBlock(start)
-            processModuleCodeBlock(exportDefaultCodeBlocks, start, end)
+            // Consume code up to the start position.
+            appendRangeAsStatement(statementCodeBlocks, usedOffset, start)
+            // Append declaration
+            appendRangeAsStatement(exportDefaultCodeBlocks, start, end)
         } else if (body.type === "ExportNamedDeclaration") {
             // Transform ExportNamedDeclaration
             // The transformed statement ASTs are restored by RestoreASTCallbacks.
             // e.g.
             // - `export let v = 42` -> `let v = 42`
             // - `export {foo, bar as Bar}` -> `({foo, bar})`
-
-            const [start, end] = getNodeFullRange(body)
-            processStatementCodeBlock(start)
-
-            const tokens = ast.tokens!
-            const exportTokenIndex = tokens.findIndex(
-                (t) => t.range[0] === body.range[0],
-            )
-            const exportToken = tokens[exportTokenIndex]
-            if (exportToken && exportToken.value === "export") {
-                processAppend(
-                    statementCodeBlocks,
-                    astOffset,
-                    exportToken.range[0],
-                ) // Maybe decorator
-                if (body.declaration) {
-                    processModuleCodeBlock(
-                        statementCodeBlocks,
-                        exportToken.range[1],
-                        end,
-                    )
-
-                    restoreASTCallbacks.addCallback(
-                        scriptSetupStartOffset,
-                        [start, end],
-                        (statement) => {
-                            if (statement.type !== body.declaration!.type) {
-                                return null
-                            }
-                            fixNodeLocations(
-                                body,
-                                result.visitorKeys,
-                                offsetLocationCalculator,
-                            )
-                            fixLocation(exportToken, offsetLocationCalculator)
-                            body.declaration = statement
-                            statement.parent = body
-                            return {
-                                statement: body,
-                                tokens: [exportToken],
-                            }
-                        },
-                    )
-                } else {
-                    statementCodeBlocks.appendSplitPunctuators("(")
-                    const restoreTokens: Token[] = [exportToken]
-                    let startOffset = exportToken.range[1]
-                    for (const spec of body.specifiers) {
-                        if (spec.local.range[0] < spec.exported.range[0]) {
-                            // {a as b}
-                            const localTokenIndex = tokens.findIndex(
-                                (t) => t.range[0] === spec.local.range[0],
-                                exportTokenIndex,
-                            )
-                            checkToken(
-                                tokens[localTokenIndex],
-                                (spec.local as ESLintIdentifier).name,
-                            )
-                            const asToken = tokens[localTokenIndex + 1]
-                            checkToken(asToken, "as")
-                            restoreTokens.push(asToken)
-                            const exportedToken = tokens[localTokenIndex + 2]
-                            checkToken(
-                                exportedToken,
-                                spec.exported.type === "Identifier"
-                                    ? spec.exported.name
-                                    : spec.exported.raw,
-                            )
-                            restoreTokens.push(exportedToken)
-                            processAppend(
-                                statementCodeBlocks,
-                                startOffset,
-                                asToken.range[0],
-                            )
-                            processAppend(
-                                statementCodeBlocks,
-                                asToken.range[1],
-                                exportedToken.range[0],
-                            )
-                            startOffset = exportedToken.range[1]
-                        }
-                    }
-                    processAppend(statementCodeBlocks, startOffset, end)
-                    statementCodeBlocks.appendSplitPunctuators(")")
-                    statementCodeBlocks.appendSplitPunctuators(";")
-
-                    restoreASTCallbacks.addCallback(
-                        scriptSetupStartOffset,
-                        [start, end],
-                        (statement) => {
-                            if (
-                                statement.type !== "ExpressionStatement" ||
-                                statement.expression.type !== "ObjectExpression"
-                            ) {
-                                return null
-                            }
-                            // preprocess and check
-                            const locals: ESLintIdentifier[] = []
-                            for (const prop of statement.expression
-                                .properties) {
-                                if (
-                                    prop.type !== "Property" ||
-                                    prop.value.type !== "Identifier"
-                                ) {
-                                    return null
-                                }
-                                locals.push(prop.value)
-                            }
-                            if (body.specifiers.length !== locals.length) {
-                                return null
-                            }
-                            const map = new Map<
-                                ESLintExportSpecifier,
-                                ESLintIdentifier
-                            >()
-                            for (
-                                let index = 0;
-                                index < body.specifiers.length;
-                                index++
-                            ) {
-                                const spec = body.specifiers[index]
-                                const local = locals[index]
-                                map.set(spec, local)
-                            }
-
-                            // restore
-                            fixNodeLocations(
-                                body,
-                                result.visitorKeys,
-                                offsetLocationCalculator,
-                            )
-                            for (const token of restoreTokens) {
-                                fixLocation(token, offsetLocationCalculator)
-                            }
-                            for (const [spec, local] of map) {
-                                spec.local = local
-                                local.parent = spec
-                            }
-                            return {
-                                statement: body,
-                                tokens: restoreTokens,
-                            }
-                        },
-                    )
-                }
-            } else {
-                processModuleCodeBlock(statementCodeBlocks, start, end)
-            }
+            transformExportNamed(body)
         }
     }
-    processStatementCodeBlock(scriptSetupEndOffset)
+    // Consume the remaining code.
+    appendRangeAsStatement(
+        statementCodeBlocks,
+        usedOffset,
+        scriptSetupEndOffset,
+    )
 
     // Creates a code block that combines import, statement block, and export default.
     const codeBlocks = new CodeBlocks()
 
+    let postprocess: Postprocess = () => {
+        // noop
+    }
+
     codeBlocks.appendCodeBlocks(importCodeBlocks)
     const scriptSetupBlockRangeStart = codeBlocks.length
     codeBlocks.appendSplitPunctuators("{")
+    const generic = extractGeneric(node)
+    if (generic) {
+        const defineGenericTypeRangeStart = codeBlocks.length
+        for (const defineType of generic.defineTypes) {
+            codeBlocks.append(defineType.define, defineType.node.range[0])
+            codeBlocks.appendSplitPunctuators(";")
+        }
+        const defineGenericTypeRangeEnd = codeBlocks.length
+        postprocess = (eslintResult, context) => {
+            const diffOffset =
+                context.scriptSetupBlockRange[0] - scriptSetupBlockRangeStart
+            const defineGenericTypeRange = [
+                defineGenericTypeRangeStart + diffOffset,
+                defineGenericTypeRangeEnd + diffOffset,
+            ] as const
+
+            function isTypeBlock(
+                block: ESLintNode,
+            ): block is ESLintBlockStatement {
+                return (
+                    block.type === "BlockStatement" &&
+                    context.scriptSetupBlockRange[0] <= block.range[0] &&
+                    block.range[1] <= context.scriptSetupBlockRange[1]
+                )
+            }
+
+            generic.postprocess({
+                result: eslintResult,
+                getTypeBlock: (program) => program.body.find(isTypeBlock)!,
+                isRemoveTarget(nodeOrToken) {
+                    return (
+                        defineGenericTypeRange[0] <= nodeOrToken.range[0] &&
+                        nodeOrToken.range[1] <= defineGenericTypeRange[1]
+                    )
+                },
+                getTypeDefScope(scopeManager) {
+                    const moduleScope =
+                        scopeManager.globalScope.childScopes.find(
+                            (s) => s.type === "module",
+                        ) ?? scopeManager.globalScope
+                    return moduleScope.childScopes.find((scope) =>
+                        isTypeBlock(scope.block as ESLintNode),
+                    )!
+                },
+            })
+        }
+    }
     codeBlocks.appendCodeBlocks(statementCodeBlocks)
     codeBlocks.appendSplitPunctuators("}")
     const scriptSetupBlockRangeEnd = codeBlocks.length
@@ -738,6 +815,7 @@ function getScriptSetupCodeBlocks(
             scriptSetupBlockRangeStart,
             scriptSetupBlockRangeEnd,
         ],
+        postprocess,
         restoreASTCallbacks,
     }
 

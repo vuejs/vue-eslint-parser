@@ -10,6 +10,11 @@ import type {
 } from "../ast"
 import { traverseNodes } from "../ast"
 import { getEslintScope } from "../common/eslint-scope"
+import {
+    findGenericDirective,
+    isScriptElement,
+    isScriptSetupElement,
+} from "../common/ast-utils"
 
 const BUILTIN_COMPONENTS = new Set([
     "template",
@@ -117,7 +122,7 @@ export function analyzeScriptSetupScope(
 ): void {
     analyzeUsedInTemplateVariables(scopeManager, templateBody, df)
 
-    analyzeCompilerMacrosVariables(scopeManager, parserOptions)
+    analyzeScriptSetupVariables(scopeManager, df, parserOptions)
 }
 
 function extractVariables(scopeManager: escopeTypes.ScopeManager) {
@@ -272,12 +277,20 @@ function analyzeUsedInTemplateVariables(
         })
     }
 
-    // Analyze CSS v-bind()
     for (const child of df.children) {
-        if (child.type === "VElement" && child.name === "style") {
-            for (const node of child.children) {
-                if (node.type === "VExpressionContainer") {
-                    processVExpressionContainer(node)
+        if (child.type === "VElement") {
+            if (isScriptSetupElement(child)) {
+                // Analyze <script setup lang="ts" generic="...">
+                const generic = findGenericDirective(child)
+                if (generic) {
+                    processVExpressionContainer(generic.value)
+                }
+            } else if (child.name === "style") {
+                // Analyze CSS v-bind()
+                for (const node of child.children) {
+                    if (node.type === "VExpressionContainer") {
+                        processVExpressionContainer(node)
+                    }
                 }
             }
         }
@@ -285,11 +298,15 @@ function analyzeUsedInTemplateVariables(
 }
 
 /**
- * Analyze compiler macros.
- * If compiler macros were used, add these variables as global variables.
+ * Analyze <script setup> variables.
+ * - Analyze compiler macros.
+ *   If compiler macros were used, add these variables as global variables.
+ * - Generic variables.
+ *   If defined generics are used, add these variables as global variables.
  */
-function analyzeCompilerMacrosVariables(
+function analyzeScriptSetupVariables(
     scopeManager: escopeTypes.ScopeManager,
+    df: VDocumentFragment,
     parserOptions: ParserOptions,
 ) {
     const globalScope = scopeManager.globalScope
@@ -303,22 +320,18 @@ function analyzeCompilerMacrosVariables(
             : [],
     )
 
-    const compilerMacroVariables = new Map<string, escopeTypes.Variable>()
-
-    function addCompilerMacroVariable(reference: escopeTypes.Reference) {
-        const name = reference.identifier.name
-        let variable = compilerMacroVariables.get(name)
-        if (!variable) {
-            variable = new (getEslintScope().Variable)()
-            variable.name = name
-            variable.scope = globalScope
-            globalScope.variables.push(variable)
-            globalScope.set.set(name, variable)
-            compilerMacroVariables.set(name, variable)
+    const genericDefineNames = new Set<string>()
+    const scriptElement = df.children.find(isScriptElement)
+    if (
+        scriptElement &&
+        isScriptSetupElement(scriptElement) &&
+        findGenericDirective(scriptElement)
+    ) {
+        for (const variable of scriptElement.variables) {
+            if (variable.kind === "generic") {
+                genericDefineNames.add(variable.id.name)
+            }
         }
-        // Links the variable and the reference.
-        reference.resolved = variable
-        variable.references.push(reference)
     }
 
     const newThrough: escopeTypes.Reference[] = []
@@ -336,8 +349,40 @@ function analyzeCompilerMacrosVariables(
                 continue
             }
         }
+        if (genericDefineNames.has(reference.identifier.name)) {
+            addGenericVariable(reference)
+            // This reference is removed from `Scope#through`.
+            continue
+        }
+
         newThrough.push(reference)
     }
 
     globalScope.through = newThrough
+
+    function addCompilerMacroVariable(reference: escopeTypes.Reference) {
+        addVariable(globalScope, reference)
+    }
+
+    function addGenericVariable(reference: escopeTypes.Reference) {
+        addVariable(globalScope, reference)
+    }
+}
+
+function addVariable(
+    scope: escopeTypes.Scope,
+    reference: escopeTypes.Reference,
+) {
+    const name = reference.identifier.name
+    let variable = scope.set.get(name)
+    if (!variable) {
+        variable = new (getEslintScope().Variable)()
+        variable.name = name
+        variable.scope = scope
+        scope.variables.push(variable)
+        scope.set.set(name, variable)
+    }
+    // Links the variable and the reference.
+    reference.resolved = variable
+    variable.references.push(reference)
 }
