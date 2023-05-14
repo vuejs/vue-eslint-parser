@@ -10,6 +10,16 @@
         ]
     },
     {
+        "filePath": "/no-undef/invalid/define-options.vue",
+        "messages": [
+            {
+                "ruleId": "no-undef",
+                "line": 3,
+                "message": "'defineOptions' is not defined."
+            }
+        ]
+    },
+    {
         "filePath": "/no-undef/invalid/define-props-and-emits.vue",
         "messages": [
             {
@@ -21,6 +31,16 @@
                 "ruleId": "no-undef",
                 "line": 7,
                 "message": "'defineEmits' is not defined."
+            }
+        ]
+    },
+    {
+        "filePath": "/no-undef/invalid/define-slots.vue",
+        "messages": [
+            {
+                "ruleId": "no-undef",
+                "line": 3,
+                "message": "'defineSlots' is not defined."
             }
         ]
     },

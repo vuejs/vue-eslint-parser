@@ -1,5 +1,10 @@
 {
     "rules": {
         "no-undef": "error"
+    },
+    "parserOptions": {
+        "parser": {
+            "ts": "@typescript-eslint/parser"
+        }
     }
 }
