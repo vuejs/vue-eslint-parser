@@ -142,6 +142,7 @@ For example:
             "filter": true,
             "interpolationAsNonHTML": true,
             "styleCSSVariableInjection": true,
+            "customMacros": []
         }
     }
 }
@@ -212,6 +213,13 @@ But, it cannot be parsed with Vue 2.
 If set to `true`, to parse expressions in `v-bind` CSS functions inside `<style>` tags. `v-bind()` is parsed into the `VExpressionContainer` AST node and held in the `VElement` of `<style>`. Default is `true`.
 
 See also to [here](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0043-sfc-style-variables.md).
+
+### parserOptions.vueFeatures.customMacros
+
+Specifies an array of names of custom macros other than Vue standard macros.  
+For example, if you have a custom macro `defineFoo()` and you want it processed by the parser, specify `["defineFoo"]`.
+
+Note that this option only works in `<script setup>`.
 
 ### parserOptions.templateTokenizer
 
