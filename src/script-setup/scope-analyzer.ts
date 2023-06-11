@@ -321,13 +321,10 @@ function analyzeScriptSetupVariables(
     )
 
     const genericDefineNames = new Set<string>()
-    const scriptElement = df.children.find(isScriptElement)
-    if (
-        scriptElement &&
-        isScriptSetupElement(scriptElement) &&
-        findGenericDirective(scriptElement)
-    ) {
-        for (const variable of scriptElement.variables) {
+    const scriptElements = df.children.filter(isScriptElement)
+    const scriptSetupElement = scriptElements.find(isScriptSetupElement)
+    if (scriptSetupElement && findGenericDirective(scriptSetupElement)) {
+        for (const variable of scriptSetupElement.variables) {
             if (variable.kind === "generic") {
                 genericDefineNames.add(variable.id.name)
             }
