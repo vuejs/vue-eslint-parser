@@ -907,6 +907,31 @@
                     "init": null
                 }
             ]
+        },
+        {
+            "name": "T",
+            "identifiers": [],
+            "defs": [],
+            "references": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "T",
+                        "loc": {
+                            "start": {
+                                "line": 5,
+                                "column": 27
+                            },
+                            "end": {
+                                "line": 5,
+                                "column": 28
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "init": null
+                }
+            ]
         }
     ],
     "references": [],
@@ -1296,7 +1321,6 @@
                         }
                     },
                     "from": "module",
-                    "resolved": null,
                     "init": null
                 },
                 {
@@ -1451,7 +1475,6 @@
                         }
                     },
                     "from": "module",
-                    "resolved": null,
                     "init": null
                 },
                 {
@@ -1477,25 +1500,6 @@
         }
     ],
     "through": [
-        {
-            "identifier": {
-                "type": "Identifier",
-                "name": "T",
-                "loc": {
-                    "start": {
-                        "line": 5,
-                        "column": 27
-                    },
-                    "end": {
-                        "line": 5,
-                        "column": 28
-                    }
-                }
-            },
-            "from": "module",
-            "resolved": null,
-            "init": null
-        },
         {
             "identifier": {
                 "type": "Identifier",
