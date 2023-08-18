@@ -964,6 +964,7 @@ export interface VDocumentFragment
     extends HasLocation,
         HasParent,
         HasConcreteInfo {
+    twigExpressions: Token[]
     type: "VDocumentFragment"
     parent: null
     children: (VElement | VText | VExpressionContainer | VStyleElement)[]

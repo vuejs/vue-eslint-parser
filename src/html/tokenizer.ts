@@ -50,6 +50,7 @@ import {
     SEMICOLON,
     SOLIDUS,
     toLowerCodePoint,
+    PERCENT,
 } from "./util/unicode"
 import type { ParserOptions } from "../common/parser-options"
 
@@ -73,6 +74,7 @@ export type TokenType =
     | "HTMLWhitespace"
     | "VExpressionStart"
     | "VExpressionEnd"
+    | "TwigExpression"
 
 /**
  * Enumeration of tokenizer's state types.
@@ -127,6 +129,7 @@ export type TokenizerState =
     | "V_EXPRESSION_START"
     | "V_EXPRESSION_DATA"
     | "V_EXPRESSION_END"
+    | "TWIG_EXPRESSION"
 // ---- Use RAWTEXT state for <script> elements instead ----
 // "SCRIPT_DATA" |
 // "SCRIPT_DATA_LESS_THAN_SIGN" |
@@ -616,6 +619,11 @@ export class Tokenizer {
                 this.setStartTokenMark()
                 return "TAG_OPEN"
             }
+            if (cp === LEFT_CURLY_BRACKET) {
+                this.setStartTokenMark()
+                this.returnState = "DATA"
+                return "TWIG_EXPRESSION"
+            }
             if (cp === LEFT_CURLY_BRACKET && this.expressionEnabled) {
                 this.setStartTokenMark()
                 this.returnState = "DATA"
@@ -1009,6 +1017,11 @@ export class Tokenizer {
             this.startToken("HTMLIdentifier")
             this.appendTokenValue(cp, "HTMLIdentifier")
             return "ATTRIBUTE_NAME"
+        }
+        if (cp === LEFT_CURLY_BRACKET) {
+            this.setStartTokenMark()
+            this.returnState = "BEFORE_ATTRIBUTE_NAME"
+            return "TWIG_EXPRESSION"
         }
 
         this.startToken("HTMLIdentifier")
@@ -1950,6 +1963,32 @@ export class Tokenizer {
 
         this.appendTokenValue(RIGHT_CURLY_BRACKET, null)
         return this.reconsumeAs(this.returnState)
+    }
+    /**
+     * Create `{% ... %} `token.
+     * @param cp The current code point.
+     * @returns The next state.
+     */
+    protected TWIG_EXPRESSION(cp: number): TokenizerState {
+        if (cp !== PERCENT) {
+            this.appendTokenValue(LEFT_CURLY_BRACKET, null)
+            return this.reconsumeAs(this.returnState)
+        }
+
+        this.startToken("TwigExpression")
+        this.appendTokenValue(LEFT_CURLY_BRACKET, null)
+        this.appendTokenValue(PERCENT, null)
+
+        cp = this.consumeNextCodePoint()
+        while (cp !== PERCENT) {
+            this.appendTokenValue(cp, null)
+            cp = this.consumeNextCodePoint()
+        }
+
+        cp = this.consumeNextCodePoint()
+        this.appendTokenValue(PERCENT, null)
+        this.appendTokenValue(RIGHT_CURLY_BRACKET, null)
+        return this.returnState
     }
 }
 

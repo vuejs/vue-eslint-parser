@@ -206,6 +206,13 @@ export class Parser {
     }
 
     /**
+     * The twig expressions.
+     */
+    private get twigExpressions(): Token[] {
+        return this.tokenizer.twigExpressions
+    }
+
+    /**
      * The syntax errors which are found in this parsing.
      */
     private get errors(): ParseError[] {
@@ -270,6 +277,7 @@ export class Parser {
             children: [],
             tokens: this.tokens,
             comments: this.comments,
+            twigExpressions: this.twigExpressions,
             errors: this.errors,
         }
         this.elementStack = []

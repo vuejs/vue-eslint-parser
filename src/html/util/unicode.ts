@@ -14,6 +14,7 @@ export const SPACE = 0x20
 export const EXCLAMATION_MARK = 0x21 // !
 export const QUOTATION_MARK = 0x22 // "
 export const NUMBER_SIGN = 0x23 // #
+export const PERCENT = 0x25 // %
 export const AMPERSAND = 0x26 // &
 export const APOSTROPHE = 0x27 // '
 export const LEFT_PARENTHESIS = 0x28 // (

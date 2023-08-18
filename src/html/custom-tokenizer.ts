@@ -12,6 +12,10 @@ export interface CustomTemplateTokenizer {
      */
     readonly comments: Token[]
     /**
+     * The tokenized twig expression tokens
+     */
+    readonly twigExpressions: Token[]
+    /**
      * The source code text.
      */
     readonly text: string

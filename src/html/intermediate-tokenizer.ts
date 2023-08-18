@@ -82,6 +82,7 @@ export class IntermediateTokenizer {
 
     public readonly tokens: Token[]
     public readonly comments: Token[]
+    public readonly twigExpressions: Token[]
 
     /**
      * The source code text.
@@ -140,6 +141,7 @@ export class IntermediateTokenizer {
         this.expressionTokens = []
         this.tokens = []
         this.comments = []
+        this.twigExpressions = []
     }
 
     /**
@@ -221,6 +223,19 @@ export class IntermediateTokenizer {
      */
     private processComment(token: Token): IntermediateToken | null {
         this.comments.push(token)
+
+        if (this.currentToken != null && this.currentToken.type === "Text") {
+            return this.commit()
+        }
+        return null
+    }
+
+    /**
+     * Process the given twig token.
+     * @param token The twig token to process.
+     */
+    private processTwigExpression(token: Token): IntermediateToken | null {
+        this.twigExpressions.push(token)
 
         if (this.currentToken != null && this.currentToken.type === "Text") {
             return this.commit()
@@ -319,6 +334,14 @@ export class IntermediateTokenizer {
      */
     protected HTMLComment(token: Token): IntermediateToken | null {
         return this.processComment(token)
+    }
+
+    /**
+     * Process a TwigExpression token.
+     * @param token The token to process.
+     */
+    protected TwigExpression(token: Token): IntermediateToken | null {
+        return this.processTwigExpression(token)
     }
 
     /**
