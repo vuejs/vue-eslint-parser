@@ -131,12 +131,12 @@ function parseAsSFC(code: string, options: ParserOptions) {
             parser: scriptParser,
         })
     } else if (
-        scripts.length === 2 &&
+        scripts.length >= 2 &&
         (scriptSetup = scripts.find(isScriptSetupElement))
     ) {
         result = parseScriptSetupElements(
             scriptSetup,
-            scripts.find((e) => e !== scriptSetup)!,
+            scripts.filter((e) => e !== scriptSetup)!,
             code,
             new LinesAndColumns(tokenizer.lineTerminators),
             {
