@@ -539,6 +539,36 @@ describe("Basic tests", () => {
         })
     })
 
+    describe("About fixtures/lang-ts", () => {
+        it.only('Should parse lang="ts" blocks as script blocks', () => {
+            const ast = parse(
+                [
+                    "<template><div></div></template>",
+                    '<script lang="ts">const test = "test"</script>',
+                    '<style lang="ts">const testStyle = {}</style>',
+                    '<custom lang="ts">const testCustom = {}</custom>',
+                ].join("\n"),
+            )
+            const body = ast
+        })
+        it.only('Should treat lang="ts" blocks as script tags', async () => {
+            const cli = new ESLint({
+                cwd: FIXTURE_DIR,
+                overrideConfig: {
+                    env: { browser: true, node: true },
+                    parser: PARSER_PATH,
+                    parserOptions: {
+                        ...BABEL_PARSER_OPTIONS,
+                        sourceType: "module",
+                        ecmaVersion: 2017,
+                    },
+                },
+                useEslintrc: false,
+            })
+            const report = await cli.lintFiles(["lang-ts.vue"])
+        })
+    })
+
     describe("About unexpected-null-character errors", () => {
         it("should keep NULL in DATA state.", () => {
             const ast = parse("<template>\u0000</template>")
