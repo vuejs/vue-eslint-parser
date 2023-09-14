@@ -540,7 +540,7 @@ describe("Basic tests", () => {
     })
 
     describe("About fixtures/lang-ts", () => {
-        it.only('Should parse lang="ts" blocks as script blocks', () => {
+        it('Should parse lang="ts" blocks as script blocks', () => {
             const ast = parse(
                 [
                     "<template><div></div></template>",
@@ -551,7 +551,7 @@ describe("Basic tests", () => {
             )
             const body = ast
         })
-        it.only('Should treat lang="ts" blocks as script tags', async () => {
+        it('Should treat lang="ts" blocks as script tags', async () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
