@@ -24,6 +24,24 @@ function isAcornStyleParseError(
 }
 
 /**
+ * Check whether the given value is probably a TSError.
+ * @param x The value to check.
+ * @returns `true` if the given value is probably a TSError.
+ */
+function isTSError(
+    x: any,
+): x is { message: string; index: number; lineNumber: number; column: number } {
+    return (
+        !(x instanceof ParseError) &&
+        typeof x.message === "string" &&
+        typeof x.index === "number" &&
+        typeof x.lineNumber === "number" &&
+        typeof x.column === "number" &&
+        x.name === "TSError"
+    )
+}
+
+/**
  * HTML parse errors.
  */
 export class ParseError extends SyntaxError {
@@ -53,6 +71,15 @@ export class ParseError extends SyntaxError {
      * @param x The error object to normalize.
      */
     public static normalize(x: any): ParseError | null {
+        if (isTSError(x)) {
+            return new ParseError(
+                x.message,
+                undefined,
+                x.index,
+                x.lineNumber,
+                x.column,
+            )
+        }
         if (ParseError.isParseError(x)) {
             return x
         }
