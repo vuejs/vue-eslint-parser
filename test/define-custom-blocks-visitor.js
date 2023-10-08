@@ -29,6 +29,7 @@ const LINTER_CONFIG = {
         "test-no-number-literal": "error",
         "test-no-forbidden-key": "error",
         "test-no-parsing-error": "error",
+        "test-no-parsing-error2": "error",
     },
 }
 const noNumberLiteralRule = {
@@ -61,6 +62,30 @@ const noNoForbiddenKeyRule = {
     },
 }
 const noParsingErrorRule = {
+    create(context) {
+        const parseError = context.getSourceCode().parserServices.parseError
+        if (parseError) {
+            let loc = undefined
+            if ("column" in parseError && "lineNumber" in parseError) {
+                loc = {
+                    line: parseError.lineNumber,
+                    column: parseError.column,
+                }
+            }
+            return {
+                Program(node) {
+                    context.report({
+                        node,
+                        loc,
+                        message: parseError.message,
+                    })
+                },
+            }
+        }
+        return {}
+    },
+}
+const noParsingErrorRule2 = {
     create(context) {
         const parseError = context.parserServices.parseError
         if (parseError) {
@@ -131,10 +156,10 @@ function createLinter(target = "json") {
             ...noParsingErrorRule,
         }),
     )
-    linter.defineRule("test-no-parsing-error", (context) =>
+    linter.defineRule("test-no-parsing-error2", (context) =>
         context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
             target,
-            ...noParsingErrorRule,
+            ...noParsingErrorRule2,
         }),
     )
     linter.defineRule("test-no-program-exit", (context) =>
@@ -297,22 +322,37 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 
         const messages = linter.verify(code, LINTER_CONFIG)
 
-        assert.strictEqual(messages.length, 3)
+        assert.strictEqual(messages.length, 6)
         assert.strictEqual(messages[0].message, "Unexpected token ':'.")
         assert.strictEqual(messages[0].line, 3)
         assert.strictEqual(messages[0].column, 6)
-        assert.strictEqual(
-            messages[1].message,
-            "Expected to be an expression, but got empty.",
-        )
-        assert.strictEqual(messages[1].line, 5)
-        assert.strictEqual(messages[1].column, 19)
+        assert.strictEqual(messages[1].message, "Unexpected token ':'.")
+        assert.strictEqual(messages[1].line, 3)
+        assert.strictEqual(messages[1].column, 6)
         assert.strictEqual(
             messages[2].message,
             "Expected to be an expression, but got empty.",
         )
-        assert.strictEqual(messages[2].line, 6)
+        assert.strictEqual(messages[2].line, 5)
         assert.strictEqual(messages[2].column, 19)
+        assert.strictEqual(
+            messages[3].message,
+            "Expected to be an expression, but got empty.",
+        )
+        assert.strictEqual(messages[3].line, 5)
+        assert.strictEqual(messages[3].column, 19)
+        assert.strictEqual(
+            messages[4].message,
+            "Expected to be an expression, but got empty.",
+        )
+        assert.strictEqual(messages[4].line, 6)
+        assert.strictEqual(messages[4].column, 19)
+        assert.strictEqual(
+            messages[5].message,
+            "Expected to be an expression, but got empty.",
+        )
+        assert.strictEqual(messages[5].line, 6)
+        assert.strictEqual(messages[5].column, 19)
     })
 
     it("should work even if error.", () => {

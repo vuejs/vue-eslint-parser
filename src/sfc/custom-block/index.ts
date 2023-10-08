@@ -213,26 +213,40 @@ export function createCustomBlockSharedContext({
     parserOptions: any
 }) {
     let sourceCode: SourceCode
-    let scopeManager: ScopeManager
     let currentNode: any
     return {
         serCurrentNode(node: any) {
             currentNode = node
         },
         context: {
-            getAncestors: () => getAncestors(currentNode),
-
+            getAncestors: () => getSourceCode().getAncestors(currentNode),
             getDeclaredVariables: (...args: any[]) =>
                 // @ts-expect-error -- ignore
-                getScopeManager().getDeclaredVariables(...args),
-            getScope: () => getScope(getScopeManager(), currentNode),
+                getSourceCode().getDeclaredVariables(...args),
+            getScope: () => getSourceCode().getScope(currentNode),
             markVariableAsUsed: (name: string) =>
-                markVariableAsUsed(
-                    getScopeManager(),
-                    currentNode,
-                    parserOptions,
-                    name,
-                ),
+                getSourceCode().markVariableAsUsed(name, currentNode),
+            get parserServices() {
+                return getSourceCode().parserServices
+            },
+            getSourceCode,
+            get sourceCode() {
+                return getSourceCode()
+            },
+        },
+    }
+
+    function getSourceCode(): SourceCode {
+        if (sourceCode) {
+            return sourceCode
+        }
+
+        const scopeManager = getScopeManager()
+
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const originalSourceCode = new (require("eslint").SourceCode)({
+            text,
+            ast: parsedResult.ast,
             parserServices: {
                 customBlock,
                 parseCustomBlockElement(
@@ -251,36 +265,36 @@ export function createCustomBlockSharedContext({
                     ? { parseError: parsedResult.error }
                     : {}),
             },
-            getSourceCode,
-            get sourceCode() {
-                return getSourceCode()
-            },
-        },
-    }
+            scopeManager,
+            visitorKeys: parsedResult.visitorKeys,
+        })
 
-    function getSourceCode() {
-        return (
-            sourceCode ||
-            // eslint-disable-next-line @typescript-eslint/no-require-imports
-            (sourceCode = new (require("eslint").SourceCode)({
-                text,
-                ast: parsedResult.ast,
-                parserServices: parsedResult.services,
-                scopeManager: getScopeManager(),
-                visitorKeys: parsedResult.visitorKeys,
-            }))
-        )
+        const polyfills = {
+            markVariableAsUsed: (name: string, node: any) =>
+                markVariableAsUsed(scopeManager, node, parsedResult.ast, name),
+            getScope: (node: any) => getScope(scopeManager, node),
+            getAncestors: (node: any) => getAncestors(node),
+            getDeclaredVariables: (...args: any[]) =>
+                // @ts-expect-error -- ignore
+                scopeManager.getDeclaredVariables(...args),
+        }
+
+        return (sourceCode = new Proxy(originalSourceCode, {
+            get(_target, prop) {
+                return originalSourceCode[prop] || (polyfills as any)[prop]
+            },
+        }))
     }
 
     function getScopeManager() {
-        if (parsedResult.scopeManager || scopeManager) {
-            return parsedResult.scopeManager || scopeManager
+        if (parsedResult.scopeManager) {
+            return parsedResult.scopeManager
         }
 
         const ecmaVersion = getEcmaVersionIfUseEspree(parserOptions) || 2022
         const ecmaFeatures = parserOptions.ecmaFeatures || {}
         const sourceType = parserOptions.sourceType || "script"
-        scopeManager = getEslintScope().analyze(parsedResult.ast, {
+        return getEslintScope().analyze(parsedResult.ast, {
             ignoreEval: true,
             nodejsScope: false,
             impliedStrict: ecmaFeatures.impliedStrict,
@@ -288,7 +302,6 @@ export function createCustomBlockSharedContext({
             sourceType,
             fallback: getFallbackKeys,
         })
-        return scopeManager
     }
 }
 
@@ -349,20 +362,19 @@ function getScope(scopeManager: ScopeManager, currentNode: Node) {
 function markVariableAsUsed(
     scopeManager: ScopeManager,
     currentNode: Node,
-    parserOptions: any,
+    program: Node,
     name: string,
 ) {
-    const hasGlobalReturn =
-        parserOptions.ecmaFeatures && parserOptions.ecmaFeatures.globalReturn
-    const specialScope =
-        hasGlobalReturn || parserOptions.sourceType === "module"
     const currentScope = getScope(scopeManager, currentNode)
-
-    // Special Node.js scope means we need to start one level deeper
-    const initialScope =
-        currentScope.type === "global" && specialScope
-            ? currentScope.childScopes[0]
-            : currentScope
+    let initialScope = currentScope
+    if (
+        currentScope.type === "global" &&
+        currentScope.childScopes.length > 0 &&
+        // top-level scopes refer to a `Program` node
+        currentScope.childScopes[0].block === program
+    ) {
+        initialScope = currentScope.childScopes[0]
+    }
 
     for (let scope: Scope | null = initialScope; scope; scope = scope.upper) {
         const variable = scope.variables.find(
