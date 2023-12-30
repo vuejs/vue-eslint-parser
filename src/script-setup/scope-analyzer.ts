@@ -87,9 +87,11 @@ const COMPILER_MACROS_AT_ROOT = new Set([
     "defineEmits",
     "defineExpose",
     "withDefaults",
-    // Added in vue 3.3
+    // Added in Vue 3.3
     "defineOptions",
     "defineSlots",
+    // Added in Vue 3.4
+    "defineModel",
 ])
 
 /**
