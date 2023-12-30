@@ -2,111 +2,6 @@
     "type": "global",
     "variables": [
         {
-            "name": "count",
-            "identifiers": [
-                {
-                    "type": "Identifier",
-                    "name": "count",
-                    "loc": {
-                        "start": {
-                            "line": 2,
-                            "column": 4
-                        },
-                        "end": {
-                            "line": 2,
-                            "column": 9
-                        }
-                    }
-                }
-            ],
-            "defs": [
-                {
-                    "type": "Variable",
-                    "node": {
-                        "type": "VariableDeclarator",
-                        "loc": {
-                            "start": {
-                                "line": 2,
-                                "column": 4
-                            },
-                            "end": {
-                                "line": 2,
-                                "column": 32
-                            }
-                        }
-                    },
-                    "name": "count"
-                }
-            ],
-            "references": [
-                {
-                    "identifier": {
-                        "type": "Identifier",
-                        "name": "count",
-                        "loc": {
-                            "start": {
-                                "line": 2,
-                                "column": 4
-                            },
-                            "end": {
-                                "line": 2,
-                                "column": 9
-                            }
-                        }
-                    },
-                    "from": "global",
-                    "resolved": {
-                        "type": "Identifier",
-                        "name": "count",
-                        "loc": {
-                            "start": {
-                                "line": 2,
-                                "column": 4
-                            },
-                            "end": {
-                                "line": 2,
-                                "column": 9
-                            }
-                        }
-                    },
-                    "init": true
-                },
-                {
-                    "identifier": {
-                        "type": "Identifier",
-                        "name": "count",
-                        "loc": {
-                            "start": {
-                                "line": 2,
-                                "column": 4
-                            },
-                            "end": {
-                                "line": 2,
-                                "column": 9
-                            }
-                        }
-                    },
-                    "from": "global",
-                    "resolved": {
-                        "type": "Identifier",
-                        "name": "count",
-                        "loc": {
-                            "start": {
-                                "line": 2,
-                                "column": 4
-                            },
-                            "end": {
-                                "line": 2,
-                                "column": 9
-                            }
-                        }
-                    },
-                    "init": null,
-                    "vueUsedInTemplate": true
-                }
-            ]
-        },
-        {
             "name": "defineModel",
             "identifiers": [],
             "defs": [],
@@ -126,64 +21,197 @@
                             }
                         }
                     },
-                    "from": "global",
+                    "from": "module",
                     "init": null
                 }
             ]
         }
     ],
-    "references": [
+    "references": [],
+    "childScopes": [
         {
-            "identifier": {
-                "type": "Identifier",
-                "name": "count",
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 4
-                    },
-                    "end": {
-                        "line": 2,
-                        "column": 9
-                    }
+            "type": "module",
+            "variables": [
+                {
+                    "name": "count",
+                    "identifiers": [
+                        {
+                            "type": "Identifier",
+                            "name": "count",
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 4
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 9
+                                }
+                            }
+                        }
+                    ],
+                    "defs": [
+                        {
+                            "type": "Variable",
+                            "node": {
+                                "type": "VariableDeclarator",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 32
+                                    }
+                                }
+                            },
+                            "name": "count"
+                        }
+                    ],
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "init": true
+                        },
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "init": null,
+                            "vueUsedInTemplate": true
+                        }
+                    ]
                 }
-            },
-            "from": "global",
-            "resolved": {
-                "type": "Identifier",
-                "name": "count",
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 4
+            ],
+            "references": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "count",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 9
+                            }
+                        }
                     },
-                    "end": {
-                        "line": 2,
-                        "column": 9
-                    }
-                }
-            },
-            "init": true
-        },
-        {
-            "identifier": {
-                "type": "Identifier",
-                "name": "defineModel",
-                "loc": {
-                    "start": {
-                        "line": 2,
-                        "column": 12
+                    "from": "module",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "count",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 9
+                            }
+                        }
                     },
-                    "end": {
-                        "line": 2,
-                        "column": 23
-                    }
+                    "init": true
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "defineModel",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 23
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "init": null
                 }
-            },
-            "from": "global",
-            "init": null
+            ],
+            "childScopes": [],
+            "through": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "defineModel",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 23
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "init": null
+                }
+            ]
         }
     ],
-    "childScopes": [],
     "through": []
 }
