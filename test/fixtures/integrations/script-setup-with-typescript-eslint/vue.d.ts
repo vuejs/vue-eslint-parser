@@ -1,1 +1,1 @@
-/// <reference types="vue/macros-global" />
+/// <reference types="vue" />
