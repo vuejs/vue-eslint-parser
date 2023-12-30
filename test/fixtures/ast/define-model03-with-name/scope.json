@@ -1,0 +1,189 @@
+{
+    "type": "global",
+    "variables": [
+        {
+            "name": "count",
+            "identifiers": [
+                {
+                    "type": "Identifier",
+                    "name": "count",
+                    "loc": {
+                        "start": {
+                            "line": 2,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 2,
+                            "column": 9
+                        }
+                    }
+                }
+            ],
+            "defs": [
+                {
+                    "type": "Variable",
+                    "node": {
+                        "type": "VariableDeclarator",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 32
+                            }
+                        }
+                    },
+                    "name": "count"
+                }
+            ],
+            "references": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "count",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "from": "global",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "count",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "init": true
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "count",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "from": "global",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "count",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "init": null,
+                    "vueUsedInTemplate": true
+                }
+            ]
+        },
+        {
+            "name": "defineModel",
+            "identifiers": [],
+            "defs": [],
+            "references": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "defineModel",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 23
+                            }
+                        }
+                    },
+                    "from": "global",
+                    "init": null
+                }
+            ]
+        }
+    ],
+    "references": [
+        {
+            "identifier": {
+                "type": "Identifier",
+                "name": "count",
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 9
+                    }
+                }
+            },
+            "from": "global",
+            "resolved": {
+                "type": "Identifier",
+                "name": "count",
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 9
+                    }
+                }
+            },
+            "init": true
+        },
+        {
+            "identifier": {
+                "type": "Identifier",
+                "name": "defineModel",
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 23
+                    }
+                }
+            },
+            "from": "global",
+            "init": null
+        }
+    ],
+    "childScopes": [],
+    "through": []
+}
