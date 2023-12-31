@@ -1,0 +1,99 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <button :aria-label id=\"close-button\">X</button>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button :aria-label id=\"close-button\">X</button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button :aria-label id=\"close-button\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":aria-label",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":aria-label",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "aria-label",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "aria-label",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "aria-label",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "id=\"close-button\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "id",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"close-button\"",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "X",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

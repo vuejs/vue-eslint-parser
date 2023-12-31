@@ -358,3 +358,32 @@ describe("Variables of v-for and references of dynamic arguments", () => {
         assert(vBindKeyReferences[0].variable === variables[0])
     })
 })
+
+describe("Variables of v-for and references of v-bind same-name shorthand", () => {
+    const code = '<template><div v-for="x of xs" :x /></template>'
+    let variables = null
+    let vForReferences = null
+    let vBindReferences = null
+
+    before(() => {
+        const ast = parse(
+            code,
+            Object.assign({ filePath: "test.vue" }, PARSER_OPTIONS),
+        ).ast
+        variables = ast.templateBody.children[0].variables
+        vForReferences =
+            ast.templateBody.children[0].startTag.attributes[0].value.references
+        vBindReferences =
+            ast.templateBody.children[0].startTag.attributes[1].value.references
+    })
+
+    it("should have relationship each other", () => {
+        assert(variables.length === 1)
+        assert(vForReferences.length === 1)
+        assert(vBindReferences.length === 1)
+        assert(variables[0].references.length === 1)
+        assert(variables[0].references[0] === vBindReferences[0])
+        assert(vForReferences[0].variable === null)
+        assert(vBindReferences[0].variable === variables[0])
+    })
+})
