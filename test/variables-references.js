@@ -389,7 +389,7 @@ describe("Variables of v-for and references of v-bind same-name shorthand", () =
 })
 
 describe("Variables of v-for and references of v-bind same-name shorthand with kebab-case", () => {
-    const code = '<template><div v-for="dataXX of xs" :data-xx /></template>'
+    const code = '<template><div v-for="dataXx of xs" :data-xx /></template>'
     let variables = null
     let vForReferences = null
     let vBindReferences = null
