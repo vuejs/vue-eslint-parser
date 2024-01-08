@@ -15,6 +15,7 @@ import {
     isScriptElement,
     isScriptSetupElement,
 } from "../common/ast-utils"
+import { camelize } from "../utils/utils"
 
 const BUILTIN_COMPONENTS = new Set([
     "template",
@@ -93,15 +94,6 @@ const COMPILER_MACROS_AT_ROOT = new Set([
     // Added in Vue 3.4
     "defineModel",
 ])
-
-/**
- * `casing.camelCase()` converts the beginning to lowercase,
- * but does not convert the case of the beginning character when converting with Vue3.
- * @see https://github.com/vuejs/vue-next/blob/48de8a42b7fed7a03f7f1ff5d53d6a704252cafe/packages/shared/src/index.ts#L109
- */
-function camelize(str: string) {
-    return str.replace(/-(\w)/gu, (_, c) => (c ? c.toUpperCase() : ""))
-}
 
 function capitalize(str: string) {
     return str[0].toUpperCase() + str.slice(1)

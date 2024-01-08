@@ -7,6 +7,8 @@ import type { ParserOptions } from "../common/parser-options"
 import { isSFCFile } from "../common/parser-options"
 import type {
     ESLintExpression,
+    ESLintExtendedProgram,
+    ESLintIdentifier,
     Reference,
     Token,
     VAttribute,
@@ -34,6 +36,7 @@ import {
     parseVOnExpression,
     parseSlotScopeExpression,
     parseGenericExpression,
+    parseScriptFragment,
 } from "../script"
 import {
     createSimpleToken,
@@ -46,6 +49,7 @@ import {
     isTSLang,
 } from "../common/ast-utils"
 import { insertError } from "../common/error-utils"
+import { camelize } from "../utils/utils"
 
 const shorthandSign = /^[.:@#]/u
 const shorthandNameMap = { ":": "bind", ".": "bind", "@": "on", "#": "slot" }
@@ -626,6 +630,14 @@ export function convertToDirective(
     }
 
     if (node.value == null) {
+        if (directive.key.name.name === "bind") {
+            // v-bind same-name shorthand (Vue 3.4+)
+            convertForVBindSameNameShorthandValue(
+                directive,
+                parserOptions,
+                locationCalculator,
+            )
+        }
         return
     }
 
@@ -675,6 +687,65 @@ export function convertToDirective(
             throw err
         }
     }
+}
+
+function convertForVBindSameNameShorthandValue(
+    directive: VDirective,
+    parserOptions: ParserOptions,
+    locationCalculator: LocationCalculatorForHtml,
+) {
+    if (
+        directive.key.name.name !== "bind" ||
+        directive.key.argument == null ||
+        directive.key.argument.type !== "VIdentifier"
+    ) {
+        return
+    }
+    // v-bind same-name shorthand (Vue 3.4+)
+    const vId = directive.key.argument
+    const camelName = camelize(vId.name)
+    let result: ESLintExtendedProgram | null = null
+    try {
+        result = parseScriptFragment(
+            camelName,
+            locationCalculator.getSubCalculatorAfter(vId.range[0]),
+            parserOptions,
+        )
+    } catch (err) {
+        debug("[template] Parse error: %s", err)
+    }
+    if (
+        result == null ||
+        result.ast.body.length !== 1 ||
+        result.ast.body[0].type !== "ExpressionStatement" ||
+        result.ast.body[0].expression.type !== "Identifier"
+    ) {
+        return
+    }
+    const id: ESLintIdentifier = result.ast.body[0].expression
+    id.range[1] = vId.range[1]
+    id.loc.end = { ...vId.loc.end }
+    if (id.end != null) {
+        id.end = vId.end
+    }
+    directive.value = {
+        type: "VExpressionContainer",
+        range: [...vId.range],
+        loc: {
+            start: { ...vId.loc.start },
+            end: { ...vId.loc.end },
+        },
+        parent: directive,
+        expression: id,
+        references: [
+            {
+                id,
+                mode: "r",
+                variable: null,
+            },
+        ],
+    }
+    id.parent = directive.value
 }
 
 /**
