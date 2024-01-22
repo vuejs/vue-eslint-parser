@@ -124,31 +124,40 @@ function getConstraint(node: TSESTree.TSTypeParameter, rawParam: string) {
     if (!node.constraint) {
         return "unknown"
     }
-    let startIndex = rawParam.indexOf(node.name.name) + node.name.name.length
-    while (startIndex < rawParam.length) {
-        if (rawParam.startsWith("extends", startIndex)) {
-            return rawParam.slice(startIndex + 7)
+    let index = rawParam.indexOf(node.name.name) + node.name.name.length
+    let startIndex: number | null = null
+    while (index < rawParam.length) {
+        if (startIndex == null) {
+            if (rawParam.startsWith("extends", index)) {
+                startIndex = index = index + 7
+                continue
+            }
+        } else if (rawParam[index] === "=") {
+            return rawParam.slice(startIndex, index)
         }
-        if (rawParam.startsWith("//", startIndex)) {
-            const lfIndex = rawParam.indexOf("\n", startIndex)
+        if (rawParam.startsWith("//", index)) {
+            const lfIndex = rawParam.indexOf("\n", index)
             if (lfIndex >= 0) {
-                startIndex = lfIndex + 1
+                index = lfIndex + 1
                 continue
             }
             return "unknown"
         }
-        if (rawParam.startsWith("/*", startIndex)) {
-            const endIndex = rawParam.indexOf("*/", startIndex)
+        if (rawParam.startsWith("/*", index)) {
+            const endIndex = rawParam.indexOf("*/", index)
             if (endIndex >= 0) {
-                startIndex = endIndex + 2
+                index = endIndex + 2
                 continue
             }
             return "unknown"
         }
-        startIndex++
+        index++
+    }
+    if (startIndex == null) {
+        return "unknown"
     }
 
-    return "unknown"
+    return rawParam.slice(startIndex)
 }
 
 /** Remove variable def */
