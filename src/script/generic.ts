@@ -124,11 +124,31 @@ function getConstraint(node: TSESTree.TSTypeParameter, rawParam: string) {
     if (!node.constraint) {
         return "unknown"
     }
-    const start = node.range[0]
-    return rawParam.slice(
-        node.constraint.range[0] - start,
-        node.constraint.range[1] - start,
-    )
+    let startIndex = rawParam.indexOf(node.name.name) + node.name.name.length
+    while (startIndex < rawParam.length) {
+        if (rawParam.startsWith("extends", startIndex)) {
+            return rawParam.slice(startIndex + 7)
+        }
+        if (rawParam.startsWith("//", startIndex)) {
+            const lfIndex = rawParam.indexOf("\n", startIndex)
+            if (lfIndex >= 0) {
+                startIndex = lfIndex + 1
+                continue
+            }
+            return "unknown"
+        }
+        if (rawParam.startsWith("/*", startIndex)) {
+            const endIndex = rawParam.indexOf("*/", startIndex)
+            if (endIndex >= 0) {
+                startIndex = endIndex + 2
+                continue
+            }
+            return "unknown"
+        }
+        startIndex++
+    }
+
+    return "unknown"
 }
 
 /** Remove variable def */

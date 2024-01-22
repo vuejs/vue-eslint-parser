@@ -213,8 +213,33 @@ export function parseScriptFragment(
     locationCalculator: LocationCalculator,
     parserOptions: ParserOptions,
 ): ESLintExtendedProgram {
+    return parseScriptFragmentWithOption(
+        code,
+        locationCalculator,
+        parserOptions,
+    )
+}
+
+/**
+ * Parse the given source code.
+ *
+ * @param code The source code to parse.
+ * @param locationCalculator The location calculator for fixLocations.
+ * @param parserOptions The parser options.
+ * @param processOptions The process options.
+ * @returns The result of parsing.
+ */
+function parseScriptFragmentWithOption(
+    code: string,
+    locationCalculator: LocationCalculator,
+    parserOptions: ParserOptions,
+    processOptions?: {
+        preFixLocationProcess?: (result: ESLintExtendedProgram) => void
+    },
+): ESLintExtendedProgram {
     try {
         const result = parseScript(code, parserOptions)
+        processOptions?.preFixLocationProcess?.(result)
         fixLocations(result, locationCalculator)
         return result
     } catch (err) {
@@ -1259,19 +1284,38 @@ export function parseGenericExpression(
         throwEmptyError(locationCalculator, "a type parameter")
     }
 
-    try {
-        const result = parseScriptFragment(
-            `void function<${code}>(){}`,
-            locationCalculator.getSubCalculatorShift(-14),
-            { ...parserOptions, project: undefined },
-        )
+    function getParams(result: ESLintExtendedProgram) {
         const { ast } = result
         const statement = ast.body[0] as ESLintExpressionStatement
         const rawExpression = statement.expression as ESLintUnaryExpression
         const classDecl = rawExpression.argument as ESLintClassExpression
         const typeParameters = (classDecl as TSESTree.ClassExpression)
             .typeParameters
-        const params = typeParameters?.params
+        return typeParameters?.params
+    }
+
+    try {
+        const rawParams: string[] = []
+        const scriptLet = `void function<${code}>(){}`
+        const result = parseScriptFragmentWithOption(
+            scriptLet,
+            locationCalculator.getSubCalculatorShift(-14),
+            { ...parserOptions, project: undefined },
+            {
+                preFixLocationProcess(preResult) {
+                    const params = getParams(preResult)
+                    if (params) {
+                        for (const param of params) {
+                            rawParams.push(
+                                scriptLet.slice(param.range[0], param.range[1]),
+                            )
+                        }
+                    }
+                },
+            },
+        )
+        const { ast } = result
+        const params = getParams(result)
 
         if (!params || params.length === 0) {
             return {
@@ -1300,12 +1344,7 @@ export function parseGenericExpression(
             loc: { start: firstParam.loc.start, end: lastParam.loc.end },
             parent: DUMMY_PARENT,
             params,
-            rawParams: params.map((param) =>
-                code.slice(
-                    param.range[0] - typeParameters.range[0] - 1,
-                    param.range[1] - typeParameters.range[0] - 1,
-                ),
-            ),
+            rawParams,
         }
 
         // Modify parent.

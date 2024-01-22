@@ -1,0 +1,39 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n{{foo}}\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{foo}}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "foo",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

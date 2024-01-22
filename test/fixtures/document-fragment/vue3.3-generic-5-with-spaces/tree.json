@@ -1,0 +1,194 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<script setup lang=\"ts\" generic=\"\n  T // extends\n    extends Foo,\n    // Comments\n  U /* extends */\n    extends\n    Record&lt;string, T>\n\">\ntype Foo = number | string\nconst p = defineProps<{foo:T, bar: U}>()\nconst foo = p.foo\nconsole.log(foo)\n</script>\n<template>\n{{foo}}\n</template>",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<script setup lang=\"ts\" generic=\"\n  T // extends\n    extends Foo,\n    // Comments\n  U /* extends */\n    extends\n    Record&lt;string, T>\n\">\ntype Foo = number | string\nconst p = defineProps<{foo:T, bar: U}>()\nconst foo = p.foo\nconsole.log(foo)\n</script>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<script setup lang=\"ts\" generic=\"\n  T // extends\n    extends Foo,\n    // Comments\n  U /* extends */\n    extends\n    Record&lt;string, T>\n\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "setup",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "setup",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "lang=\"ts\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "lang",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"ts\"",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "generic=\"\n  T // extends\n    extends Foo,\n    // Comments\n  U /* extends */\n    extends\n    Record&lt;string, T>\n\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "generic",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "generic",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"\n  T // extends\n    extends Foo,\n    // Comments\n  U /* extends */\n    extends\n    Record&lt;string, T>\n\"",
+                                        "children": [
+                                            {
+                                                "type": "VGenericExpression",
+                                                "text": "T // extends\n    extends Foo,\n    // Comments\n  U /* extends */\n    extends\n    Record&lt;string, T>",
+                                                "children": [
+                                                    {
+                                                        "type": "TSTypeParameter",
+                                                        "text": "T // extends\n    extends Foo",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "T",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "TSTypeReference",
+                                                                "text": "Foo",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "Foo",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "TSTypeParameter",
+                                                        "text": "U /* extends */\n    extends\n    Record&lt;string, T>",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "U",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "TSTypeReference",
+                                                                "text": "Record&lt;string, T>",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "Record",
+                                                                        "children": []
+                                                                    },
+                                                                    {
+                                                                        "type": "TSTypeParameterInstantiation",
+                                                                        "text": "&lt;string, T>",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "TSStringKeyword",
+                                                                                "text": "string",
+                                                                                "children": []
+                                                                            },
+                                                                            {
+                                                                                "type": "TSTypeReference",
+                                                                                "text": "T",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "Identifier",
+                                                                                        "text": "T",
+                                                                                        "children": []
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\ntype Foo = number | string\nconst p = defineProps<{foo:T, bar: U}>()\nconst foo = p.foo\nconsole.log(foo)\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</script>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<template>\n{{foo}}\n</template>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<template>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{foo}}",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "foo",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</template>",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]
