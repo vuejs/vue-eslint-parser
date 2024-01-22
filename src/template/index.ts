@@ -703,7 +703,7 @@ function convertForVBindSameNameShorthandValue(
     }
     // v-bind same-name shorthand (Vue 3.4+)
     const vId = directive.key.argument
-    const camelName = camelize(vId.name)
+    const camelName = camelize(vId.rawName)
     let result: ESLintExtendedProgram | null = null
     try {
         result = parseScriptFragment(
