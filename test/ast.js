@@ -16,6 +16,7 @@ const lodash = require("lodash")
 const parser = require("../src")
 const Linter = require("./fixtures/eslint").Linter
 const semver = require("semver")
+const { scopeToJSON, analyze, replacer, getAllTokens } = require("./test-utils")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -30,40 +31,7 @@ const PARSER_OPTIONS = {
     loc: true,
     range: true,
     tokens: true,
-}
-
-/**
- * Remove `parent` proeprties from the given AST.
- * @param {string} key The key.
- * @param {any} value The value of the key.
- * @returns {any} The value of the key to output.
- */
-function replacer(key, value) {
-    if (key === "parent") {
-        return undefined
-    }
-    if (key === "errors" && Array.isArray(value)) {
-        return value.map((e) => ({
-            message: e.message,
-            index: e.index,
-            lineNumber: e.lineNumber,
-            column: e.column,
-        }))
-    }
-    return value
-}
-
-/**
- * Get all tokens of the given AST.
- * @param {ASTNode} ast The root node of AST.
- * @returns {Token[]} Tokens.
- */
-function getAllTokens(ast) {
-    const tokenArrays = [ast.tokens, ast.comments]
-    if (ast.templateBody != null) {
-        tokenArrays.push(ast.templateBody.tokens, ast.templateBody.comments)
-    }
-    return Array.prototype.concat.apply([], tokenArrays)
+    eslintScopeManager: true,
 }
 
 /**
@@ -301,6 +269,23 @@ describe("Template AST", () => {
                 const expectedText = fs.readFileSync(resultPath, "utf8")
                 const tokens = getTree(source, parserOptions)
                 const actualText = JSON.stringify(tokens, null, 4)
+
+                assert.strictEqual(actualText, expectedText)
+            })
+
+            it("should scope in the correct.", () => {
+                const version = require(`eslint/package.json`).version
+                if (!semver.satisfies(version, ">=8")) {
+                    return
+                }
+                const resultPath = path.join(ROOT, `${name}/scope.json`)
+                if (!fs.existsSync(resultPath)) {
+                    return
+                }
+                const expectedText = fs.readFileSync(resultPath, "utf8")
+                const actualText = scopeToJSON(
+                    actual.scopeManager || analyze(actual.ast, options),
+                )
 
                 assert.strictEqual(actualText, expectedText)
             })
