@@ -32,7 +32,6 @@ import type {
     VSlotScopeExpression,
     OffsetRange,
     VGenericExpression,
-    ESLintClassExpression,
 } from "../ast"
 import { ParseError } from "../ast"
 import { debug } from "../common/debug"
@@ -1288,8 +1287,8 @@ export function parseGenericExpression(
         const { ast } = result
         const statement = ast.body[0] as ESLintExpressionStatement
         const rawExpression = statement.expression as ESLintUnaryExpression
-        const classDecl = rawExpression.argument as ESLintClassExpression
-        const typeParameters = (classDecl as TSESTree.ClassExpression)
+        const classDecl = rawExpression.argument as ESLintFunctionExpression
+        const typeParameters = (classDecl as TSESTree.FunctionExpression)
             .typeParameters
         return typeParameters?.params
     }
