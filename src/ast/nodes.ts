@@ -486,7 +486,7 @@ export interface ESLintArrowFunctionExpression extends HasLocation, HasParent {
     generator: boolean
     id: ESLintIdentifier | null
     params: ESLintPattern[]
-    body: ESLintBlockStatement
+    body: ESLintBlockStatement | ESLintExpression
 }
 
 export interface ESLintSequenceExpression extends HasLocation, HasParent {
