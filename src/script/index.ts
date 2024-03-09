@@ -78,6 +78,11 @@ const DUMMY_PARENT: any = {}
 // https://github.com/vuejs/core/blob/fef2acb2049fce3407dff17fe8af1836b97dfd73/packages/compiler-core/src/transforms/vOn.ts#L19
 const IS_FUNCTION_EXPRESSION =
     /^\s*([\w$_]+|(async\s*)?\([^)]*?\))\s*(:[^=]+)?=>|^\s*(async\s+)?function(?:\s+[\w$]+)?\s*\(/u
+//        ^^^^^^^ omit paren argument                                 ^^^^^^^^ function keyword
+//                 ^^^^^ <--- async key word (optional) --> ^^^^^
+//                           ^^------^^ arguments with parens                       ^^^^^^ named function (optional)
+//                                         ^^^^^^^^^ return types (optional)
+//                                                  ^^ arrow                                   ^^ opening paren
 
 const IS_SIMPLE_PATH =
     /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['[^']*?'\]|\["[^"]*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/u
