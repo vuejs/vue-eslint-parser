@@ -79,7 +79,7 @@ const DUMMY_PARENT: any = {}
 const IS_FUNCTION_EXPRESSION =
     /^\s*([\w$_]+|(async\s*)?\([^)]*?\))\s*(:[^=]+)?=>|^\s*(async\s+)?function(?:\s+[\w$]+)?\s*\(/u
 //        ^^^^^^^ omit paren argument                                 ^^^^^^^^ function keyword
-//                 ^^^^^ <--- async key word (optional) --> ^^^^^
+//                 ^^^^^ <--- async keyword (optional) ---> ^^^^^
 //                           ^^------^^ arguments with parens                       ^^^^^^ named function (optional)
 //                                         ^^^^^^^^^ return types (optional)
 //                                                  ^^ arrow                                   ^^ opening paren
