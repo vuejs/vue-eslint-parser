@@ -75,8 +75,10 @@ const PARENS = /^(\s*\()([\s\S]*?)(\)\s*)$/u
 const DUMMY_PARENT: any = {}
 
 // Like Vue, it judges whether it is a function expression or not.
-// https://github.com/vuejs/vue/blob/0948d999f2fddf9f90991956493f976273c5da1f/src/compiler/codegen/events.js#L3
-const IS_FUNCTION_EXPRESSION = /^\s*([\w$_]+|\([^)]*?\))\s*=>|^function\s*\(/u
+// https://github.com/vuejs/core/blob/fef2acb2049fce3407dff17fe8af1836b97dfd73/packages/compiler-core/src/transforms/vOn.ts#L19
+const IS_FUNCTION_EXPRESSION =
+    /^\s*([\w$_]+|(async\s*)?\([^)]*?\))\s*(:[^=]+)?=>|^\s*(async\s+)?function(?:\s+[\w$]+)?\s*\(/u
+
 const IS_SIMPLE_PATH =
     /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*|\['[^']*?'\]|\["[^"]*?"\]|\[\d+\]|\[[A-Za-z_$][\w$]*\])*$/u
 
