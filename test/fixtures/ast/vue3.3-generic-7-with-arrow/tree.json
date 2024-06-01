@@ -1,0 +1,89 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n{{p.t()}}\n{{p.u()}}\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{p.t()}}",
+                "children": [
+                    {
+                        "type": "CallExpression",
+                        "text": "p.t()",
+                        "children": [
+                            {
+                                "type": "MemberExpression",
+                                "text": "p.t",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "p",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "t",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{p.u()}}",
+                "children": [
+                    {
+                        "type": "CallExpression",
+                        "text": "p.u()",
+                        "children": [
+                            {
+                                "type": "MemberExpression",
+                                "text": "p.u",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "p",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "Identifier",
+                                        "text": "u",
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

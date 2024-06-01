@@ -133,9 +133,15 @@ function getConstraint(node: TSESTree.TSTypeParameter, rawParam: string) {
                 continue
             }
         } else if (rawParam[index] === "=") {
+            if (rawParam[index + 1] === ">") {
+                // Arrow function type
+                index += 2
+                continue
+            }
             return rawParam.slice(startIndex, index)
         }
         if (rawParam.startsWith("//", index)) {
+            // Skip line comment
             const lfIndex = rawParam.indexOf("\n", index)
             if (lfIndex >= 0) {
                 index = lfIndex + 1
@@ -144,6 +150,7 @@ function getConstraint(node: TSESTree.TSTypeParameter, rawParam: string) {
             return "unknown"
         }
         if (rawParam.startsWith("/*", index)) {
+            // Skip block comment
             const endIndex = rawParam.indexOf("*/", index)
             if (endIndex >= 0) {
                 index = endIndex + 2
