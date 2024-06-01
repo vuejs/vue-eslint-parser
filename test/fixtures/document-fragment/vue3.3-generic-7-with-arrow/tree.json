@@ -1,0 +1,257 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<script setup lang=\"ts\" generic=\"\n  T extends () => string,\n  U  extends () => string = () => 'abc'\n\">\nconst p = defineProps<{t: T, u: U}>()\n</script>\n\n<template>\n{{p.t()}}\n{{p.u()}}\n</template>",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<script setup lang=\"ts\" generic=\"\n  T extends () => string,\n  U  extends () => string = () => 'abc'\n\">\nconst p = defineProps<{t: T, u: U}>()\n</script>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<script setup lang=\"ts\" generic=\"\n  T extends () => string,\n  U  extends () => string = () => 'abc'\n\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "setup",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "setup",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "lang=\"ts\"",
+                                "children": [
+                                    {
+                                        "type": "VIdentifier",
+                                        "text": "lang",
+                                        "children": []
+                                    },
+                                    {
+                                        "type": "VLiteral",
+                                        "text": "\"ts\"",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VAttribute",
+                                "text": "generic=\"\n  T extends () => string,\n  U  extends () => string = () => 'abc'\n\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "generic",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "generic",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"\n  T extends () => string,\n  U  extends () => string = () => 'abc'\n\"",
+                                        "children": [
+                                            {
+                                                "type": "VGenericExpression",
+                                                "text": "T extends () => string,\n  U  extends () => string = () => 'abc'",
+                                                "children": [
+                                                    {
+                                                        "type": "TSTypeParameter",
+                                                        "text": "T extends () => string",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "T",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "TSFunctionType",
+                                                                "text": "() => string",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "TSTypeAnnotation",
+                                                                        "text": "=> string",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "TSStringKeyword",
+                                                                                "text": "string",
+                                                                                "children": []
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    {
+                                                        "type": "TSTypeParameter",
+                                                        "text": "U  extends () => string = () => 'abc'",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "U",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "TSFunctionType",
+                                                                "text": "() => string",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "TSTypeAnnotation",
+                                                                        "text": "=> string",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "TSStringKeyword",
+                                                                                "text": "string",
+                                                                                "children": []
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "type": "TSFunctionType",
+                                                                "text": "() => 'abc'",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "TSTypeAnnotation",
+                                                                        "text": "=> 'abc'",
+                                                                        "children": [
+                                                                            {
+                                                                                "type": "TSLiteralType",
+                                                                                "text": "'abc'",
+                                                                                "children": [
+                                                                                    {
+                                                                                        "type": "Literal",
+                                                                                        "text": "'abc'",
+                                                                                        "children": []
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\nconst p = defineProps<{t: T, u: U}>()\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</script>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n\n",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<template>\n{{p.t()}}\n{{p.u()}}\n</template>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<template>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{p.t()}}",
+                        "children": [
+                            {
+                                "type": "CallExpression",
+                                "text": "p.t()",
+                                "children": [
+                                    {
+                                        "type": "MemberExpression",
+                                        "text": "p.t",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "p",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "Identifier",
+                                                "text": "t",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{p.u()}}",
+                        "children": [
+                            {
+                                "type": "CallExpression",
+                                "text": "p.u()",
+                                "children": [
+                                    {
+                                        "type": "MemberExpression",
+                                        "text": "p.u",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "p",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "Identifier",
+                                                "text": "u",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</template>",
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]
