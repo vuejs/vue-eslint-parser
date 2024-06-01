@@ -1,0 +1,96 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <button @click=\"async () => await act()\"></button>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button @click=\"async () => await act()\"></button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button @click=\"async () => await act()\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "@click=\"async () => await act()\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "@click",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "@",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "click",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"async () => await act()\"",
+                                        "children": [
+                                            {
+                                                "type": "ArrowFunctionExpression",
+                                                "text": "async () => await act()",
+                                                "children": [
+                                                    {
+                                                        "type": "AwaitExpression",
+                                                        "text": "await act()",
+                                                        "children": [
+                                                            {
+                                                                "type": "CallExpression",
+                                                                "text": "act()",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "act",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
