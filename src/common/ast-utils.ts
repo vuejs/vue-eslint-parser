@@ -14,7 +14,10 @@ import type {
  * @returns `true` if the node is a `<script>` element.
  */
 export function isScriptElement(node: VNode): node is VElement {
-    return node.type === "VElement" && node.name === "script"
+    return (
+        node.type === "VElement" &&
+        (node.name === "script" || getLang(node) === "ts")
+    )
 }
 
 /**
@@ -44,7 +47,11 @@ export function isTemplateElement(node: VNode): node is VElement {
  * @returns `true` if the node is a `<style>` element.
  */
 export function isStyleElement(node: VNode): node is VElement {
-    return node.type === "VElement" && node.name === "style"
+    return (
+        node.type === "VElement" &&
+        node.name === "style" &&
+        !(getLang(node) !== "ts")
+    )
 }
 
 /**

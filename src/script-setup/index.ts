@@ -206,7 +206,7 @@ function parseScript(
  */
 export function parseScriptSetupElements(
     scriptSetupElement: VElement,
-    scriptElement: VElement,
+    scriptElements: VElement[],
     sfcCode: string,
     linesAndColumns: LinesAndColumns,
     originalParserOptions: ParserOptions,
@@ -216,7 +216,7 @@ export function parseScriptSetupElements(
     )
     const scriptSetupModuleCodeBlocks = getScriptSetupModuleCodeBlocks(
         scriptSetupElement,
-        scriptElement,
+        scriptElements,
         sfcCode,
         linesAndColumns,
         parserOptions,
@@ -283,7 +283,7 @@ export function parseScriptSetupElements(
 
     // Adjust AST and tokens
     if (result.ast.tokens != null) {
-        for (const node of [scriptSetupElement, scriptElement]) {
+        for (const node of [scriptSetupElement, ...scriptElements]) {
             const startTag = node.startTag
             const endTag = node.endTag
 
@@ -314,7 +314,7 @@ export function parseScriptSetupElements(
     result.ast.loc.start =
         locationCalculator.getLocFromIndex(programStartOffset)
     if (result.ast.start != null) {
-        result.ast.start = [scriptSetupElement, scriptElement].reduce(
+        result.ast.start = [scriptSetupElement, ...scriptElements].reduce(
             (start, node) => {
                 const textNode = node.children[0]
                 return Math.min(
@@ -335,7 +335,7 @@ export function parseScriptSetupElements(
     result.ast.range[1] = programEndOffset
     result.ast.loc.end = locationCalculator.getLocFromIndex(programEndOffset)
     if (result.ast.end != null) {
-        result.ast.end = [scriptSetupElement, scriptElement].reduce(
+        result.ast.end = [scriptSetupElement, ...scriptElements].reduce(
             (end, node) => {
                 const textNode = node.children[0]
                 return Math.max(
@@ -447,7 +447,7 @@ export function parseScriptSetupElements(
  */
 function getScriptSetupModuleCodeBlocks(
     scriptSetupElement: VElement,
-    scriptElement: VElement,
+    scriptElements: VElement[],
     sfcCode: string,
     linesAndColumns: LinesAndColumns,
     parserOptions: ParserOptions,
@@ -459,17 +459,22 @@ function getScriptSetupModuleCodeBlocks(
         parserOptions,
     )
 
-    const textNode = scriptElement.children[0]
-    if (textNode == null || textNode.type !== "VText") {
-        return scriptSetupCodeBlocks
+    const codeBlocks = new CodeBlocks()
+
+    for (const scriptElement of scriptElements) {
+        const textNode = scriptElement.children[0]
+        if (textNode == null || textNode.type !== "VText") {
+            continue
+        }
+
+        const [scriptStartOffset, scriptEndOffset] = textNode.range
+
+        codeBlocks.append(
+            sfcCode.slice(scriptStartOffset, scriptEndOffset),
+            scriptStartOffset,
+        )
     }
 
-    const [scriptStartOffset, scriptEndOffset] = textNode.range
-    const codeBlocks = new CodeBlocks()
-    codeBlocks.append(
-        sfcCode.slice(scriptStartOffset, scriptEndOffset),
-        scriptStartOffset,
-    )
     if (scriptSetupCodeBlocks == null) {
         return { codeBlocks }
     }
@@ -477,6 +482,7 @@ function getScriptSetupModuleCodeBlocks(
     codeBlocks.appendSplitPunctuators(";")
     const scriptSetupOffset = codeBlocks.length
     codeBlocks.appendCodeBlocks(scriptSetupCodeBlocks.codeBlocks)
+
     return {
         codeBlocks,
         scriptSetupBlockRange: [
