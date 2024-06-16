@@ -1,0 +1,50 @@
+[
+    {
+        "type": "VDocumentFragment",
+        "text": "<style>\n  .text{\n    color: v-bind(color, blue);\n  }\n</style>\n",
+        "children": [
+            {
+                "type": "VElement",
+                "text": "<style>\n  .text{\n    color: v-bind(color, blue);\n  }\n</style>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<style>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  .text{\n    color: ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "v-bind(color, blue)",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "color",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": ";\n  }\n",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</style>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            }
+        ]
+    }
+]

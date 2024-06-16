@@ -45,6 +45,7 @@ export const LATIN_SMALL_Z = 0x7A
 export const LEFT_CURLY_BRACKET = 0x7B // {
 export const RIGHT_CURLY_BRACKET = 0x7D // }
 export const NULL_REPLACEMENT = 0xFFFD
+export const COMMA = 0x2C
 
 /**
  * Check whether the code point is a whitespace.

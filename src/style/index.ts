@@ -121,6 +121,7 @@ function parseStyle(
         quote,
         openingParenOffset,
         comments,
+        defaultValue,
     } of iterateVBind(code, cssOptions)) {
         insertComments(
             document,
@@ -197,6 +198,32 @@ function parseStyle(
                     closeStart,
                     closeStart + 1,
                     quote,
+                    locationCalculator,
+                ),
+            )
+        }
+        if (defaultValue.length) {
+            afterTokens.unshift(
+                createSimpleToken(
+                    "Punctuator",
+                    locationCalculator.getOffsetWithGap(
+                        defaultValue[0].range[0],
+                    ),
+                    locationCalculator.getOffsetWithGap(
+                        defaultValue[0].range[1],
+                    ),
+                    ",",
+                    locationCalculator,
+                ),
+                createSimpleToken(
+                    "HTMLRawText",
+                    locationCalculator.getOffsetWithGap(
+                        defaultValue[1].range[0],
+                    ),
+                    locationCalculator.getOffsetWithGap(
+                        defaultValue[1].range[1],
+                    ),
+                    defaultValue[1].value,
                     locationCalculator,
                 ),
             )
@@ -287,6 +314,7 @@ type VBindLocations = {
     quote: '"' | "'" | null
     openingParenOffset: number
     comments: CSSCommentToken[]
+    defaultValue: CSSToken[]
 }
 
 /**
@@ -317,6 +345,7 @@ function* iterateVBind(
             quote: arg.quote,
             openingParenOffset: openingParen.openingParen.range[0],
             comments: [...openingParen.comments, ...arg.comments],
+            defaultValue: arg.defaultValue,
         }
     }
 }
@@ -350,6 +379,7 @@ function parseVBindArg(tokenizer: CSSTokenScanner): {
     quote: '"' | "'" | null
     closingParen: CSSPunctuatorToken
     comments: CSSCommentToken[]
+    defaultValue: CSSToken[]
 } | null {
     const tokensBuffer: CSSToken[] = []
     const comments: CSSCommentToken[] = []
@@ -370,14 +400,25 @@ function parseVBindArg(tokenizer: CSSTokenScanner): {
                         quote: quotedToken.quote,
                         closingParen: token,
                         comments,
+                        defaultValue: [],
                     }
                 }
                 const startToken = tokensBuffer[0] || token
+                const commaToken = tokens.find(
+                    (tk) =>
+                        tk.type === CSSTokenType.Punctuator && tk.value === ",",
+                )
                 return {
-                    exprRange: [startToken.range[0], token.range[0]],
+                    exprRange: [
+                        startToken.range[0],
+                        (commaToken || token).range[0],
+                    ],
                     quote: null,
                     closingParen: token,
                     comments: [],
+                    defaultValue: commaToken
+                        ? tokens.slice(tokens.indexOf(commaToken))
+                        : [],
                 }
             }
 

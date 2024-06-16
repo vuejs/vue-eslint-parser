@@ -19,6 +19,7 @@ import {
     SEMICOLON,
     LEFT_SQUARE_BRACKET,
     RIGHT_SQUARE_BRACKET,
+    COMMA,
 } from "../html/util/unicode"
 
 export const enum CSSTokenType {
@@ -315,6 +316,7 @@ export class CSSTokenizer {
 
 function isPunctuator(cp: number): boolean {
     return (
+        cp === COMMA ||
         cp === COLON ||
         cp === SEMICOLON ||
         // Brackets
