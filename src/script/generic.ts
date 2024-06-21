@@ -124,7 +124,8 @@ function getConstraint(node: TSESTree.TSTypeParameter, rawParam: string) {
     if (!node.constraint) {
         return "unknown"
     }
-    let index = rawParam.indexOf(node.name.name) + node.name.name.length
+    const name = typeof node.name === "string" ? node.name : node.name.name
+    let index = rawParam.indexOf(name) + name.length
     let startIndex: number | null = null
     while (index < rawParam.length) {
         if (startIndex == null) {
