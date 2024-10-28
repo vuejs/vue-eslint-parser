@@ -43,11 +43,7 @@ import {
     analyzeExternalReferences,
     analyzeVariablesAndExternalReferences,
 } from "./scope-analyzer"
-import {
-    getEcmaVersionIfUseEspree,
-    getEspreeFromUser,
-    getEspreeFromEcmaVersion,
-} from "../common/espree"
+import { getEcmaVersionIfUseEspree, getNewestEspree } from "../common/espree"
 import type { ParserOptions } from "../common/parser-options"
 import {
     fixErrorLocation,
@@ -571,7 +567,7 @@ function loadParser(parser: string) {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         return require(parser)
     }
-    return getEspreeFromUser()
+    return getNewestEspree()
 }
 
 /**
@@ -590,7 +586,7 @@ export function parseScript(
             ? loadParser(parserOptions.parser)
             : isParserObject(parserOptions.parser)
             ? parserOptions.parser
-            : getEspreeFromEcmaVersion(parserOptions.ecmaVersion)
+            : getNewestEspree()
 
     const result: any = isEnhancedParserObject(parser)
         ? parser.parseForESLint(code, parserOptions)
