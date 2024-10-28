@@ -68,12 +68,16 @@ function getEspreeFromUser(): Espree {
  * If the loaded ESLint was not found, just returns `require("espree")`.
  */
 function getEspreeFromLinter(): Espree {
-    const require = getLinterRequire()
-    if (require) {
-        const espree = getEspreeFromRequireFunction(require)
-        if (espree) {
-            return espree
+    try {
+        const require = getLinterRequire()
+        if (require) {
+            const espree = getEspreeFromRequireFunction(require)
+            if (espree) {
+                return espree
+            }
         }
+    } catch {
+        // ignore
     }
     return dependencyEspree
 }
