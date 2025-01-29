@@ -1,7 +1,7 @@
 import * as escope from "eslint-scope"
 import { lte } from "semver"
-import { createRequire } from "./create-require"
 import path from "path"
+import { createRequire } from "module"
 
 type ESLintScope = typeof escope & {
     version: string

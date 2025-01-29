@@ -300,10 +300,6 @@ describe("Template AST", () => {
             })
 
             it("should scope in the correct.", () => {
-                const version = require(`eslint/package.json`).version
-                if (!semver.satisfies(version, ">=8")) {
-                    return
-                }
                 const resultPath = path.join(ROOT, `${name}/scope.json`)
                 if (!fs.existsSync(resultPath)) {
                     return
