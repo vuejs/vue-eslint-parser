@@ -31,7 +31,7 @@ import {
     parseScriptFragment,
 } from "../script/index"
 import { extractGeneric } from "../script/generic"
-import { getScriptSetupParserOptions } from "./parser-options"
+import { DEFAULT_ECMA_VERSION } from "./parser-options"
 
 type RemapBlock = {
     range: [number, number]
@@ -214,9 +214,10 @@ export function parseScriptSetupElements(
     linesAndColumns: LinesAndColumns,
     originalParserOptions: ParserOptions,
 ): ESLintExtendedProgram {
-    const parserOptions: ParserOptions = getScriptSetupParserOptions(
-        originalParserOptions,
-    )
+    const parserOptions: ParserOptions = {
+        ...originalParserOptions,
+        ecmaVersion: originalParserOptions.ecmaVersion || DEFAULT_ECMA_VERSION,
+    }
     const scriptSetupModuleCodeBlocks = getScriptSetupModuleCodeBlocks(
         scriptSetupElement,
         scriptElement,

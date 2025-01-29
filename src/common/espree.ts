@@ -19,6 +19,22 @@ export function getEspree(): Espree {
     return espreeCache || (espreeCache = getNewestEspree())
 }
 
+export function getEcmaVersionIfUseEspree(
+    parserOptions: ParserOptions,
+): number | undefined {
+    if (parserOptions.parser != null && parserOptions.parser !== "espree") {
+        return undefined
+    }
+
+    if (
+        parserOptions.ecmaVersion === "latest" ||
+        parserOptions.ecmaVersion == null
+    ) {
+        return getDefaultEcmaVersion()
+    }
+    return normalizeEcmaVersion(parserOptions.ecmaVersion)
+}
+
 /**
  * Load `espree` from the user dir.
  */
@@ -44,26 +60,8 @@ function getNewestEspree(): Espree {
     return newest
 }
 
-export function getEcmaVersionIfUseEspree(
-    parserOptions: ParserOptions,
-    getDefault?: (defaultVer: number) => number,
-): number | undefined {
-    if (parserOptions.parser != null && parserOptions.parser !== "espree") {
-        return undefined
-    }
-
-    if (parserOptions.ecmaVersion === "latest") {
-        return getDefaultEcmaVersion()
-    }
-    if (parserOptions.ecmaVersion == null) {
-        const defVer = getDefaultEcmaVersion()
-        return getDefault?.(defVer) ?? defVer
-    }
-    return normalizeEcmaVersion(parserOptions.ecmaVersion)
-}
-
 function getDefaultEcmaVersion(): number {
-    return normalizeEcmaVersion(getLatestEcmaVersion(getNewestEspree()))
+    return getLatestEcmaVersion(getEspree())
 }
 
 /**

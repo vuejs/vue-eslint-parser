@@ -588,7 +588,7 @@ describe("Basic tests", async () => {
                         parserOptions: {
                             ...BABEL_PARSER_OPTIONS,
                             sourceType: "module",
-                            ecmaVersion: 2017,
+                            ecmaVersion: "latest",
                         },
                         globals: {},
                     },
@@ -752,7 +752,7 @@ describe("Basic tests", async () => {
             const indexOfDecorator = code.indexOf("@Component")
             const ast = parse(code, {
                 ...BABEL_PARSER_OPTIONS,
-                ecmaVersion: 2017,
+                ecmaVersion: "latest",
                 sourceType: "module",
 
                 // Implicit parserOptions to detect whether the current ESLint supports `result.scopeManager` and `result.visitorKeys`.
@@ -859,7 +859,7 @@ describe("Basic tests", async () => {
                 languageOptions: {
                     parser,
                     parserOptions: {
-                        ecmaVersion: 2015,
+                        ecmaVersion: "latest",
                     },
                 },
             }
