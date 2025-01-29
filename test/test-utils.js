@@ -105,7 +105,7 @@ function scopeToJSON(scopeManager) {
  * Analyze scope
  */
 function analyze(ast, parserOptions) {
-    const ecmaVersion = parserOptions.ecmaVersion || 2017
+    const ecmaVersion = parserOptions.ecmaVersion || 2022
     const ecmaFeatures = parserOptions.ecmaFeatures || {}
     const sourceType = parserOptions.sourceType || "script"
     const result = escope.analyze(ast, {

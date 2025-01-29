@@ -14,6 +14,7 @@ import type {
 import { getFallbackKeys } from "../ast/index"
 import { getEslintScope } from "../common/eslint-scope"
 import { getEcmaVersionIfUseEspree } from "../common/espree"
+import { ANALYZE_SCOPE_DEFAULT_ECMA_VERSION } from "../script-setup/parser-options"
 
 type ParserResult = {
     ast: ESLintProgram
@@ -100,7 +101,9 @@ export function analyzeScope(
     ast: ESLintProgram,
     parserOptions: ParserOptions,
 ): escopeTypes.ScopeManager {
-    const ecmaVersion = getEcmaVersionIfUseEspree(parserOptions) || 2022
+    const ecmaVersion =
+        getEcmaVersionIfUseEspree(parserOptions) ||
+        ANALYZE_SCOPE_DEFAULT_ECMA_VERSION
     const ecmaFeatures = parserOptions.ecmaFeatures || {}
     const sourceType = parserOptions.sourceType || "script"
     const result = getEslintScope().analyze(ast, {

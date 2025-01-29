@@ -17,7 +17,10 @@ import type { LocationCalculatorForHtml } from "../../common/location-calculator
 import type { ParserObject } from "../../common/parser-object"
 import { isEnhancedParserObject } from "../../common/parser-object"
 import type { ParserOptions } from "../../common/parser-options"
-import { DEFAULT_ECMA_VERSION } from "../../script-setup/parser-options"
+import {
+    ANALYZE_SCOPE_DEFAULT_ECMA_VERSION,
+    DEFAULT_ECMA_VERSION,
+} from "../../script-setup/parser-options"
 
 export type ESLintCustomBlockParser = ParserObject<any, any>
 
@@ -291,7 +294,9 @@ export function createCustomBlockSharedContext({
             return parsedResult.scopeManager
         }
 
-        const ecmaVersion = getEcmaVersionIfUseEspree(parserOptions) || 2022
+        const ecmaVersion =
+            getEcmaVersionIfUseEspree(parserOptions) ||
+            ANALYZE_SCOPE_DEFAULT_ECMA_VERSION
         const ecmaFeatures = parserOptions.ecmaFeatures || {}
         const sourceType = parserOptions.sourceType || "script"
         return getEslintScope().analyze(parsedResult.ast, {

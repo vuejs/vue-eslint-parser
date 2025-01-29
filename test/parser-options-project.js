@@ -28,7 +28,7 @@ describe("use `project: undefined` when parsing template script-let", () => {
             {
                 project: true,
                 sourceType: "module",
-                ecmaVersion: 2018,
+                ecmaVersion: "latest",
                 parser: {
                     parseForESLint(code, options) {
                         if (options.project) {
@@ -72,7 +72,7 @@ describe("use `project: undefined` when parsing template script-let", () => {
             {
                 project: true,
                 sourceType: "module",
-                ecmaVersion: 2018,
+                ecmaVersion: "latest",
                 parser: {
                     parseForESLint(code, options) {
                         if (options.project) {
@@ -115,7 +115,7 @@ describe("use `project: undefined` when parsing template script-let", () => {
             {
                 project: true,
                 sourceType: "module",
-                ecmaVersion: 2018,
+                ecmaVersion: "latest",
                 parser: {
                     parseForESLint(code, options) {
                         if (options.project) {

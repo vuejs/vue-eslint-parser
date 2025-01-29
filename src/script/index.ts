@@ -50,11 +50,7 @@ import {
     fixLocation,
     fixLocations,
 } from "../common/fix-locations"
-import {
-    DEFAULT_ECMA_VERSION,
-    getScriptSetupParserOptions,
-} from "../script-setup/parser-options"
-import { isScriptSetupElement } from "../common/ast-utils"
+import { DEFAULT_ECMA_VERSION } from "../script-setup/parser-options"
 import type { LinesAndColumns } from "../common/lines-and-columns"
 import type { ParserObject } from "../common/parser-object"
 import { isEnhancedParserObject, isParserObject } from "../common/parser-object"
@@ -612,13 +608,10 @@ export function parseScriptElement(
     linesAndColumns: LinesAndColumns,
     originalParserOptions: ParserOptions,
 ): ESLintExtendedProgram {
-    const parserOptions: ParserOptions = isScriptSetupElement(node)
-        ? getScriptSetupParserOptions(originalParserOptions)
-        : {
-              ...originalParserOptions,
-              ecmaVersion:
-                  originalParserOptions.ecmaVersion || DEFAULT_ECMA_VERSION,
-          }
+    const parserOptions: ParserOptions = {
+        ...originalParserOptions,
+        ecmaVersion: originalParserOptions.ecmaVersion || DEFAULT_ECMA_VERSION,
+    }
 
     let generic: GenericProcessInfo | null = null
     let code: string
