@@ -19,20 +19,19 @@ npm install --save-dev eslint vue-eslint-parser
 
 ## 📖 Usage
 
-1. Write `parser` option into your `.eslintrc.*` file.
-2. Use glob patterns or `--ext .vue` CLI option.
+Write `parser` option into your `eslint.config.*` file.
 
-```json
-{
-    "extends": "eslint:recommended",
-    "parser": "vue-eslint-parser"
-}
-```
-
-```console
-$ eslint "src/**/*.{js,vue}"
-# or
-$ eslint src --ext .vue
+```js
+import vueParser from "vue-eslint-parser"
+export default [
+    js.configs.recommended,
+    {
+        files: ["*.vue", "**/*.vue"],
+        languageOptions: {
+            parser: vueParser,
+        },
+    }
+]
 ```
 
 ## 🔧 Options
@@ -40,19 +39,25 @@ $ eslint src --ext .vue
 `parserOptions` has the same properties as what [espree](https://github.com/eslint/espree#usage), the default parser of ESLint, is supporting.
 For example:
 
-```json
-{
-    "parser": "vue-eslint-parser",
-    "parserOptions": {
-        "sourceType": "module",
-        "ecmaVersion": "latest",
-        "ecmaFeatures": {
-            "globalReturn": false,
-            "impliedStrict": false,
-            "jsx": false
-        }
+```js
+import vueParser from "vue-eslint-parser"
+export default [
+    {
+        files: ["*.vue", "**/*.vue"],
+        languageOptions: {
+            parser: vueParser,
+            sourceType: "module",
+            ecmaVersion: "latest",
+            parserOptions: {
+                ecmaFeatures: {
+                    globalReturn: false,
+                    impliedStrict: false,
+                    jsx: false
+                }
+            }
+        },
     }
-}
+]
 ```
 
 ### parserOptions.parser
@@ -61,66 +66,65 @@ You can use `parserOptions.parser` property to specify a custom parser to parse 
 Other properties than parser would be given to the specified parser.
 For example:
 
-```json
-{
-    "parser": "vue-eslint-parser",
-    "parserOptions": {
-        "parser": "@babel/eslint-parser",
-        "sourceType": "module"
+```js
+import vueParser from "vue-eslint-parser"
+import babelParser from "@babel/eslint-parser"
+export default [
+    {
+        files: ["*.vue", "**/*.vue"],
+        languageOptions: {
+            parser: vueParser,
+            parserOptions: {
+                parser: babelParser,
+            }
+        },
     }
-}
+]
 ```
 
-```json
-{
-    "parser": "vue-eslint-parser",
-    "parserOptions": {
-        "parser": "@typescript-eslint/parser",
-        "sourceType": "module"
+```js
+import vueParser from "vue-eslint-parser"
+import tsParser from "@typescript-eslint/parser"
+export default [
+    {
+        files: ["*.vue", "**/*.vue"],
+        languageOptions: {
+            parser: vueParser,
+            parserOptions: {
+                parser: tsParser,
+            }
+        },
     }
-}
+]
 ```
 
 You can also specify an object and change the parser separately for `<script lang="...">`.
 
-```jsonc
-{
-    "parser": "vue-eslint-parser",
-    "parserOptions": {
-        "parser": {
-             // Script parser for `<script>`
-            "js": "espree",
-
-             // Script parser for `<script lang="ts">`
-            "ts": "@typescript-eslint/parser",
-
-             // Script parser for vue directives (e.g. `v-if=` or `:attribute=`)
-             // and vue interpolations (e.g. `{{variable}}`).
-             // If not specified, the parser determined by `<script lang ="...">` is used.
-            "<template>": "espree",
-        }
-    }
-}
-```
-
-When using JavaScript configuration (`.eslintrc.js`), you can also give the parser object directly.
-
 ```js
-const tsParser = require("@typescript-eslint/parser")
-const espree = require("espree")
+import vueParser from "vue-eslint-parser"
+import tsParser from "@typescript-eslint/parser"
+export default [
+    {
+        files: ["*.vue", "**/*.vue"],
+        languageOptions: {
+            parser: vueParser,
+            parserOptions: {
+                "parser": {
+                    // Script parser for `<script>`
+                    "js": "espree",
 
-module.exports = {
-    parser: "vue-eslint-parser",
-    parserOptions: {
-        // Single parser
-        parser: tsParser,
-        // Multiple parser
-        parser: {
-            js: espree,
-            ts: tsParser,
-        }
-    },
-}
+                    // Script parser for `<script lang="ts">`
+                    "ts": tsParser,
+
+                    // Script parser for vue directives (e.g. `v-if=` or `:attribute=`)
+                    // and vue interpolations (e.g. `{{variable}}`).
+                    // If not specified, the parser determined by `<script lang ="...">` is used.
+                    "<template>": "espree",
+                }
+            }
+        },
+    }
+]
 ```
 
 If the `parserOptions.parser` is `false`, the `vue-eslint-parser` skips parsing `<script>` tags completely.
@@ -131,18 +135,24 @@ This is useful for people who use the language ESLint community doesn't provide 
 You can use `parserOptions.vueFeatures` property to specify how to parse related to Vue features.
 For example:
 
-```json
-{
-    "parser": "vue-eslint-parser",
-    "parserOptions": {
-        "vueFeatures": {
-            "filter": true,
-            "interpolationAsNonHTML": true,
-            "styleCSSVariableInjection": true,
-            "customMacros": []
-        }
+```js
+import vueParser from "vue-eslint-parser"
+export default [
+    {
+        files: ["*.vue", "**/*.vue"],
+        languageOptions: {
+            parser: vueParser,
+            parserOptions: {
+                vueFeatures: {
+                    filter: true,
+                    interpolationAsNonHTML: true,
+                    styleCSSVariableInjection: true,
+                    customMacros: []
+                }
+            }
+        },
     }
-}
+]
 ```
 
 ### parserOptions.vueFeatures.filter
@@ -152,7 +162,6 @@ For example:
 
 ```json
 {
-    "parser": "vue-eslint-parser",
     "parserOptions": {
         "vueFeatures": {
             "filter": false
@@ -185,7 +194,6 @@ For example:
 
 ```json
 {
-    "parser": "vue-eslint-parser",
     "parserOptions": {
         "vueFeatures": {
             "interpolationAsNonHTML": true
@@ -228,7 +236,6 @@ For example to enable parsing of pug templates:
 
 ```jsonc
 {
-    "parser": "vue-eslint-parser",
     "parserOptions": {
         "templateTokenizer": {
              // template tokenizer for `<template lang="pug">`
