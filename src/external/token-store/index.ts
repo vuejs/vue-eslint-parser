@@ -3,23 +3,29 @@
  * @author Brandon Mills
  */
 import assert from "assert"
-import {HasLocation, Token} from "../../ast"
-import * as cursors from "./cursors"
-import Cursor from "./cursors/cursor"
+import type { HasLocation, Token } from "../../ast/index"
+import * as cursors from "./cursors/index"
+import type Cursor from "./cursors/cursor"
 import ForwardTokenCursor from "./cursors/forward-token-cursor"
 import PaddedTokenCursor from "./cursors/padded-token-cursor"
-import {search} from "./utils"
+import { search } from "./utils"
 
-export type SkipOptions = number | ((token: Token) => boolean) | {
-    includeComments?: boolean
-    filter?: (token: Token) => boolean
-    skip?: number
-}
-export type CountOptions = number | ((token: Token) => boolean) | {
-    includeComments?: boolean
-    filter?: (token: Token) => boolean
-    count?: number
-}
+export type SkipOptions =
+    | number
+    | ((token: Token) => boolean)
+    | {
+          includeComments?: boolean
+          filter?: (token: Token) => boolean
+          skip?: number
+      }
+export type CountOptions =
+    | number
+    | ((token: Token) => boolean)
+    | {
+          includeComments?: boolean
+          filter?: (token: Token) => boolean
+          count?: number
+      }
 
 /**
  * Check whether the given token is a comment token or not.
@@ -27,7 +33,11 @@ export type CountOptions = number | ((token: Token) => boolean) | {
  * @returns `true` if the token is a comment token.
  */
 function isCommentToken(token: Token): boolean {
-    return token.type === "Line" || token.type === "Block" || token.type === "Shebang"
+    return (
+        token.type === "Line" ||
+        token.type === "Block" ||
+        token.type === "Shebang"
+    )
 }
 
 /**
@@ -41,7 +51,10 @@ function isCommentToken(token: Token): boolean {
  * @returns The map from locations to indices in `tokens`.
  * @private
  */
-function createIndexMap(tokens: Token[], comments: Token[]): { [key: number]: number } {
+function createIndexMap(
+    tokens: Token[],
+    comments: Token[],
+): { [key: number]: number } {
     const map = Object.create(null)
     let tokenIndex = 0
     let commentIndex = 0
@@ -49,15 +62,27 @@ function createIndexMap(tokens: Token[], comments: Token[]): { [key: number]: nu
     let range: [number, number] | null = null
 
     while (tokenIndex < tokens.length || commentIndex < comments.length) {
-        nextStart = (commentIndex < comments.length) ? comments[commentIndex].range[0] : Number.MAX_SAFE_INTEGER
-        while (tokenIndex < tokens.length && (range = tokens[tokenIndex].range)[0] < nextStart) {
+        nextStart =
+            commentIndex < comments.length
+                ? comments[commentIndex].range[0]
+                : Number.MAX_SAFE_INTEGER
+        while (
+            tokenIndex < tokens.length &&
+            (range = tokens[tokenIndex].range)[0] < nextStart
+        ) {
             map[range[0]] = tokenIndex
             map[range[1] - 1] = tokenIndex
             tokenIndex += 1
         }
 
-        nextStart = (tokenIndex < tokens.length) ? tokens[tokenIndex].range[0] : Number.MAX_SAFE_INTEGER
-        while (commentIndex < comments.length && (range = comments[commentIndex].range)[0] < nextStart) {
+        nextStart =
+            tokenIndex < tokens.length
+                ? tokens[tokenIndex].range[0]
+                : Number.MAX_SAFE_INTEGER
+        while (
+            commentIndex < comments.length &&
+            (range = comments[commentIndex].range)[0] < nextStart
+        ) {
             map[range[0]] = tokenIndex
             map[range[1] - 1] = tokenIndex
             commentIndex += 1
@@ -80,26 +105,45 @@ function createIndexMap(tokens: Token[], comments: Token[]): { [key: number]: nu
  * @returns The created cursor.
  * @private
  */
-function createCursorWithSkip(factory: cursors.CursorFactory, tokens: Token[], comments: Token[], indexMap: { [key: number]: number }, startLoc: number, endLoc: number, opts?: SkipOptions): Cursor {
+function createCursorWithSkip(
+    factory: cursors.CursorFactory,
+    tokens: Token[],
+    comments: Token[],
+    indexMap: { [key: number]: number },
+    startLoc: number,
+    endLoc: number,
+    opts?: SkipOptions,
+): Cursor {
     let includeComments = false
     let skip = 0
     let filter: ((token: Token) => boolean) | null = null
 
     if (typeof opts === "number") {
         skip = opts | 0
-    }
-    else if (typeof opts === "function") {
+    } else if (typeof opts === "function") {
         filter = opts
-    }
-    else if (opts) {
+    } else if (opts) {
         includeComments = Boolean(opts.includeComments)
         skip = opts.skip || 0
         filter = opts.filter || null
     }
     assert(skip >= 0, "options.skip should be zero or a positive integer.")
-    assert(!filter || typeof filter === "function", "options.filter should be a function.")
+    assert(
+        !filter || typeof filter === "function",
+        "options.filter should be a function.",
+    )
 
-    return factory.createCursor(tokens, comments, indexMap, startLoc, endLoc, includeComments, filter, skip, -1)
+    return factory.createCursor(
+        tokens,
+        comments,
+        indexMap,
+        startLoc,
+        endLoc,
+        includeComments,
+        filter,
+        skip,
+        -1,
+    )
 }
 
 /**
@@ -115,7 +159,15 @@ function createCursorWithSkip(factory: cursors.CursorFactory, tokens: Token[], c
  * @returns The created cursor.
  * @private
  */
-function createCursorWithCount(factory: cursors.CursorFactory, tokens: Token[], comments: Token[], indexMap: { [key: number]: number }, startLoc: number, endLoc: number, opts?: CountOptions): Cursor {
+function createCursorWithCount(
+    factory: cursors.CursorFactory,
+    tokens: Token[],
+    comments: Token[],
+    indexMap: { [key: number]: number },
+    startLoc: number,
+    endLoc: number,
+    opts?: CountOptions,
+): Cursor {
     let includeComments = false
     let count = 0
     let countExists = false
@@ -124,20 +176,31 @@ function createCursorWithCount(factory: cursors.CursorFactory, tokens: Token[], 
     if (typeof opts === "number") {
         count = opts | 0
         countExists = true
-    }
-    else if (typeof opts === "function") {
+    } else if (typeof opts === "function") {
         filter = opts
-    }
-    else if (opts) {
+    } else if (opts) {
         includeComments = Boolean(opts.includeComments)
         count = opts.count || 0
         countExists = typeof opts.count === "number"
         filter = opts.filter || null
     }
     assert(count >= 0, "options.count should be zero or a positive integer.")
-    assert(!filter || typeof filter === "function", "options.filter should be a function.")
+    assert(
+        !filter || typeof filter === "function",
+        "options.filter should be a function.",
+    )
 
-    return factory.createCursor(tokens, comments, indexMap, startLoc, endLoc, includeComments, filter, 0, countExists ? count : -1)
+    return factory.createCursor(
+        tokens,
+        comments,
+        indexMap,
+        startLoc,
+        endLoc,
+        includeComments,
+        filter,
+        0,
+        countExists ? count : -1,
+    )
 }
 
 /**
@@ -153,14 +216,47 @@ function createCursorWithCount(factory: cursors.CursorFactory, tokens: Token[], 
  * @returns The created cursor.
  * @private
  */
-function createCursorWithPadding(tokens: Token[], comments: Token[], indexMap: { [key: number]: number }, startLoc: number, endLoc: number, beforeCount?: CountOptions, afterCount?: number): Cursor {
-    if (typeof beforeCount === "undefined" && typeof afterCount === "undefined") {
-        return new ForwardTokenCursor(tokens, comments, indexMap, startLoc, endLoc)
+function createCursorWithPadding(
+    tokens: Token[],
+    comments: Token[],
+    indexMap: { [key: number]: number },
+    startLoc: number,
+    endLoc: number,
+    beforeCount?: CountOptions,
+    afterCount?: number,
+): Cursor {
+    if (
+        typeof beforeCount === "undefined" &&
+        typeof afterCount === "undefined"
+    ) {
+        return new ForwardTokenCursor(
+            tokens,
+            comments,
+            indexMap,
+            startLoc,
+            endLoc,
+        )
     }
     if (typeof beforeCount === "number" || typeof beforeCount === "undefined") {
-        return new PaddedTokenCursor(tokens, comments, indexMap, startLoc, endLoc, beforeCount || 0, afterCount || 0)
+        return new PaddedTokenCursor(
+            tokens,
+            comments,
+            indexMap,
+            startLoc,
+            endLoc,
+            beforeCount || 0,
+            afterCount || 0,
+        )
     }
-    return createCursorWithCount(cursors.forward, tokens, comments, indexMap, startLoc, endLoc, beforeCount)
+    return createCursorWithCount(
+        cursors.forward,
+        tokens,
+        comments,
+        indexMap,
+        startLoc,
+        endLoc,
+        beforeCount,
+    )
 }
 
 /**
@@ -206,7 +302,7 @@ export default class TokenStore {
      * @param tokens - The array of tokens.
      * @param comments - The array of comments.
      */
-    constructor(tokens: Token[], comments: Token[]) {
+    public constructor(tokens: Token[], comments: Token[]) {
         this._tokens = tokens
         this._comments = comments
         this._indexMap = createIndexMap(tokens, comments)
@@ -222,16 +318,21 @@ export default class TokenStore {
      * @param options - The option object.
      * @returns The token starting at index, or null if no such token.
      */
-    getTokenByRangeStart(offset: number, options?: { includeComments: boolean }): Token | null {
+    public getTokenByRangeStart(
+        offset: number,
+        options?: { includeComments: boolean },
+    ): Token | null {
         const includeComments = Boolean(options && options.includeComments)
-        const token = cursors.forward.createBaseCursor(
-            this._tokens,
-            this._comments,
-            this._indexMap,
-            offset,
-            -1,
-            includeComments
-        ).getOneToken()
+        const token = cursors.forward
+            .createBaseCursor(
+                this._tokens,
+                this._comments,
+                this._indexMap,
+                offset,
+                -1,
+                includeComments,
+            )
+            .getOneToken()
 
         if (token && token.range[0] === offset) {
             return token
@@ -245,7 +346,10 @@ export default class TokenStore {
      * @param options - The option object.
      * @returns An object representing the token.
      */
-    getFirstToken(node: HasLocation, options?: SkipOptions): Token | null {
+    public getFirstToken(
+        node: HasLocation,
+        options?: SkipOptions,
+    ): Token | null {
         return createCursorWithSkip(
             cursors.forward,
             this._tokens,
@@ -253,7 +357,7 @@ export default class TokenStore {
             this._indexMap,
             node.range[0],
             node.range[1],
-            options
+            options,
         ).getOneToken()
     }
 
@@ -263,7 +367,10 @@ export default class TokenStore {
      * @param options - The option object.
      * @returns An object representing the token.
      */
-    getLastToken(node: HasLocation, options?: SkipOptions): Token | null {
+    public getLastToken(
+        node: HasLocation,
+        options?: SkipOptions,
+    ): Token | null {
         return createCursorWithSkip(
             cursors.backward,
             this._tokens,
@@ -271,7 +378,7 @@ export default class TokenStore {
             this._indexMap,
             node.range[0],
             node.range[1],
-            options
+            options,
         ).getOneToken()
     }
 
@@ -281,7 +388,10 @@ export default class TokenStore {
      * @param options - The option object.
      * @returns An object representing the token.
      */
-    getTokenBefore(node: HasLocation, options?: SkipOptions): Token | null {
+    public getTokenBefore(
+        node: HasLocation,
+        options?: SkipOptions,
+    ): Token | null {
         return createCursorWithSkip(
             cursors.backward,
             this._tokens,
@@ -289,7 +399,7 @@ export default class TokenStore {
             this._indexMap,
             -1,
             node.range[0],
-            options
+            options,
         ).getOneToken()
     }
 
@@ -299,7 +409,10 @@ export default class TokenStore {
      * @param options - The option object.
      * @returns An object representing the token.
      */
-    getTokenAfter(node: HasLocation, options?: SkipOptions): Token | null {
+    public getTokenAfter(
+        node: HasLocation,
+        options?: SkipOptions,
+    ): Token | null {
         return createCursorWithSkip(
             cursors.forward,
             this._tokens,
@@ -307,7 +420,7 @@ export default class TokenStore {
             this._indexMap,
             node.range[1],
             -1,
-            options
+            options,
         ).getOneToken()
     }
 
@@ -318,7 +431,11 @@ export default class TokenStore {
      * @param options - The option object.
      * @returns An object representing the token.
      */
-    getFirstTokenBetween(left: HasLocation, right: HasLocation, options?: SkipOptions): Token | null {
+    public getFirstTokenBetween(
+        left: HasLocation,
+        right: HasLocation,
+        options?: SkipOptions,
+    ): Token | null {
         return createCursorWithSkip(
             cursors.forward,
             this._tokens,
@@ -326,7 +443,7 @@ export default class TokenStore {
             this._indexMap,
             left.range[1],
             right.range[0],
-            options
+            options,
         ).getOneToken()
     }
 
@@ -337,7 +454,11 @@ export default class TokenStore {
      * @param options - The option object.
      * @returns An object representing the token.
      */
-    getLastTokenBetween(left: HasLocation, right: HasLocation, options?: SkipOptions): Token | null {
+    public getLastTokenBetween(
+        left: HasLocation,
+        right: HasLocation,
+        options?: SkipOptions,
+    ): Token | null {
         return createCursorWithSkip(
             cursors.backward,
             this._tokens,
@@ -345,7 +466,7 @@ export default class TokenStore {
             this._indexMap,
             left.range[1],
             right.range[0],
-            options
+            options,
         ).getOneToken()
     }
 
@@ -358,8 +479,11 @@ export default class TokenStore {
      * @returns An object representing the token.
      * @deprecated
      */
-    getTokenOrCommentBefore(node: HasLocation, skip?: number): Token | null {
-        return this.getTokenBefore(node, {includeComments: true, skip})
+    public getTokenOrCommentBefore(
+        node: HasLocation,
+        skip?: number,
+    ): Token | null {
+        return this.getTokenBefore(node, { includeComments: true, skip })
     }
 
     /**
@@ -371,8 +495,11 @@ export default class TokenStore {
      * @returns An object representing the token.
      * @deprecated
      */
-    getTokenOrCommentAfter(node: HasLocation, skip?: number): Token | null {
-        return this.getTokenAfter(node, {includeComments: true, skip})
+    public getTokenOrCommentAfter(
+        node: HasLocation,
+        skip?: number,
+    ): Token | null {
+        return this.getTokenAfter(node, { includeComments: true, skip })
     }
 
     //--------------------------------------------------------------------------
@@ -388,7 +515,7 @@ export default class TokenStore {
      * @param [options.count=0] - The maximum count of tokens the cursor iterates.
      * @returns Tokens.
      */
-    getFirstTokens(node: HasLocation, options?: CountOptions): Token[] {
+    public getFirstTokens(node: HasLocation, options?: CountOptions): Token[] {
         return createCursorWithCount(
             cursors.forward,
             this._tokens,
@@ -396,7 +523,7 @@ export default class TokenStore {
             this._indexMap,
             node.range[0],
             node.range[1],
-            options
+            options,
         ).getAllTokens()
     }
 
@@ -406,7 +533,7 @@ export default class TokenStore {
      * @param [options=0] - The option object. Same options as getFirstTokens()
      * @returns Tokens.
      */
-    getLastTokens(node: HasLocation, options?: CountOptions) {
+    public getLastTokens(node: HasLocation, options?: CountOptions) {
         return createCursorWithCount(
             cursors.backward,
             this._tokens,
@@ -414,8 +541,10 @@ export default class TokenStore {
             this._indexMap,
             node.range[0],
             node.range[1],
-            options
-        ).getAllTokens().reverse()
+            options,
+        )
+            .getAllTokens()
+            .reverse()
     }
 
     /**
@@ -424,7 +553,7 @@ export default class TokenStore {
      * @param [options=0] - The option object. Same options as getFirstTokens()
      * @returns Tokens.
      */
-    getTokensBefore(node: HasLocation, options?: CountOptions): Token[] {
+    public getTokensBefore(node: HasLocation, options?: CountOptions): Token[] {
         return createCursorWithCount(
             cursors.backward,
             this._tokens,
@@ -432,8 +561,10 @@ export default class TokenStore {
             this._indexMap,
             -1,
             node.range[0],
-            options
-        ).getAllTokens().reverse()
+            options,
+        )
+            .getAllTokens()
+            .reverse()
     }
 
     /**
@@ -442,7 +573,7 @@ export default class TokenStore {
      * @param [options=0] - The option object. Same options as getFirstTokens()
      * @returns Tokens.
      */
-    getTokensAfter(node: HasLocation, options?: CountOptions): Token[] {
+    public getTokensAfter(node: HasLocation, options?: CountOptions): Token[] {
         return createCursorWithCount(
             cursors.forward,
             this._tokens,
@@ -450,7 +581,7 @@ export default class TokenStore {
             this._indexMap,
             node.range[1],
             -1,
-            options
+            options,
         ).getAllTokens()
     }
 
@@ -461,7 +592,11 @@ export default class TokenStore {
      * @param [options=0] - The option object. Same options as getFirstTokens()
      * @returns Tokens between left and right.
      */
-    getFirstTokensBetween(left: HasLocation, right: HasLocation, options?: CountOptions): Token[] {
+    public getFirstTokensBetween(
+        left: HasLocation,
+        right: HasLocation,
+        options?: CountOptions,
+    ): Token[] {
         return createCursorWithCount(
             cursors.forward,
             this._tokens,
@@ -469,7 +604,7 @@ export default class TokenStore {
             this._indexMap,
             left.range[1],
             right.range[0],
-            options
+            options,
         ).getAllTokens()
     }
 
@@ -480,7 +615,11 @@ export default class TokenStore {
      * @param [options=0] - The option object. Same options as getFirstTokens()
      * @returns Tokens between left and right.
      */
-    getLastTokensBetween(left: HasLocation, right: HasLocation, options?: CountOptions): Token[] {
+    public getLastTokensBetween(
+        left: HasLocation,
+        right: HasLocation,
+        options?: CountOptions,
+    ): Token[] {
         return createCursorWithCount(
             cursors.backward,
             this._tokens,
@@ -488,8 +627,10 @@ export default class TokenStore {
             this._indexMap,
             left.range[1],
             right.range[0],
-            options
-        ).getAllTokens().reverse()
+            options,
+        )
+            .getAllTokens()
+            .reverse()
     }
 
     /**
@@ -499,7 +640,11 @@ export default class TokenStore {
      * @param afterCount - The number of tokens after the node to retrieve.
      * @returns Array of objects representing tokens.
      */
-    getTokens(node: HasLocation, beforeCount?: CountOptions, afterCount?: number): Token[] {
+    public getTokens(
+        node: HasLocation,
+        beforeCount?: CountOptions,
+        afterCount?: number,
+    ): Token[] {
         return createCursorWithPadding(
             this._tokens,
             this._comments,
@@ -507,7 +652,7 @@ export default class TokenStore {
             node.range[0],
             node.range[1],
             beforeCount,
-            afterCount
+            afterCount,
         ).getAllTokens()
     }
 
@@ -518,7 +663,11 @@ export default class TokenStore {
      * @param padding Number of extra tokens on either side of center.
      * @returns Tokens between left and right.
      */
-    getTokensBetween(left: HasLocation, right: HasLocation, padding?: CountOptions): Token[] {
+    public getTokensBetween(
+        left: HasLocation,
+        right: HasLocation,
+        padding?: CountOptions,
+    ): Token[] {
         return createCursorWithPadding(
             this._tokens,
             this._comments,
@@ -526,7 +675,7 @@ export default class TokenStore {
             left.range[1],
             right.range[0],
             padding,
-            typeof padding === "number" ? padding : undefined
+            typeof padding === "number" ? padding : undefined,
         ).getAllTokens()
     }
 
@@ -541,7 +690,10 @@ export default class TokenStore {
      * @param right - The node to check.
      * @returns `true` if one or more comments exist.
      */
-    commentsExistBetween(left: HasLocation, right: HasLocation): boolean {
+    public commentsExistBetween(
+        left: HasLocation,
+        right: HasLocation,
+    ): boolean {
         const index = search(this._comments, left.range[1])
 
         return (
@@ -555,7 +707,7 @@ export default class TokenStore {
      * @param nodeOrToken The AST node or token to check for adjacent comment tokens.
      * @returns An array of comments in occurrence order.
      */
-    getCommentsBefore(nodeOrToken: HasLocation): Token[] {
+    public getCommentsBefore(nodeOrToken: HasLocation): Token[] {
         const cursor = createCursorWithCount(
             cursors.backward,
             this._tokens,
@@ -563,7 +715,7 @@ export default class TokenStore {
             this._indexMap,
             -1,
             nodeOrToken.range[0],
-            {includeComments: true}
+            { includeComments: true },
         )
 
         return getAdjacentCommentTokensFromCursor(cursor).reverse()
@@ -574,7 +726,7 @@ export default class TokenStore {
      * @param nodeOrToken The AST node or token to check for adjacent comment tokens.
      * @returns An array of comments in occurrence order.
      */
-    getCommentsAfter(nodeOrToken: HasLocation): Token[] {
+    public getCommentsAfter(nodeOrToken: HasLocation): Token[] {
         const cursor = createCursorWithCount(
             cursors.forward,
             this._tokens,
@@ -582,7 +734,7 @@ export default class TokenStore {
             this._indexMap,
             nodeOrToken.range[1],
             -1,
-            {includeComments: true}
+            { includeComments: true },
         )
 
         return getAdjacentCommentTokensFromCursor(cursor)
@@ -593,7 +745,7 @@ export default class TokenStore {
      * @param node The AST node to get the comments for.
      * @returns An array of comments in occurrence order.
      */
-    getCommentsInside(node: HasLocation): Token[] {
+    public getCommentsInside(node: HasLocation): Token[] {
         return this.getTokens(node, {
             includeComments: true,
             filter: isCommentToken,

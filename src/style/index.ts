@@ -6,8 +6,8 @@ import type {
     VExpressionContainer,
     VStyleElement,
     VText,
-} from "../ast"
-import { ParseError } from "../ast"
+} from "../ast/index"
+import { ParseError } from "../ast/index"
 import { getLang, getOwnerDocument } from "../common/ast-utils"
 import { debug } from "../common/debug"
 import { insertError } from "../common/error-utils"
@@ -18,9 +18,9 @@ import {
     insertComments,
     replaceAndSplitTokens,
 } from "../common/token-utils"
-import { parseExpression } from "../script"
+import { parseExpression } from "../script/index"
 import { DEFAULT_ECMA_VERSION } from "../script-setup/parser-options"
-import { resolveReferences } from "../template"
+import { resolveReferences } from "../template/index"
 import type {
     CSSCommentToken,
     CSSPunctuatorToken,

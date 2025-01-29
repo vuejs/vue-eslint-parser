@@ -5,8 +5,8 @@ import type {
     LocationRange,
     Node,
     ParseError,
-} from "../ast"
-import { traverseNodes } from "../ast"
+} from "../ast/index"
+import { traverseNodes } from "../ast/index"
 import type { LocationCalculator } from "./location-calculator"
 
 /**

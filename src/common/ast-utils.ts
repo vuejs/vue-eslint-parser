@@ -6,7 +6,7 @@ import type {
     VExpressionContainer,
     VGenericExpression,
     VNode,
-} from "../ast"
+} from "../ast/index"
 
 /**
  * Check whether the node is a `<script>` element.

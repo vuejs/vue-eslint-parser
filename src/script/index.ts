@@ -32,8 +32,8 @@ import type {
     VSlotScopeExpression,
     OffsetRange,
     VGenericExpression,
-} from "../ast"
-import { ParseError } from "../ast"
+} from "../ast/index"
+import { ParseError } from "../ast/index"
 import { debug } from "../common/debug"
 import type {
     LocationCalculator,
@@ -589,8 +589,8 @@ export function parseScript(
         typeof parserOptions.parser === "string"
             ? loadParser(parserOptions.parser)
             : isParserObject(parserOptions.parser)
-            ? parserOptions.parser
-            : getEspreeFromEcmaVersion(parserOptions.ecmaVersion)
+              ? parserOptions.parser
+              : getEspreeFromEcmaVersion(parserOptions.ecmaVersion)
 
     const result: any = isEnhancedParserObject(parser)
         ? parser.parseForESLint(code, parserOptions)

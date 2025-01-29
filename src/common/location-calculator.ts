@@ -4,7 +4,7 @@
  * See LICENSE file in root directory for full license.
  */
 import sortedLastIndex from "lodash/sortedLastIndex"
-import type { Location } from "../ast"
+import type { Location } from "../ast/index"
 import { LinesAndColumns } from "./lines-and-columns"
 
 /**

@@ -4,12 +4,12 @@
  * See LICENSE file in root directory for full license.
  */
 
-/*eslint-disable no-constant-condition, no-param-reassign */
+/*eslint-disable no-param-reassign */
 
 import assert from "assert"
 import { debug } from "../common/debug"
-import type { ErrorCode, Namespace, Token } from "../ast"
-import { NS, ParseError } from "../ast"
+import type { ErrorCode, Namespace, Token } from "../ast/index"
+import { NS, ParseError } from "../ast/index"
 import { alternativeCR } from "./util/alternative-cr"
 import { entitySets } from "./util/entities"
 import {
@@ -1893,10 +1893,10 @@ export class Tokenizer {
             const type = isWhitespace(cp)
                 ? "HTMLWhitespace"
                 : state === "RCDATA"
-                ? "HTMLRawText"
-                : state === "RAWTEXT"
-                ? "HTMLRCDataText"
-                : "HTMLText"
+                  ? "HTMLRawText"
+                  : state === "RAWTEXT"
+                    ? "HTMLRCDataText"
+                    : "HTMLText"
             if (this.currentToken != null && this.currentToken.type !== type) {
                 this.endToken()
                 return this.reconsumeAs(this.state)
@@ -1953,4 +1953,4 @@ export class Tokenizer {
     }
 }
 
-/*eslint-enable no-constant-condition, no-param-reassign */
+/*eslint-enable no-param-reassign */

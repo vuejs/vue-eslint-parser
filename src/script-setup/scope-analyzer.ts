@@ -7,8 +7,8 @@ import type {
     VDocumentFragment,
     VElement,
     VExpressionContainer,
-} from "../ast"
-import { traverseNodes } from "../ast"
+} from "../ast/index"
+import { traverseNodes } from "../ast/index"
 import { getEslintScope } from "../common/eslint-scope"
 import {
     findGenericDirective,

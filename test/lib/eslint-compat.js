@@ -80,7 +80,6 @@ function getESLintClassForV6(eslint) {
          * @param {Parameters<eslint.ESLint['lintText']>} params
          * @returns {ReturnType<eslint.ESLint['lintText']>}
          */
-        // eslint-disable-next-line require-await -- ignore
         async lintText(...params) {
             const result = this.engine.executeOnText(
                 params[0],
@@ -93,7 +92,6 @@ function getESLintClassForV6(eslint) {
          * @param {Parameters<eslint.ESLint['lintFiles']>} params
          * @returns {ReturnType<eslint.ESLint['lintFiles']>}
          */
-        // eslint-disable-next-line require-await -- ignore
         async lintFiles(...params) {
             const result = this.engine.executeOnFiles(
                 Array.isArray(params[0]) ? params[0] : [params[0]],
@@ -105,7 +103,6 @@ function getESLintClassForV6(eslint) {
          * @param {Parameters<eslint.ESLint['outputFixes']>} params
          * @returns {ReturnType<eslint.ESLint['outputFixes']>}
          */
-        // eslint-disable-next-line require-await -- ignore
         static async outputFixes(...params) {
             return eslint.CLIEngine.outputFixes({
                 results: params[0],

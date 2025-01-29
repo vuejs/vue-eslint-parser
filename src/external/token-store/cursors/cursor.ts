@@ -2,7 +2,7 @@
  * @fileoverview Define the abstract class about cursors which iterate tokens.
  * @author Toru Nagashima
  */
-import {Token} from "../../../ast"
+import type { Token } from "../../../ast/index"
 
 /**
  * The abstract class about cursors which iterate tokens.
@@ -28,12 +28,12 @@ import {Token} from "../../../ast"
  *
  */
 export default abstract class Cursor {
-    current: Token | null
+    public current: Token | null
 
     /**
      * Initializes this cursor.
      */
-    constructor() {
+    public constructor() {
         this.current = null
     }
 
@@ -42,7 +42,7 @@ export default abstract class Cursor {
      * This consumes this cursor.
      * @returns The first token or null.
      */
-    getOneToken(): Token | null {
+    public getOneToken(): Token | null {
         return this.moveNext() ? this.current : null
     }
 
@@ -51,7 +51,7 @@ export default abstract class Cursor {
      * This consumes this cursor.
      * @returns All tokens.
      */
-    getAllTokens(): Token[] {
+    public getAllTokens(): Token[] {
         const tokens: Token[] = []
 
         while (this.moveNext()) {
@@ -66,5 +66,5 @@ export default abstract class Cursor {
      * @returns {boolean} `true` if the next token exists.
      * @abstract
      */
-    abstract moveNext(): boolean
+    public abstract moveNext(): boolean
 }

@@ -16,15 +16,15 @@ import type {
     VElement,
     VExpressionContainer,
     VLiteral,
-} from "../ast"
-import { NS, ParseError } from "../ast"
+} from "../ast/index"
+import { NS, ParseError } from "../ast/index"
 import { debug } from "../common/debug"
 import { LocationCalculatorForHtml } from "../common/location-calculator"
 import {
     convertToDirective,
     processMustache,
     resolveReferences,
-} from "../template"
+} from "../template/index"
 import {
     MATHML_ATTRIBUTE_NAME_MAP,
     SVG_ATTRIBUTE_NAME_MAP,

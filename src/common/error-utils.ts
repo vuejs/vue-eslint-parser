@@ -1,4 +1,4 @@
-import type { ParseError, VDocumentFragment } from "../ast"
+import type { ParseError, VDocumentFragment } from "../ast/index"
 import sortedIndexBy from "lodash/sortedIndexBy"
 /**
  * Insert the given error.

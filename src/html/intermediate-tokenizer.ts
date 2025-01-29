@@ -11,8 +11,8 @@ import type {
     Namespace,
     Token,
     VAttribute,
-} from "../ast"
-import { ParseError } from "../ast"
+} from "../ast/index"
+import { ParseError } from "../ast/index"
 import { debug } from "../common/debug"
 import type { Tokenizer, TokenizerState, TokenType } from "./tokenizer"
 

@@ -6,24 +6,24 @@
 import type { Rule } from "eslint"
 import EventEmitter from "events"
 import NodeEventGenerator from "./external/node-event-generator"
-import TokenStore from "./external/token-store"
+import TokenStore from "./external/token-store/index"
 import type {
     ESLintProgram,
     VElement,
     VDocumentFragment,
     VAttribute,
-} from "./ast"
+} from "./ast/index"
 import { getFallbackKeys, KEYS, traverseNodes } from "./ast/traverse"
 import type { LocationCalculatorForHtml } from "./common/location-calculator"
 import type {
     CustomBlockContext,
     ESLintCustomBlockParser,
-} from "./sfc/custom-block"
+} from "./sfc/custom-block/index"
 import {
     createCustomBlockSharedContext,
     getCustomBlocks,
     parseCustomBlockElement,
-} from "./sfc/custom-block"
+} from "./sfc/custom-block/index"
 import type { ParserOptions } from "./common/parser-options"
 import { isSFCFile } from "./common/parser-options"
 import { getLang } from "./common/ast-utils"
@@ -175,7 +175,6 @@ export function define(
                             generator,
                         )
                     } finally {
-                        // @ts-expect-error -- ignore
                         scriptVisitor[templateBodyTriggerSelector] =
                             programExitHandler
                         templateBodyEmitters.delete(templateBodyTriggerSelector)
@@ -377,9 +376,9 @@ export function define(
                 typeof target === "function"
                     ? target
                     : Array.isArray(target)
-                    ? (lang: string | null) =>
-                          Boolean(lang && target.includes(lang))
-                    : (lang: string | null) => target === lang
+                      ? (lang: string | null) =>
+                            Boolean(lang && target.includes(lang))
+                      : (lang: string | null) => target === lang
             factories.push({
                 context,
                 test,

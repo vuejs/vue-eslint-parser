@@ -2,7 +2,7 @@
  * @fileoverview Define the cursor which limits the number of tokens.
  * @author Toru Nagashima
  */
-import Cursor from "./cursor"
+import type Cursor from "./cursor"
 import DecorativeCursor from "./decorative-cursor"
 
 /**
@@ -16,13 +16,13 @@ export default class LimitCursor extends DecorativeCursor {
      * @param cursor - The cursor to be decorated.
      * @param count - The count of tokens this cursor iterates.
      */
-    constructor(cursor: Cursor, count: number) {
+    public constructor(cursor: Cursor, count: number) {
         super(cursor)
         this.count = count
     }
 
     /** @inheritdoc */
-    moveNext(): boolean {
+    public moveNext(): boolean {
         if (this.count > 0) {
             this.count -= 1
             return super.moveNext()

@@ -1,5 +1,5 @@
 import * as path from "path"
-import type { VDocumentFragment } from "../ast"
+import type { VDocumentFragment } from "../ast/index"
 import type { CustomTemplateTokenizerConstructor } from "../html/custom-tokenizer"
 import { getLang, isScriptElement, isScriptSetupElement } from "./ast-utils"
 import type { ParserObject } from "./parser-object"
@@ -83,8 +83,8 @@ export function getScriptParser(
             parserLang == null
                 ? []
                 : typeof parserLang === "string"
-                ? [parserLang]
-                : parserLang
+                  ? [parserLang]
+                  : parserLang
         for (const lang of parserLangs) {
             const parserForLang = lang && parser[lang]
             if (

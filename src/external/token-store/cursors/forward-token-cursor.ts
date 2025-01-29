@@ -2,8 +2,8 @@
  * @fileoverview Define the cursor which iterates tokens only.
  * @author Toru Nagashima
  */
-import {Token} from "../../../ast"
-import {getFirstIndex, getLastIndex} from "../utils"
+import type { Token } from "../../../ast/index"
+import { getFirstIndex, getLastIndex } from "../utils"
 import Cursor from "./cursor"
 
 /**
@@ -22,7 +22,13 @@ export default class ForwardTokenCursor extends Cursor {
      * @param startLoc - The start location of the iteration range.
      * @param endLoc - The end location of the iteration range.
      */
-    constructor(tokens: Token[], _comments: Token[], indexMap: { [key: number]: number }, startLoc: number, endLoc: number) {
+    public constructor(
+        tokens: Token[],
+        _comments: Token[],
+        indexMap: { [key: number]: number },
+        startLoc: number,
+        endLoc: number,
+    ) {
         super()
         this.tokens = tokens
         this.index = getFirstIndex(tokens, indexMap, startLoc)
@@ -30,7 +36,7 @@ export default class ForwardTokenCursor extends Cursor {
     }
 
     /** @inheritdoc */
-    moveNext(): boolean {
+    public moveNext(): boolean {
         if (this.index <= this.indexEnd) {
             this.current = this.tokens[this.index]
             this.index += 1
@@ -44,12 +50,12 @@ export default class ForwardTokenCursor extends Cursor {
     //
 
     /** @inheritdoc */
-    getOneToken(): Token | null {
-        return (this.index <= this.indexEnd) ? this.tokens[this.index] : null
+    public getOneToken(): Token | null {
+        return this.index <= this.indexEnd ? this.tokens[this.index] : null
     }
 
     /** @inheritdoc */
-    getAllTokens(): Token[] {
+    public getAllTokens(): Token[] {
         return this.tokens.slice(this.index, this.indexEnd + 1)
     }
 }

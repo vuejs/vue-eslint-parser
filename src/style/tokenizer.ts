@@ -1,5 +1,5 @@
 import { debug } from "../common/debug"
-import type { OffsetRange } from "../ast"
+import type { OffsetRange } from "../ast/index"
 import {
     APOSTROPHE,
     ASTERISK,

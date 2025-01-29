@@ -5,7 +5,7 @@ import type {
     Token,
     VElement,
     VGenericExpression,
-} from "../ast"
+} from "../ast/index"
 // eslint-disable-next-line node/no-extraneous-import -- ignore
 import type { TSESTree } from "@typescript-eslint/utils"
 import type {

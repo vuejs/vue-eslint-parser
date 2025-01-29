@@ -15,8 +15,8 @@ import type {
     ESLintStatement,
     Token,
     VElement,
-} from "../ast"
-import { ParseError, traverseNodes } from "../ast"
+} from "../ast/index"
+import { ParseError, traverseNodes } from "../ast/index"
 import {
     fixErrorLocation,
     fixLocation,
@@ -26,7 +26,10 @@ import {
 import type { LinesAndColumns } from "../common/lines-and-columns"
 import type { LocationCalculator } from "../common/location-calculator"
 import type { ParserOptions } from "../common/parser-options"
-import { parseScript as parseScriptBase, parseScriptFragment } from "../script"
+import {
+    parseScript as parseScriptBase,
+    parseScriptFragment,
+} from "../script/index"
 import { extractGeneric } from "../script/generic"
 import { getScriptSetupParserOptions } from "./parser-options"
 
@@ -342,7 +345,7 @@ export function parseScriptSetupElements(
                     end,
                     textNode != null && textNode.type === "VText"
                         ? textNode.range[1]
-                        : node.endTag?.range[0] ?? node.range[1],
+                        : (node.endTag?.range[0] ?? node.range[1]),
                 )
             },
             0,

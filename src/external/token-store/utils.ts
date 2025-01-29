@@ -3,7 +3,7 @@
  * @author Toru Nagashima
  */
 import sortedIndexBy from "lodash/sortedIndexBy"
-import {HasLocation} from "../../ast"
+import type { HasLocation } from "../../ast/index"
 
 /**
  * Gets `token.range[0]` from the given token.
@@ -41,13 +41,17 @@ export function search(tokens: HasLocation[], location: number): number {
  * @param startLoc - The location to get an index.
  * @returns The index.
  */
-export function getFirstIndex(tokens: HasLocation[], indexMap: { [key: number]: number }, startLoc: number): number {
+export function getFirstIndex(
+    tokens: HasLocation[],
+    indexMap: { [key: number]: number },
+    startLoc: number,
+): number {
     if (startLoc in indexMap) {
         return indexMap[startLoc]
     }
-    if ((startLoc - 1) in indexMap) {
+    if (startLoc - 1 in indexMap) {
         const index = indexMap[startLoc - 1]
-        const token = (index >= 0 && index < tokens.length) ? tokens[index] : null
+        const token = index >= 0 && index < tokens.length ? tokens[index] : null
 
         // For the map of "comment's location -> token's index", it points the next token of a comment.
         // In that case, +1 is unnecessary.
@@ -68,13 +72,17 @@ export function getFirstIndex(tokens: HasLocation[], indexMap: { [key: number]: 
  * @param endLoc - The location to get an index.
  * @returns The index.
  */
-export function getLastIndex(tokens: HasLocation[], indexMap: { [key: number]: number }, endLoc: number): number {
+export function getLastIndex(
+    tokens: HasLocation[],
+    indexMap: { [key: number]: number },
+    endLoc: number,
+): number {
     if (endLoc in indexMap) {
         return indexMap[endLoc] - 1
     }
-    if ((endLoc - 1) in indexMap) {
+    if (endLoc - 1 in indexMap) {
         const index = indexMap[endLoc - 1]
-        const token = (index >= 0 && index < tokens.length) ? tokens[index] : null
+        const token = index >= 0 && index < tokens.length ? tokens[index] : null
 
         // For the map of "comment's location -> token's index", it points the next token of a comment.
         // In that case, -1 is necessary.
