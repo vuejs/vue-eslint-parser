@@ -8,8 +8,8 @@ import type {
     VElement,
     VExpressionContainer,
     VText,
-} from "../../ast"
-import { getFallbackKeys, ParseError } from "../../ast"
+} from "../../ast/index"
+import { getFallbackKeys, ParseError } from "../../ast/index"
 import { getEslintScope } from "../../common/eslint-scope"
 import { getEcmaVersionIfUseEspree } from "../../common/espree"
 import { fixErrorLocation, fixLocations } from "../../common/fix-locations"

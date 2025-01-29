@@ -25,11 +25,11 @@ import type {
     VNode,
     VOnExpression,
     VSlotScopeExpression,
-} from "../ast"
-import { ParseError } from "../ast"
+} from "../ast/index"
+import { ParseError } from "../ast/index"
 import { debug } from "../common/debug"
 import type { LocationCalculatorForHtml } from "../common/location-calculator"
-import type { ExpressionParseResult } from "../script"
+import type { ExpressionParseResult } from "../script/index"
 import {
     parseExpression,
     parseVForExpression,
@@ -37,7 +37,7 @@ import {
     parseSlotScopeExpression,
     parseGenericExpression,
     parseScriptFragment,
-} from "../script"
+} from "../script/index"
 import {
     createSimpleToken,
     insertComments,

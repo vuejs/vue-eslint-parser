@@ -10,13 +10,13 @@
 const assert = require("assert")
 const path = require("path")
 const eslint = require("eslint")
-const Linter = eslint.Linter
+const parser = require("../src/index.ts")
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 
-const PARSER_PATH = path.resolve(__dirname, "../src/index.ts")
+const Linter = eslint.Linter
 
 //------------------------------------------------------------------------------
 // Tests
@@ -42,41 +42,50 @@ describe("parserServices.defineDocumentVisitor tests", () => {
 }
 </style>`
 
-        const linter = new Linter()
+        const linter = new Linter({ configType: "flat" })
 
-        linter.defineParser(PARSER_PATH, require(PARSER_PATH))
-        linter.defineRule("test-no-forbidden", {
-            create(context) {
-                return context.parserServices.defineDocumentVisitor({
-                    'Identifier[name="forbidden"]'(node) {
-                        context.report({
-                            node,
-                            message: 'no "forbidden"',
-                        })
-                    },
-                })
+        const rules = {
+            "test-no-forbidden": {
+                create(context) {
+                    return context.sourceCode.parserServices.defineDocumentVisitor(
+                        {
+                            'Identifier[name="forbidden"]'(node) {
+                                context.report({
+                                    node,
+                                    message: 'no "forbidden"',
+                                })
+                            },
+                        },
+                    )
+                },
             },
-        })
-        linter.defineRule("test-no-call", {
-            create(context) {
-                return context.parserServices.defineDocumentVisitor({
-                    CallExpression(node) {
-                        context.report({
-                            node,
-                            message: "no call",
-                        })
-                    },
-                })
+            "test-no-call": {
+                create(context) {
+                    return context.sourceCode.parserServices.defineDocumentVisitor(
+                        {
+                            CallExpression(node) {
+                                context.report({
+                                    node,
+                                    message: "no call",
+                                })
+                            },
+                        },
+                    )
+                },
             },
-        })
+        }
         const messages = linter.verify(code, {
-            parser: PARSER_PATH,
-            parserOptions: {
-                ecmaVersion: 2018,
+            plugins: {
+                test: {
+                    rules,
+                },
+            },
+            languageOptions: {
+                parser,
             },
             rules: {
-                "test-no-forbidden": "error",
-                "test-no-call": "error",
+                "test/test-no-forbidden": "error",
+                "test/test-no-call": "error",
             },
         })
         assert.strictEqual(messages.length, 4)

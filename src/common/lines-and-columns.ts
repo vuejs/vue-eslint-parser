@@ -1,5 +1,5 @@
 import sortedLastIndex from "lodash/sortedLastIndex"
-import type { Location } from "../ast"
+import type { Location } from "../ast/index"
 import type { LocationCalculator } from "./location-calculator"
 /**
  * A class for getting lines and columns location.

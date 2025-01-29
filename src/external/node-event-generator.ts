@@ -1,12 +1,13 @@
 /**
  * This file is copied from `eslint/lib/util/node-event-generator.js`
  */
-import EventEmitter from "events"
-import esquery, {ESQueryOptions, Selector} from "esquery"
+import type EventEmitter from "events"
+import type { ESQueryOptions, Selector } from "esquery"
+import esquery from "esquery"
 import union from "lodash/union"
 import intersection from "lodash/intersection"
 import memoize from "lodash/memoize"
-import {Node} from "../ast"
+import type { Node } from "../ast/index"
 
 interface NodeSelector {
     rawSelector: string
@@ -18,17 +19,18 @@ interface NodeSelector {
 }
 
 /**
-* Gets the possible types of a selector
-* @param parsedSelector An object (from esquery) describing the matching behavior of the selector
-* @returns The node types that could possibly trigger this selector, or `null` if all node types could trigger it
-*/
+ * Gets the possible types of a selector
+ * @param parsedSelector An object (from esquery) describing the matching behavior of the selector
+ * @returns The node types that could possibly trigger this selector, or `null` if all node types could trigger it
+ */
 function getPossibleTypes(parsedSelector: Selector): string[] | null {
     switch (parsedSelector.type) {
         case "identifier":
             return [parsedSelector.value]
 
         case "matches": {
-            const typesForComponents = parsedSelector.selectors.map(getPossibleTypes)
+            const typesForComponents =
+                parsedSelector.selectors.map(getPossibleTypes)
 
             if (typesForComponents.every(Boolean)) {
                 return union(...(typesForComponents as string[][]))
@@ -37,17 +39,17 @@ function getPossibleTypes(parsedSelector: Selector): string[] | null {
         }
 
         case "compound": {
-            const typesForComponents = parsedSelector.selectors.map(getPossibleTypes).filter(Boolean) as string[][]
+            const typesForComponents = parsedSelector.selectors
+                .map(getPossibleTypes)
+                .filter(Boolean) as string[][]
 
             // If all of the components could match any type, then the compound could also match any type.
             if (!typesForComponents.length) {
                 return null
             }
 
-            /*
-             * If at least one of the components could only match a particular type, the compound could only match
-             * the intersection of those types.
-             */
+            // If at least one of the components could only match a particular type, the compound could only match
+            // the intersection of those types.
             return intersection(...typesForComponents)
         }
 
@@ -73,12 +75,19 @@ function countClassAttributes(parsedSelector: Selector): number {
         case "descendant":
         case "sibling":
         case "adjacent":
-            return countClassAttributes(parsedSelector.left) + countClassAttributes(parsedSelector.right)
+            return (
+                countClassAttributes(parsedSelector.left) +
+                countClassAttributes(parsedSelector.right)
+            )
 
         case "compound":
         case "not":
         case "matches":
-            return parsedSelector.selectors.reduce((sum, childSelector) => sum + countClassAttributes(childSelector), 0)
+            return parsedSelector.selectors.reduce(
+                (sum, childSelector) =>
+                    sum + countClassAttributes(childSelector),
+                0,
+            )
 
         case "attribute":
         case "field":
@@ -102,12 +111,18 @@ function countIdentifiers(parsedSelector: Selector): number {
         case "descendant":
         case "sibling":
         case "adjacent":
-            return countIdentifiers(parsedSelector.left) + countIdentifiers(parsedSelector.right)
+            return (
+                countIdentifiers(parsedSelector.left) +
+                countIdentifiers(parsedSelector.right)
+            )
 
         case "compound":
         case "not":
         case "matches":
-            return parsedSelector.selectors.reduce((sum, childSelector) => sum + countIdentifiers(childSelector), 0)
+            return parsedSelector.selectors.reduce(
+                (sum, childSelector) => sum + countIdentifiers(childSelector),
+                0,
+            )
 
         case "identifier":
             return 1
@@ -127,10 +142,15 @@ function countIdentifiers(parsedSelector: Selector): number {
  * a value less than 0 if selectorA and selectorB have the same specificity, and selectorA <= selectorB alphabetically
  * a value greater than 0 if selectorA and selectorB have the same specificity, and selectorA > selectorB alphabetically
  */
-function compareSpecificity(selectorA: NodeSelector, selectorB: NodeSelector): number {
-    return selectorA.attributeCount - selectorB.attributeCount ||
+function compareSpecificity(
+    selectorA: NodeSelector,
+    selectorB: NodeSelector,
+): number {
+    return (
+        selectorA.attributeCount - selectorB.attributeCount ||
         selectorA.identifierCount - selectorB.identifierCount ||
         (selectorA.rawSelector <= selectorB.rawSelector ? -1 : 1)
+    )
 }
 
 /**
@@ -141,11 +161,12 @@ function compareSpecificity(selectorA: NodeSelector, selectorB: NodeSelector): n
  */
 function tryParseSelector(rawSelector: string): Selector {
     try {
-        return esquery.parse(rawSelector.replace(/:exit$/, ""))
-    }
-    catch (err: any) {
+        return esquery.parse(rawSelector.replace(/:exit$/u, ""))
+    } catch (err: any) {
         if (typeof err.offset === "number") {
-            throw new Error(`Syntax error in selector "${rawSelector}" at position ${err.offset}: ${err.message}`)
+            throw new Error(
+                `Syntax error in selector "${rawSelector}" at position ${err.offset}: ${err.message}`,
+            )
         }
         throw err
     }
@@ -156,18 +177,20 @@ function tryParseSelector(rawSelector: string): Selector {
  * @param {string} rawSelector A raw AST selector
  * @returns {ASTSelector} A selector descriptor
  */
-const parseSelector = memoize<(rawSelector: string) => NodeSelector>(rawSelector => {
-    const parsedSelector = tryParseSelector(rawSelector)
+const parseSelector = memoize<(rawSelector: string) => NodeSelector>(
+    (rawSelector) => {
+        const parsedSelector = tryParseSelector(rawSelector)
 
-    return {
-        rawSelector,
-        isExit: rawSelector.endsWith(":exit"),
-        parsedSelector,
-        listenerTypes: getPossibleTypes(parsedSelector),
-        attributeCount: countClassAttributes(parsedSelector),
-        identifierCount: countIdentifiers(parsedSelector),
-    }
-})
+        return {
+            rawSelector,
+            isExit: rawSelector.endsWith(":exit"),
+            parsedSelector,
+            listenerTypes: getPossibleTypes(parsedSelector),
+            attributeCount: countClassAttributes(parsedSelector),
+            identifierCount: countIdentifiers(parsedSelector),
+        }
+    },
+)
 
 //------------------------------------------------------------------------------
 // Public Interface
@@ -186,8 +209,8 @@ const parseSelector = memoize<(rawSelector: string) => NodeSelector>(rawSelector
  * ```
  */
 export default class NodeEventGenerator {
-    emitter: EventEmitter
-    esqueryOptions: ESQueryOptions
+    public emitter: EventEmitter
+    public esqueryOptions: ESQueryOptions
 
     private currentAncestry: Node[]
     private enterSelectorsByNodeType: Map<string, NodeSelector[]>
@@ -196,10 +219,10 @@ export default class NodeEventGenerator {
     private anyTypeExitSelectors: NodeSelector[]
 
     /**
-    * @param emitter - An event emitter which is the destination of events. This emitter must already
-    * have registered listeners for all of the events that it needs to listen for.
-    */
-    constructor(emitter: EventEmitter, esqueryOptions: ESQueryOptions) {
+     * @param emitter - An event emitter which is the destination of events. This emitter must already
+     * have registered listeners for all of the events that it needs to listen for.
+     */
+    public constructor(emitter: EventEmitter, esqueryOptions: ESQueryOptions) {
         this.emitter = emitter
         this.esqueryOptions = esqueryOptions
         this.currentAncestry = []
@@ -208,21 +231,20 @@ export default class NodeEventGenerator {
         this.anyTypeEnterSelectors = []
         this.anyTypeExitSelectors = []
 
-        const eventNames = typeof emitter.eventNames === "function"
-
-            // Use the built-in eventNames() function if available (Node 6+)
-            ? emitter.eventNames()
-
-            /*
-             * Otherwise, use the private _events property.
-             * Using a private property isn't ideal here, but this seems to
-             * be the best way to get a list of event names without overriding
-             * addEventListener, which would hurt performance. This property
-             * is widely used and unlikely to be removed in a future version
-             * (see https://github.com/nodejs/node/issues/1817). Also, future
-             * node versions will have eventNames() anyway.
-             */
-            : Object.keys((emitter as any)._events)
+        const eventNames =
+            typeof emitter.eventNames === "function"
+                ? // Use the built-in eventNames() function if available (Node 6+)
+                  emitter.eventNames()
+                : /*
+                   * Otherwise, use the private _events property.
+                   * Using a private property isn't ideal here, but this seems to
+                   * be the best way to get a list of event names without overriding
+                   * addEventListener, which would hurt performance. This property
+                   * is widely used and unlikely to be removed in a future version
+                   * (see https://github.com/nodejs/node/issues/1817). Also, future
+                   * node versions will have eventNames() anyway.
+                   */
+                  Object.keys((emitter as any)._events)
 
         for (const rawSelector of eventNames) {
             if (typeof rawSelector === "symbol") {
@@ -232,7 +254,9 @@ export default class NodeEventGenerator {
 
             if (selector.listenerTypes) {
                 for (const nodeType of selector.listenerTypes) {
-                    const typeMap = selector.isExit ? this.exitSelectorsByNodeType : this.enterSelectorsByNodeType
+                    const typeMap = selector.isExit
+                        ? this.exitSelectorsByNodeType
+                        : this.enterSelectorsByNodeType
 
                     let selectors = typeMap.get(nodeType)
                     if (selectors == null) {
@@ -240,9 +264,11 @@ export default class NodeEventGenerator {
                     }
                     selectors.push(selector)
                 }
-            }
-            else {
-                (selector.isExit ? this.anyTypeExitSelectors : this.anyTypeEnterSelectors).push(selector)
+            } else {
+                ;(selector.isExit
+                    ? this.anyTypeExitSelectors
+                    : this.anyTypeEnterSelectors
+                ).push(selector)
             }
         }
 
@@ -262,7 +288,14 @@ export default class NodeEventGenerator {
      * @param selector An AST selector descriptor
      */
     private applySelector(node: Node, selector: NodeSelector): void {
-        if (esquery.matches(node, selector.parsedSelector, this.currentAncestry,  this.esqueryOptions)) {
+        if (
+            esquery.matches(
+                node,
+                selector.parsedSelector,
+                this.currentAncestry,
+                this.esqueryOptions,
+            )
+        ) {
             this.emitter.emit(selector.rawSelector, node)
         }
     }
@@ -273,25 +306,41 @@ export default class NodeEventGenerator {
      * @param isExit `false` if the node is currently being entered, `true` if it's currently being exited
      */
     private applySelectors(node: Node, isExit: boolean): void {
-        const selectorsByNodeType = (isExit ? this.exitSelectorsByNodeType : this.enterSelectorsByNodeType).get(node.type) || []
-        const anyTypeSelectors = isExit ? this.anyTypeExitSelectors : this.anyTypeEnterSelectors
+        const selectorsByNodeType =
+            (isExit
+                ? this.exitSelectorsByNodeType
+                : this.enterSelectorsByNodeType
+            ).get(node.type) || []
+        const anyTypeSelectors = isExit
+            ? this.anyTypeExitSelectors
+            : this.anyTypeEnterSelectors
 
-        /*
-         * selectorsByNodeType and anyTypeSelectors were already sorted by specificity in the constructor.
-         * Iterate through each of them, applying selectors in the right order.
-         */
+        // selectorsByNodeType and anyTypeSelectors were already sorted by specificity in the constructor.
+        // Iterate through each of them, applying selectors in the right order.
         let selectorsByTypeIndex = 0
         let anyTypeSelectorsIndex = 0
 
-        while (selectorsByTypeIndex < selectorsByNodeType.length || anyTypeSelectorsIndex < anyTypeSelectors.length) {
+        while (
+            selectorsByTypeIndex < selectorsByNodeType.length ||
+            anyTypeSelectorsIndex < anyTypeSelectors.length
+        ) {
             if (
                 selectorsByTypeIndex >= selectorsByNodeType.length ||
-                (anyTypeSelectorsIndex < anyTypeSelectors.length && compareSpecificity(anyTypeSelectors[anyTypeSelectorsIndex], selectorsByNodeType[selectorsByTypeIndex]) < 0)
+                (anyTypeSelectorsIndex < anyTypeSelectors.length &&
+                    compareSpecificity(
+                        anyTypeSelectors[anyTypeSelectorsIndex],
+                        selectorsByNodeType[selectorsByTypeIndex],
+                    ) < 0)
             ) {
-                this.applySelector(node, anyTypeSelectors[anyTypeSelectorsIndex++])
-            }
-            else {
-                this.applySelector(node, selectorsByNodeType[selectorsByTypeIndex++])
+                this.applySelector(
+                    node,
+                    anyTypeSelectors[anyTypeSelectorsIndex++],
+                )
+            } else {
+                this.applySelector(
+                    node,
+                    selectorsByNodeType[selectorsByTypeIndex++],
+                )
             }
         }
     }
@@ -300,7 +349,7 @@ export default class NodeEventGenerator {
      * Emits an event of entering AST node.
      * @param node - A node which was entered.
      */
-    enterNode(node: Node): void {
+    public enterNode(node: Node): void {
         if (node.parent) {
             this.currentAncestry.unshift(node.parent)
         }
@@ -311,7 +360,7 @@ export default class NodeEventGenerator {
      * Emits an event of leaving AST node.
      * @param node - A node which was left.
      */
-    leaveNode(node: Node): void {
+    public leaveNode(node: Node): void {
         this.applySelectors(node, true)
         this.currentAncestry.shift()
     }

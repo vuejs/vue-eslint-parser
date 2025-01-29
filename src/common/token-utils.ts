@@ -1,6 +1,6 @@
 import sortedIndexBy from "lodash/sortedIndexBy"
 import sortedLastIndexBy from "lodash/sortedLastIndexBy"
-import type { LocationRange, Token, VDocumentFragment } from "../ast"
+import type { LocationRange, Token, VDocumentFragment } from "../ast/index"
 import type { LinesAndColumns } from "./lines-and-columns"
 
 interface HasRange {

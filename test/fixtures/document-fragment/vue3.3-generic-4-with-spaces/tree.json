@@ -66,11 +66,6 @@
                                                         "text": "T\n    extends Foo",
                                                         "children": [
                                                             {
-                                                                "type": "Identifier",
-                                                                "text": "T",
-                                                                "children": []
-                                                            },
-                                                            {
                                                                 "type": "TSTypeReference",
                                                                 "text": "Foo",
                                                                 "children": [
@@ -80,6 +75,11 @@
                                                                         "children": []
                                                                     }
                                                                 ]
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "T",
+                                                                "children": []
                                                             }
                                                         ]
                                                     },
@@ -87,11 +87,6 @@
                                                         "type": "TSTypeParameter",
                                                         "text": "U extends\n    T",
                                                         "children": [
-                                                            {
-                                                                "type": "Identifier",
-                                                                "text": "U",
-                                                                "children": []
-                                                            },
                                                             {
                                                                 "type": "TSTypeReference",
                                                                 "text": "T",
@@ -102,6 +97,11 @@
                                                                         "children": []
                                                                     }
                                                                 ]
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "U",
+                                                                "children": []
                                                             }
                                                         ]
                                                     }

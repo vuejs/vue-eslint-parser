@@ -17,9 +17,6 @@ This parser allows us to lint the `<template>` of `.vue` files. We can make mist
 npm install --save-dev eslint vue-eslint-parser
 ```
 
-- Requires Node.js ^14.17.0, 16.0.0 or later.
-- Requires ESLint 6.0.0 or later.
-
 ## 📖 Usage
 
 1. Write `parser` option into your `.eslintrc.*` file.
@@ -48,7 +45,7 @@ For example:
     "parser": "vue-eslint-parser",
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 2018,
+        "ecmaVersion": "latest",
         "ecmaFeatures": {
             "globalReturn": false,
             "impliedStrict": false,
@@ -314,9 +311,8 @@ Welcome contributing!
 
 Please use GitHub's Issues/PRs.
 
-If you want to write code, please execute `npm install && npm run setup` after you cloned this repository.
+If you want to write code, please execute `npm install` after you cloned this repository.
 The `npm install` command installs dependencies.
-The `npm run setup` command initializes ESLint as git submodules for tests.
 
 ### Development Tools
 
@@ -325,6 +321,5 @@ The `npm run setup` command initializes ESLint as git submodules for tests.
 - `npm run coverage` shows the coverage result of `npm test` command with the default browser.
 - `npm run clean` removes the temporary files which are created by `npm test` and `npm run build`.
 - `npm run lint` runs ESLint.
-- `npm run setup` setups submodules to develop.
 - `npm run update-fixtures` updates files in `test/fixtures/ast` directory based on `test/fixtures/ast/*/source.vue` files.
 - `npm run watch` runs `build`, `update-fixtures`, and tests with `--watch` option.

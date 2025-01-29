@@ -1,4 +1,4 @@
-import type { ESLintExtendedProgram, ESLintProgram } from "../ast"
+import type { ESLintExtendedProgram, ESLintProgram } from "../ast/index"
 
 /**
  * The type of basic ESLint custom parser.

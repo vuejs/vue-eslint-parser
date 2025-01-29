@@ -2,7 +2,7 @@
  * @fileoverview Define the cursor which iterates tokens only, with inflated range.
  * @author Toru Nagashima
  */
-import {Token} from "../../../ast"
+import type { Token } from "../../../ast/index"
 import ForwardTokenCursor from "./forward-token-cursor"
 
 /**
@@ -20,7 +20,15 @@ export default class PaddedTokenCursor extends ForwardTokenCursor {
      * @param beforeCount - The number of tokens this cursor iterates before start.
      * @param afterCount - The number of tokens this cursor iterates after end.
      */
-    constructor(tokens: Token[], comments: Token[], indexMap: { [key: number]: number }, startLoc: number, endLoc: number, beforeCount: number, afterCount: number) {
+    public constructor(
+        tokens: Token[],
+        comments: Token[],
+        indexMap: { [key: number]: number },
+        startLoc: number,
+        endLoc: number,
+        beforeCount: number,
+        afterCount: number,
+    ) {
         super(tokens, comments, indexMap, startLoc, endLoc)
         this.index = Math.max(0, this.index - beforeCount)
         this.indexEnd = Math.min(tokens.length - 1, this.indexEnd + afterCount)

@@ -4,16 +4,16 @@
  * See LICENSE file in root directory for full license.
  */
 import * as path from "path"
-import * as AST from "./ast"
+import * as AST from "./ast/index"
 import { LocationCalculatorForHtml } from "./common/location-calculator"
-import { HTMLParser, HTMLTokenizer } from "./html"
-import { parseScript, parseScriptElement } from "./script"
+import { HTMLParser, HTMLTokenizer } from "./html/index"
+import { parseScript, parseScriptElement } from "./script/index"
 import * as services from "./parser-services"
 import type { ParserOptions } from "./common/parser-options"
 import { getScriptParser, getParserLangFromSFC } from "./common/parser-options"
-import { parseScriptSetupElements } from "./script-setup"
+import { parseScriptSetupElements } from "./script-setup/index"
 import { LinesAndColumns } from "./common/lines-and-columns"
-import type { VElement } from "./ast"
+import type { VElement } from "./ast/index"
 import { DEFAULT_ECMA_VERSION } from "./script-setup/parser-options"
 import {
     getLang,
@@ -22,7 +22,7 @@ import {
     isStyleElement,
     isTemplateElement,
 } from "./common/ast-utils"
-import { parseStyleElements } from "./style"
+import { parseStyleElements } from "./style/index"
 import { analyzeScope } from "./script/scope-analyzer"
 import { analyzeScriptSetupScope } from "./script-setup/scope-analyzer"
 
@@ -92,6 +92,7 @@ export function parse(code: string, options: any): AST.ESLintProgram {
 
 export { AST }
 
+// eslint-disable-next-line complexity -- ignore
 function parseAsSFC(code: string, options: ParserOptions) {
     const optionsForTemplate = {
         ...options,

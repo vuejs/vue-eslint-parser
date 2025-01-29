@@ -1,25 +1,41 @@
 import * as escope from "eslint-scope"
-import { getLinterRequire } from "./linter-require"
 import { lte } from "semver"
+import { createRequire } from "./create-require"
+import path from "path"
 
-let escopeCache: typeof escope | null = null
+type ESLintScope = typeof escope & {
+    version: string
+}
+let escopeCache: ESLintScope | null = null
 
 /**
  * Load the newest `eslint-scope` from the loaded ESLint or dependency.
  */
-export function getEslintScope(): typeof escope & {
-    version: string
-} {
-    if (!escopeCache) {
-        escopeCache = getLinterRequire()?.("eslint-scope")
-        if (
-            !escopeCache ||
-            escopeCache.version == null ||
-            lte(escopeCache.version, escope.version)
-        ) {
-            escopeCache = escope
-        }
-    }
+export function getEslintScope(): ESLintScope {
+    return escopeCache || (escopeCache = getNewest())
+}
 
-    return escopeCache
+/**
+ * Load the newest `eslint-scope` from the dependency.
+ */
+function getNewest(): ESLintScope {
+    let newest = escope
+    const userEscope = getEslintScopeFromUser()
+    if (userEscope.version != null && lte(newest.version, userEscope.version)) {
+        newest = userEscope
+    }
+    return newest
+}
+
+/**
+ * Load `eslint-scope` from the user dir.
+ */
+function getEslintScopeFromUser(): ESLintScope {
+    try {
+        const cwd = process.cwd()
+        const relativeTo = path.join(cwd, "__placeholder__.js")
+        return createRequire(relativeTo)("eslint-scope")
+    } catch {
+        return escope
+    }
 }

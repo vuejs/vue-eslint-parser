@@ -16,11 +16,11 @@ const ROOT = path.join(__dirname, "../test/fixtures/document-fragment")
 const TARGETS = fs.readdirSync(ROOT)
 const PARSER_OPTIONS = {
     comment: true,
-    ecmaVersion: 6,
+    ecmaVersion: "latest",
+    sourceType: "module",
     loc: true,
     range: true,
     tokens: true,
-    sourceType: "module",
 }
 
 /**

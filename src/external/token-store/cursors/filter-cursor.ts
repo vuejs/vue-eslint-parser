@@ -2,8 +2,8 @@
  * @fileoverview Define the cursor which ignores specified tokens.
  * @author Toru Nagashima
  */
-import {Token} from "../../../ast"
-import Cursor from "./cursor"
+import type { Token } from "../../../ast/index"
+import type Cursor from "./cursor"
 import DecorativeCursor from "./decorative-cursor"
 
 /**
@@ -17,13 +17,13 @@ export default class FilterCursor extends DecorativeCursor {
      * @param cursor - The cursor to be decorated.
      * @param predicate - The predicate function to decide tokens this cursor iterates.
      */
-    constructor(cursor: Cursor, predicate: (token: Token) => boolean) {
+    public constructor(cursor: Cursor, predicate: (token: Token) => boolean) {
         super(cursor)
         this.predicate = predicate
     }
 
     /** @inheritdoc */
-    moveNext(): boolean {
+    public moveNext(): boolean {
         const predicate = this.predicate
 
         while (super.moveNext()) {

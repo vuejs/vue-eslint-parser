@@ -18,13 +18,13 @@ export default class DecorativeCursor extends Cursor {
      * Initializes this cursor.
      * @param cursor - The cursor to be decorated.
      */
-    constructor(cursor: Cursor) {
+    public constructor(cursor: Cursor) {
         super()
         this.cursor = cursor
     }
 
     /** @inheritdoc */
-    moveNext(): boolean {
+    public moveNext(): boolean {
         const retv = this.cursor.moveNext()
 
         this.current = this.cursor.current

@@ -10,8 +10,8 @@ import type {
     ESLintProgram,
     Reference,
     Variable,
-} from "../ast"
-import { getFallbackKeys } from "../ast"
+} from "../ast/index"
+import { getFallbackKeys } from "../ast/index"
 import { getEslintScope } from "../common/eslint-scope"
 import { getEcmaVersionIfUseEspree } from "../common/espree"
 
@@ -56,8 +56,8 @@ function transformReference(reference: escopeTypes.Reference): Reference {
         mode: reference.isReadOnly()
             ? "r"
             : reference.isWriteOnly()
-            ? "w"
-            : /* otherwise */ "rw",
+              ? "w"
+              : /* otherwise */ "rw",
         variable: null,
         isValueReference: reference.isValueReference,
         isTypeReference: reference.isTypeReference,

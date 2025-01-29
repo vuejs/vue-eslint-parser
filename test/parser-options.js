@@ -6,33 +6,43 @@
 
 const assert = require("assert")
 const { parseForESLint } = require("../src")
-const eslint = require("./fixtures/eslint")
+const eslint = require("eslint")
 const Linter = eslint.Linter
 
 describe("parserOptions", () => {
     describe("parser", () => {
-        const linter = new Linter()
-        linter.defineParser("vue-eslint-parser", { parseForESLint })
-        linter.defineRule("vue/template-test", {
-            create(context) {
-                return {
-                    Program(node) {
-                        const element = node.templateBody
-                        if (element != null) {
-                            context.report({ node, message: "test" })
+        const linter = new Linter({ configType: "flat" })
+        const parser = { parseForESLint }
+        const plugin = {
+            rules: {
+                "template-test": {
+                    create(context) {
+                        return {
+                            Program(node) {
+                                const element = node.templateBody
+                                if (element != null) {
+                                    context.report({ node, message: "test" })
+                                }
+                            },
                         }
                     },
-                }
+                },
             },
-        })
+        }
 
         it("false then skip parsing '<script>'.", () => {
             const code = `<template>Hello</template>
 <script>This is syntax error</script>`
             const config = {
-                parser: "vue-eslint-parser",
-                parserOptions: {
-                    parser: false,
+                files: ["*.vue"],
+                plugins: {
+                    vue: plugin,
+                },
+                languageOptions: {
+                    parser,
+                    parserOptions: {
+                        parser: false,
+                    },
                 },
                 rules: {
                     "vue/template-test": "error",
@@ -44,12 +54,19 @@ describe("parserOptions", () => {
             assert.strictEqual(messages[0].ruleId, "vue/template-test")
         })
 
-        it("Fail in <script setup> without sourceType.", () => {
+        it("Fail in <script setup> with sourceType: script.", () => {
             const code = `<template>Hello</template>
 <script setup>import Foo from './foo'</script>`
             const config = {
-                parser: "vue-eslint-parser",
-                parserOptions: {},
+                files: ["*.vue"],
+                plugins: {
+                    vue: plugin,
+                },
+                languageOptions: {
+                    parser,
+                    sourceType: "script",
+                    parserOptions: {},
+                },
                 rules: {},
             }
             const messages = linter.verify(code, config, "test.vue")

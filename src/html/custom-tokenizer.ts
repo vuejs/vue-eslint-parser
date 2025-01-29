@@ -1,4 +1,4 @@
-import type { Namespace, ParseError, Token } from "../ast"
+import type { Namespace, ParseError, Token } from "../ast/index"
 import type { IntermediateToken } from "./intermediate-tokenizer"
 import type { TokenizerState } from "./tokenizer"
 

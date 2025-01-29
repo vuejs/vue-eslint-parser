@@ -32,11 +32,13 @@ describe("Integration tests", () => {
                     process.chdir(path.join(FIXTURE_DIR, target))
                     cp.execSync("npm i", { stdio: "inherit" })
                     ESLint = eslintCompat(
-                        require(path.join(
-                            FIXTURE_DIR,
-                            target,
-                            "node_modules/eslint",
-                        )),
+                        require(
+                            path.join(
+                                FIXTURE_DIR,
+                                target,
+                                "node_modules/eslint",
+                            ),
+                        ),
                     ).ESLint
                 } finally {
                     process.chdir(originalCwd)
@@ -94,8 +96,8 @@ describe("Integration tests", () => {
                         a.filePath < b.filePath
                             ? -1
                             : a.filePath < b.filePath
-                            ? 1
-                            : 0,
+                              ? 1
+                              : 0,
                     )
             }
         })

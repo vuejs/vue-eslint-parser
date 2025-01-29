@@ -2,8 +2,8 @@
  * @fileoverview Define the cursor which iterates tokens and comments in reverse.
  * @author Toru Nagashima
  */
-import {Token} from "../../../ast"
-import {getLastIndex, search} from "../utils"
+import type { Token } from "../../../ast/index"
+import { getLastIndex, search } from "../utils"
 import Cursor from "./cursor"
 
 /**
@@ -24,7 +24,13 @@ export default class BackwardTokenCommentCursor extends Cursor {
      * @param startLoc - The start location of the iteration range.
      * @param endLoc - The end location of the iteration range.
      */
-    constructor(tokens: Token[], comments: Token[], indexMap: { [key: number]: number }, startLoc: number, endLoc: number) {
+    public constructor(
+        tokens: Token[],
+        comments: Token[],
+        indexMap: { [key: number]: number },
+        startLoc: number,
+        endLoc: number,
+    ) {
         super()
         this.tokens = tokens
         this.comments = comments
@@ -34,22 +40,24 @@ export default class BackwardTokenCommentCursor extends Cursor {
     }
 
     /** @inheritdoc */
-    moveNext(): boolean {
-        const token = (this.tokenIndex >= 0) ? this.tokens[this.tokenIndex] : null
-        const comment = (this.commentIndex >= 0) ? this.comments[this.commentIndex] : null
+    public moveNext(): boolean {
+        const token = this.tokenIndex >= 0 ? this.tokens[this.tokenIndex] : null
+        const comment =
+            this.commentIndex >= 0 ? this.comments[this.commentIndex] : null
 
         if (token && (!comment || token.range[1] > comment.range[1])) {
             this.current = token
             this.tokenIndex -= 1
-        }
-        else if (comment) {
+        } else if (comment) {
             this.current = comment
             this.commentIndex -= 1
-        }
-        else {
+        } else {
             this.current = null
         }
 
-        return this.current != null && (this.border === -1 || this.current.range[0] >= this.border)
+        return (
+            this.current != null &&
+            (this.border === -1 || this.current.range[0] >= this.border)
+        )
     }
 }
