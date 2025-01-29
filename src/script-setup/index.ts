@@ -516,13 +516,11 @@ function getScriptSetupCodeBlocks(
     const offsetLocationCalculator =
         linesAndColumns.createOffsetLocationCalculator(scriptSetupStartOffset)
 
-    const result = parseScript(
+    const { ast, visitorKeys } = parseScript(
         scriptCode,
-        parserOptions,
+        { ...parserOptions, project: undefined, projectService: undefined },
         offsetLocationCalculator,
     )
-
-    const { ast } = result
 
     // Holds the `import` and re-`export` statements.
     // All import and re-`export` statements are hoisted to the top.
@@ -597,7 +595,7 @@ function getScriptSetupCodeBlocks(
                         }
                         fixNodeLocations(
                             body,
-                            result.visitorKeys,
+                            visitorKeys,
                             offsetLocationCalculator,
                         )
                         fixLocation(exportToken, offsetLocationCalculator)
@@ -695,7 +693,7 @@ function getScriptSetupCodeBlocks(
                         // restore
                         fixNodeLocations(
                             body,
-                            result.visitorKeys,
+                            visitorKeys,
                             offsetLocationCalculator,
                         )
                         for (const token of restoreTokens) {
@@ -826,7 +824,7 @@ function getScriptSetupCodeBlocks(
         let start = n.range[0]
         let end = n.range[1]
         traverseNodes(n, {
-            visitorKeys: result.visitorKeys,
+            visitorKeys,
             enterNode(c) {
                 start = Math.min(start, c.range[0])
                 end = Math.max(end, c.range[1])

@@ -1302,7 +1302,7 @@ export function parseGenericExpression(
         const result = parseScriptFragmentWithOption(
             scriptLet,
             locationCalculator.getSubCalculatorShift(-14),
-            { ...parserOptions, project: undefined },
+            { ...parserOptions, project: undefined, projectService: undefined },
             {
                 preFixLocationProcess(preResult) {
                     const params = getParams(preResult)
