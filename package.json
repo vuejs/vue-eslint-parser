@@ -2,15 +2,15 @@
   "name": "vue-eslint-parser",
   "version": "9.4.3",
   "description": "The ESLint custom parser for `.vue` files.",
-  "engines": {
-    "node": "^14.17.0 || >=16.0.0"
-  },
   "main": "index.js",
   "files": [
     "index.*"
   ],
+  "engines": {
+    "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+  },
   "peerDependencies": {
-    "eslint": ">=6.0.0"
+    "eslint": "^8.57.0 || ^9.0.0"
   },
   "dependencies": {
     "debug": "^4.3.4",
