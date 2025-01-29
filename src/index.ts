@@ -166,6 +166,7 @@ function parseAsSFC(code: string, options: ParserOptions) {
                 yield getParserLangFromSFC(rootAST)
             }),
             project: undefined,
+            projectService: undefined,
         })
     }
     result.ast.templateBody = templateBody

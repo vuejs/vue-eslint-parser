@@ -518,7 +518,7 @@ function getScriptSetupCodeBlocks(
 
     const { ast, visitorKeys } = parseScript(
         scriptCode,
-        { ...parserOptions, project: undefined },
+        { ...parserOptions, project: undefined, projectService: undefined },
         offsetLocationCalculator,
     )
 

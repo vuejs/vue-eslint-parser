@@ -303,6 +303,7 @@ export class Parser {
                 },
             ),
             project: undefined,
+            projectService: undefined,
         }
         const scriptParserOptions = {
             ...this.baseParserOptions,

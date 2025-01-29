@@ -30,6 +30,7 @@ export interface ParserOptions {
     lib?: string[]
 
     project?: string | string[]
+    projectService?: boolean | ProjectServiceOptions
     projectFolderIgnoreList?: string[]
     tsconfigRootDir?: string
     extraFileExtensions?: string[]
@@ -53,6 +54,13 @@ export interface ParserOptions {
         string,
         string | CustomTemplateTokenizerConstructor | undefined
     >
+}
+
+interface ProjectServiceOptions {
+    allowDefaultProject?: string[]
+    defaultProject?: string
+    loadTypeScriptPlugins?: boolean
+    maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING?: number
 }
 
 export function isSFCFile(parserOptions: ParserOptions) {
