@@ -341,7 +341,7 @@ export function define(
                                 )
                                 // Register handlers into the intermediate event emitter.
                                 for (const selector of Object.keys(
-                                    visitor || {},
+                                    visitor ?? {},
                                 )) {
                                     emitter.on(selector, visitor![selector])
                                 }

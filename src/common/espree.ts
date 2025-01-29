@@ -16,7 +16,7 @@ let espreeCache: Espree | null = null
  * Gets the espree that the given ecmaVersion can parse.
  */
 export function getEspree(): Espree {
-    return espreeCache || (espreeCache = getNewestEspree())
+    return espreeCache ?? (espreeCache = getNewestEspree())
 }
 
 export function getEcmaVersionIfUseEspree(

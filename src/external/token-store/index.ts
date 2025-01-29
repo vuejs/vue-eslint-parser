@@ -334,7 +334,7 @@ export default class TokenStore {
             )
             .getOneToken()
 
-        if (token && token.range[0] === offset) {
+        if (token?.range[0] === offset) {
             return token
         }
         return null

@@ -49,15 +49,13 @@ export function parseForESLint(
     code: string,
     parserOptions: any,
 ): AST.ESLintExtendedProgram {
-    const options: ParserOptions = Object.assign(
-        {
-            comment: true,
-            loc: true,
-            range: true,
-            tokens: true,
-        },
-        parserOptions || {},
-    )
+    const options: ParserOptions = {
+        comment: true,
+        loc: true,
+        range: true,
+        tokens: true,
+        ...(parserOptions ?? {}),
+    }
 
     let result: AST.ESLintExtendedProgram
     let document: AST.VDocumentFragment | null
@@ -70,12 +68,12 @@ export function parseForESLint(
         ;({ result, document, locationCalculator } = parseAsSFC(code, options))
     }
 
-    result.services = Object.assign(
-        result.services || {},
-        services.define(code, result.ast, document, locationCalculator, {
+    result.services = {
+        ...(result.services || {}),
+        ...services.define(code, result.ast, document, locationCalculator, {
             parserOptions: options,
         }),
-    )
+    }
 
     return result
 }
@@ -96,7 +94,7 @@ export { AST }
 function parseAsSFC(code: string, options: ParserOptions) {
     const optionsForTemplate = {
         ...options,
-        ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
+        ecmaVersion: options.ecmaVersion ?? DEFAULT_ECMA_VERSION,
     }
     const skipParsingScript = options.parser === false
     const tokenizer = new HTMLTokenizer(code, optionsForTemplate)
@@ -128,7 +126,7 @@ function parseAsSFC(code: string, options: ParserOptions) {
     if (skipParsingScript || !scripts.length) {
         result = parseScript("", {
             ...options,
-            ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
+            ecmaVersion: options.ecmaVersion ?? DEFAULT_ECMA_VERSION,
             parser: scriptParser,
         })
     } else if (
@@ -195,7 +193,7 @@ function parseAsSFC(code: string, options: ParserOptions) {
 function parseAsScript(code: string, options: ParserOptions) {
     return parseScript(code, {
         ...options,
-        ecmaVersion: options.ecmaVersion || DEFAULT_ECMA_VERSION,
+        ecmaVersion: options.ecmaVersion ?? DEFAULT_ECMA_VERSION,
         parser: getScriptParser(options.parser, () => {
             const ext = (
                 path.extname(options.filePath || "unknown.js").toLowerCase() ||

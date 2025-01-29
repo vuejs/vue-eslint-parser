@@ -77,8 +77,8 @@ function getTree(source, parserOptions) {
             },
             languageOptions: {
                 parser: parser,
-                ecmaVersion: parserOptions.ecmaVersion || "latest",
-                sourceType: parserOptions.sourceType || "module",
+                ecmaVersion: parserOptions.ecmaVersion ?? "latest",
+                sourceType: parserOptions.sourceType ?? "module",
                 parserOptions: parserOptions,
             },
             rules: { "test/maketree": "error" },
@@ -148,8 +148,8 @@ function validateParent(source, parserOptions) {
             },
             languageOptions: {
                 parser,
-                ecmaVersion: parserOptions.ecmaVersion || "latest",
-                sourceType: parserOptions.sourceType || "module",
+                ecmaVersion: parserOptions.ecmaVersion ?? "latest",
+                sourceType: parserOptions.sourceType ?? "module",
                 parserOptions: parserOptions,
             },
             rules: { "test/validateparent": "error" },
@@ -191,11 +191,11 @@ describe("Template AST", () => {
                 ),
             )
         }
-        const options = Object.assign(
-            { filePath: sourcePath },
-            PARSER_OPTIONS,
-            parserOptions,
-        )
+        const options = {
+            filePath: sourcePath,
+            ...PARSER_OPTIONS,
+            ...parserOptions,
+        }
 
         if (
             Object.entries(requirements).some(([pkgName, pkgVersion]) => {
@@ -253,7 +253,7 @@ describe("Template AST", () => {
             })
 
             it("should have correct location.", () => {
-                const lines = source.match(/[^\r\n]*(?:\r?\n|$)/gu) || []
+                const lines = source.match(/[^\r\n]*(?:\r?\n|$)/gu) ?? []
                 lines.push(String.fromCodePoint(0))
                 for (const token of getAllTokens(actual.ast)) {
                     const line0 = token.loc.start.line - 1

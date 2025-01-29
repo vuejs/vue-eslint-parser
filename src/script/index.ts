@@ -375,8 +375,8 @@ function parseExpressionBody(
             parserOptions,
         )
         const { ast } = result
-        const tokens = ast.tokens || []
-        const comments = ast.comments || []
+        const tokens = ast.tokens ?? []
+        const comments = ast.comments ?? []
         const references = analyzeExternalReferences(result, parserOptions)
         const statement = ast.body[0] as ESLintExpressionStatement
         const callExpression = statement.expression as ESLintCallExpression
@@ -385,7 +385,7 @@ function parseExpressionBody(
         if (!allowEmpty && !expression) {
             return throwEmptyError(locationCalculator, "an expression")
         }
-        if (expression && expression.type === "SpreadElement") {
+        if (expression?.type === "SpreadElement") {
             return throwUnexpectedTokenError("...", expression)
         }
         if (callExpression.arguments[1]) {
@@ -610,14 +610,14 @@ export function parseScriptElement(
 ): ESLintExtendedProgram {
     const parserOptions: ParserOptions = {
         ...originalParserOptions,
-        ecmaVersion: originalParserOptions.ecmaVersion || DEFAULT_ECMA_VERSION,
+        ecmaVersion: originalParserOptions.ecmaVersion ?? DEFAULT_ECMA_VERSION,
     }
 
     let generic: GenericProcessInfo | null = null
     let code: string
     let offset: number
     const textNode = node.children[0]
-    if (textNode != null && textNode.type === "VText") {
+    if (textNode?.type === "VText") {
         const [scriptStartOffset, scriptEndOffset] = textNode.range
         code = sfcCode.slice(scriptStartOffset, scriptEndOffset)
         offset = scriptStartOffset
@@ -738,8 +738,8 @@ export function parseExpression(
         parent: null as any,
         expression: retB.expression,
         filters: [],
-        range: retB.expression.range.slice(0) as [number, number],
-        loc: Object.assign({}, retB.expression.loc),
+        range: [...retB.expression.range] as const,
+        loc: { ...retB.expression.loc },
     }
     ret.expression.expression.parent = ret.expression
 
@@ -831,8 +831,8 @@ export function parseVForExpression(
             parserOptions,
         )
         const { ast } = result
-        const tokens = ast.tokens || []
-        const comments = ast.comments || []
+        const tokens = ast.tokens ?? []
+        const comments = ast.comments ?? []
         const scope = analyzeVariablesAndExternalReferences(
             result,
             "v-for",
@@ -1013,8 +1013,8 @@ function parseVForAliasesForEcmaVersion5(
         parserOptions,
     )
     const { ast } = result
-    const tokens = ast.tokens || []
-    const comments = ast.comments || []
+    const tokens = ast.tokens ?? []
+    const comments = ast.comments ?? []
     const variables = analyzeExternalReferences(result, parserOptions).map(
         transformVariable,
     )
@@ -1064,8 +1064,8 @@ function parseVForIteratorForEcmaVersion5(
         parserOptions,
     )
     const { ast } = result
-    const tokens = ast.tokens || []
-    const comments = ast.comments || []
+    const tokens = ast.tokens ?? []
+    const comments = ast.comments ?? []
     const references = analyzeExternalReferences(result, parserOptions)
 
     const statement = ast.body[0] as ESLintExpressionStatement
@@ -1075,7 +1075,7 @@ function parseVForIteratorForEcmaVersion5(
     if (!expression) {
         return throwEmptyError(locationCalculator, "an expression")
     }
-    if (expression && expression.type === "SpreadElement") {
+    if (expression?.type === "SpreadElement") {
         return throwUnexpectedTokenError("...", expression)
     }
     const right = expression
@@ -1162,8 +1162,8 @@ function parseVOnExpressionBody(
             parent: DUMMY_PARENT,
             body,
         }
-        const tokens = ast.tokens || []
-        const comments = ast.comments || []
+        const tokens = ast.tokens ?? []
+        const comments = ast.comments ?? []
 
         // Modify parent.
         for (const b of body) {
@@ -1223,8 +1223,8 @@ export function parseSlotScopeExpression(
             }
         }
 
-        const tokens = ast.tokens || []
-        const comments = ast.comments || []
+        const tokens = ast.tokens ?? []
+        const comments = ast.comments ?? []
         const scope = analyzeVariablesAndExternalReferences(
             result,
             "scope",
@@ -1322,8 +1322,8 @@ export function parseGenericExpression(
             }
         }
 
-        const tokens = ast.tokens || []
-        const comments = ast.comments || []
+        const tokens = ast.tokens ?? []
+        const comments = ast.comments ?? []
         const scope = analyzeVariablesAndExternalReferences(
             result,
             "generic",

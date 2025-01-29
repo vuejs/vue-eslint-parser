@@ -12,7 +12,7 @@ let escopeCache: ESLintScope | null = null
  * Load the newest `eslint-scope` from the loaded ESLint or dependency.
  */
 export function getEslintScope(): ESLintScope {
-    return escopeCache || (escopeCache = getNewest())
+    return escopeCache ?? (escopeCache = getNewest())
 }
 
 /**

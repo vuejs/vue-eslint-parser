@@ -62,7 +62,7 @@ export class LocationCalculatorForHtml
         super(ltOffsets)
         this.gapOffsets = gapOffsets
         this.ltOffsets = ltOffsets
-        this.baseOffset = baseOffset || 0
+        this.baseOffset = baseOffset ?? 0
         this.baseIndexOfGap =
             this.baseOffset === 0
                 ? 0

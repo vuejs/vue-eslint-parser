@@ -87,7 +87,7 @@ export function parseCustomBlockElement(
 ): ESLintExtendedProgram & { error?: ParseError | Error } {
     const text = node.children[0]
     const { code, range, loc } =
-        text != null && text.type === "VText"
+        text?.type === "VText"
             ? {
                   code: text.value,
                   range: text.range,
@@ -263,7 +263,7 @@ export function createCustomBlockSharedContext({
                         { ...parserOptions, ...options },
                     )
                 },
-                ...(parsedResult.services || {}),
+                ...(parsedResult.services ?? {}),
                 ...(parsedResult.error
                     ? { parseError: parsedResult.error }
                     : {}),
@@ -295,10 +295,10 @@ export function createCustomBlockSharedContext({
         }
 
         const ecmaVersion =
-            getEcmaVersionIfUseEspree(parserOptions) ||
+            getEcmaVersionIfUseEspree(parserOptions) ??
             ANALYZE_SCOPE_DEFAULT_ECMA_VERSION
-        const ecmaFeatures = parserOptions.ecmaFeatures || {}
-        const sourceType = parserOptions.sourceType || "script"
+        const ecmaFeatures = parserOptions.ecmaFeatures ?? {}
+        const sourceType = parserOptions.sourceType ?? "script"
         return getEslintScope().analyze(parsedResult.ast, {
             ignoreEval: true,
             nodejsScope: false,
@@ -341,7 +341,7 @@ function getScope(scopeManager: ScopeManager, currentNode: Node) {
     for (
         let node: Node | null = currentNode;
         node;
-        node = node.parent || null
+        node = node.parent ?? null
     ) {
         const scope = scopeManager.acquire(node as any, inner)
 
