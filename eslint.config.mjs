@@ -118,6 +118,10 @@ export default [
 
         languageOptions: {
             parser: tsParser,
+            globals: {
+                process: "readonly",
+                require: "readonly",
+            },
         },
 
         rules: {
@@ -248,14 +252,14 @@ export default [
             ],
 
             "no-undef": [
-                "off",
+                "error",
                 {
                     typeof: true,
                 },
             ],
 
-            "no-unused-vars": [
-                "off",
+            "@typescript-eslint/no-unused-vars": [
+                "error",
                 {
                     args: "all",
                     argsIgnorePattern: "^_(?:[^_].*)?$",
@@ -291,7 +295,6 @@ export default [
             "@typescript-eslint/no-non-null-assertion": ["off"],
             "@typescript-eslint/no-type-alias": ["off"],
             "@typescript-eslint/no-unnecessary-condition": ["off"],
-            "@typescript-eslint/no-unused-vars": ["off"],
             "@typescript-eslint/no-use-before-define": ["off"],
             "@typescript-eslint/prefer-for-of": ["off"],
             "@typescript-eslint/promise-function-async": ["off"],

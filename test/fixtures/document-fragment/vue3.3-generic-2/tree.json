@@ -92,11 +92,6 @@
                                                         "text": "T extends Foo",
                                                         "children": [
                                                             {
-                                                                "type": "Identifier",
-                                                                "text": "T",
-                                                                "children": []
-                                                            },
-                                                            {
                                                                 "type": "TSTypeReference",
                                                                 "text": "Foo",
                                                                 "children": [
@@ -106,6 +101,11 @@
                                                                         "children": []
                                                                     }
                                                                 ]
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "T",
+                                                                "children": []
                                                             }
                                                         ]
                                                     }

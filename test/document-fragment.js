@@ -17,7 +17,7 @@ const ROOT = path.join(__dirname, "fixtures/document-fragment")
 const TARGETS = fs.readdirSync(ROOT)
 const PARSER_OPTIONS = {
     comment: true,
-    ecmaVersion: 6,
+    ecmaVersion: "latest",
     loc: true,
     range: true,
     tokens: true,

@@ -29,18 +29,18 @@ function sh(command) {
         : `^${requestedVersion}`
 
     // Install ESLint of the requested version
-    await sh(`npm install eslint@${requestedVersionSpec} --legacy-peer-deps`)
+    await sh(`npm install eslint@${requestedVersionSpec} -f`)
 
     // Install ESLint submodule of the requested version
-    const installedVersion = require("eslint/package.json").version
-    cd("test/fixtures/eslint")
-    if (!installedVersion.startsWith("8.")) {
-        await sh(`git checkout v${installedVersion}`)
-    }
-    if (installedVersion.startsWith("5.")) {
-        await sh("npm install eslint-utils@1.4.0")
-    }
-    await sh("npm install --legacy-peer-deps")
+    // const installedVersion = require("eslint/package.json").version
+    // cd("test/fixtures/eslint")
+    // if (!installedVersion.startsWith("8.")) {
+    //     await sh(`git checkout v${installedVersion}`)
+    // }
+    // if (installedVersion.startsWith("5.")) {
+    //     await sh("npm install eslint-utils@1.4.0")
+    // }
+    // await sh("npm install -f")
 })().catch((error) => {
     console.error(error)
     process.exitCode = 1

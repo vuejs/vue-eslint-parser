@@ -66,11 +66,6 @@
                                                         "text": "T // extends\n    extends Foo",
                                                         "children": [
                                                             {
-                                                                "type": "Identifier",
-                                                                "text": "T",
-                                                                "children": []
-                                                            },
-                                                            {
                                                                 "type": "TSTypeReference",
                                                                 "text": "Foo",
                                                                 "children": [
@@ -80,6 +75,11 @@
                                                                         "children": []
                                                                     }
                                                                 ]
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "T",
+                                                                "children": []
                                                             }
                                                         ]
                                                     },
@@ -88,19 +88,9 @@
                                                         "text": "U /* extends */\n    extends\n    Record&lt;string, T>",
                                                         "children": [
                                                             {
-                                                                "type": "Identifier",
-                                                                "text": "U",
-                                                                "children": []
-                                                            },
-                                                            {
                                                                 "type": "TSTypeReference",
                                                                 "text": "Record&lt;string, T>",
                                                                 "children": [
-                                                                    {
-                                                                        "type": "Identifier",
-                                                                        "text": "Record",
-                                                                        "children": []
-                                                                    },
                                                                     {
                                                                         "type": "TSTypeParameterInstantiation",
                                                                         "text": "&lt;string, T>",
@@ -122,8 +112,18 @@
                                                                                 ]
                                                                             }
                                                                         ]
+                                                                    },
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "Record",
+                                                                        "children": []
                                                                     }
                                                                 ]
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "U",
+                                                                "children": []
                                                             }
                                                         ]
                                                     }

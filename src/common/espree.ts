@@ -1,14 +1,13 @@
 import type { ParserOptions } from "../common/parser-options"
-import { getLinterRequire } from "./linter-require"
 // @ts-expect-error -- ignore
 import * as dependencyEspree from "espree"
-import { lte, lt } from "semver"
+import { lte } from "semver"
 import { createRequire } from "./create-require"
 import path from "path"
 import type { BasicParserObject } from "./parser-object"
 
 type Espree = BasicParserObject & {
-    latestEcmaVersion?: number
+    latestEcmaVersion: number
     version: string
 }
 let espreeCache: Espree | null = null
@@ -16,68 +15,28 @@ let espreeCache: Espree | null = null
 /**
  * Gets the espree that the given ecmaVersion can parse.
  */
-export function getEspreeFromEcmaVersion(
-    ecmaVersion: ParserOptions["ecmaVersion"],
-): Espree {
-    const linterEspree = getEspreeFromLinter()
-    if (ecmaVersion == null) {
-        return linterEspree
-    }
-    if (ecmaVersion === "latest") {
-        return getNewestEspree()
-    }
-    if (
-        normalizeEcmaVersion(ecmaVersion) <= getLatestEcmaVersion(linterEspree)
-    ) {
-        return linterEspree
-    }
-    const userEspree = getEspreeFromUser()
-    if (normalizeEcmaVersion(ecmaVersion) <= getLatestEcmaVersion(userEspree)) {
-        return userEspree
-    }
-    return linterEspree
+export function getEspree(): Espree {
+    return espreeCache || (espreeCache = getNewestEspree())
 }
 
 /**
  * Load `espree` from the user dir.
  */
-export function getEspreeFromUser(): Espree {
+function getEspreeFromUser(): Espree {
     try {
         const cwd = process.cwd()
         const relativeTo = path.join(cwd, "__placeholder__.js")
         return createRequire(relativeTo)("espree")
     } catch {
-        return getEspreeFromLinter()
+        return dependencyEspree
     }
 }
 
 /**
- * Load `espree` from the loaded ESLint.
- * If the loaded ESLint was not found, just returns `require("espree")`.
- */
-export function getEspreeFromLinter(): Espree {
-    if (!espreeCache) {
-        espreeCache = getLinterRequire()?.("espree")
-        if (!espreeCache) {
-            espreeCache = dependencyEspree
-        }
-    }
-
-    return espreeCache!
-}
-
-/**
- * Load the newest `espree` from the loaded ESLint or dependency.
+ * Load the newest `espree` from the dependency.
  */
 function getNewestEspree(): Espree {
     let newest = dependencyEspree
-    const linterEspree = getEspreeFromLinter()
-    if (
-        linterEspree.version != null &&
-        lte(newest.version, linterEspree.version)
-    ) {
-        newest = linterEspree
-    }
     const userEspree = getEspreeFromUser()
     if (userEspree.version != null && lte(newest.version, userEspree.version)) {
         newest = userEspree
@@ -94,7 +53,7 @@ export function getEcmaVersionIfUseEspree(
     }
 
     if (parserOptions.ecmaVersion === "latest") {
-        return normalizeEcmaVersion(getLatestEcmaVersion(getNewestEspree()))
+        return getDefaultEcmaVersion()
     }
     if (parserOptions.ecmaVersion == null) {
         const defVer = getDefaultEcmaVersion()
@@ -104,10 +63,6 @@ export function getEcmaVersionIfUseEspree(
 }
 
 function getDefaultEcmaVersion(): number {
-    if (lt(getEspreeFromLinter().version, "9.0.0")) {
-        return 5
-    }
-    // Perhaps the version 9 will change the default to "latest".
     return normalizeEcmaVersion(getLatestEcmaVersion(getNewestEspree()))
 }
 
@@ -122,16 +77,5 @@ function normalizeEcmaVersion(version: number) {
 }
 
 function getLatestEcmaVersion(espree: Espree) {
-    if (espree.latestEcmaVersion == null) {
-        for (const { v, latest } of [
-            { v: "6.1.0", latest: 2020 },
-            { v: "4.0.0", latest: 2019 },
-        ]) {
-            if (lte(v, espree.version)) {
-                return latest
-            }
-        }
-        return 2018
-    }
     return normalizeEcmaVersion(espree.latestEcmaVersion)
 }

@@ -15,9 +15,7 @@ const fs = require("fs-extra")
 const semver = require("semver")
 const parse = require("../src").parse
 const parseForESLint = require("../src").parseForESLint
-const eslint = require("./lib/eslint-compat")(require("./fixtures/eslint"))
-const ESLint = eslint.ESLint
-const Linter = eslint.Linter
+const eslint = require("eslint")
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -25,7 +23,7 @@ const Linter = eslint.Linter
 
 const ORIGINAL_FIXTURE_DIR = path.join(__dirname, "fixtures")
 const FIXTURE_DIR = path.join(__dirname, "temp")
-const PARSER_PATH = path.resolve(__dirname, "../src/index.ts")
+const parser = require("../src/index.ts")
 
 const BABEL_PARSER_OPTIONS = {
     parser: "@babel/eslint-parser",
@@ -46,7 +44,13 @@ const BABEL_PARSER_OPTIONS = {
 // Tests
 //------------------------------------------------------------------------------
 
-describe("Basic tests", () => {
+describe("Basic tests", async () => {
+    const ESLint = await eslint.loadESLint({ useFlatConfig: true })
+    const Linter = class extends eslint.Linter {
+        constructor() {
+            super({ configType: "flat" })
+        }
+    }
     beforeEach(() => {
         fs.emptyDirSync(FIXTURE_DIR)
         for (const fileName of fs.readdirSync(ORIGINAL_FIXTURE_DIR)) {
@@ -67,11 +71,14 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                     rules: { semi: "error" },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["hello.vue"])
             const messages = report[0].messages
@@ -90,11 +97,14 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 fix: true,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                     rules: { semi: "error" },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             await ESLint.outputFixes(await cli.lintFiles(["hello.vue"]))
 
@@ -116,11 +126,14 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                     rules: { semi: "error" },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["empty.vue"])
             const messages = report[0].messages
@@ -134,11 +147,14 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                     rules: { semi: "error" },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["no-script.vue"])
             const messages = report[0].messages
@@ -152,11 +168,14 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                     rules: { semi: "error" },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["empty-script.vue"])
             const messages = report[0].messages
@@ -170,11 +189,14 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                     rules: { semi: "error" },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["no-end-script-tag.vue"])
             const messages = report[0].messages
@@ -188,11 +210,14 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.js"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                     rules: { semi: "error" },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["notvue.js"])
             const messages = report[0].messages
@@ -208,11 +233,14 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 fix: true,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.js"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                     rules: { semi: "error" },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             await ESLint.outputFixes(await cli.lintFiles(["notvue.js"]))
 
@@ -225,7 +253,7 @@ describe("Basic tests", () => {
                 "utf8",
             )
 
-            assert(actual === expected)
+            assert.strictEqual(actual, expected)
         })
     })
 
@@ -234,11 +262,14 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                     rules: { indent: "error" },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["crlf.vue"])
             const messages = report[0].messages
@@ -252,15 +283,18 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
-                    parserOptions: {
-                        ...BABEL_PARSER_OPTIONS,
-                        sourceType: "module",
+                    files: ["*.js"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                        parserOptions: {
+                            ...BABEL_PARSER_OPTIONS,
+                            sourceType: "module",
+                        },
                     },
                     rules: { semi: ["error", "never"] },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["typed.js"])
             const messages = report[0].messages
@@ -273,14 +307,17 @@ describe("Basic tests", () => {
                 const cli = new ESLint({
                     cwd: FIXTURE_DIR,
                     overrideConfig: {
-                        env: { es6: true, node: true },
-                        parser: PARSER_PATH,
-                        parserOptions: {
-                            parser: "@typescript-eslint/parser",
+                        files: ["*.js"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                parser: "@typescript-eslint/parser",
+                            },
                         },
                         rules: { semi: ["error", "never"] },
                     },
-                    useEslintrc: false,
+                    overrideConfigFile: true,
                 })
                 const report = await cli.lintFiles(["typed.js"])
                 const messages = report[0].messages
@@ -292,16 +329,19 @@ describe("Basic tests", () => {
                 const cli = new ESLint({
                     cwd: FIXTURE_DIR,
                     overrideConfig: {
-                        env: { es6: true, node: true },
-                        parser: PARSER_PATH,
-                        parserOptions: {
-                            parser: {
-                                ts: "@typescript-eslint/parser",
+                        files: ["*.ts", "*.tsx"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                parser: {
+                                    ts: "@typescript-eslint/parser",
+                                },
                             },
                         },
                         rules: { semi: ["error", "never"] },
                     },
-                    useEslintrc: false,
+                    overrideConfigFile: true,
                 })
                 const report = await cli.lintFiles(["typed.ts", "typed.tsx"])
 
@@ -313,14 +353,17 @@ describe("Basic tests", () => {
                 const cli = new ESLint({
                     cwd: FIXTURE_DIR,
                     overrideConfig: {
-                        env: { es6: true, node: true },
-                        parser: PARSER_PATH,
-                        parserOptions: {
-                            parser: require("@typescript-eslint/parser"),
+                        files: ["*.js"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                parser: require("@typescript-eslint/parser"),
+                            },
                         },
                         rules: { semi: ["error", "never"] },
                     },
-                    useEslintrc: false,
+                    overrideConfigFile: true,
                 })
                 const report = await cli.lintFiles(["typed.js"])
                 const messages = report[0].messages
@@ -332,16 +375,19 @@ describe("Basic tests", () => {
                 const cli = new ESLint({
                     cwd: FIXTURE_DIR,
                     overrideConfig: {
-                        env: { es6: true, node: true },
-                        parser: PARSER_PATH,
-                        parserOptions: {
-                            parser: {
-                                ts: require("@typescript-eslint/parser"),
+                        files: ["*.ts", "*.tsx"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                parser: {
+                                    ts: require("@typescript-eslint/parser"),
+                                },
                             },
                         },
                         rules: { semi: ["error", "never"] },
                     },
-                    useEslintrc: false,
+                    overrideConfigFile: true,
                 })
                 const report = await cli.lintFiles(["typed.ts", "typed.tsx"])
 
@@ -356,15 +402,17 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
-                    parserOptions: {
-                        ...BABEL_PARSER_OPTIONS,
-                        sourceType: "module",
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                        parserOptions: {
+                            ...BABEL_PARSER_OPTIONS,
+                        },
                     },
                     rules: { semi: ["error", "never"] },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["typed.vue"])
             const messages = report[0].messages
@@ -377,14 +425,17 @@ describe("Basic tests", () => {
                 const cli = new ESLint({
                     cwd: FIXTURE_DIR,
                     overrideConfig: {
-                        env: { es6: true, node: true },
-                        parser: PARSER_PATH,
-                        parserOptions: {
-                            parser: "@typescript-eslint/parser",
+                        files: ["*.vue"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                parser: "@typescript-eslint/parser",
+                            },
                         },
                         rules: { semi: ["error", "never"] },
                     },
-                    useEslintrc: false,
+                    overrideConfigFile: true,
                 })
                 const report = await cli.lintFiles(["typed.vue"])
                 const messages = report[0].messages
@@ -398,15 +449,17 @@ describe("Basic tests", () => {
                 cwd: FIXTURE_DIR,
                 fix: true,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
-                    parserOptions: {
-                        ...BABEL_PARSER_OPTIONS,
-                        sourceType: "module",
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                        parserOptions: {
+                            ...BABEL_PARSER_OPTIONS,
+                        },
                     },
                     rules: { semi: ["error", "always"] },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             await ESLint.outputFixes(await cli.lintFiles(["typed.vue"]))
 
@@ -428,14 +481,17 @@ describe("Basic tests", () => {
                     cwd: FIXTURE_DIR,
                     fix: true,
                     overrideConfig: {
-                        env: { es6: true, node: true },
-                        parser: PARSER_PATH,
-                        parserOptions: {
-                            parser: "@typescript-eslint/parser",
+                        files: ["*.vue"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                parser: "@typescript-eslint/parser",
+                            },
                         },
                         rules: { semi: ["error", "always"] },
                     },
-                    useEslintrc: false,
+                    overrideConfigFile: true,
                 })
                 await ESLint.outputFixes(await cli.lintFiles(["typed.vue"]))
 
@@ -448,7 +504,7 @@ describe("Basic tests", () => {
                     "utf8",
                 )
 
-                assert(actual === expected)
+                assert.strictEqual(actual, expected)
             })
         }
     })
@@ -459,14 +515,17 @@ describe("Basic tests", () => {
                 const cli = new ESLint({
                     cwd: FIXTURE_DIR,
                     overrideConfig: {
-                        env: { es6: true, node: true },
-                        parser: PARSER_PATH,
-                        parserOptions: {
-                            parser: "@typescript-eslint/parser",
+                        files: ["*.vue"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                parser: "@typescript-eslint/parser",
+                            },
                         },
                         rules: { "no-unused-vars": ["error"] },
                     },
-                    useEslintrc: false,
+                    overrideConfigFile: true,
                 })
                 const report = await cli.lintFiles(["ts-scope-manager.vue"])
                 const messages = report[0].messages
@@ -485,10 +544,13 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["svg-attrs-colon.vue"])
             const messages = report[0].messages
@@ -500,10 +562,13 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { es6: true, node: true },
-                    parser: PARSER_PATH,
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        globals: {},
+                    },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles(["svg-attrs-camel-case.vue"])
             const messages = report[0].messages
@@ -517,18 +582,21 @@ describe("Basic tests", () => {
             const cli = new ESLint({
                 cwd: FIXTURE_DIR,
                 overrideConfig: {
-                    env: { browser: true, node: true },
-                    parser: PARSER_PATH,
-                    parserOptions: {
-                        ...BABEL_PARSER_OPTIONS,
-                        sourceType: "module",
-                        ecmaVersion: 2017,
+                    files: ["*.vue"],
+                    languageOptions: {
+                        parser,
+                        parserOptions: {
+                            ...BABEL_PARSER_OPTIONS,
+                            sourceType: "module",
+                            ecmaVersion: 2017,
+                        },
+                        globals: {},
                     },
                     rules: {
                         "no-use-before-define": "error",
                     },
                 },
-                useEslintrc: false,
+                overrideConfigFile: true,
             })
             const report = await cli.lintFiles([
                 "location-issue-with-babel-eslint.vue",
@@ -704,22 +772,25 @@ describe("Basic tests", () => {
         it("should work even if AST object was reused.", () => {
             const code = "<template><div/></template>"
             const config = {
-                parser: PARSER_PATH,
+                languageOptions: {
+                    parser,
+                },
+                plugins: buildPlugins({
+                    create(context) {
+                        return context.sourceCode.parserServices.defineTemplateBodyVisitor(
+                            {
+                                "VElement[name='div']"(node) {
+                                    context.report({ node, message: "OK" })
+                                },
+                            },
+                        )
+                    },
+                }),
                 rules: {
-                    "test-rule": "error",
+                    "test/test-rule": "error",
                 },
             }
             const linter = new Linter()
-
-            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
-            linter.defineRule("test-rule", (context) =>
-                context.parserServices.defineTemplateBodyVisitor({
-                    "VElement[name='div']"(node) {
-                        context.report({ node, message: "OK" })
-                    },
-                }),
-            )
-
             const messages1 = linter.verify(code, config)
             const messages2 = linter.verify(linter.getSourceCode(), config)
 
@@ -732,22 +803,28 @@ describe("Basic tests", () => {
         it("should work even if used sibling selector.", () => {
             const code = "<template><div/><div/></template>"
             const config = {
-                parser: PARSER_PATH,
+                languageOptions: {
+                    parser,
+                },
+                plugins: buildPlugins({
+                    create(context) {
+                        return context.sourceCode.parserServices.defineTemplateBodyVisitor(
+                            {
+                                "* ~ *"(node) {
+                                    context.report({
+                                        node,
+                                        message: "OK",
+                                    })
+                                },
+                            },
+                        )
+                    },
+                }),
                 rules: {
-                    "test-rule": "error",
+                    "test/test-rule": "error",
                 },
             }
             const linter = new Linter()
-
-            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
-            linter.defineRule("test-rule", (context) =>
-                context.parserServices.defineTemplateBodyVisitor({
-                    "* ~ *"(node) {
-                        context.report({ node, message: "OK" })
-                    },
-                }),
-            )
-
             const messages1 = linter.verify(code, config)
             const messages2 = linter.verify(linter.getSourceCode(), config)
 
@@ -763,12 +840,11 @@ describe("Basic tests", () => {
             const code =
                 '<script>"script" /* </script><script setup>/**/</script>'
             const config = {
-                parser: PARSER_PATH,
+                languageOptions: {
+                    parser,
+                },
             }
             const linter = new Linter()
-
-            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
-
             const messages = linter.verify(code, config)
 
             assert.strictEqual(messages.length, 1)
@@ -780,15 +856,14 @@ describe("Basic tests", () => {
         it("should notify parsing error #2", () => {
             const code = "<script>var a = `</script><script setup>`</script>"
             const config = {
-                parser: PARSER_PATH,
-                parserOptions: {
-                    ecmaVersion: 2015,
+                languageOptions: {
+                    parser,
+                    parserOptions: {
+                        ecmaVersion: 2015,
+                    },
                 },
             }
             const linter = new Linter()
-
-            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
-
             const messages = linter.verify(code, config)
 
             assert.strictEqual(messages.length, 1)
@@ -800,12 +875,11 @@ describe("Basic tests", () => {
         it("should notify parsing error #3", () => {
             const code = '<script>var a = "</script><script setup>"</script>'
             const config = {
-                parser: PARSER_PATH,
+                languageOptions: {
+                    parser,
+                },
             }
             const linter = new Linter()
-
-            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
-
             const messages = linter.verify(code, config)
 
             assert.strictEqual(messages.length, 1)
@@ -818,15 +892,14 @@ describe("Basic tests", () => {
             const code =
                 "<script>var a = 1, b = 2;</script><script setup>c = a + b</script>"
             const config = {
-                parser: PARSER_PATH,
+                languageOptions: {
+                    parser,
+                },
                 rules: {
                     "no-undef": "error",
                 },
             }
             const linter = new Linter()
-
-            linter.defineParser(PARSER_PATH, require(PARSER_PATH))
-
             const messages = linter.verify(code, config)
 
             assert.strictEqual(messages.length, 1)
@@ -834,3 +907,13 @@ describe("Basic tests", () => {
         })
     })
 })
+
+function buildPlugins(rule) {
+    return {
+        test: {
+            rules: {
+                "test-rule": rule,
+            },
+        },
+    }
+}

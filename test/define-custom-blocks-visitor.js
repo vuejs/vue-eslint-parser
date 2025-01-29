@@ -12,26 +12,14 @@ const path = require("path")
 const eslint = require("eslint")
 const jsonParser = require("jsonc-eslint-parser")
 const espree = require("espree")
-const Linter = eslint.Linter
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
+const Linter = eslint.Linter
 
-const PARSER_PATH = path.resolve(__dirname, "../src/index.ts")
+const parser = require("../src/index.ts")
 
-const LINTER_CONFIG = {
-    parser: PARSER_PATH,
-    parserOptions: {
-        ecmaVersion: 2015,
-    },
-    rules: {
-        "test-no-number-literal": "error",
-        "test-no-forbidden-key": "error",
-        "test-no-parsing-error": "error",
-        "test-no-parsing-error2": "error",
-    },
-}
 const noNumberLiteralRule = {
     create(context) {
         let count = 0
@@ -134,45 +122,230 @@ const siblingSelectorRule = {
     },
 }
 
-function createLinter(target = "json") {
-    const linter = new Linter()
+function getConfig(target = "json") {
+    const spaceUnaryOps =
+        require("eslint/use-at-your-own-risk").builtinRules.get(
+            "space-unary-ops",
+        )
+    const noParamReassign =
+        require("eslint/use-at-your-own-risk").builtinRules.get(
+            "no-param-reassign",
+        )
+    const noUnusedVars =
+        require("eslint/use-at-your-own-risk").builtinRules.get(
+            "no-unused-vars",
+        )
 
-    linter.defineParser(PARSER_PATH, require(PARSER_PATH))
-    linter.defineRule("test-no-number-literal", (context) =>
-        context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
-            target,
-            ...noNumberLiteralRule,
-        }),
-    )
-    linter.defineRule("test-no-forbidden-key", (context) =>
-        context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
-            target,
-            ...noNoForbiddenKeyRule,
-        }),
-    )
-    linter.defineRule("test-no-parsing-error", (context) =>
-        context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
-            target,
-            ...noParsingErrorRule,
-        }),
-    )
-    linter.defineRule("test-no-parsing-error2", (context) =>
-        context.parserServices.defineCustomBlocksVisitor(context, jsonParser, {
-            target,
-            ...noParsingErrorRule2,
-        }),
-    )
-    linter.defineRule("test-no-program-exit", (context) =>
-        context.parserServices.defineCustomBlocksVisitor(
-            context,
-            jsonParser,
-            {
-                target,
-                ...noProgramExitRule,
+    return {
+        files: ["**"],
+        plugins: {
+            test: {
+                rules: {
+                    "test-no-number-literal": {
+                        create: (context) =>
+                            context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                jsonParser,
+                                {
+                                    target,
+                                    ...noNumberLiteralRule,
+                                },
+                            ),
+                    },
+                    "test-no-forbidden-key": {
+                        create: (context) =>
+                            context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                jsonParser,
+                                {
+                                    target,
+                                    ...noNoForbiddenKeyRule,
+                                },
+                            ),
+                    },
+                    "test-no-parsing-error": {
+                        create: (context) =>
+                            context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                jsonParser,
+                                {
+                                    target,
+                                    ...noParsingErrorRule,
+                                },
+                            ),
+                    },
+                    "test-no-parsing-error2": {
+                        create: (context) =>
+                            context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                jsonParser,
+                                {
+                                    target,
+                                    ...noParsingErrorRule2,
+                                },
+                            ),
+                    },
+                    "test-no-program-exit": {
+                        create: (context) =>
+                            context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                jsonParser,
+                                {
+                                    target,
+                                    ...noProgramExitRule,
+                                },
+                                noProgramExitRule.create(context),
+                            ),
+                    },
+                    "test-no-yml-parsing-error": {
+                        create: (context) =>
+                            context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                {
+                                    parse() {
+                                        throw new Error("Foo")
+                                    },
+                                },
+                                {
+                                    target: "yaml",
+                                    ...noParsingErrorRule,
+                                },
+                            ),
+                    },
+
+                    "test-for-sibling-selector": {
+                        create: (context) =>
+                            context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                jsonParser,
+                                {
+                                    target: "json",
+                                    create: siblingSelectorRule.create,
+                                },
+                            ),
+                    },
+                    "test-for-parse-custom-block-element": {
+                        create: (context) =>
+                            context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                jsonParser,
+                                {
+                                    target: "json",
+                                    create(ctx) {
+                                        return {
+                                            Program(node) {
+                                                const error =
+                                                    ctx.sourceCode.parserServices.parseCustomBlockElement(
+                                                        jsonParser,
+                                                        { jsonSyntax: "json" },
+                                                    ).error
+                                                ctx.report({
+                                                    node,
+                                                    message: JSON.stringify({
+                                                        lineNumber:
+                                                            error.lineNumber,
+                                                        column: error.column,
+                                                        message: error.message,
+                                                    }),
+                                                })
+                                            },
+                                        }
+                                    },
+                                },
+                            ),
+                    },
+                    "test-mark-vars": {
+                        create(context) {
+                            return context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                espree,
+                                {
+                                    target: "js",
+                                    create(customBlockContext) {
+                                        return {
+                                            Literal() {
+                                                customBlockContext.markVariableAsUsed(
+                                                    "a",
+                                                )
+                                                customBlockContext.markVariableAsUsed(
+                                                    "b",
+                                                )
+                                            },
+                                        }
+                                    },
+                                },
+                            )
+                        },
+                    },
+
+                    "test-space-unary-ops": {
+                        ...spaceUnaryOps,
+                        create(context) {
+                            return context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                espree,
+                                {
+                                    target: "js",
+                                    create(customBlockContext) {
+                                        return spaceUnaryOps.create(
+                                            customBlockContext,
+                                        )
+                                    },
+                                },
+                            )
+                        },
+                    },
+                    "test-no-param-reassign": {
+                        ...noParamReassign,
+                        create(context) {
+                            return context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                espree,
+                                {
+                                    target: "js",
+                                    create(customBlockContext) {
+                                        return noParamReassign.create(
+                                            customBlockContext,
+                                        )
+                                    },
+                                },
+                            )
+                        },
+                    },
+                    "test-no-unused-vars": {
+                        ...noUnusedVars,
+                        create(context) {
+                            return context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                espree,
+                                {
+                                    target: "js",
+                                    create(customBlockContext) {
+                                        return noUnusedVars.create(
+                                            customBlockContext,
+                                        )
+                                    },
+                                },
+                            )
+                        },
+                    },
+                },
             },
-            noProgramExitRule.create(context),
-        ),
-    )
+        },
+        languageOptions: {
+            parser,
+        },
+        rules: {
+            "test/test-no-number-literal": "error",
+            "test/test-no-forbidden-key": "error",
+            "test/test-no-parsing-error": "error",
+            "test/test-no-parsing-error2": "error",
+        },
+    }
+}
+
+function createLinter() {
+    const linter = new Linter({ configType: "flat" })
 
     return linter
 }
@@ -189,8 +362,8 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>`
 
         const linter = createLinter()
-        const messages1 = linter.verify(code, LINTER_CONFIG)
-        const messages2 = linter.verify(linter.getSourceCode(), LINTER_CONFIG)
+        const messages1 = linter.verify(code, getConfig())
+        const messages2 = linter.verify(linter.getSourceCode(), getConfig())
 
         assert.strictEqual(messages1.length, 2)
         assert.strictEqual(messages1[0].message, 'no "forbidden" key')
@@ -212,9 +385,9 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 {"foo": 123}
 </i18n>
 `
-        const linter = createLinter(["json", "json5"])
+        const linter = createLinter()
 
-        const messages = linter.verify(code, LINTER_CONFIG)
+        const messages = linter.verify(code, getConfig(["json", "json5"]))
 
         assert.strictEqual(messages.length, 2)
         assert.strictEqual(messages[0].message, "OK 42@count:1")
@@ -238,7 +411,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 `
         const linter = createLinter()
 
-        const messages = linter.verify(code, LINTER_CONFIG)
+        const messages = linter.verify(code, getConfig())
 
         assert.strictEqual(messages.length, 0)
     })
@@ -251,7 +424,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 `
         const linter = createLinter()
 
-        const messages = linter.verify(code, LINTER_CONFIG)
+        const messages = linter.verify(code, getConfig())
 
         assert.strictEqual(messages.length, 0)
     })
@@ -262,7 +435,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 `
         const linter = createLinter()
 
-        const messages = linter.verify(code, LINTER_CONFIG)
+        const messages = linter.verify(code, getConfig())
 
         assert.strictEqual(messages.length, 0)
     })
@@ -279,19 +452,17 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 "foo": 42
 </docs>
 `
-        const linter = createLinter(
+        const linter = createLinter()
+        const config = getConfig(
             (lang, block) =>
                 (lang === "json" && lang === "json5") ||
                 (!lang && block.name === "i18n"),
         )
 
-        const messages1 = linter.verify(code, LINTER_CONFIG)
+        const messages1 = linter.verify(code, config)
 
         assert.strictEqual(messages1.length, 0)
-        const messages2 = linter.verify(
-            `${code}<i18n>123</i18n>`,
-            LINTER_CONFIG,
-        )
+        const messages2 = linter.verify(`${code}<i18n>123</i18n>`, config)
 
         assert.strictEqual(messages2.length, 1)
     })
@@ -304,7 +475,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 `
         const linter = createLinter()
 
-        const messages = linter.verify(code, LINTER_CONFIG, "test.html")
+        const messages = linter.verify(code, getConfig(), "test.html")
 
         assert.strictEqual(messages.length, 0)
     })
@@ -320,7 +491,7 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 `
         const linter = createLinter()
 
-        const messages = linter.verify(code, LINTER_CONFIG)
+        const messages = linter.verify(code, getConfig())
 
         assert.strictEqual(messages.length, 6)
         assert.strictEqual(messages[0].message, "Unexpected token ':'.")
@@ -365,26 +536,13 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>
 `
         const linter = createLinter()
-        linter.defineRule("test-no-yml-parsing-error", (context) =>
-            context.parserServices.defineCustomBlocksVisitor(
-                context,
-                {
-                    parse() {
-                        throw new Error("Foo")
-                    },
-                },
-                {
-                    target: "yaml",
-                    ...noParsingErrorRule,
-                },
-            ),
-        )
+        const baseConfig = getConfig()
 
         const messages = linter.verify(code, {
-            ...LINTER_CONFIG,
+            ...baseConfig,
             rules: {
-                ...LINTER_CONFIG.rules,
-                "test-no-yml-parsing-error": "error",
+                ...baseConfig.rules,
+                "test/test-no-yml-parsing-error": "error",
             },
         })
 
@@ -404,12 +562,13 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>
 `
         const linter = createLinter()
+        const baseConfig = getConfig()
 
         const messages = linter.verify(code, {
-            ...LINTER_CONFIG,
+            ...baseConfig,
             rules: {
-                "test-no-program-exit": "error",
-                ...LINTER_CONFIG.rules,
+                "test/test-no-program-exit": "error",
+                ...baseConfig.rules,
             },
         })
 
@@ -429,40 +588,13 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>
 `
         const linter = createLinter()
-        linter.defineRule("test-for-parse-custom-block-element", (context) =>
-            context.parserServices.defineCustomBlocksVisitor(
-                context,
-                jsonParser,
-                {
-                    target: "json",
-                    create(ctx) {
-                        return {
-                            Program(node) {
-                                const error =
-                                    ctx.parserServices.parseCustomBlockElement(
-                                        jsonParser,
-                                        { jsonSyntax: "json" },
-                                    ).error
-                                ctx.report({
-                                    node,
-                                    message: JSON.stringify({
-                                        lineNumber: error.lineNumber,
-                                        column: error.column,
-                                        message: error.message,
-                                    }),
-                                })
-                            },
-                        }
-                    },
-                },
-            ),
-        )
+        const baseConfig = getConfig()
 
         const messages = linter.verify(code, {
-            ...LINTER_CONFIG,
+            ...baseConfig,
             rules: {
-                "test-for-parse-custom-block-element": "error",
-                ...LINTER_CONFIG.rules,
+                "test/test-for-parse-custom-block-element": "error",
+                ...baseConfig.rules,
             },
         })
 
@@ -480,20 +612,12 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>
 `
         const linter = createLinter()
-        linter.defineRule("test-for-sibling-selector", (context) =>
-            context.parserServices.defineCustomBlocksVisitor(
-                context,
-                jsonParser,
-                {
-                    target: "json",
-                    create: siblingSelectorRule.create,
-                },
-            ),
-        )
+        const baseConfig = getConfig()
+
         const messages = linter.verify(code, {
-            ...LINTER_CONFIG,
+            ...baseConfig,
             rules: {
-                "test-for-sibling-selector": "error",
+                "test/test-for-sibling-selector": "error",
             },
         })
 
@@ -511,37 +635,51 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>
 `
             const linter = createLinter()
-            linter.defineRule("test", (context) =>
-                context.parserServices.defineCustomBlocksVisitor(
-                    context,
-                    jsonParser,
-                    {
-                        target: "json",
-                        create(customBlockContext) {
-                            return {
-                                "JSONLiteral[value='target']"(node) {
-                                    customBlockContext.report({
-                                        node,
-                                        message: JSON.stringify(
-                                            customBlockContext
-                                                .getAncestors()
-                                                .map((n) => n.type),
-                                        ),
-                                    })
-                                },
-                            }
-                        },
-                    },
-                ),
-            )
+            const baseConfig = getConfig()
 
-            const messages = linter.verify(code, {
-                ...LINTER_CONFIG,
+            const plugin = {
                 rules: {
-                    ...LINTER_CONFIG.rules,
-                    test: "error",
+                    test: {
+                        create: (context) =>
+                            context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                jsonParser,
+                                {
+                                    target: "json",
+                                    create(customBlockContext) {
+                                        return {
+                                            "JSONLiteral[value='target']"(
+                                                node,
+                                            ) {
+                                                customBlockContext.report({
+                                                    node,
+                                                    message: JSON.stringify(
+                                                        customBlockContext
+                                                            .getAncestors()
+                                                            .map((n) => n.type),
+                                                    ),
+                                                })
+                                            },
+                                        }
+                                    },
+                                },
+                            ),
+                    },
                 },
-            })
+            }
+
+            const messages = linter.verify(code, [
+                baseConfig,
+                {
+                    files: ["**"],
+                    plugins: {
+                        t: plugin,
+                    },
+                    rules: {
+                        "t/test": "error",
+                    },
+                },
+            ])
 
             assert.strictEqual(messages.length, 1)
             assert.strictEqual(
@@ -556,37 +694,53 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
 </i18n>
 `
             const linter = createLinter()
-            linter.defineRule("test", (context) =>
-                context.parserServices.defineCustomBlocksVisitor(
-                    context,
-                    jsonParser,
-                    {
-                        target: "json",
-                        create(customBlockContext) {
-                            return {
-                                "JSONLiteral[value='target']"(node) {
-                                    customBlockContext.report({
-                                        node,
-                                        message: JSON.stringify(
-                                            customBlockContext
-                                                .getSourceCode()
-                                                .getLocFromIndex(node.range[0]),
-                                        ),
-                                    })
-                                },
-                            }
-                        },
-                    },
-                ),
-            )
+            const baseConfig = getConfig()
 
-            const messages = linter.verify(code, {
-                ...LINTER_CONFIG,
+            const plugin = {
                 rules: {
-                    ...LINTER_CONFIG.rules,
-                    test: "error",
+                    test: {
+                        create: (context) =>
+                            context.sourceCode.parserServices.defineCustomBlocksVisitor(
+                                context,
+                                jsonParser,
+                                {
+                                    target: "json",
+                                    create(customBlockContext) {
+                                        return {
+                                            "JSONLiteral[value='target']"(
+                                                node,
+                                            ) {
+                                                customBlockContext.report({
+                                                    node,
+                                                    message: JSON.stringify(
+                                                        customBlockContext
+                                                            .getSourceCode()
+                                                            .getLocFromIndex(
+                                                                node.range[0],
+                                                            ),
+                                                    ),
+                                                })
+                                            },
+                                        }
+                                    },
+                                },
+                            ),
+                    },
                 },
-            })
+            }
+
+            const messages = linter.verify(code, [
+                baseConfig,
+                {
+                    files: ["**"],
+                    plugins: {
+                        t: plugin,
+                    },
+                    rules: {
+                        "t/test": "error",
+                    },
+                },
+            ])
 
             assert.strictEqual(messages.length, 1)
             assert.strictEqual(messages[0].message, '{"line":3,"column":18}')
@@ -601,51 +755,13 @@ let a = 42;
 </js>
 `
             const linter = createLinter()
-            const rule = linter.getRules().get("no-unused-vars")
-            linter.defineRule("test-no-unused-vars", {
-                ...rule,
-                create(context) {
-                    return context.parserServices.defineCustomBlocksVisitor(
-                        context,
-                        espree,
-                        {
-                            target: "js",
-                            create(customBlockContext) {
-                                return rule.create(customBlockContext)
-                            },
-                        },
-                    )
-                },
-            })
-            linter.defineRule("test-mark-vars", {
-                create(context) {
-                    return context.parserServices.defineCustomBlocksVisitor(
-                        context,
-                        espree,
-                        {
-                            target: "js",
-                            create(customBlockContext) {
-                                return {
-                                    Literal() {
-                                        customBlockContext.markVariableAsUsed(
-                                            "a",
-                                        )
-                                        customBlockContext.markVariableAsUsed(
-                                            "b",
-                                        )
-                                    },
-                                }
-                            },
-                        },
-                    )
-                },
-            })
+            const baseConfig = getConfig()
 
             const messages1 = linter.verify(code, {
-                ...LINTER_CONFIG,
+                ...baseConfig,
                 rules: {
-                    ...LINTER_CONFIG.rules,
-                    "test-no-unused-vars": "error",
+                    ...baseConfig.rules,
+                    "test/test-no-unused-vars": "error",
                 },
             })
 
@@ -656,11 +772,11 @@ let a = 42;
             )
 
             const messages2 = linter.verify(code, {
-                ...LINTER_CONFIG,
+                ...baseConfig,
                 rules: {
-                    ...LINTER_CONFIG.rules,
-                    "test-no-unused-vars": "error",
-                    "test-mark-vars": "error",
+                    ...baseConfig.rules,
+                    "test/test-no-unused-vars": "error",
+                    "test/test-mark-vars": "error",
                 },
             })
 
@@ -676,28 +792,13 @@ function a(arg) {
 </js>
 `
             const linter = createLinter()
-            const rule = linter.getRules().get("no-param-reassign")
-            linter.defineRule("test-no-param-reassign", {
-                ...rule,
-                create(context) {
-                    return context.parserServices.defineCustomBlocksVisitor(
-                        context,
-                        espree,
-                        {
-                            target: "js",
-                            create(customBlockContext) {
-                                return rule.create(customBlockContext)
-                            },
-                        },
-                    )
-                },
-            })
+            const baseConfig = getConfig()
 
             const messages1 = linter.verify(code, {
-                ...LINTER_CONFIG,
+                ...baseConfig,
                 rules: {
-                    ...LINTER_CONFIG.rules,
-                    "test-no-param-reassign": "error",
+                    ...baseConfig.rules,
+                    "test/test-no-param-reassign": "error",
                 },
             })
 
@@ -715,28 +816,13 @@ var v = + 42
 </js>
 `
             const linter = createLinter()
-            const rule = linter.getRules().get("space-unary-ops")
-            linter.defineRule("test-space-unary-ops", {
-                ...rule,
-                create(context) {
-                    return context.parserServices.defineCustomBlocksVisitor(
-                        context,
-                        espree,
-                        {
-                            target: "js",
-                            create(customBlockContext) {
-                                return rule.create(customBlockContext)
-                            },
-                        },
-                    )
-                },
-            })
+            const baseConfig = getConfig()
 
             const messages1 = linter.verify(code, {
-                ...LINTER_CONFIG,
+                ...baseConfig,
                 rules: {
-                    ...LINTER_CONFIG.rules,
-                    "test-space-unary-ops": "error",
+                    ...baseConfig.rules,
+                    "test/test-space-unary-ops": "error",
                 },
             })
 

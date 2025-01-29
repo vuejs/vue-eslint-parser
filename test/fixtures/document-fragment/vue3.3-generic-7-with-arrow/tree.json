@@ -66,11 +66,6 @@
                                                         "text": "T extends () => string",
                                                         "children": [
                                                             {
-                                                                "type": "Identifier",
-                                                                "text": "T",
-                                                                "children": []
-                                                            },
-                                                            {
                                                                 "type": "TSFunctionType",
                                                                 "text": "() => string",
                                                                 "children": [
@@ -86,6 +81,11 @@
                                                                         ]
                                                                     }
                                                                 ]
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "T",
+                                                                "children": []
                                                             }
                                                         ]
                                                     },
@@ -93,11 +93,6 @@
                                                         "type": "TSTypeParameter",
                                                         "text": "U  extends () => string = () => 'abc'",
                                                         "children": [
-                                                            {
-                                                                "type": "Identifier",
-                                                                "text": "U",
-                                                                "children": []
-                                                            },
                                                             {
                                                                 "type": "TSFunctionType",
                                                                 "text": "() => string",
@@ -137,6 +132,11 @@
                                                                         ]
                                                                     }
                                                                 ]
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "U",
+                                                                "children": []
                                                             }
                                                         ]
                                                     }

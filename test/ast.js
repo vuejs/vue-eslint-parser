@@ -14,20 +14,20 @@ const fs = require("fs")
 const path = require("path")
 const lodash = require("lodash")
 const parser = require("../src")
-const Linter = require("./fixtures/eslint").Linter
+const eslint = require("eslint")
 const semver = require("semver")
 const { scopeToJSON, analyze, replacer, getAllTokens } = require("./test-utils")
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
-
-const PARSER = path.resolve(__dirname, "../src/index.ts")
+const Linter = eslint.Linter
 const ROOT = path.join(__dirname, "fixtures/ast")
 const TARGETS = fs.readdirSync(ROOT)
 const PARSER_OPTIONS = {
     comment: true,
-    ecmaVersion: 2020,
+    ecmaVersion: "latest",
+    sourceType: "module",
     loc: true,
     range: true,
     tokens: true,
@@ -41,39 +41,52 @@ const PARSER_OPTIONS = {
  * @returns {object} Simple tree.
  */
 function getTree(source, parserOptions) {
-    const linter = new Linter()
+    const linter = new Linter({ configType: "flat" })
     const stack = []
     const root = { children: [] }
     let current = root
 
-    linter.defineParser(PARSER, require(PARSER))
-    linter.defineRule("maketree", (ruleContext) =>
-        ruleContext.parserServices.defineTemplateBodyVisitor({
-            "*"(node) {
-                stack.push(current)
-                current.children.push(
-                    (current = {
-                        type: node.type,
-                        text: source.slice(node.range[0], node.range[1]),
-                        children: [],
-                    }),
-                )
-            },
-            "*:exit"() {
-                current = stack.pop()
-            },
-        }),
-    )
-    linter.verify(
+    const maketree = {
+        create: (ruleContext) =>
+            ruleContext.sourceCode.parserServices.defineTemplateBodyVisitor({
+                "*"(node) {
+                    stack.push(current)
+                    current.children.push(
+                        (current = {
+                            type: node.type,
+                            text: source.slice(node.range[0], node.range[1]),
+                            children: [],
+                        }),
+                    )
+                },
+                "*:exit"() {
+                    current = stack.pop()
+                },
+            }),
+    }
+    const result = linter.verify(
         source,
         {
-            parser: PARSER,
-            parserOptions: Object.assign({ ecmaVersion: 2020 }, parserOptions),
-            rules: { maketree: "error" },
+            files: ["**"],
+            plugins: {
+                test: {
+                    rules: {
+                        maketree,
+                    },
+                },
+            },
+            languageOptions: {
+                parser: parser,
+                ecmaVersion: parserOptions.ecmaVersion || "latest",
+                sourceType: parserOptions.sourceType || "module",
+                parserOptions: parserOptions,
+            },
+            rules: { "test/maketree": "error" },
         },
         undefined,
         true,
     )
+    assert.deepStrictEqual(result, [])
 
     return root.children
 }
@@ -95,43 +108,56 @@ function nodeToString(node, source) {
  * @returns {void}
  */
 function validateParent(source, parserOptions) {
-    const linter = new Linter()
+    const linter = new Linter({ configType: "flat" })
     const stack = []
 
-    linter.defineParser(PARSER, require(PARSER))
-    linter.defineRule("validateparent", (ruleContext) =>
-        ruleContext.parserServices.defineTemplateBodyVisitor({
-            "*"(node) {
-                if (stack.length >= 1) {
-                    const parent = lodash.last(stack)
-                    assert(
-                        node.parent === parent,
-                        `The parent of ${nodeToString(
-                            node,
-                            source,
-                        )} should be ${nodeToString(
-                            parent,
-                            source,
-                        )}, but got ${nodeToString(node.parent, source)}`,
-                    )
-                }
-                stack.push(node)
-            },
-            "*:exit"() {
-                stack.pop()
-            },
-        }),
-    )
-    linter.verify(
+    const validateparent = {
+        create: (ruleContext) =>
+            ruleContext.sourceCode.parserServices.defineTemplateBodyVisitor({
+                "*"(node) {
+                    if (stack.length >= 1) {
+                        const parent = lodash.last(stack)
+                        assert(
+                            node.parent === parent,
+                            `The parent of ${nodeToString(
+                                node,
+                                source,
+                            )} should be ${nodeToString(
+                                parent,
+                                source,
+                            )}, but got ${nodeToString(node.parent, source)}`,
+                        )
+                    }
+                    stack.push(node)
+                },
+                "*:exit"() {
+                    stack.pop()
+                },
+            }),
+    }
+    const result = linter.verify(
         source,
         {
-            parser: PARSER,
-            parserOptions: Object.assign({ ecmaVersion: 2017 }, parserOptions),
-            rules: { validateparent: "error" },
+            files: ["**"],
+            plugins: {
+                test: {
+                    rules: {
+                        validateparent,
+                    },
+                },
+            },
+            languageOptions: {
+                parser,
+                ecmaVersion: parserOptions.ecmaVersion || "latest",
+                sourceType: parserOptions.sourceType || "module",
+                parserOptions: parserOptions,
+            },
+            rules: { "test/validateparent": "error" },
         },
         undefined,
         true,
     )
+    assert.deepStrictEqual(result, [])
 }
 
 //------------------------------------------------------------------------------

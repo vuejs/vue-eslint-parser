@@ -6,7 +6,7 @@
 
 const assert = require("assert")
 const { parseForESLint } = require("../src")
-const eslint = require("./fixtures/eslint")
+const eslint = require("eslint")
 const Linter = eslint.Linter
 
 describe("parserOptions", () => {
@@ -34,6 +34,7 @@ describe("parserOptions", () => {
             const code = `<template>Hello</template>
 <script>This is syntax error</script>`
             const config = {
+                files: ["*.vue"],
                 plugins: {
                     vue: plugin,
                 },
@@ -57,6 +58,7 @@ describe("parserOptions", () => {
             const code = `<template>Hello</template>
 <script setup>import Foo from './foo'</script>`
             const config = {
+                files: ["*.vue"],
                 plugins: {
                     vue: plugin,
                 },
