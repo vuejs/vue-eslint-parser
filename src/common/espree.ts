@@ -2,9 +2,9 @@ import type { ParserOptions } from "../common/parser-options"
 // @ts-expect-error -- ignore
 import * as dependencyEspree from "espree"
 import { lte } from "semver"
-import { createRequire } from "./create-require"
 import path from "path"
 import type { BasicParserObject } from "./parser-object"
+import { createRequire } from "module"
 
 type Espree = BasicParserObject & {
     latestEcmaVersion: number

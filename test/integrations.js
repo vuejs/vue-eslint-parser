@@ -6,7 +6,6 @@ const assert = require("assert")
 const path = require("path")
 const fs = require("fs-extra")
 const cp = require("child_process")
-const semver = require("semver")
 const eslintCompat = require("./lib/eslint-compat")
 
 //------------------------------------------------------------------------------
@@ -20,9 +19,6 @@ const FIXTURE_DIR = path.join(__dirname, "fixtures/integrations")
 //------------------------------------------------------------------------------
 
 describe("Integration tests", () => {
-    if (!semver.gte(process.version, "14.0.0")) {
-        return
-    }
     for (const target of fs.readdirSync(FIXTURE_DIR)) {
         it(target, async () => {
             let ESLint = eslintCompat(require("eslint")).ESLint
