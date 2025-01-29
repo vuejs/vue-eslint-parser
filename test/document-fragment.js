@@ -61,11 +61,11 @@ describe("services.getDocumentFragment", () => {
         ].find((fp) => fs.existsSync(fp))
         const source = fs.readFileSync(sourcePath, "utf8")
         const parserOptions = optionsPath ? require(optionsPath) : {}
-        const options = Object.assign(
-            { filePath: sourcePath },
-            PARSER_OPTIONS,
-            parserOptions,
-        )
+        const options = {
+            filePath: sourcePath,
+            ...PARSER_OPTIONS,
+            ...parserOptions,
+        }
         const result = parser.parseForESLint(source, options)
         const actual = result.services.getDocumentFragment()
 

@@ -36,7 +36,7 @@ class CSSTokenScanner {
         this.tokenizer = new CSSTokenizer(text, 0, options)
     }
     public nextToken(): CSSToken | null {
-        return this.reconsuming.shift() || this.tokenizer.nextToken()
+        return this.reconsuming.shift() ?? this.tokenizer.nextToken()
     }
     public reconsume(...tokens: CSSToken[]) {
         this.reconsuming.push(...tokens)
@@ -57,7 +57,7 @@ export function parseStyleElements(
 ): void {
     const parserOptions: ParserOptions = {
         ...originalParserOptions,
-        ecmaVersion: originalParserOptions.ecmaVersion || DEFAULT_ECMA_VERSION,
+        ecmaVersion: originalParserOptions.ecmaVersion ?? DEFAULT_ECMA_VERSION,
     }
 
     for (const style of elements) {
@@ -372,7 +372,7 @@ function parseVBindArg(tokenizer: CSSTokenScanner): {
                         comments,
                     }
                 }
-                const startToken = tokensBuffer[0] || token
+                const startToken = tokensBuffer[0] ?? token
                 return {
                     exprRange: [startToken.range[0], token.range[0]],
                     quote: null,

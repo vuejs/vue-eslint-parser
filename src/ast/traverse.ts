@@ -27,6 +27,7 @@ export const KEYS = Evk.unionWith({
     VSlotScopeExpression: ["params"],
     VStartTag: ["attributes"],
     VText: [],
+    VGenericExpression: ["expression"],
 })
 
 /**
@@ -82,7 +83,7 @@ function traverse(node: Node, parent: Node | null, visitor: Visitor): void {
     visitor.enterNode(node, parent)
 
     const keys =
-        (visitor.visitorKeys || KEYS)[node.type] || getFallbackKeys(node)
+        (visitor.visitorKeys ?? KEYS)[node.type] ?? getFallbackKeys(node)
     for (i = 0; i < keys.length; ++i) {
         const child = (node as any)[keys[i]]
 

@@ -421,7 +421,7 @@ export class Parser {
 
         if (name === "template") {
             const xmlns = token.attributes.find((a) => a.key.name === "xmlns")
-            const value = xmlns && xmlns.value && xmlns.value.value
+            const value = xmlns?.value?.value
 
             if (value === NS.HTML || value === NS.MathML || value === NS.SVG) {
                 return value
@@ -477,7 +477,7 @@ export class Parser {
 
         node.key.name = adjustAttributeName(node.key.name, namespace)
         const key = this.getTagName(node.key)
-        const value = node.value && node.value.value
+        const value = node.value?.value
 
         if (key === "xmlns" && value !== namespace) {
             this.reportParseError(node, "x-invalid-namespace")
@@ -616,8 +616,7 @@ export class Parser {
             for (const attribute of element.startTag.attributes) {
                 if (attribute.directive) {
                     if (
-                        attribute.key.argument != null &&
-                        attribute.key.argument.type === "VExpressionContainer"
+                        attribute.key.argument?.type === "VExpressionContainer"
                     ) {
                         resolveReferences(attribute.key.argument)
                     }

@@ -68,7 +68,7 @@ function scopeToJSON(scopeManager) {
                     reference.resolved.defs[0] &&
                     reference.resolved.defs[0].name,
             ),
-            init: reference.init || null,
+            init: reference.init ?? null,
             vueUsedInTemplate: reference.vueUsedInTemplate
                 ? reference.vueUsedInTemplate
                 : undefined,
@@ -105,9 +105,9 @@ function scopeToJSON(scopeManager) {
  * Analyze scope
  */
 function analyze(ast, parserOptions) {
-    const ecmaVersion = parserOptions.ecmaVersion || 2022
-    const ecmaFeatures = parserOptions.ecmaFeatures || {}
-    const sourceType = parserOptions.sourceType || "script"
+    const ecmaVersion = parserOptions.ecmaVersion ?? 2022
+    const ecmaFeatures = parserOptions.ecmaFeatures ?? {}
+    const sourceType = parserOptions.sourceType ?? "script"
     const result = escope.analyze(ast, {
         ignoreEval: true,
         nodejsScope: false,

@@ -980,8 +980,7 @@ export class Tokenizer {
         function maybeValidCustomBlock(this: Tokenizer, nextCp: number) {
             return (
                 this.currentToken &&
-                this.lastTagOpenToken &&
-                this.lastTagOpenToken.value.startsWith(
+                this.lastTagOpenToken?.value.startsWith(
                     this.currentToken.value + String.fromCodePoint(nextCp),
                 )
             )

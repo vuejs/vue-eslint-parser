@@ -216,7 +216,7 @@ export function parseScriptSetupElements(
 ): ESLintExtendedProgram {
     const parserOptions: ParserOptions = {
         ...originalParserOptions,
-        ecmaVersion: originalParserOptions.ecmaVersion || DEFAULT_ECMA_VERSION,
+        ecmaVersion: originalParserOptions.ecmaVersion ?? DEFAULT_ECMA_VERSION,
     }
     const scriptSetupModuleCodeBlocks = getScriptSetupModuleCodeBlocks(
         scriptSetupElement,
@@ -323,7 +323,7 @@ export function parseScriptSetupElements(
                 const textNode = node.children[0]
                 return Math.min(
                     start,
-                    textNode != null && textNode.type === "VText"
+                    textNode?.type === "VText"
                         ? textNode.range[0]
                         : node.startTag.range[1],
                 )
@@ -344,7 +344,7 @@ export function parseScriptSetupElements(
                 const textNode = node.children[0]
                 return Math.max(
                     end,
-                    textNode != null && textNode.type === "VText"
+                    textNode?.type === "VText"
                         ? textNode.range[1]
                         : (node.endTag?.range[0] ?? node.range[1]),
                 )
@@ -575,7 +575,7 @@ function getScriptSetupCodeBlocks(
             (t) => t.range[0] === body.range[0],
         )
         const exportToken = tokens[exportTokenIndex]
-        if (exportToken && exportToken.value === "export") {
+        if (exportToken?.value === "export") {
             // Consume code up to the start position of `export`.
             // The code may contain legacy decorators.
             append(statementCodeBlocks, usedOffset, exportToken.range[0])
@@ -958,7 +958,7 @@ function remapLocationAndTokens(
     { codeBlocks }: ScriptSetupModuleCodeBlocks,
     locationCalculator: LocationCalculator,
 ) {
-    const tokens = result.ast.tokens || []
+    const tokens = result.ast.tokens ?? []
 
     const endMap = new Map<number, number>()
     const buffer: number[] = []

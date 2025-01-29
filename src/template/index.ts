@@ -159,7 +159,7 @@ function parseDirectiveKeyStatically(
     if (directiveKey.name == null) {
         directiveKey.name = modifiers.shift()!
     } else if (directiveKey.argument == null && modifiers[0].name !== "") {
-        directiveKey.argument = modifiers.shift() || null
+        directiveKey.argument = modifiers.shift() ?? null
     }
     directiveKey.modifiers = modifiers.filter(isNotEmptyModifier)
 
@@ -553,7 +553,7 @@ function resolveReference(referene: Reference, element: VElement): void {
     let node: VNode | null = element
 
     // Find the variable of this reference.
-    while (node != null && node.type === "VElement") {
+    while (node?.type === "VElement") {
         for (const variable of node.variables) {
             if (variable.id.name === referene.id.name) {
                 referene.variable = variable
@@ -592,7 +592,7 @@ export function convertToDirective(
     debug(
         '[template] convert to directive: %s="%s" %j',
         node.key.name,
-        node.value && node.value.value,
+        node.value?.value,
         node.range,
     )
 
@@ -607,11 +607,7 @@ export function convertToDirective(
     )
 
     const { argument } = directive.key
-    if (
-        argument &&
-        argument.type === "VIdentifier" &&
-        argument.name.startsWith("[")
-    ) {
+    if (argument?.type === "VIdentifier" && argument.name.startsWith("[")) {
         const nextChar = code[argument.range[1]]
         if (nextChar == null || invalidDynamicArgumentNextChar.test(nextChar)) {
             const char =
@@ -778,7 +774,7 @@ export function processMustache(
             { allowEmpty: true, allowFilters: true },
         )
 
-        node.expression = ret.expression || null
+        node.expression = ret.expression ?? null
         node.references = ret.references
         if (ret.expression != null) {
             ret.expression.parent = node

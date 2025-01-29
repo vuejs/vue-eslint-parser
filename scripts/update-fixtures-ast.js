@@ -102,11 +102,11 @@ for (const name of TARGETS) {
     const servicesPath = path.join(ROOT, `${name}/services.json`)
     const source = fs.readFileSync(sourcePath, "utf8")
     const parserOptions = optionsPath ? require(optionsPath) : {}
-    const options = Object.assign(
-        { filePath: sourcePath },
-        PARSER_OPTIONS,
-        parserOptions,
-    )
+    const options = {
+        filePath: sourcePath,
+        ...PARSER_OPTIONS,
+        ...parserOptions,
+    }
     // console.log("Start:", name)
     const actual = parser.parseForESLint(source, options)
     const tokenRanges = getAllTokens(actual.ast).map((t) =>

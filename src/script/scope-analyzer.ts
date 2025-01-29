@@ -102,10 +102,10 @@ export function analyzeScope(
     parserOptions: ParserOptions,
 ): escopeTypes.ScopeManager {
     const ecmaVersion =
-        getEcmaVersionIfUseEspree(parserOptions) ||
+        getEcmaVersionIfUseEspree(parserOptions) ??
         ANALYZE_SCOPE_DEFAULT_ECMA_VERSION
-    const ecmaFeatures = parserOptions.ecmaFeatures || {}
-    const sourceType = parserOptions.sourceType || "script"
+    const ecmaFeatures = parserOptions.ecmaFeatures ?? {}
+    const sourceType = parserOptions.sourceType ?? "script"
     const result = getEslintScope().analyze(ast, {
         ignoreEval: true,
         nodejsScope: false,

@@ -58,11 +58,12 @@ for (const name of TARGETS) {
         path.join(ROOT, `${name}/parser-options.js`),
     ].find((fp) => fs.existsSync(fp))
     const source = fs.readFileSync(sourcePath, "utf8")
-    const options = Object.assign(
-        { filePath: sourcePath },
-        PARSER_OPTIONS,
-        optionsPath ? require(optionsPath) : {},
-    )
+    const options = {
+        filePath: sourcePath,
+        ...PARSER_OPTIONS,
+        ...(optionsPath ? require(optionsPath) : {}),
+    }
+
     const result = parser.parseForESLint(source, options)
     const actual = result.services.getDocumentFragment()
 

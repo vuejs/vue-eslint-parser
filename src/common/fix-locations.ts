@@ -24,10 +24,10 @@ export function fixLocations(
 ): void {
     fixNodeLocations(result.ast, result.visitorKeys, locationCalculator)
 
-    for (const token of result.ast.tokens || []) {
+    for (const token of result.ast.tokens ?? []) {
         fixLocation(token, locationCalculator)
     }
-    for (const comment of result.ast.comments || []) {
+    for (const comment of result.ast.comments ?? []) {
         fixLocation(comment, locationCalculator)
     }
 }

@@ -78,8 +78,8 @@ export function isLang(
  * @returns The `lang` attribute value.
  */
 export function getLang(element: VElement | undefined): string | null {
-    const langAttr = element && element.startTag.attributes.find(isLang)
-    const lang = langAttr && langAttr.value && langAttr.value.value
+    const langAttr = element?.startTag.attributes.find(isLang)
+    const lang = langAttr?.value?.value
     return lang || null
 }
 /**

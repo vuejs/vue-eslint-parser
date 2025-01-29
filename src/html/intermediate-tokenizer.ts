@@ -222,7 +222,7 @@ export class IntermediateTokenizer {
     private processComment(token: Token): IntermediateToken | null {
         this.comments.push(token)
 
-        if (this.currentToken != null && this.currentToken.type === "Text") {
+        if (this.currentToken?.type === "Text") {
             return this.commit()
         }
         return null

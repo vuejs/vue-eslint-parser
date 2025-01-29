@@ -131,7 +131,7 @@ function extractVariables(scopeManager: escopeTypes.ScopeManager) {
     const moduleScope = globalScope.childScopes.find(
         (scope) => scope.type === "module",
     )
-    for (const variable of (moduleScope && moduleScope.variables) || []) {
+    for (const variable of moduleScope?.variables ?? []) {
         scriptVariables.set(variable.name, variable)
     }
     return scriptVariables
