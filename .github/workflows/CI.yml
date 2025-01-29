@@ -13,13 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Checkout submodules
         run: git submodule update --init
       - name: Install Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 'lts/*'
       - name: Install Packages
         run: npm install && cd test/fixtures/eslint && npm install
       - name: Lint
@@ -29,42 +29,34 @@ jobs:
     name: Test
     strategy:
       matrix:
-        eslint: [7, 8]
-        node: [16, 17]
+        eslint: [9]
+        node: [18, 20, 21, 'lts/*']
         os: [ubuntu-latest]
         include:
           # On other platforms
-          - eslint: 7
-            node: 16
+          - eslint: 9
+            node: 'lts/*'
             os: windows-latest
-          - eslint: 7
-            node: 16
-            os: macos-12
-          # On old Node.js versions
-          - eslint: 7
-            node: 14
-            os: ubuntu-latest
+          - eslint: 9
+            node: 'lts/*'
+            os: macos-latest
           # On old ESLint versions
-          - eslint: 6
-            node: 16
-            os: ubuntu-latest
-          # On the minimum supported ESLint/Node.js version
-          - eslint: 6
-            node: 14
+          - eslint: 8
+            node: 'lts/*'
             os: ubuntu-latest
 
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Checkout submodules
       run: git submodule update --init
     - name: Install Node.js v${{ matrix.node }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node }}
     - name: Install Packages
-      run: npm install --legacy-peer-deps
+      run: npm install -f
     - name: Install ESLint v${{ matrix.eslint }}
       run: node scripts/ci-install-eslint ${{ matrix.eslint }}
     - name: Build
@@ -77,17 +69,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Checkout submodules
       run: git submodule update --init
-    - name: Install Node.js v16
-      uses: actions/setup-node@v3
+    - name: Install Node.js
+      uses: actions/setup-node@v4
       with:
-        node-version: 16
+        node-version: 'lts/*'
     - name: Install Packages
       run: npm install
-    - name: Install ESLint v8
-      run: node scripts/ci-install-eslint 8.12.0
+    - name: Install ESLint v9
+      run: node scripts/ci-install-eslint 9
     - name: Build
       run: npm run -s build
     - name: Test

@@ -17,9 +17,6 @@ This parser allows us to lint the `<template>` of `.vue` files. We can make mist
 npm install --save-dev eslint vue-eslint-parser
 ```
 
-- Requires Node.js ^14.17.0, 16.0.0 or later.
-- Requires ESLint 6.0.0 or later.
-
 ## 📖 Usage
 
 1. Write `parser` option into your `.eslintrc.*` file.
@@ -48,7 +45,7 @@ For example:
     "parser": "vue-eslint-parser",
     "parserOptions": {
         "sourceType": "module",
-        "ecmaVersion": 2018,
+        "ecmaVersion": "latest",
         "ecmaFeatures": {
             "globalReturn": false,
             "impliedStrict": false,
