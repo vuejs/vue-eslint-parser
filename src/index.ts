@@ -54,7 +54,7 @@ export function parseForESLint(
         loc: true,
         range: true,
         tokens: true,
-        ...(parserOptions ?? {}),
+        ...parserOptions,
     }
 
     let result: AST.ESLintExtendedProgram
@@ -69,7 +69,7 @@ export function parseForESLint(
     }
 
     result.services = {
-        ...(result.services || {}),
+        ...result.services,
         ...services.define(code, result.ast, document, locationCalculator, {
             parserOptions: options,
         }),
