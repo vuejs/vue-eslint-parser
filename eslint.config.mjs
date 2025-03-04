@@ -783,6 +783,7 @@ export default [
             ],
 
             "unicorn/no-useless-fallback-in-spread": ["error"],
+            "unicorn/no-useless-spread": ["error"],
         },
     },
     {
