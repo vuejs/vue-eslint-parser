@@ -3,6 +3,7 @@ import typescriptEslint from "@typescript-eslint/eslint-plugin"
 import eslintComments from "eslint-plugin-eslint-comments"
 import node from "eslint-plugin-n"
 import nodeDeps from "eslint-plugin-node-dependencies"
+import unicorn from "eslint-plugin-unicorn"
 import tsParser from "@typescript-eslint/parser"
 import jsonParser from "jsonc-eslint-parser"
 import path from "node:path"
@@ -114,6 +115,7 @@ export default [
             "@typescript-eslint": typescriptEslint,
             "eslint-comments": eslintComments,
             node,
+            unicorn,
         },
 
         languageOptions: {
@@ -779,6 +781,8 @@ export default [
                     ],
                 },
             ],
+
+            "unicorn/no-useless-fallback-in-spread": ["error"],
         },
     },
     {
