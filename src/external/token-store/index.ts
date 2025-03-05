@@ -751,4 +751,24 @@ export default class TokenStore {
             filter: isCommentToken,
         })
     }
+
+    /**
+     * Returns the location of the given node or token.
+     * @param nodeOrToken The node or token to get the location of.
+     * @returns The location of the node or token.
+     */
+    // eslint-disable-next-line class-methods-use-this
+    public getLoc(nodeOrToken: HasLocation) {
+        return nodeOrToken.loc
+    }
+
+    /**
+     * Returns the range of the given node or token.
+     * @param nodeOrToken The node or token to get the range of.
+     * @returns The range of the node or token.
+     */
+    // eslint-disable-next-line class-methods-use-this
+    public getRange(nodeOrToken: HasLocation) {
+        return nodeOrToken.range
+    }
 }
