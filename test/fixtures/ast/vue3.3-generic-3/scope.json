@@ -1160,28 +1160,35 @@
             "references": []
         },
         {
-            "name": "T",
+            "name": "defineProps",
             "identifiers": [],
             "defs": [],
             "references": [
                 {
                     "identifier": {
                         "type": "Identifier",
-                        "name": "T",
+                        "name": "defineProps",
                         "loc": {
                             "end": {
-                                "column": 11,
-                                "line": 8
+                                "line": 5,
+                                "column": 21
                             },
                             "start": {
-                                "column": 10,
-                                "line": 8
+                                "line": 5,
+                                "column": 10
                             }
                         }
                     },
                     "from": "module",
                     "init": null
-                },
+                }
+            ]
+        },
+        {
+            "name": "T",
+            "identifiers": [],
+            "defs": [],
+            "references": [
                 {
                     "identifier": {
                         "type": "Identifier",
@@ -1203,22 +1210,22 @@
             ]
         },
         {
-            "name": "defineProps",
+            "name": "U",
             "identifiers": [],
             "defs": [],
             "references": [
                 {
                     "identifier": {
                         "type": "Identifier",
-                        "name": "defineProps",
+                        "name": "U",
                         "loc": {
                             "end": {
                                 "line": 5,
-                                "column": 21
+                                "column": 36
                             },
                             "start": {
                                 "line": 5,
-                                "column": 10
+                                "column": 35
                             }
                         }
                     },
@@ -1303,78 +1310,6 @@
                             },
                             "init": null,
                             "vueUsedInTemplate": true
-                        }
-                    ]
-                },
-                {
-                    "name": "U",
-                    "identifiers": [
-                        {
-                            "type": "Identifier",
-                            "name": "U",
-                            "loc": {
-                                "end": {
-                                    "column": 6,
-                                    "line": 8
-                                },
-                                "start": {
-                                    "column": 5,
-                                    "line": 8
-                                }
-                            }
-                        }
-                    ],
-                    "defs": [
-                        {
-                            "type": "Type",
-                            "node": {
-                                "type": "TSTypeAliasDeclaration",
-                                "loc": {
-                                    "end": {
-                                        "column": 1,
-                                        "line": 9
-                                    },
-                                    "start": {
-                                        "column": 0,
-                                        "line": 8
-                                    }
-                                }
-                            },
-                            "name": "U"
-                        }
-                    ],
-                    "references": [
-                        {
-                            "identifier": {
-                                "type": "Identifier",
-                                "name": "U",
-                                "loc": {
-                                    "end": {
-                                        "line": 5,
-                                        "column": 36
-                                    },
-                                    "start": {
-                                        "line": 5,
-                                        "column": 35
-                                    }
-                                }
-                            },
-                            "from": "module",
-                            "resolved": {
-                                "type": "Identifier",
-                                "name": "U",
-                                "loc": {
-                                    "end": {
-                                        "column": 6,
-                                        "line": 8
-                                    },
-                                    "start": {
-                                        "column": 5,
-                                        "line": 8
-                                    }
-                                }
-                            },
-                            "init": null
                         }
                     ]
                 },
@@ -1624,24 +1559,6 @@
                 {
                     "identifier": {
                         "type": "Identifier",
-                        "name": "T",
-                        "loc": {
-                            "end": {
-                                "column": 11,
-                                "line": 8
-                            },
-                            "start": {
-                                "column": 10,
-                                "line": 8
-                            }
-                        }
-                    },
-                    "from": "module",
-                    "init": null
-                },
-                {
-                    "identifier": {
-                        "type": "Identifier",
                         "name": "p",
                         "loc": {
                             "end": {
@@ -1723,20 +1640,6 @@
                         }
                     },
                     "from": "module",
-                    "resolved": {
-                        "type": "Identifier",
-                        "name": "U",
-                        "loc": {
-                            "end": {
-                                "column": 6,
-                                "line": 8
-                            },
-                            "start": {
-                                "column": 5,
-                                "line": 8
-                            }
-                        }
-                    },
                     "init": null
                 },
                 {
@@ -1860,24 +1763,6 @@
                 {
                     "identifier": {
                         "type": "Identifier",
-                        "name": "T",
-                        "loc": {
-                            "end": {
-                                "column": 11,
-                                "line": 8
-                            },
-                            "start": {
-                                "column": 10,
-                                "line": 8
-                            }
-                        }
-                    },
-                    "from": "module",
-                    "init": null
-                },
-                {
-                    "identifier": {
-                        "type": "Identifier",
                         "name": "defineProps",
                         "loc": {
                             "end": {
@@ -1905,6 +1790,24 @@
                             "start": {
                                 "line": 5,
                                 "column": 27
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "U",
+                        "loc": {
+                            "end": {
+                                "line": 5,
+                                "column": 36
+                            },
+                            "start": {
+                                "line": 5,
+                                "column": 35
                             }
                         }
                     },
