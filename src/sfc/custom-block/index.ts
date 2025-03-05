@@ -263,7 +263,7 @@ export function createCustomBlockSharedContext({
                         { ...parserOptions, ...options },
                     )
                 },
-                ...(parsedResult.services ?? {}),
+                ...parsedResult.services,
                 ...(parsedResult.error
                     ? { parseError: parsedResult.error }
                     : {}),

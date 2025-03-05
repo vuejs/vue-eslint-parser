@@ -95,7 +95,7 @@ export function extractGeneric(element: VElement): GenericProcessInfo | null {
         typeDefScope: Scope,
         isRemoveTarget: (nodeOrToken: HasLocation) => boolean,
     ) {
-        for (const variable of [...typeDefScope.variables]) {
+        for (const variable of typeDefScope.variables) {
             let def = variable.defs.find((d) =>
                 isRemoveTarget(d.name as HasLocation),
             )
@@ -106,13 +106,13 @@ export function extractGeneric(element: VElement): GenericProcessInfo | null {
                 )
             }
         }
-        for (const reference of [...typeDefScope.references]) {
+        for (const reference of typeDefScope.references) {
             if (isRemoveTarget(reference.identifier as HasLocation)) {
                 removeReference(reference, typeDefScope)
             }
         }
 
-        for (const scope of [...scopeManager.scopes]) {
+        for (const scope of scopeManager.scopes) {
             if (isRemoveTarget(scope.block as HasLocation)) {
                 removeScope(scopeManager, scope)
             }
