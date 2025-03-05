@@ -154,17 +154,9 @@ export default [
 
             "node/no-extraneous-import": ["error"],
 
-            "node/file-extension-in-import": [
-                "error",
-                "always",
-                {
-                    ".js": "never",
-                    ".ts": "never",
-                    ".tsx": "never",
-                },
-            ],
+            "node/file-extension-in-import": ["off"],
 
-            "node/no-missing-import": ["error"],
+            "node/no-missing-import": ["off"],
             "node/no-unpublished-import": ["error"],
             "node/exports-style": ["error", "module.exports"],
             "node/no-callback-literal": ["off"],

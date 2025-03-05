@@ -54,7 +54,6 @@ import { DEFAULT_ECMA_VERSION } from "../script-setup/parser-options"
 import type { LinesAndColumns } from "../common/lines-and-columns"
 import type { ParserObject } from "../common/parser-object"
 import { isEnhancedParserObject, isParserObject } from "../common/parser-object"
-// eslint-disable-next-line node/no-extraneous-import -- ignore
 import type { TSESTree } from "@typescript-eslint/utils"
 import type { GenericProcessInfo } from "./generic"
 import { extractGeneric } from "./generic"

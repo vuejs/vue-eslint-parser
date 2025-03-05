@@ -4,9 +4,8 @@
  * See LICENSE file in root directory for full license.
  */
 
-import type { Node } from "../../src/ast"
-// eslint-disable-next-line @mysticatea/node/no-missing-import
-import type { VisitorKeys } from "../eslint-visitor-keys"
+import type { Node } from "../../src/ast/index"
+import type { VisitorKeys } from "eslint-visitor-keys"
 
 export type Selector =
     | AdjacentSelector

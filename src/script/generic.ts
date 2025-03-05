@@ -6,7 +6,6 @@ import type {
     VElement,
     VGenericExpression,
 } from "../ast/index"
-// eslint-disable-next-line node/no-extraneous-import -- ignore
 import type { TSESTree } from "@typescript-eslint/utils"
 import type {
     Reference,
