@@ -27,7 +27,7 @@ export const KEYS = Evk.unionWith({
     VSlotScopeExpression: ["params"],
     VStartTag: ["attributes"],
     VText: [],
-    VGenericExpression: ["expression"],
+    VGenericExpression: ["params"],
 })
 
 /**
