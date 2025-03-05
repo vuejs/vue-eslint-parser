@@ -285,4 +285,19 @@ describe("services.getTemplateBodyTokenStore", () => {
             assert.deepStrictEqual(actual, ["div", ">"])
         })
     })
+
+    describe("TokenStore#get{Range,Loc}()", () => {
+        it("should return loc and range.", () => {
+            const {
+                templateBody: {
+                    children: [node],
+                    tokens: [token],
+                },
+            } = ast
+            assert.equal(typeof tokens.getRange(node)[0], "number")
+            assert.equal(typeof tokens.getRange(token)[1], "number")
+            assert.equal(typeof tokens.getLoc(node).start.line, "number")
+            assert.equal(typeof tokens.getLoc(node).end.column, "number")
+        })
+    })
 })
