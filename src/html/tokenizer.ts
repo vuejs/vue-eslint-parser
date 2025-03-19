@@ -1892,9 +1892,9 @@ export class Tokenizer {
             const type = isWhitespace(cp)
                 ? "HTMLWhitespace"
                 : state === "RCDATA"
-                  ? "HTMLRawText"
+                  ? "HTMLRCDataText"
                   : state === "RAWTEXT"
-                    ? "HTMLRCDataText"
+                    ? "HTMLRawText"
                     : "HTMLText"
             if (this.currentToken != null && this.currentToken.type !== type) {
                 this.endToken()
