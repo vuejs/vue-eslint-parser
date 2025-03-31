@@ -260,6 +260,7 @@ See [implementing-custom-template-tokenizers.md](./docs/implementing-custom-temp
     - `defineDocumentVisitor(documentVisitor, options)` ... returns ESLint visitor to traverses the document.
 - [ast.md](./docs/ast.md) is `<template>` AST specification.
 - [mustache-interpolation-spacing.js](https://github.com/vuejs/eslint-plugin-vue/blob/b434ff99d37f35570fa351681e43ba2cf5746db3/lib/rules/mustache-interpolation-spacing.js) is an example.
+- Check your version of ESLint as the location of `defineTemplateBodyVisitor` was moved from `context` to `context.sourceCode` after major version `9.x`
 
 ### `defineTemplateBodyVisitor(templateBodyVisitor, scriptVisitor, options)`
 
@@ -274,7 +275,7 @@ See [implementing-custom-template-tokenizers.md](./docs/implementing-custom-temp
 import { AST } from "vue-eslint-parser"
 
 export function create(context) {
-    return context.parserServices.defineTemplateBodyVisitor(
+    return context.sourceCode.parserServices.defineTemplateBodyVisitor(
         // Event handlers for <template>.
         {
             VElement(node: AST.VElement): void {
