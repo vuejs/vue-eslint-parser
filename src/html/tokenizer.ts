@@ -1942,9 +1942,12 @@ export class Tokenizer {
             this.startToken("VExpressionEnd")
             this.appendTokenValue(RIGHT_CURLY_BRACKET, null)
             this.appendTokenValue(RIGHT_CURLY_BRACKET, null)
-            return this.vExpressionScriptState
-                ? this.vExpressionScriptState.state
-                : this.returnState
+            if (this.vExpressionScriptState) {
+                const state = this.vExpressionScriptState.state
+                this.vExpressionScriptState = null
+                return state
+            }
+            return this.returnState
         }
 
         this.appendTokenValue(RIGHT_CURLY_BRACKET, null)
