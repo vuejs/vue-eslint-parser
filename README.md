@@ -3,7 +3,6 @@
 [![npm version](https://img.shields.io/npm/v/vue-eslint-parser.svg)](https://www.npmjs.com/package/vue-eslint-parser)
 [![Downloads/month](https://img.shields.io/npm/dm/vue-eslint-parser.svg)](http://www.npmtrends.com/vue-eslint-parser)
 [![Build Status](https://github.com/vuejs/vue-eslint-parser/workflows/CI/badge.svg)](https://github.com/vuejs/vue-eslint-parser/actions)
-[![Coverage Status](https://codecov.io/gh/vuejs/vue-eslint-parser/branch/master/graph/badge.svg)](https://codecov.io/gh/vuejs/vue-eslint-parser)
 
 The ESLint custom parser for `.vue` files.
 
