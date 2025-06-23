@@ -896,6 +896,44 @@ describe("Basic tests", async () => {
             assert.strictEqual(messages.length, 1)
             assert.strictEqual(messages[0].message, "'c' is not defined.")
         })
+
+        it("should sort comments by their original source position", () => {
+            const code = `<script lang="ts" setup>
+const test = () => {
+  // first
+  return false
+}
+</script>
+
+<script lang="ts">
+/**
+ * second
+ */
+export default {}
+</script>
+
+<template>
+  <div @click="test" />
+</template>`
+
+            const result = parseForESLint(code, { sourceType: "module" })
+            const comments = result.ast.comments
+
+            // Should have 2 comments
+            assert.strictEqual(comments.length, 2)
+
+            // Comments should be sorted by their original position in source code
+            assert.strictEqual(comments[0].type, "Line")
+            assert.strictEqual(comments[0].value, " first")
+            assert.strictEqual(comments[0].loc.start.line, 3)
+
+            assert.strictEqual(comments[1].type, "Block")
+            assert.strictEqual(comments[1].value, " second")
+            assert.strictEqual(comments[1].loc.start.line, 9)
+
+            // Verify comments are sorted by range
+            assert.ok(comments[0].range[0] < comments[1].range[0])
+        })
     })
 })
 
