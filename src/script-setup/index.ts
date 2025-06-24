@@ -308,6 +308,10 @@ export function parseScriptSetupElements(
         }
         result.ast.tokens.sort((a, b) => a.range[0] - b.range[0])
     }
+
+    if (result.ast.comments != null) {
+        result.ast.comments.sort((a, b) => a.range[0] - b.range[0])
+    }
     result.ast.body.sort((a, b) => a.range[0] - b.range[0])
 
     const programStartOffset = result.ast.body.reduce(

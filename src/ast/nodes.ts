@@ -7,7 +7,6 @@ import type { ScopeManager } from "eslint-scope"
 import type { ParseError } from "./errors"
 import type { HasLocation } from "./locations"
 import type { Token } from "./tokens"
-// eslint-disable-next-line node/no-extraneous-import -- ignore
 import type { TSESTree } from "@typescript-eslint/utils"
 
 //------------------------------------------------------------------------------
