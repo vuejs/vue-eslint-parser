@@ -1,5 +1,4 @@
 {
-  "compileOnSave": true,
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
@@ -8,7 +7,6 @@
     "alwaysStrict": true,
     "baseUrl": ".",
     "checkJs": false,
-    "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "inlineSources": true,
@@ -23,11 +21,11 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": ".temp",
     "paths": {
       "*": ["typings/*"]
     },
     "pretty": true,
+    "resolveJsonModule": true,
     "removeComments": true,
     "sourceMap": true,
     "sourceRoot": "src",
@@ -37,5 +35,5 @@
 
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "tsdown.config.ts"]
 }
