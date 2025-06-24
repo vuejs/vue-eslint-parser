@@ -61,9 +61,8 @@
     "warun": "^1.0.0"
   },
   "scripts": {
-    "prebuild": "npm run -s clean",
     "build": "tsdown",
-    "clean": "rimraf .nyc_output .temp coverage",
+    "clean": "rimraf .nyc_output coverage",
     "coverage": "opener ./coverage/lcov-report/index.html",
     "lint": "eslint src test package.json",
     "pretest": "run-s build lint",
@@ -77,10 +76,9 @@
     "postversion": "git push && git push --tags",
     "prewatch": "npm run -s clean",
     "watch": "run-p watch:*",
-    "watch:tsc": "tsc --module es2015 --watch",
-    "watch:rollup": "wait-on .temp/index.js && rollup -c -o index.js --watch",
-    "watch:test": "wait-on index.js && warun index.js \"test/*.js\" \"test/fixtures/ast/*/*.json\" \"test/fixtures/*\" --debounce 1000 --no-initial -- nyc mocha \"test/*.js\" --reporter dot --timeout 10000",
-    "watch:update-ast": "wait-on index.js && warun index.js \"test/fixtures/ast/*/*.vue\" -- node scripts/update-fixtures-ast.js",
+    "watch:tsdown": "tsdown --watch",
+    "watch:test": "wait-on dist/index.js && warun dist/index.js \"test/*.js\" \"test/fixtures/ast/*/*.json\" \"test/fixtures/*\" --debounce 1000 --no-initial -- nyc mocha \"test/*.js\" --reporter dot --timeout 10000",
+    "watch:update-ast": "wait-on dist/index.js && warun dist/index.js \"test/fixtures/ast/*/*.vue\" -- node scripts/update-fixtures-ast.js",
     "watch:coverage-report": "wait-on coverage/lcov-report/index.html && opener coverage/lcov-report/index.html"
   },
   "repository": {

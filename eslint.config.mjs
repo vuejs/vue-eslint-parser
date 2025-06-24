@@ -23,8 +23,8 @@ export default [
     {
         ignores: [
             ".nyc_output",
-            ".temp",
             "coverage",
+            "dist",
             "**/node_modules",
             "src/html/util/alternative-cr.ts",
             "src/html/util/attribute-names.ts",
@@ -32,8 +32,6 @@ export default [
             "src/html/util/tag-names.ts",
             "test/fixtures",
             "test/temp",
-            "index.d.ts",
-            "index.js",
         ],
     },
     ...nodeDeps.configs["flat/recommended"],
