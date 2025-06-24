@@ -25,6 +25,7 @@ import {
 import { parseStyleElements } from "./style/index"
 import { analyzeScope } from "./script/scope-analyzer"
 import { analyzeScriptSetupScope } from "./script-setup/scope-analyzer"
+import { name, version } from "../package.json"
 
 const STARTS_WITH_LT = /^\s*</u
 
@@ -211,7 +212,6 @@ function parseAsScript(code: string, options: ParserOptions) {
 }
 
 export const meta = {
-    name: "vue-eslint-parser",
-    // eslint-disable-next-line no-process-env
-    version: process.env.PACKAGE_VERSION,
+    name,
+    version,
 }
