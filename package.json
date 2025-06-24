@@ -78,7 +78,7 @@
     "watch": "run-p watch:*",
     "watch:tsdown": "tsdown --watch",
     "watch:test": "wait-on dist/index.js && warun dist/index.js \"test/*.js\" \"test/fixtures/ast/*/*.json\" \"test/fixtures/*\" --debounce 1000 --no-initial -- nyc mocha \"test/*.js\" --reporter dot --timeout 10000",
-    "watch:update-ast": "wait-on dist/index.js && warun dist/index.js \"test/fixtures/ast/*/*.vue\" -- node scripts/update-fixtures-ast.js",
+    "watch:update-ast": "wait-on dist/index.js && warun dist/index.js \"test/fixtures/ast/*/*.vue\" -- ts-node scripts/update-fixtures-ast.js",
     "watch:coverage-report": "wait-on coverage/lcov-report/index.html && opener coverage/lcov-report/index.html"
   },
   "repository": {
