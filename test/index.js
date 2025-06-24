@@ -928,7 +928,7 @@ export default {}
             assert.strictEqual(comments[0].loc.start.line, 3)
 
             assert.strictEqual(comments[1].type, "Block")
-            assert.strictEqual(comments[1].value, " second")
+            assert.strictEqual(comments[1].value, "*\n * second\n ")
             assert.strictEqual(comments[1].loc.start.line, 9)
 
             // Verify comments are sorted by range
