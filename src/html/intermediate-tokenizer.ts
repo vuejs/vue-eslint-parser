@@ -4,7 +4,6 @@
  * See LICENSE file in root directory for full license.
  */
 import assert from "assert"
-import last from "lodash/last"
 import type {
     ErrorCode,
     HasLocation,
@@ -175,7 +174,7 @@ export class IntermediateTokenizer {
             // VExpressionEnd was not found.
             // Concatenate the deferred tokens to the committed token.
             const start = this.expressionStartToken
-            const end = last(this.expressionTokens) || start
+            const end = this.expressionTokens.at(-1) || start
             const value = this.expressionTokens.reduce(concat, start.value)
             this.expressionStartToken = null
             this.expressionTokens = []
@@ -240,7 +239,7 @@ export class IntermediateTokenizer {
         if (this.expressionStartToken != null) {
             // Defer this token until a VExpressionEnd token or a non-text token appear.
             const lastToken =
-                last(this.expressionTokens) || this.expressionStartToken
+                this.expressionTokens.at(-1) || this.expressionStartToken
             if (lastToken.range[1] === token.range[0]) {
                 this.expressionTokens.push(token)
                 return null
@@ -552,7 +551,7 @@ export class IntermediateTokenizer {
         }
 
         const start = this.expressionStartToken
-        const end = last(this.expressionTokens) || start
+        const end = this.expressionTokens.at(-1) || start
 
         // If it's '{{}}', it's handled as a text.
         if (token.range[0] === start.range[1]) {

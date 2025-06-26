@@ -3,8 +3,6 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import first from "lodash/first"
-import last from "lodash/last"
 import sortedIndexBy from "lodash/sortedIndexBy"
 import type {
     ESLintArrayExpression,
@@ -521,7 +519,7 @@ function parseFilter(
                     }
                 }
 
-                const token = last(ast.tokens)!
+                const token = ast.tokens!.at(-1)!
                 return throwUnexpectedTokenError(token.value, token)
             }
 
@@ -536,7 +534,7 @@ function parseFilter(
 
         // Update range.
         const firstToken = tokens[0]
-        const lastToken = last(tokens)!
+        const lastToken = tokens.at(-1)!
         expression.range = [firstToken.range[0], lastToken.range[1]]
         expression.loc = { start: firstToken.loc.start, end: lastToken.loc.end }
 
@@ -778,7 +776,7 @@ export function parseExpression(
     }
 
     // Update range.
-    const lastToken = last(ret.tokens)!
+    const lastToken = ret.tokens.at(-1)!
     ret.expression.range[1] = lastToken.range[1]
     ret.expression.loc.end = lastToken.loc.end
 
@@ -933,7 +931,7 @@ function parseVForExpressionForEcmaVersion5(
             if (open != null) {
                 open.value = "("
             }
-            const close = last(parsedAliases.tokens)
+            const close = parsedAliases.tokens.at(-1)
             if (close != null) {
                 close.value = ")"
             }
@@ -977,7 +975,7 @@ function parseVForExpressionForEcmaVersion5(
         comments.push(...parsedIterator.comments)
         const { right, references } = parsedIterator
         const firstToken = tokens[0]
-        const lastToken = last(tokens) || firstToken
+        const lastToken = tokens.at(-1) || firstToken
         const expression: VForExpression = {
             type: "VForExpression",
             range: [firstToken.range[0], lastToken.range[1]],
@@ -1136,8 +1134,8 @@ function parseVOnExpressionBody(
         ).argument as ESLintFunctionExpression
         const block = functionDecl.body
         const body = block.body
-        const firstStatement = first(body)
-        const lastStatement = last(body)
+        const firstStatement = body[0]
+        const lastStatement = body.at(-1)
         const expression: VOnExpression = {
             type: "VOnExpression",
             range: [
@@ -1231,8 +1229,8 @@ export function parseSlotScopeExpression(
         )
         const references = scope.references
         const variables = scope.variables
-        const firstParam = first(params)!
-        const lastParam = last(params)!
+        const firstParam = params[0]
+        const lastParam = params.at(-1)!
         const expression: VSlotScopeExpression = {
             type: "VSlotScopeExpression",
             range: [firstParam.range[0], lastParam.range[1]],
@@ -1330,8 +1328,8 @@ export function parseGenericExpression(
         )
         const references = scope.references
         const variables = scope.variables
-        const firstParam = first(params)!
-        const lastParam = last(params)!
+        const firstParam = params[0]
+        const lastParam = params.at(-1)!
         const expression: VGenericExpression = {
             type: "VGenericExpression",
             range: [firstParam.range[0], lastParam.range[1]],

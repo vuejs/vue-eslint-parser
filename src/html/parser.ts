@@ -4,7 +4,6 @@
  * See LICENSE file in root directory for full license.
  */
 import assert from "assert"
-import last from "lodash/last"
 import findLastIndex from "lodash/findLastIndex"
 import type {
     ErrorCode,
@@ -160,7 +159,7 @@ function adjustAttributeName(name: string, namespace: Namespace): string {
  */
 function propagateEndLocation(node: VDocumentFragment | VElement): void {
     const lastChild =
-        (node.type === "VElement" ? node.endTag : null) || last(node.children)
+        (node.type === "VElement" ? node.endTag : null) || node.children.at(-1)
     if (lastChild != null) {
         node.range[1] = lastChild.range[1]
         node.loc.end = lastChild.loc.end
@@ -236,7 +235,7 @@ export class Parser {
      * Get the current node.
      */
     private get currentNode(): VDocumentFragment | VElement {
-        return last(this.elementStack) || this.document
+        return this.elementStack.at(-1) || this.document
     }
 
     /**
