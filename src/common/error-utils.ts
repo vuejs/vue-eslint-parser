@@ -1,5 +1,5 @@
 import type { ParseError, VDocumentFragment } from "../ast/index"
-import sortedIndexBy from "lodash/sortedIndexBy"
+import { sortedIndexBy } from "lodash-es"
 /**
  * Insert the given error.
  * @param document The document that the node is belonging to.

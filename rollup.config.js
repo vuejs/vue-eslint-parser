@@ -9,7 +9,7 @@ import replace from "rollup-plugin-replace"
 
 const pkg = require("./package.json")
 const deps = new Set(
-    ["assert", "events", "path"].concat(Object.keys(pkg.dependencies))
+    ["assert", "events", "path"].concat(Object.keys(pkg.dependencies)),
 )
 
 export default {
@@ -31,5 +31,5 @@ export default {
             "process.env.PACKAGE_VERSION": `"${pkg.version}"`,
         }),
     ],
-    external: id => deps.has(id) || id.startsWith("lodash"),
+    external: (id) => deps.has(id),
 }

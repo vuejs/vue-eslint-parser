@@ -50,8 +50,7 @@ import {
     getScriptParser,
     getParserLangFromSFC,
 } from "../common/parser-options"
-import sortedIndexBy from "lodash/sortedIndexBy"
-import sortedLastIndexBy from "lodash/sortedLastIndexBy"
+import { sortedIndexBy, sortedLastIndexBy } from "lodash-es"
 import type {
     CustomTemplateTokenizer,
     CustomTemplateTokenizerConstructor,
