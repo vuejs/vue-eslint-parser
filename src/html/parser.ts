@@ -4,7 +4,6 @@
  * See LICENSE file in root directory for full license.
  */
 import assert from "assert"
-import findLastIndex from "lodash/findLastIndex"
 import type {
     ErrorCode,
     HasLocation,
@@ -700,8 +699,7 @@ export class Parser {
     protected EndTag(token: EndTag): void {
         debug("[html] EndTag %j", token)
 
-        const i = findLastIndex(
-            this.elementStack,
+        const i = this.elementStack.findLastIndex(
             (el) => el.name.toLowerCase() === token.name,
         )
         if (i === -1) {
