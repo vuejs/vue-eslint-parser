@@ -3,7 +3,7 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-import { sortedIndexBy } from "lodash-es"
+import { sortedIndexBy } from "../utils/utils"
 import type {
     ESLintArrayExpression,
     ESLintArrayPattern,

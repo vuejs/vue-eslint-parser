@@ -1,4 +1,4 @@
-import { sortedIndexBy, sortedLastIndexBy } from "lodash-es"
+import { sortedIndexBy, sortedLastIndexBy } from "../utils/utils"
 import type { LocationRange, Token, VDocumentFragment } from "../ast/index"
 import type { LinesAndColumns } from "./lines-and-columns"
 
