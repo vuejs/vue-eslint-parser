@@ -12,7 +12,6 @@
 const assert = require("assert")
 const fs = require("fs")
 const path = require("path")
-const lodash = require("lodash")
 const parser = require("../src")
 const eslint = require("eslint")
 const semver = require("semver")
@@ -116,7 +115,7 @@ function validateParent(source, parserOptions) {
             ruleContext.sourceCode.parserServices.defineTemplateBodyVisitor({
                 "*"(node) {
                     if (stack.length >= 1) {
-                        const parent = lodash.last(stack)
+                        const parent = stack.at(-1)
                         assert(
                             node.parent === parent,
                             `The parent of ${nodeToString(

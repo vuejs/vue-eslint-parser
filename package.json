@@ -18,7 +18,6 @@
     "eslint-visitor-keys": "^4.2.0",
     "espree": "^10.3.0",
     "esquery": "^1.6.0",
-    "lodash": "^4.17.21",
     "semver": "^7.6.3"
   },
   "devDependencies": {
@@ -31,7 +30,6 @@
     "@eslint/js": "^9.19.0",
     "@types/debug": "^4.1.7",
     "@types/estree": "^1.0.0",
-    "@types/lodash": "^4.14.186",
     "@types/mocha": "^9.0.0",
     "@types/node": "^18.8.4",
     "@types/semver": "^7.3.12",
@@ -84,7 +82,7 @@
     "watch:tsc": "tsc --module es2015 --watch",
     "watch:rollup": "wait-on .temp/index.js && rollup -c -o index.js --watch",
     "watch:test": "wait-on index.js && warun index.js \"test/*.js\" \"test/fixtures/ast/*/*.json\" \"test/fixtures/*\" --debounce 1000 --no-initial -- nyc mocha \"test/*.js\" --reporter dot --timeout 10000",
-    "watch:update-ast": "wait-on index.js && warun index.js \"test/fixtures/ast/*/*.vue\" -- node scripts/update-fixtures-ast.js",
+    "watch:update-ast": "wait-on index.js && warun index.js \"test/fixtures/ast/*/*.vue\" -- ts-node scripts/update-fixtures-ast.js",
     "watch:coverage-report": "wait-on coverage/lcov-report/index.html && opener coverage/lcov-report/index.html"
   },
   "repository": {
