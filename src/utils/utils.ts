@@ -153,6 +153,7 @@ export function sortedIndexBy<T>(
  *    R.sortedLastIndexBy(data, item, valueFunction)
  * @example
  *    R.sortedLastIndexBy([{age:20},{age:22}],{age:21},prop('age')) // => 1
+ *
  * MIT License | Copyright (c) 2018 remeda | https://remedajs.com/
  *
  * The implementation is copied from remeda package:
@@ -173,4 +174,107 @@ export function sortedLastIndexBy<T>(
         array,
         (pivot, index) => valueFunction(pivot, index, array) <= value,
     )
+}
+
+/**
+ * Creates a duplicate-free version of an array.
+ *
+ * This function takes an array and returns a new array containing only the unique values
+ * from the original array, preserving the order of first occurrence.
+ *
+ * @template T - The type of elements in the array.
+ * @param {T[]} arr - The array to process.
+ * @returns {T[]} A new array with only unique values from the original array.
+ *
+ * @example
+ * const array = [1, 2, 2, 3, 4, 4, 5];
+ * const result = uniq(array);
+ * // result will be [1, 2, 3, 4, 5]
+ *
+ * MIT © Viva Republica, Inc. | https://es-toolkit.dev/
+ *
+ * The implementation is copied from es-toolkit package:
+ * https://github.com/toss/es-toolkit/blob/16709839f131269b84cdd96e9645df52648ccedf/src/array/uniq.ts#L16
+ */
+export function uniq<T>(arr: readonly T[]): T[] {
+    return Array.from(new Set(arr))
+}
+
+/**
+ * Returns the intersection of multiple arrays.
+ *
+ * This function takes multiple arrays and returns a new array containing the elements that are
+ * present in all provided arrays. It effectively filters out any elements that are not found
+ * in every array.
+ *
+ * @template T - The type of elements in the arrays.
+ * @param {...(ArrayLike<T> | null | undefined)} arrays - The arrays to compare.
+ * @returns {T[]} A new array containing the elements that are present in all arrays.
+ *
+ * @example
+ * const array1 = [1, 2, 3, 4, 5];
+ * const array2 = [3, 4, 5, 6, 7];
+ * const result = intersection(array1, array2);
+ * // result will be [3, 4, 5] since these elements are in both arrays.
+ *
+ * MIT © Viva Republica, Inc. | https://es-toolkit.dev/
+ *
+ * The implementation is copied from es-toolkit package:
+ * https://github.com/toss/es-toolkit/blob/16709839f131269b84cdd96e9645df52648ccedf/src/compat/array/intersection.ts#L22
+ * https://github.com/toss/es-toolkit/blob/16709839f131269b84cdd96e9645df52648ccedf/src/array/intersection.ts#L19
+ */
+export function intersection<T>(...arrays: (T[] | null | undefined)[]): T[] {
+    if (arrays.length === 0) {
+        return []
+    }
+
+    let result: T[] = uniq(arrays[0]!)
+
+    for (let i = 1; i < arrays.length; i++) {
+        const array = arrays[i]
+        const secondSet = new Set(array)
+
+        result = result.filter((item) => secondSet.has(item))
+    }
+
+    return result
+}
+
+/**
+ * This function takes multiple arrays and returns a new array containing only the unique values
+ * from all input arrays, preserving the order of their first occurrence.
+ *
+ * @template T - The type of elements in the arrays.
+ * @param {Array<ArrayLike<T> | null | undefined>} arrays - The arrays to inspect.
+ * @returns {T[]} Returns the new array of combined unique values.
+ *
+ * @example
+ * // Returns [2, 1]
+ * union([2], [1, 2]);
+ *
+ * @example
+ * // Returns [2, 1, 3]
+ * union([2], [1, 2], [2, 3]);
+ *
+ * @example
+ * // Returns [1, 3, 2, [5], [4]] (does not deeply flatten nested arrays)
+ * union([1, 3, 2], [1, [5]], [2, [4]]);
+ *
+ * @example
+ * // Returns [0, 2, 1] (ignores non-array values like 3 and { '0': 1 })
+ * union([0], 3, { '0': 1 }, null, [2, 1]);
+ * @example
+ * // Returns [0, 'a', 2, 1] (treats array-like object { 0: 'a', length: 1 } as a valid array)
+ * union([0], { 0: 'a', length: 1 }, [2, 1]);
+ *
+ * MIT © Viva Republica, Inc. | https://es-toolkit.dev/
+ *
+ * The implementation is copied from es-toolkit package:
+ * https://github.com/toss/es-toolkit/blob/16709839f131269b84cdd96e9645df52648ccedf/src/compat/array/union.ts#L61
+ * https://github.com/toss/es-toolkit/blob/16709839f131269b84cdd96e9645df52648ccedf/src/compat/array/flattenDepth.ts#L21
+ */
+export function union<T>(...arrays: T[][]): T[] {
+    const flattened = arrays.flat()
+
+    return uniq(flattened)
 }
