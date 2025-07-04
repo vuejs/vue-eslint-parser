@@ -2,7 +2,7 @@
  * @fileoverview Define utilify functions for token store.
  * @author Toru Nagashima
  */
-import sortedIndexBy from "lodash/sortedIndexBy"
+import { sortedIndexBy } from "../../utils/utils"
 import type { HasLocation } from "../../ast/index"
 
 /**

@@ -4,8 +4,6 @@
  * See LICENSE file in root directory for full license.
  */
 import assert from "assert"
-import last from "lodash/last"
-import findLastIndex from "lodash/findLastIndex"
 import type {
     ErrorCode,
     HasLocation,
@@ -52,8 +50,7 @@ import {
     getScriptParser,
     getParserLangFromSFC,
 } from "../common/parser-options"
-import sortedIndexBy from "lodash/sortedIndexBy"
-import sortedLastIndexBy from "lodash/sortedLastIndexBy"
+import { sortedIndexBy, sortedLastIndexBy } from "../utils/utils"
 import type {
     CustomTemplateTokenizer,
     CustomTemplateTokenizerConstructor,
@@ -160,7 +157,7 @@ function adjustAttributeName(name: string, namespace: Namespace): string {
  */
 function propagateEndLocation(node: VDocumentFragment | VElement): void {
     const lastChild =
-        (node.type === "VElement" ? node.endTag : null) || last(node.children)
+        (node.type === "VElement" ? node.endTag : null) || node.children.at(-1)
     if (lastChild != null) {
         node.range[1] = lastChild.range[1]
         node.loc.end = lastChild.loc.end
@@ -236,7 +233,7 @@ export class Parser {
      * Get the current node.
      */
     private get currentNode(): VDocumentFragment | VElement {
-        return last(this.elementStack) || this.document
+        return this.elementStack.at(-1) || this.document
     }
 
     /**
@@ -701,8 +698,7 @@ export class Parser {
     protected EndTag(token: EndTag): void {
         debug("[html] EndTag %j", token)
 
-        const i = findLastIndex(
-            this.elementStack,
+        const i = this.elementStack.findLastIndex(
             (el) => el.name.toLowerCase() === token.name,
         )
         if (i === -1) {
