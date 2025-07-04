@@ -25,7 +25,7 @@ import {
 import { parseStyleElements } from "./style/index"
 import { analyzeScope } from "./script/scope-analyzer"
 import { analyzeScriptSetupScope } from "./script-setup/scope-analyzer"
-import { name, version } from "../package.json"
+import { name, version } from "../package.json" with { type: "json" }
 
 const STARTS_WITH_LT = /^\s*</u
 
