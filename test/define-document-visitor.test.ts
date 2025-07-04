@@ -1,22 +1,16 @@
 /**
  * @author Yosuke Ota <https://github.com/ota-meshi>
  */
-"use strict"
 
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const assert = require("assert")
-const path = require("path")
-const eslint = require("eslint")
-const parser = require("../src/index.ts")
-
-//------------------------------------------------------------------------------
-// Helpers
-//------------------------------------------------------------------------------
-
-const Linter = eslint.Linter
+import type { ESLint } from "eslint"
+import { Linter } from "eslint"
+import { assert, describe, it } from "vitest"
+import * as parser from "../src/index"
+import type { CallExpression, Identifier } from "estree"
 
 //------------------------------------------------------------------------------
 // Tests
@@ -44,12 +38,12 @@ describe("parserServices.defineDocumentVisitor tests", () => {
 
         const linter = new Linter({ configType: "flat" })
 
-        const rules = {
+        const rules: ESLint.Plugin["rules"] = {
             "test-no-forbidden": {
-                create(context) {
+                create(context: any) {
                     return context.sourceCode.parserServices.defineDocumentVisitor(
                         {
-                            'Identifier[name="forbidden"]'(node) {
+                            'Identifier[name="forbidden"]'(node: Identifier) {
                                 context.report({
                                     node,
                                     message: 'no "forbidden"',
@@ -60,10 +54,10 @@ describe("parserServices.defineDocumentVisitor tests", () => {
                 },
             },
             "test-no-call": {
-                create(context) {
+                create(context: any) {
                     return context.sourceCode.parserServices.defineDocumentVisitor(
                         {
-                            CallExpression(node) {
+                            CallExpression(node: CallExpression) {
                                 context.report({
                                     node,
                                     message: "no call",
