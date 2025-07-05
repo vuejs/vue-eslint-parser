@@ -1,5 +1,10 @@
-import type { Identifier } from "estree"
-import type { Scope, ScopeManager } from "eslint-scope"
+import type { Identifier, Node } from "estree"
+import type {
+    Scope,
+    ScopeManager,
+    Variable,
+    VariableDefinition,
+} from "eslint-scope"
 import type { ESLintProgram, Token } from "../src/ast"
 import type { ParserOptions } from "../src/common/parser-options"
 import escope from "eslint-scope"
@@ -41,7 +46,7 @@ export function getAllTokens(ast: ESLintProgram): Token[] {
 export function scopeToJSON(scopeManager: ScopeManager) {
     return JSON.stringify(normalizeScope(scopeManager.globalScope), replacer, 4)
 
-    function normalizeScope(scope: Scope) {
+    function normalizeScope(scope: Scope): any {
         return {
             type: scope.type,
             variables: scope.variables.map(normalizeVar),
@@ -51,7 +56,7 @@ export function scopeToJSON(scopeManager: ScopeManager) {
         }
     }
 
-    function normalizeVar(v) {
+    function normalizeVar(v: Variable) {
         return {
             name: v.name,
             identifiers: v.identifiers.map(normalizeId),
@@ -60,7 +65,7 @@ export function scopeToJSON(scopeManager: ScopeManager) {
         }
     }
 
-    function normalizeReference(reference) {
+    function normalizeReference(reference: any) {
         return {
             identifier: normalizeId(reference.identifier),
             from: reference.from.type,
@@ -77,7 +82,7 @@ export function scopeToJSON(scopeManager: ScopeManager) {
         }
     }
 
-    function normalizeDef(def) {
+    function normalizeDef(def: VariableDefinition) {
         return {
             type: def.type,
             node: normalizeDefNode(def.node),
@@ -85,7 +90,7 @@ export function scopeToJSON(scopeManager: ScopeManager) {
         }
     }
 
-    function normalizeId(identifier: Identifier) {
+    function normalizeId(identifier: Identifier | null) {
         return (
             identifier && {
                 type: identifier.type,
@@ -95,7 +100,7 @@ export function scopeToJSON(scopeManager: ScopeManager) {
         )
     }
 
-    function normalizeDefNode(node) {
+    function normalizeDefNode(node: Node) {
         return {
             type: node.type,
             loc: node.loc,
@@ -106,7 +111,10 @@ export function scopeToJSON(scopeManager: ScopeManager) {
 /**
  * Analyze scope
  */
-export function analyze(ast: ESLintProgram, parserOptions: ParserOptions) {
+export function analyze(
+    ast: ESLintProgram,
+    parserOptions: ParserOptions,
+): ScopeManager {
     const ecmaVersion = parserOptions.ecmaVersion ?? 2022
     const ecmaFeatures = parserOptions.ecmaFeatures ?? {}
     const sourceType = parserOptions.sourceType ?? "script"
@@ -121,11 +129,11 @@ export function analyze(ast: ESLintProgram, parserOptions: ParserOptions) {
 
     return result
 
-    function getFallbackKeys(node) {
+    function getFallbackKeys(node: any) {
         return Object.keys(node).filter(fallbackKeysFilter, node)
     }
 
-    function fallbackKeysFilter(key) {
+    function fallbackKeysFilter(key: string) {
         const value = null
         return (
             key !== "comments" &&
