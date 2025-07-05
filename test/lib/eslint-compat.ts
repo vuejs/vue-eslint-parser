@@ -1,6 +1,10 @@
-import type { ESLint } from "eslint"
+import type { ESLint, Linter, RuleTester } from "eslint"
 
-export default function compat(eslint: any) {
+export default function compat(eslint: any): {
+    ESLint: typeof ESLint
+    RuleTester: typeof RuleTester
+    Linter: typeof Linter
+} {
     return {
         ESLint: eslint.ESLint || getESLintClassForV6(eslint),
         RuleTester: eslint.RuleTester,
@@ -8,16 +12,17 @@ export default function compat(eslint: any) {
     }
 }
 
-function getESLintClassForV6(eslint: any): ESLint {
+function getESLintClassForV6(eslint: any): typeof ESLint {
     class ESLintForV6 {
         public engine
 
+        // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
         static get version() {
             return eslint.CLIEngine.version
         }
 
         // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
-        constructor(options: ESLint.Options) {
+        constructor(options: any) {
             const {
                 overrideConfig: {
                     plugins,
@@ -29,14 +34,14 @@ function getESLintClassForV6(eslint: any): ESLint {
                     plugins: [],
                     globals: {},
                     rules: {},
-                },
+                } as any,
                 overrideConfigFile,
                 fix,
                 reportUnusedDisableDirectives,
                 plugins: pluginsMap,
                 ...otherOptions
             } = options || {}
-            const newOptions: CLIEngine.Options = {
+            const newOptions = {
                 fix: Boolean(fix),
                 reportUnusedDisableDirectives: reportUnusedDisableDirectives
                     ? reportUnusedDisableDirectives !== "off"
@@ -59,7 +64,7 @@ function getESLintClassForV6(eslint: any): ESLint {
                               }
                               return o
                           },
-                          {} satisfies NonNullable<CLIEngine.Options["rules"]>,
+                          {} as Record<string, any>,
                       )
                     : undefined,
                 ...overrideConfig,
@@ -71,29 +76,33 @@ function getESLintClassForV6(eslint: any): ESLint {
             }
         }
 
+        // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
         async lintText(
             ...params: Parameters<ESLint["lintText"]>
         ): ReturnType<ESLint["lintText"]> {
-            const result = this.engine.executeOnText(
+            const result = await this.engine.executeOnText(
                 params[0],
                 params[1]!.filePath,
             )
             return result.results
         }
 
+        // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
         async lintFiles(
             ...params: Parameters<ESLint["lintFiles"]>
         ): ReturnType<ESLint["lintFiles"]> {
-            const result = this.engine.executeOnFiles(
+            const result = await this.engine.executeOnFiles(
                 Array.isArray(params[0]) ? params[0] : [params[0]],
             )
             return result.results
         }
 
+        // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
         static async outputFixes(
-            ...params: Parameters<ESLint["outputFixes"]>
-        ): ReturnType<ESLint["outputFixes"]> {
-            return eslint.CLIEngine.outputFixes({
+            ...params: Parameters<typeof ESLint.outputFixes>
+        ): ReturnType<typeof ESLint.outputFixes> {
+            // eslint-disable-next-line no-return-await
+            return await eslint.CLIEngine.outputFixes({
                 results: params[0],
             })
         }

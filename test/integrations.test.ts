@@ -22,6 +22,7 @@ const FIXTURE_DIR = path.join(__dirname, "fixtures/integrations")
 
 describe("Integration tests", () => {
     beforeAll(async () => {
+        // @ts-expect-error -- ignore
         await import("ts-node/register")
     })
     for (const target of fs.readdirSync(FIXTURE_DIR)) {
@@ -75,8 +76,11 @@ describe("Integration tests", () => {
                 throw e
             }
 
-            function normalizeReport(report, option = {}) {
-                return report
+            function normalizeReport(
+                result: ESLintRaw.ESLint.LintResult[],
+                option: { withoutMessage?: boolean } = {},
+            ) {
+                return result
                     .filter((res) => res.messages.length)
                     .map((res) => ({
                         filePath: res.filePath
