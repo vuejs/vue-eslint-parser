@@ -58,7 +58,7 @@ jobs:
     - name: Build
       run: npm run -s build
     - name: Test
-      run: npm run -s test:mocha
+      run: npm run -s test
   test-for-old-eslint:
     name: Test
     strategy:
@@ -82,4 +82,4 @@ jobs:
     - name: Install ESLint v${{ matrix.eslint }}
       run: node scripts/ci-install-eslint ${{ matrix.eslint }}
     - name: Test
-      run: npm run -s test:debug
+      run: npm run -s test
