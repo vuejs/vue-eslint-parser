@@ -7,7 +7,7 @@ import type {
 } from "eslint-scope"
 import type { ESLintProgram, Token } from "../src/ast"
 import type { ParserOptions } from "../src/common/parser-options"
-import escope from "eslint-scope"
+import * as escope from "eslint-scope"
 
 /**
  * Remove `parent` properties from the given AST.

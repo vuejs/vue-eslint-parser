@@ -3,7 +3,7 @@ import { defineConfig } from "vitest/config"
 export default defineConfig({
     test: {
         include: [
-            "test/{parser-options,crlf,define-document-visitor,define-custom-blocks-visitor,parser-options-project,document-fragment,tokens,variables-references}.test.ts",
+            "test/{parser-options,crlf,define-document-visitor,define-custom-blocks-visitor,parser-options-project,document-fragment,tokens,variables-references,ast}.test.ts",
         ],
     },
 })

@@ -3,27 +3,29 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-"use strict"
 
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const assert = require("assert")
-const fs = require("fs")
-const path = require("path")
-const parser = require("../src")
-const eslint = require("eslint")
-const semver = require("semver")
-const { scopeToJSON, analyze, replacer, getAllTokens } = require("./test-utils")
+import type { Rule } from "eslint"
+import type { Node } from "../src/ast"
+import type { ParserOptions } from "../src/common/parser-options"
+import fs from "node:fs"
+import path from "node:path"
+import { describe, it, assert } from "vitest"
+import { Linter } from "eslint"
+import semver from "semver"
+import * as parser from "../src"
+import { scopeToJSON, analyze, replacer, getAllTokens } from "./test-utils"
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
-const Linter = eslint.Linter
+// eslint-disable-next-line no-undef
 const ROOT = path.join(__dirname, "fixtures/ast")
 const TARGETS = fs.readdirSync(ROOT)
-const PARSER_OPTIONS = {
+const PARSER_OPTIONS: ParserOptions = {
     comment: true,
     ecmaVersion: "latest",
     sourceType: "module",
@@ -33,22 +35,28 @@ const PARSER_OPTIONS = {
     eslintScopeManager: true,
 }
 
+type TreeNode = {
+    type?: string
+    text?: string
+    children: TreeNode[]
+}
+
 /**
  * Create simple tree.
- * @param {string} source The source code.
- * @param {object} parserOptions The parser options.
- * @returns {object} Simple tree.
+ * @param source The source code.
+ * @param parserOptions The parser options.
+ * @returns Simple tree.
  */
-function getTree(source, parserOptions) {
+function getTree(source: string, parserOptions: any) {
     const linter = new Linter({ configType: "flat" })
-    const stack = []
-    const root = { children: [] }
-    let current = root
+    const stack: TreeNode[] = []
+    const root: TreeNode = { children: [] }
+    let current: TreeNode = root
 
-    const maketree = {
+    const maketree: Rule.RuleModule = {
         create: (ruleContext) =>
             ruleContext.sourceCode.parserServices.defineTemplateBodyVisitor({
-                "*"(node) {
+                "*"(node: Node) {
                     stack.push(current)
                     current.children.push(
                         (current = {
@@ -59,7 +67,7 @@ function getTree(source, parserOptions) {
                     )
                 },
                 "*:exit"() {
-                    current = stack.pop()
+                    current = stack.pop()!
                 },
             }),
     }
@@ -75,10 +83,10 @@ function getTree(source, parserOptions) {
                 },
             },
             languageOptions: {
-                parser: parser,
+                parser,
                 ecmaVersion: parserOptions.ecmaVersion ?? "latest",
                 sourceType: parserOptions.sourceType ?? "module",
-                parserOptions: parserOptions,
+                parserOptions,
             },
             rules: { "test/maketree": "error" },
         },
@@ -92,28 +100,27 @@ function getTree(source, parserOptions) {
 
 /**
  * Convert a given node to string.
- * @param {Node} node The node to make string expression.
- * @param {string} source The source code.
- * @returns {string} The string expression of the node.
+ * @param node The node to make string expression.
+ * @param source The source code.
+ * @returns The string expression of the node.
  */
-function nodeToString(node, source) {
+function nodeToString(node: Node, source: string): string {
     return node ? `${node.type}[${source.slice(...node.range)}]` : "undefined"
 }
 
 /**
  * Validate the parent property of every node.
- * @param {string} source The source code.
- * @param {object} parserOptions The parser options.
- * @returns {void}
+ * @param source The source code.
+ * @param parserOptions The parser options.
  */
-function validateParent(source, parserOptions) {
+function validateParent(source: string, parserOptions: any) {
     const linter = new Linter({ configType: "flat" })
-    const stack = []
+    const stack: Node[] = []
 
-    const validateparent = {
+    const validateparent: Rule.RuleModule = {
         create: (ruleContext) =>
             ruleContext.sourceCode.parserServices.defineTemplateBodyVisitor({
-                "*"(node) {
+                "*"(node: Node) {
                     if (stack.length >= 1) {
                         const parent = stack.at(-1)
                         assert(
@@ -124,7 +131,7 @@ function validateParent(source, parserOptions) {
                             )} should be ${nodeToString(
                                 parent,
                                 source,
-                            )}, but got ${nodeToString(node.parent, source)}`,
+                            )}, but got ${nodeToString(node.parent!, source)}`,
                         )
                     }
                     stack.push(node)
@@ -149,7 +156,7 @@ function validateParent(source, parserOptions) {
                 parser,
                 ecmaVersion: parserOptions.ecmaVersion ?? "latest",
                 sourceType: parserOptions.sourceType ?? "module",
-                parserOptions: parserOptions,
+                parserOptions,
             },
             rules: { "test/validateparent": "error" },
         },
@@ -173,8 +180,13 @@ describe("Template AST", () => {
         const requirementsPath = path.join(ROOT, `${name}/requirements.json`)
         const servicesPath = path.join(ROOT, `${name}/services.json`)
         const source = fs.readFileSync(sourcePath, "utf8")
-        const parserOptions = optionsPath ? require(optionsPath) : {}
-        const requirements = fs.existsSync(requirementsPath)
+
+        const parserOptions: ParserOptions = optionsPath
+            ? require(optionsPath) // eslint-disable-line @typescript-eslint/no-require-imports
+            : {}
+        const requirements: Record<string, string> = fs.existsSync(
+            requirementsPath,
+        )
             ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
             : {}
         const services = fs.existsSync(servicesPath)
@@ -185,12 +197,13 @@ describe("Template AST", () => {
                 Object.entries(parserOptions.templateTokenizer).map(
                     ([key, value]) => [
                         key,
-                        path.resolve(__dirname, "../", value),
+                        // eslint-disable-next-line no-undef
+                        path.resolve(__dirname, "../", value as string),
                     ],
                 ),
             )
         }
-        const options = {
+        const options: ParserOptions = {
             filePath: sourcePath,
             ...PARSER_OPTIONS,
             ...parserOptions,
@@ -201,7 +214,7 @@ describe("Template AST", () => {
                 const version =
                     pkgName === "node"
                         ? process.version
-                        : require(`${pkgName}/package.json`).version
+                        : require(`${pkgName}/package.json`).version // eslint-disable-line @typescript-eslint/no-require-imports
                 return !semver.satisfies(version, pkgVersion)
             })
         ) {
@@ -252,7 +265,8 @@ describe("Template AST", () => {
             })
 
             it("should have correct location.", () => {
-                const lines = source.match(/[^\r\n]*(?:\r?\n|$)/gu) ?? []
+                const lines: string[] =
+                    source.match(/[^\r\n]*(?:\r?\n|$)/gu) ?? []
                 lines.push(String.fromCodePoint(0))
                 for (const token of getAllTokens(actual.ast)) {
                     const line0 = token.loc.start.line - 1
@@ -318,7 +332,7 @@ describe("Template AST", () => {
             if (services) {
                 it("should have correct services.", () => {
                     assert.deepStrictEqual(
-                        Object.keys(actual.services).sort(),
+                        Object.keys(actual.services!).sort(),
                         services,
                     )
                 })
