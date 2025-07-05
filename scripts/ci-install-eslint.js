@@ -31,7 +31,7 @@ function sh(command) {
 
     // Install ESLint of the requested version
     await sh(`npm install eslint@${requestedVersionSpec} -f`)
-    if (semver.compare(requestedVersionSpec, "9.0.0"))
+    if (semver.compare(requestedVersion, "9.0.0"))
         await sh(`npm install @types/eslint -f`)
 
     // Install ESLint submodule of the requested version
