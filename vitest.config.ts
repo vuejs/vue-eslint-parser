@@ -4,7 +4,7 @@ export default defineConfig({
     test: {
         reporters: "dot",
         include: ["test/**/*.test.ts"],
-        teardownTimeout: 60000,
+        testTimeout: 60000,
         coverage: {
             include: ["src"],
         },
