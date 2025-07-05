@@ -3,11 +3,11 @@
 //------------------------------------------------------------------------------
 
 import { assert, beforeAll, describe, it } from "vitest"
-import path from "path"
-import fs from "fs-extra"
+import path from "node:path"
+import fs from "node:fs"
 import cp from "child_process"
 import eslintCompat from "./lib/eslint-compat"
-import * as ESLintRaw from "eslint"
+import ESLintRaw from "eslint"
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -22,7 +22,6 @@ const FIXTURE_DIR = path.join(__dirname, "fixtures/integrations")
 
 describe("Integration tests", () => {
     beforeAll(async () => {
-        // @ts-expect-error -- ignore
         await import("ts-node/register")
     })
     for (const target of fs.readdirSync(FIXTURE_DIR)) {

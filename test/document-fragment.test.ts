@@ -3,8 +3,8 @@
 //------------------------------------------------------------------------------
 
 import type { VDocumentFragment } from "../src/ast"
-import fs from "fs"
-import path from "path"
+import fs from "node:fs"
+import path from "node:path"
 import { describe, it, assert } from "vitest"
 import * as parser from "../src"
 import { replacer } from "./test-utils"

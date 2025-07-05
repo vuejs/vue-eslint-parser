@@ -11,10 +11,9 @@
 import type { Rule } from "eslint"
 import path from "node:path"
 import { describe, it, assert, beforeEach, afterEach } from "vitest"
-// @ts-expect-error -- ignore
-import * as tsParser from "@typescript-eslint/parser"
+import tsParser from "@typescript-eslint/parser"
 import fs from "fs-extra"
-import * as eslint from "eslint"
+import eslint from "eslint"
 import { parse, parseForESLint } from "../src"
 import * as parser from "../src"
 import type { Node, VAttribute, VElement, VText } from "../src/ast"

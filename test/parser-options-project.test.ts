@@ -1,6 +1,5 @@
 import { describe, it, assert } from "vitest"
 import { parseForESLint } from "../src"
-// @ts-expect-error -- ignore
 import * as espree from "espree"
 import type { Linter } from "eslint"
 

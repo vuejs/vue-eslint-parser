@@ -7,13 +7,12 @@
 //------------------------------------------------------------------------------
 
 import type { ESLint, Rule } from "eslint"
-import type { VElement } from "../src/ast"
+import type { Location, VElement } from "../src/ast"
 import type { CustomBlockContext } from "../src/sfc/custom-block"
 import { assert, describe, it } from "vitest"
 import { Linter } from "eslint"
 import { builtinRules } from "eslint/use-at-your-own-risk"
 import jsonParser from "jsonc-eslint-parser"
-// @ts-expect-error -- ignore
 import * as espree from "espree"
 import * as parser from "../src"
 import type { Program } from "estree"
@@ -55,7 +54,7 @@ const noParsingErrorRule: Rule.RuleModule = {
     create(context) {
         const parseError = context.getSourceCode().parserServices.parseError
         if (parseError) {
-            let loc = undefined
+            let loc: Location | undefined = undefined
             if ("column" in parseError && "lineNumber" in parseError) {
                 loc = {
                     line: parseError.lineNumber,
@@ -79,7 +78,7 @@ const noParsingErrorRule2: Rule.RuleModule = {
     create(context: any) {
         const parseError = context.parserServices.parseError
         if (parseError) {
-            let loc = undefined
+            let loc: Location | undefined = undefined
             if ("column" in parseError && "lineNumber" in parseError) {
                 loc = {
                     line: parseError.lineNumber,
