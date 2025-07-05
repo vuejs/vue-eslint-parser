@@ -3,26 +3,29 @@
  * @copyright 2016 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-"use strict"
 
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const assert = require("assert")
-const path = require("path")
-const fs = require("fs-extra")
-const parse = require("../src").parse
-const parseForESLint = require("../src").parseForESLint
-const eslint = require("eslint")
+import type { Rule } from "eslint"
+import path from "node:path"
+import { describe, it, assert, beforeEach, afterEach } from "vitest"
+import * as tsParser from "@typescript-eslint/parser"
+import fs from "fs-extra"
+import * as eslint from "eslint"
+import { parse, parseForESLint } from "../src"
+import * as parser from "../src"
+import type { Node, VAttribute, VElement, VText } from "../src/ast"
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 
+// eslint-disable-next-line no-undef
 const ORIGINAL_FIXTURE_DIR = path.join(__dirname, "fixtures")
+// eslint-disable-next-line no-undef
 const FIXTURE_DIR = path.join(__dirname, "temp")
-const parser = require("../src/index.ts")
 
 const BABEL_PARSER_OPTIONS = {
     parser: "@babel/eslint-parser",
@@ -356,7 +359,7 @@ describe("Basic tests", async () => {
                         parser,
                         globals: {},
                         parserOptions: {
-                            parser: require("@typescript-eslint/parser"),
+                            parser: tsParser,
                         },
                     },
                     rules: { semi: ["error", "never"] },
@@ -379,7 +382,7 @@ describe("Basic tests", async () => {
                         globals: {},
                         parserOptions: {
                             parser: {
-                                ts: require("@typescript-eslint/parser"),
+                                ts: tsParser,
                             },
                         },
                     },
@@ -601,8 +604,8 @@ describe("Basic tests", async () => {
     describe("About unexpected-null-character errors", () => {
         it("should keep NULL in DATA state.", () => {
             const ast = parse("<template>\u0000</template>")
-            const text = ast.templateBody.children[0]
-            const errors = ast.templateBody.errors
+            const text = ast.templateBody!.children[0] as VText
+            const errors = ast.templateBody!.errors
 
             assert.strictEqual(text.value, "\u0000")
             assert.strictEqual(errors.length, 1)
@@ -613,8 +616,9 @@ describe("Basic tests", async () => {
             const ast = parse(
                 "<template><textarea>\u0000</textarea></template>",
             )
-            const text = ast.templateBody.children[0].children[0]
-            const errors = ast.templateBody.errors
+            const text = (ast.templateBody!.children[0] as VElement)
+                .children[0] as VText
+            const errors = ast.templateBody!.errors
 
             assert.strictEqual(text.value, "\uFFFD")
             assert.strictEqual(errors.length, 1)
@@ -623,8 +627,9 @@ describe("Basic tests", async () => {
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in RAWTEXT state.", () => {
             const ast = parse("<template><style>\u0000</style></template>")
-            const text = ast.templateBody.children[0].children[0]
-            const errors = ast.templateBody.errors
+            const text = (ast.templateBody!.children[0] as VElement)
+                .children[0] as VText
+            const errors = ast.templateBody!.errors
 
             assert.strictEqual(text.value, "\uFFFD")
             assert.strictEqual(errors.length, 1)
@@ -633,8 +638,8 @@ describe("Basic tests", async () => {
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in TAG_NAME state.", () => {
             const ast = parse("<template><test\u0000></template>")
-            const element = ast.templateBody.children[0]
-            const errors = ast.templateBody.errors
+            const element = ast.templateBody!.children[0] as VElement
+            const errors = ast.templateBody!.errors
 
             assert.strictEqual(element.name, "test\uFFFD")
             assert.strictEqual(errors.length, 1)
@@ -643,9 +648,9 @@ describe("Basic tests", async () => {
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_NAME state.", () => {
             const ast = parse("<template><div a\u0000></div></template>")
-            const attribute =
-                ast.templateBody.children[0].startTag.attributes[0]
-            const errors = ast.templateBody.errors
+            const attribute = (ast.templateBody!.children[0] as VElement)
+                .startTag.attributes[0]
+            const errors = ast.templateBody!.errors
 
             assert.strictEqual(attribute.key.name, "a\uFFFD")
             assert.strictEqual(errors.length, 1)
@@ -654,41 +659,41 @@ describe("Basic tests", async () => {
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_DOUBLE_QUOTED state.", () => {
             const ast = parse('<template><div a="\u0000"></div></template>')
-            const attribute =
-                ast.templateBody.children[0].startTag.attributes[0]
-            const errors = ast.templateBody.errors
+            const attribute = (ast.templateBody!.children[0] as VElement)
+                .startTag.attributes[0] as VAttribute
+            const errors = ast.templateBody!.errors
 
-            assert.strictEqual(attribute.value.value, "\uFFFD")
+            assert.strictEqual(attribute.value!.value, "\uFFFD")
             assert.strictEqual(errors.length, 1)
             assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_SINGLE_QUOTED state.", () => {
             const ast = parse("<template><div a='\u0000'></div></template>")
-            const attribute =
-                ast.templateBody.children[0].startTag.attributes[0]
-            const errors = ast.templateBody.errors
+            const attribute = (ast.templateBody!.children[0] as VElement)
+                .startTag.attributes[0] as VAttribute
+            const errors = ast.templateBody!.errors
 
-            assert.strictEqual(attribute.value.value, "\uFFFD")
+            assert.strictEqual(attribute.value!.value, "\uFFFD")
             assert.strictEqual(errors.length, 1)
             assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in ATTRIBUTE_VALUE_UNQUOTED state.", () => {
             const ast = parse("<template><div a=\u0000></div></template>")
-            const attribute =
-                ast.templateBody.children[0].startTag.attributes[0]
-            const errors = ast.templateBody.errors
+            const attribute = (ast.templateBody!.children[0] as VElement)
+                .startTag.attributes[0] as VAttribute
+            const errors = ast.templateBody!.errors
 
-            assert.strictEqual(attribute.value.value, "\uFFFD")
+            assert.strictEqual(attribute.value!.value, "\uFFFD")
             assert.strictEqual(errors.length, 1)
             assert.strictEqual(errors[0].code, "unexpected-null-character")
         })
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in COMMENT state.", () => {
             const ast = parse("<template><!-- \u0000 --></template>")
-            const comment = ast.templateBody.comments[0]
-            const errors = ast.templateBody.errors
+            const comment = ast.templateBody!.comments[0]
+            const errors = ast.templateBody!.errors
 
             assert.strictEqual(comment.value, " \uFFFD ")
             assert.strictEqual(errors.length, 1)
@@ -697,8 +702,8 @@ describe("Basic tests", async () => {
 
         it("should replace NULL by U+FFFD REPLACEMENT CHARACTER in BOGUS_COMMENT state.", () => {
             const ast = parse("<template><? \u0000 ?></template>")
-            const comment = ast.templateBody.comments[0]
-            const errors = ast.templateBody.errors
+            const comment = ast.templateBody!.comments[0]
+            const errors = ast.templateBody!.errors
 
             assert.strictEqual(comment.value, "? \uFFFD ?")
             assert.strictEqual(errors.length, 1)
@@ -710,8 +715,9 @@ describe("Basic tests", async () => {
 
         it("should not error in CDATA section state.", () => {
             const ast = parse("<template><svg><![CDATA[\u0000]]></template>")
-            const cdata = ast.templateBody.children[0].children[0]
-            const errors = ast.templateBody.errors
+            const cdata = (ast.templateBody!.children[0] as VElement)
+                .children[0] as VText
+            const errors = ast.templateBody!.errors
 
             assert.strictEqual(cdata.value, "\u0000")
             assert.strictEqual(errors.length, 0)
@@ -736,7 +742,7 @@ describe("Basic tests", async () => {
 
     describe("https://github.com/vuejs/vue-eslint-parser/issues/21", () => {
         it("should make the correct location of decorators", () => {
-            const code = fs.readFileSync(
+            const code: string = fs.readFileSync(
                 path.join(FIXTURE_DIR, "issue21.vue"),
                 "utf8",
             )
@@ -753,7 +759,8 @@ describe("Basic tests", async () => {
 
             assert.strictEqual(ast.body[2].range[0], indexOfDecorator)
             assert.strictEqual(
-                ast.body[2].decorators[0].range[0],
+                // TSESLintClassDeclaration
+                (ast.body[2] as any).decorators[0].range[0],
                 indexOfDecorator,
             )
         })
@@ -762,7 +769,7 @@ describe("Basic tests", async () => {
     describe("parserServices.defineTemplateBodyVisitor", () => {
         it("should work even if AST object was reused.", () => {
             const code = "<template><div/></template>"
-            const config = {
+            const config: eslint.Linter.Config = {
                 languageOptions: {
                     parser,
                 },
@@ -770,7 +777,7 @@ describe("Basic tests", async () => {
                     create(context) {
                         return context.sourceCode.parserServices.defineTemplateBodyVisitor(
                             {
-                                "VElement[name='div']"(node) {
+                                "VElement[name='div']"(node: VElement) {
                                     context.report({ node, message: "OK" })
                                 },
                             },
@@ -793,7 +800,7 @@ describe("Basic tests", async () => {
 
         it("should work even if used sibling selector.", () => {
             const code = "<template><div/><div/></template>"
-            const config = {
+            const config: eslint.Linter.Config = {
                 languageOptions: {
                     parser,
                 },
@@ -801,7 +808,7 @@ describe("Basic tests", async () => {
                     create(context) {
                         return context.sourceCode.parserServices.defineTemplateBodyVisitor(
                             {
-                                "* ~ *"(node) {
+                                "* ~ *"(node: Node) {
                                     context.report({
                                         node,
                                         message: "OK",
@@ -846,7 +853,7 @@ describe("Basic tests", async () => {
         })
         it("should notify parsing error #2", () => {
             const code = "<script>var a = `</script><script setup>`</script>"
-            const config = {
+            const config: eslint.Linter.Config = {
                 languageOptions: {
                     parser,
                     parserOptions: {
@@ -882,7 +889,7 @@ describe("Basic tests", async () => {
         it("should notify 1 no-undef error", () => {
             const code =
                 "<script>var a = 1, b = 2;</script><script setup>c = a + b</script>"
-            const config = {
+            const config: eslint.Linter.Config = {
                 languageOptions: {
                     parser,
                 },
@@ -917,7 +924,7 @@ export default {}
 </template>`
 
             const result = parseForESLint(code, { sourceType: "module" })
-            const comments = result.ast.comments
+            const comments = result.ast.comments!
 
             // Should have 2 comments
             assert.strictEqual(comments.length, 2)
@@ -937,7 +944,7 @@ export default {}
     })
 })
 
-function buildPlugins(rule) {
+function buildPlugins(rule: Rule.RuleModule) {
     return {
         test: {
             rules: {
