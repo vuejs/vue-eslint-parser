@@ -24,6 +24,7 @@ export default [
         ignores: [
             ".temp",
             "**/node_modules",
+            "coverage",
             "src/html/util/alternative-cr.ts",
             "src/html/util/attribute-names.ts",
             "src/html/util/entities.ts",
