@@ -22,9 +22,7 @@ const compat = new FlatCompat({
 export default [
     {
         ignores: [
-            ".nyc_output",
             ".temp",
-            "coverage",
             "**/node_modules",
             "src/html/util/alternative-cr.ts",
             "src/html/util/attribute-names.ts",

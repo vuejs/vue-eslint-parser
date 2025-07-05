@@ -11,6 +11,7 @@
 import type { Rule } from "eslint"
 import path from "node:path"
 import { describe, it, assert, beforeEach, afterEach } from "vitest"
+// @ts-expect-error -- ignore
 import * as tsParser from "@typescript-eslint/parser"
 import fs from "fs-extra"
 import * as eslint from "eslint"
@@ -49,6 +50,7 @@ const BABEL_PARSER_OPTIONS = {
 describe("Basic tests", async () => {
     const ESLint = await eslint.loadESLint({ useFlatConfig: true })
     const Linter = class extends eslint.Linter {
+        // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
         constructor() {
             super({ configType: "flat" })
         }

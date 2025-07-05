@@ -5,13 +5,14 @@
 
 import { describe, it, assert } from "vitest"
 import { parseForESLint } from "../src"
+import type { ESLint } from "eslint"
 import { Linter } from "eslint"
 
 describe("parserOptions", () => {
     describe("parser", () => {
         const linter = new Linter({ configType: "flat" })
-        const parser = { parseForESLint }
-        const plugin = {
+        const parser: Linter.Parser = { parseForESLint }
+        const plugin: ESLint.Plugin = {
             rules: {
                 "template-test": {
                     create(context) {
