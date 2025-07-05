@@ -1,18 +1,18 @@
-"use strict"
-
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const assert = require("assert")
-const fs = require("fs")
-const path = require("path")
-const parser = require("../src")
+import type { VDocumentFragment } from "../src/ast"
+import fs from "fs"
+import path from "path"
+import { describe, it, assert } from "vitest"
+import * as parser from "../src"
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 
+// eslint-disable-next-line no-undef
 const ROOT = path.join(__dirname, "fixtures/document-fragment")
 const TARGETS = fs.readdirSync(ROOT)
 const PARSER_OPTIONS = {
@@ -26,11 +26,11 @@ const PARSER_OPTIONS = {
 
 /**
  * Remove `parent` proeprties from the given AST.
- * @param {string} key The key.
- * @param {any} value The value of the key.
- * @returns {any} The value of the key to output.
+ * @param key The key.
+ * @param value The value of the key.
+ * @returns The value of the key to output.
  */
-function replacer(key, value) {
+function replacer(key: string, value: any): any {
     if (key === "parent") {
         return undefined
     }
@@ -60,6 +60,7 @@ describe("services.getDocumentFragment", () => {
             path.join(ROOT, `${name}/parser-options.js`),
         ].find((fp) => fs.existsSync(fp))
         const source = fs.readFileSync(sourcePath, "utf8")
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const parserOptions = optionsPath ? require(optionsPath) : {}
         const options = {
             filePath: sourcePath,
@@ -67,7 +68,7 @@ describe("services.getDocumentFragment", () => {
             ...parserOptions,
         }
         const result = parser.parseForESLint(source, options)
-        const actual = result.services.getDocumentFragment()
+        const actual = result.services!.getDocumentFragment()
 
         describe(`'test/fixtures/document-fragment/${name}/${sourceFileName}'`, () => {
             it("should be parsed to valid document fragment.", () => {
@@ -86,7 +87,7 @@ describe("services.getDocumentFragment", () => {
             it("should have correct range.", () => {
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
                 const expectedText = fs.readFileSync(resultPath, "utf8")
-                const tokens = getAllTokens(actual).map((t) =>
+                const tokens = getAllTokens(actual!).map((t) =>
                     source.slice(t.range[0], t.range[1]),
                 )
                 const actualText = JSON.stringify(tokens, null, 4)
@@ -97,7 +98,7 @@ describe("services.getDocumentFragment", () => {
     }
 })
 
-function getAllTokens(fgAst) {
+function getAllTokens(fgAst: VDocumentFragment) {
     const tokenArrays = [fgAst.tokens, fgAst.comments]
 
     return Array.prototype.concat.apply([], tokenArrays)
