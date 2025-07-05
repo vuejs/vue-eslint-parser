@@ -1,6 +1,7 @@
 "use strict"
 
 const { spawn } = require("child_process")
+const semver = require("semver")
 
 function cd(path) {
     console.log("$ cd %s", path)
@@ -30,6 +31,8 @@ function sh(command) {
 
     // Install ESLint of the requested version
     await sh(`npm install eslint@${requestedVersionSpec} -f`)
+    if (semver.compare(requestedVersionSpec, "9.0.0"))
+        await sh(`npm install @types/eslint -f`)
 
     // Install ESLint submodule of the requested version
     // const installedVersion = require("eslint/package.json").version
