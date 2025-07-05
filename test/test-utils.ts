@@ -144,6 +144,7 @@ export function analyze(
             key !== "tokens" &&
             key !== "trailingComments" &&
             typeof value === "object" &&
+            // @ts-expect-error -- ignore
             (typeof value.type === "string" || Array.isArray(value))
         )
     }

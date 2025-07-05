@@ -461,7 +461,8 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
         const linter = createLinter()
         const config = getConfig(
             (lang, block) =>
-                (lang === "json" && lang === "json5") ||
+                lang === "json" ||
+                lang === "json5" ||
                 (!lang && block.name === "i18n"),
         )
 

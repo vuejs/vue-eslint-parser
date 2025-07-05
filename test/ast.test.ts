@@ -71,28 +71,23 @@ function getTree(source: string, parserOptions: any) {
                 },
             }),
     }
-    const result = linter.verify(
-        source,
-        {
-            files: ["**"],
-            plugins: {
-                test: {
-                    rules: {
-                        maketree,
-                    },
+    const result = linter.verify(source, {
+        files: ["**"],
+        plugins: {
+            test: {
+                rules: {
+                    maketree,
                 },
             },
-            languageOptions: {
-                parser,
-                ecmaVersion: parserOptions.ecmaVersion ?? "latest",
-                sourceType: parserOptions.sourceType ?? "module",
-                parserOptions,
-            },
-            rules: { "test/maketree": "error" },
         },
-        undefined,
-        true,
-    )
+        languageOptions: {
+            parser,
+            ecmaVersion: parserOptions.ecmaVersion ?? "latest",
+            sourceType: parserOptions.sourceType ?? "module",
+            parserOptions,
+        },
+        rules: { "test/maketree": "error" },
+    })
     assert.deepStrictEqual(result, [])
 
     return root.children
@@ -122,7 +117,7 @@ function validateParent(source: string, parserOptions: any) {
             ruleContext.sourceCode.parserServices.defineTemplateBodyVisitor({
                 "*"(node: Node) {
                     if (stack.length >= 1) {
-                        const parent = stack.at(-1)
+                        const parent = stack.at(-1)!
                         assert(
                             node.parent === parent,
                             `The parent of ${nodeToString(
@@ -141,28 +136,23 @@ function validateParent(source: string, parserOptions: any) {
                 },
             }),
     }
-    const result = linter.verify(
-        source,
-        {
-            files: ["**"],
-            plugins: {
-                test: {
-                    rules: {
-                        validateparent,
-                    },
+    const result = linter.verify(source, {
+        files: ["**"],
+        plugins: {
+            test: {
+                rules: {
+                    validateparent,
                 },
             },
-            languageOptions: {
-                parser,
-                ecmaVersion: parserOptions.ecmaVersion ?? "latest",
-                sourceType: parserOptions.sourceType ?? "module",
-                parserOptions,
-            },
-            rules: { "test/validateparent": "error" },
         },
-        undefined,
-        true,
-    )
+        languageOptions: {
+            parser,
+            ecmaVersion: parserOptions.ecmaVersion ?? "latest",
+            sourceType: parserOptions.sourceType ?? "module",
+            parserOptions,
+        },
+        rules: { "test/validateparent": "error" },
+    })
     assert.deepStrictEqual(result, [])
 }
 
