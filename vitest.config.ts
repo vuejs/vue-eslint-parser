@@ -2,8 +2,8 @@ import { defineConfig } from "vitest/config"
 
 export default defineConfig({
     test: {
-        include: [
-            "test/{parser-options,crlf,define-document-visitor,define-custom-blocks-visitor,parser-options-project,document-fragment,tokens,variables-references,ast,index}.test.ts",
-        ],
+        reporters: "dot",
+        include: ["test/*.test.ts"],
+        teardownTimeout: 60000,
     },
 })

@@ -1,11 +1,6 @@
-"use strict"
+import type { ESLint } from "eslint"
 
-/**
- * @typedef {import('eslint')} eslint
- */
-
-/** @param {eslint} eslint */
-module.exports = function compat(eslint) {
+export default function compat(eslint: any) {
     return {
         ESLint: eslint.ESLint || getESLintClassForV6(eslint),
         RuleTester: eslint.RuleTester,
@@ -13,15 +8,16 @@ module.exports = function compat(eslint) {
     }
 }
 
-/** @returns {typeof eslint.ESLint} */
-function getESLintClassForV6(eslint) {
+function getESLintClassForV6(eslint: any): ESLint {
     class ESLintForV6 {
+        public engine
+
         static get version() {
             return eslint.CLIEngine.version
         }
 
-        /** @param {eslint.ESLint.Options} options */
-        constructor(options) {
+        // eslint-disable-next-line @typescript-eslint/explicit-member-accessibility
+        constructor(options: ESLint.Options) {
             const {
                 overrideConfig: {
                     plugins,
@@ -40,8 +36,7 @@ function getESLintClassForV6(eslint) {
                 plugins: pluginsMap,
                 ...otherOptions
             } = options || {}
-            /** @type {eslint.CLIEngine.Options} */
-            const newOptions = {
+            const newOptions: CLIEngine.Options = {
                 fix: Boolean(fix),
                 reportUnusedDisableDirectives: reportUnusedDisableDirectives
                     ? reportUnusedDisableDirectives !== "off"
@@ -64,7 +59,7 @@ function getESLintClassForV6(eslint) {
                               }
                               return o
                           },
-                          /** @type {NonNullable<eslint.CLIEngine.Options["rules"]>} */ {},
+                          {} satisfies NonNullable<CLIEngine.Options["rules"]>,
                       )
                     : undefined,
                 ...overrideConfig,
@@ -76,41 +71,33 @@ function getESLintClassForV6(eslint) {
             }
         }
 
-        /**
-         * @param {Parameters<eslint.ESLint['lintText']>} params
-         * @returns {ReturnType<eslint.ESLint['lintText']>}
-         */
-        async lintText(...params) {
+        async lintText(
+            ...params: Parameters<ESLint["lintText"]>
+        ): ReturnType<ESLint["lintText"]> {
             const result = this.engine.executeOnText(
                 params[0],
-                params[1].filePath,
+                params[1]!.filePath,
             )
             return result.results
         }
 
-        /**
-         * @param {Parameters<eslint.ESLint['lintFiles']>} params
-         * @returns {ReturnType<eslint.ESLint['lintFiles']>}
-         */
-        async lintFiles(...params) {
+        async lintFiles(
+            ...params: Parameters<ESLint["lintFiles"]>
+        ): ReturnType<ESLint["lintFiles"]> {
             const result = this.engine.executeOnFiles(
                 Array.isArray(params[0]) ? params[0] : [params[0]],
             )
             return result.results
         }
 
-        /**
-         * @param {Parameters<eslint.ESLint['outputFixes']>} params
-         * @returns {ReturnType<eslint.ESLint['outputFixes']>}
-         */
-        static async outputFixes(...params) {
+        static async outputFixes(
+            ...params: Parameters<ESLint["outputFixes"]>
+        ): ReturnType<ESLint["outputFixes"]> {
             return eslint.CLIEngine.outputFixes({
                 results: params[0],
             })
         }
     }
 
-    /** @type {typeof eslint.ESLint} */
-    const eslintClass = /** @type {any} */ ESLintForV6
-    return eslintClass
+    return ESLintForV6 as any
 }

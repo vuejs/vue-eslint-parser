@@ -13,6 +13,7 @@ import { assert, describe, it } from "vitest"
 import { Linter } from "eslint"
 import { builtinRules } from "eslint/use-at-your-own-risk"
 import jsonParser from "jsonc-eslint-parser"
+// @ts-expect-error -- ignore
 import * as espree from "espree"
 import * as parser from "../src"
 import type { Program } from "estree"

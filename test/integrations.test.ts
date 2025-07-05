@@ -2,16 +2,18 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-const assert = require("assert")
-const path = require("path")
-const fs = require("fs-extra")
-const cp = require("child_process")
-const eslintCompat = require("./lib/eslint-compat")
+import { assert, beforeAll, describe, it } from "vitest"
+import path from "path"
+import fs from "fs-extra"
+import cp from "child_process"
+import eslintCompat from "./lib/eslint-compat"
+import * as ESLintRaw from "eslint"
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
 
+// eslint-disable-next-line no-undef
 const FIXTURE_DIR = path.join(__dirname, "fixtures/integrations")
 
 //------------------------------------------------------------------------------
@@ -19,15 +21,19 @@ const FIXTURE_DIR = path.join(__dirname, "fixtures/integrations")
 //------------------------------------------------------------------------------
 
 describe("Integration tests", () => {
+    beforeAll(async () => {
+        await import("ts-node/register")
+    })
     for (const target of fs.readdirSync(FIXTURE_DIR)) {
         it(target, async () => {
-            let ESLint = eslintCompat(require("eslint")).ESLint
+            let ESLint = eslintCompat(ESLintRaw).ESLint
             if (fs.existsSync(path.join(FIXTURE_DIR, target, "package.json"))) {
                 const originalCwd = process.cwd()
                 try {
                     process.chdir(path.join(FIXTURE_DIR, target))
                     cp.execSync("npm i", { stdio: "inherit" })
                     ESLint = eslintCompat(
+                        // eslint-disable-next-line @typescript-eslint/no-require-imports
                         require(
                             path.join(
                                 FIXTURE_DIR,
@@ -46,7 +52,7 @@ describe("Integration tests", () => {
             })
             const report = await cli.lintFiles(["**/*.vue"])
 
-            const outputPath = path.join(FIXTURE_DIR, target, `output.json`)
+            const outputPath = path.join(FIXTURE_DIR, target, "output.json")
             const expected = JSON.parse(fs.readFileSync(outputPath, "utf8"))
             try {
                 assert.deepStrictEqual(
@@ -59,7 +65,7 @@ describe("Integration tests", () => {
                 const actualPath = path.join(
                     FIXTURE_DIR,
                     target,
-                    `_actual.json`,
+                    "_actual.json",
                 )
                 fs.writeFileSync(
                     actualPath,
@@ -72,22 +78,18 @@ describe("Integration tests", () => {
             function normalizeReport(report, option = {}) {
                 return report
                     .filter((res) => res.messages.length)
-                    .map((res) => {
-                        return {
-                            filePath: res.filePath
-                                .replace(cwd, "")
-                                .replace(/\\/gu, "/"),
-                            messages: res.messages.map((msg) => {
-                                return {
-                                    ruleId: msg.ruleId,
-                                    line: msg.line,
-                                    ...(option.withoutMessage
-                                        ? {}
-                                        : { message: msg.message }),
-                                }
-                            }),
-                        }
-                    })
+                    .map((res) => ({
+                        filePath: res.filePath
+                            .replace(cwd, "")
+                            .replace(/\\/gu, "/"),
+                        messages: res.messages.map((msg) => ({
+                            ruleId: msg.ruleId,
+                            line: msg.line,
+                            ...(option.withoutMessage
+                                ? {}
+                                : { message: msg.message }),
+                        })),
+                    }))
                     .sort((a, b) =>
                         a.filePath < b.filePath
                             ? -1
