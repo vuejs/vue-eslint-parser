@@ -66,7 +66,7 @@
     "prebuild": "npm run -s clean",
     "build": "tsc --module es2015 && rollup -c -o index.js && dts-bundle --name vue-eslint-parser --main .temp/index.d.ts --out ../index.d.ts",
     "clean": "rimraf .temp index.*",
-    "coverage": "vitest --ui",
+    "coverage": "vitest  --coverage --ui",
     "lint": "eslint src test package.json",
     "pretest": "run-s build lint",
     "test": "vitest",

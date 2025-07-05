@@ -6,7 +6,6 @@ export default defineConfig({
         include: ["test/**/*.test.ts"],
         teardownTimeout: 60000,
         coverage: {
-            enabled: true,
             include: ["src"],
         },
     },
