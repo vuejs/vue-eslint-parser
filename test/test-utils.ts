@@ -1,14 +1,16 @@
-const escope = require("eslint-scope")
-
-module.exports = { replacer, getAllTokens, scopeToJSON, analyze }
+import type { Identifier } from "estree"
+import type { Scope, ScopeManager } from "eslint-scope"
+import type { ESLintProgram, Token } from "../src/ast"
+import type { ParserOptions } from "../src/common/parser-options"
+import escope from "eslint-scope"
 
 /**
  * Remove `parent` properties from the given AST.
- * @param {string} key The key.
- * @param {any} value The value of the key.
- * @returns {any} The value of the key to output.
+ * @param key The key.
+ * @param value The value of the key.
+ * @returns The value of the key to output.
  */
-function replacer(key, value) {
+export function replacer(key: string, value: any): any {
     if (key === "parent") {
         return undefined
     }
@@ -25,10 +27,10 @@ function replacer(key, value) {
 
 /**
  * Get all tokens of the given AST.
- * @param {ASTNode} ast The root node of AST.
- * @returns {Token[]} Tokens.
+ * @param ast The root node of AST.
+ * @returns Tokens.
  */
-function getAllTokens(ast) {
+export function getAllTokens(ast: ESLintProgram): Token[] {
     const tokenArrays = [ast.tokens, ast.comments]
     if (ast.templateBody != null) {
         tokenArrays.push(ast.templateBody.tokens, ast.templateBody.comments)
@@ -36,10 +38,10 @@ function getAllTokens(ast) {
     return Array.prototype.concat.apply([], tokenArrays)
 }
 
-function scopeToJSON(scopeManager) {
+export function scopeToJSON(scopeManager: ScopeManager) {
     return JSON.stringify(normalizeScope(scopeManager.globalScope), replacer, 4)
 
-    function normalizeScope(scope) {
+    function normalizeScope(scope: Scope) {
         return {
             type: scope.type,
             variables: scope.variables.map(normalizeVar),
@@ -83,7 +85,7 @@ function scopeToJSON(scopeManager) {
         }
     }
 
-    function normalizeId(identifier) {
+    function normalizeId(identifier: Identifier) {
         return (
             identifier && {
                 type: identifier.type,
@@ -104,7 +106,7 @@ function scopeToJSON(scopeManager) {
 /**
  * Analyze scope
  */
-function analyze(ast, parserOptions) {
+export function analyze(ast: ESLintProgram, parserOptions: ParserOptions) {
     const ecmaVersion = parserOptions.ecmaVersion ?? 2022
     const ecmaFeatures = parserOptions.ecmaFeatures ?? {}
     const sourceType = parserOptions.sourceType ?? "script"

@@ -7,6 +7,7 @@ import fs from "fs"
 import path from "path"
 import { describe, it, assert } from "vitest"
 import * as parser from "../src"
+import { replacer } from "./test-utils"
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -22,27 +23,6 @@ const PARSER_OPTIONS = {
     range: true,
     tokens: true,
     sourceType: "module",
-}
-
-/**
- * Remove `parent` proeprties from the given AST.
- * @param key The key.
- * @param value The value of the key.
- * @returns The value of the key to output.
- */
-function replacer(key: string, value: any): any {
-    if (key === "parent") {
-        return undefined
-    }
-    if (key === "errors" && Array.isArray(value)) {
-        return value.map((e) => ({
-            message: e.message,
-            index: e.index,
-            lineNumber: e.lineNumber,
-            column: e.column,
-        }))
-    }
-    return value
 }
 
 //------------------------------------------------------------------------------
