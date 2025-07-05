@@ -83,7 +83,7 @@ export interface ParserServices {
                 | ((lang: string | null, customBlock: VElement) => boolean)
             create: CustomBlockVisitorFactory
         },
-        scriptVisitor: { [key: string]: (...args: any) => void },
+        scriptVisitor?: { [key: string]: (...args: any) => void },
     ): { [key: string]: (...args: any) => void }
 
     /**
@@ -262,7 +262,7 @@ export function define(
                     | ((lang: string | null, customBlock: VElement) => boolean)
                 create: CustomBlockVisitorFactory
             },
-            scriptVisitor: { [key: string]: (...args: any) => void },
+            scriptVisitor?: { [key: string]: (...args: any) => void },
         ): { [key: string]: (...args: any) => void } {
             if (scriptVisitor == null) {
                 scriptVisitor = {} //eslint-disable-line no-param-reassign
