@@ -57,6 +57,7 @@
     "rollup-plugin-sourcemaps": "^0.6.3",
     "ts-node": "^10.9.2",
     "typescript": "~5.7.3",
+    "vite": "^6.3.5",
     "vitest": "^3.2.4",
     "wait-on": "^6.0.0",
     "warun": "^1.0.0"
@@ -67,7 +68,6 @@
     "clean": "rimraf .temp index.*",
     "coverage": "vitest --coverage --ui",
     "lint": "eslint src test package.json",
-    "pretest": "npm run lint",
     "test": "vitest",
     "test:cover": "vitest --coverage",
     "update-fixtures": "ts-node --transpile-only scripts/update-fixtures-ast.js && ts-node --transpile-only scripts/update-fixtures-document-fragment.js",
