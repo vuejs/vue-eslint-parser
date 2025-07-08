@@ -1,9 +1,11 @@
 import { defineConfig } from "tsdown"
 
-const banner = `/**
+const banner = `
+/**
  * @author Toru Nagashima <https://github.com/mysticatea>
  * See LICENSE file in root directory for full license.
- */`
+ */
+`.trim()
 
 export default defineConfig({
     entry: "./src/index.ts",

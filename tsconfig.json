@@ -13,7 +13,7 @@
     "module": "preserve",
     "moduleResolution": "bundler",
     "newLine": "LF",
-    "noEmitOnError": true,
+    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -30,6 +30,5 @@
 
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "tsdown.config.ts"],
-  "references": [{ "path": "./tsconfig.test.json" }]
+  "include": ["**/*.ts"]
 }
