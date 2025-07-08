@@ -6,7 +6,9 @@ export default defineConfig({
         include: ["test/**/*.test.ts"],
         testTimeout: 60000,
         coverage: {
-            include: ["src"],
+            include: ["src/**/*.ts"],
+            exclude: ["src/external/**/*.ts"],
+            reporter: ["html", "lcov", "text-summary"],
         },
     },
 })
