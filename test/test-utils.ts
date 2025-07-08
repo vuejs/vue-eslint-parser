@@ -8,6 +8,7 @@ import type {
 import type { ESLintProgram, Token } from "../src/ast"
 import type { ParserOptions } from "../src/common/parser-options"
 import * as escope from "eslint-scope"
+import { getFallbackKeys } from "../src/ast"
 
 /**
  * Remove `parent` properties from the given AST.
@@ -128,24 +129,4 @@ export function analyze(
     })
 
     return result
-
-    function getFallbackKeys(node: any) {
-        return Object.keys(node).filter(fallbackKeysFilter, node)
-    }
-
-    function fallbackKeysFilter(key: string) {
-        const value = null
-        return (
-            key !== "comments" &&
-            key !== "leadingComments" &&
-            key !== "loc" &&
-            key !== "parent" &&
-            key !== "range" &&
-            key !== "tokens" &&
-            key !== "trailingComments" &&
-            typeof value === "object" &&
-            // @ts-expect-error -- ignore
-            (typeof value.type === "string" || Array.isArray(value))
-        )
-    }
 }
