@@ -30,6 +30,8 @@ function sh(command) {
 
     // Install ESLint of the requested version
     await sh(`npm install eslint@${requestedVersionSpec} -f`)
+    if (Number(requestedVersion) < 9)
+        await sh(`npm install @types/eslint -D -f`)
 
     // Install ESLint submodule of the requested version
     // const installedVersion = require("eslint/package.json").version

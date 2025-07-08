@@ -1,26 +1,27 @@
 /**
  * @author Yosuke Ota <https://github.com/ota-meshi>
  */
-"use strict"
 
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const assert = require("assert")
-const path = require("path")
-const eslint = require("eslint")
-const jsonParser = require("jsonc-eslint-parser")
-const espree = require("espree")
+import type { ESLint, Rule } from "eslint"
+import type { Location, VElement } from "../src/ast"
+import type { CustomBlockContext } from "../src/sfc/custom-block"
+import { assert, describe, it } from "vitest"
+import { Linter } from "eslint"
+import { builtinRules } from "eslint/use-at-your-own-risk"
+import jsonParser from "jsonc-eslint-parser"
+import * as espree from "espree"
+import * as parser from "../src"
+import type { Program } from "estree"
 
 //------------------------------------------------------------------------------
 // Helpers
 //------------------------------------------------------------------------------
-const Linter = eslint.Linter
 
-const parser = require("../src/index.ts")
-
-const noNumberLiteralRule = {
+const noNumberLiteralRule: Rule.RuleModule = {
     create(context) {
         let count = 0
         return {
@@ -35,7 +36,7 @@ const noNumberLiteralRule = {
         }
     },
 }
-const noNoForbiddenKeyRule = {
+const noNoForbiddenKeyRule: Rule.RuleModule = {
     create(context) {
         return {
             'JSONProperty > JSONLiteral[value="forbidden"]'(node) {
@@ -49,11 +50,11 @@ const noNoForbiddenKeyRule = {
         }
     },
 }
-const noParsingErrorRule = {
+const noParsingErrorRule: Rule.RuleModule = {
     create(context) {
         const parseError = context.getSourceCode().parserServices.parseError
         if (parseError) {
-            let loc = undefined
+            let loc: Location | undefined = undefined
             if ("column" in parseError && "lineNumber" in parseError) {
                 loc = {
                     line: parseError.lineNumber,
@@ -73,11 +74,11 @@ const noParsingErrorRule = {
         return {}
     },
 }
-const noParsingErrorRule2 = {
-    create(context) {
+const noParsingErrorRule2: Rule.RuleModule = {
+    create(context: any) {
         const parseError = context.parserServices.parseError
         if (parseError) {
-            let loc = undefined
+            let loc: Location | undefined = undefined
             if ("column" in parseError && "lineNumber" in parseError) {
                 loc = {
                     line: parseError.lineNumber,
@@ -97,7 +98,7 @@ const noParsingErrorRule2 = {
         return {}
     },
 }
-const noProgramExitRule = {
+const noProgramExitRule: Rule.RuleModule = {
     create(context) {
         return {
             "Program:exit"(node) {
@@ -109,7 +110,7 @@ const noProgramExitRule = {
         }
     },
 }
-const siblingSelectorRule = {
+const siblingSelectorRule: Rule.RuleModule = {
     create(context) {
         return {
             "* ~ *"(node) {
@@ -122,19 +123,15 @@ const siblingSelectorRule = {
     },
 }
 
-function getConfig(target = "json") {
-    const spaceUnaryOps =
-        require("eslint/use-at-your-own-risk").builtinRules.get(
-            "space-unary-ops",
-        )
-    const noParamReassign =
-        require("eslint/use-at-your-own-risk").builtinRules.get(
-            "no-param-reassign",
-        )
-    const noUnusedVars =
-        require("eslint/use-at-your-own-risk").builtinRules.get(
-            "no-unused-vars",
-        )
+function getConfig(
+    target:
+        | string
+        | string[]
+        | ((lang: string | null, customBlock: VElement) => boolean) = "json",
+): Linter.Config {
+    const spaceUnaryOps = builtinRules.get("space-unary-ops")!
+    const noParamReassign = builtinRules.get("no-param-reassign")!
+    const noUnusedVars = builtinRules.get("no-unused-vars")!
 
     return {
         files: ["**"],
@@ -142,7 +139,7 @@ function getConfig(target = "json") {
             test: {
                 rules: {
                     "test-no-number-literal": {
-                        create: (context) =>
+                        create: (context: any) =>
                             context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 jsonParser,
@@ -153,7 +150,7 @@ function getConfig(target = "json") {
                             ),
                     },
                     "test-no-forbidden-key": {
-                        create: (context) =>
+                        create: (context: any) =>
                             context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 jsonParser,
@@ -164,7 +161,7 @@ function getConfig(target = "json") {
                             ),
                     },
                     "test-no-parsing-error": {
-                        create: (context) =>
+                        create: (context: any) =>
                             context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 jsonParser,
@@ -175,7 +172,7 @@ function getConfig(target = "json") {
                             ),
                     },
                     "test-no-parsing-error2": {
-                        create: (context) =>
+                        create: (context: any) =>
                             context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 jsonParser,
@@ -186,7 +183,7 @@ function getConfig(target = "json") {
                             ),
                     },
                     "test-no-program-exit": {
-                        create: (context) =>
+                        create: (context: any) =>
                             context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 jsonParser,
@@ -198,7 +195,7 @@ function getConfig(target = "json") {
                             ),
                     },
                     "test-no-yml-parsing-error": {
-                        create: (context) =>
+                        create: (context: any) =>
                             context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 {
@@ -214,7 +211,7 @@ function getConfig(target = "json") {
                     },
 
                     "test-for-sibling-selector": {
-                        create: (context) =>
+                        create: (context: any) =>
                             context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 jsonParser,
@@ -225,15 +222,15 @@ function getConfig(target = "json") {
                             ),
                     },
                     "test-for-parse-custom-block-element": {
-                        create: (context) =>
+                        create: (context: any) =>
                             context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 jsonParser,
                                 {
                                     target: "json",
-                                    create(ctx) {
+                                    create(ctx: CustomBlockContext) {
                                         return {
-                                            Program(node) {
+                                            Program(node: Program) {
                                                 const error =
                                                     ctx.sourceCode.parserServices.parseCustomBlockElement(
                                                         jsonParser,
@@ -255,13 +252,15 @@ function getConfig(target = "json") {
                             ),
                     },
                     "test-mark-vars": {
-                        create(context) {
+                        create(context: any) {
                             return context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 espree,
                                 {
                                     target: "js",
-                                    create(customBlockContext) {
+                                    create(
+                                        customBlockContext: CustomBlockContext,
+                                    ) {
                                         return {
                                             Literal() {
                                                 customBlockContext.markVariableAsUsed(
@@ -280,13 +279,15 @@ function getConfig(target = "json") {
 
                     "test-space-unary-ops": {
                         ...spaceUnaryOps,
-                        create(context) {
+                        create(context: any) {
                             return context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 espree,
                                 {
                                     target: "js",
-                                    create(customBlockContext) {
+                                    create(
+                                        customBlockContext: Rule.RuleContext,
+                                    ) {
                                         return spaceUnaryOps.create(
                                             customBlockContext,
                                         )
@@ -297,13 +298,15 @@ function getConfig(target = "json") {
                     },
                     "test-no-param-reassign": {
                         ...noParamReassign,
-                        create(context) {
+                        create(context: any) {
                             return context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 espree,
                                 {
                                     target: "js",
-                                    create(customBlockContext) {
+                                    create(
+                                        customBlockContext: Rule.RuleContext,
+                                    ) {
                                         return noParamReassign.create(
                                             customBlockContext,
                                         )
@@ -314,13 +317,15 @@ function getConfig(target = "json") {
                     },
                     "test-no-unused-vars": {
                         ...noUnusedVars,
-                        create(context) {
+                        create(context: any) {
                             return context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 espree,
                                 {
                                     target: "js",
-                                    create(customBlockContext) {
+                                    create(
+                                        customBlockContext: Rule.RuleContext,
+                                    ) {
                                         return noUnusedVars.create(
                                             customBlockContext,
                                         )
@@ -341,7 +346,7 @@ function getConfig(target = "json") {
             "test/test-no-parsing-error": "error",
             "test/test-no-parsing-error2": "error",
         },
-    }
+    } satisfies Linter.Config
 }
 
 function createLinter() {
@@ -455,7 +460,8 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
         const linter = createLinter()
         const config = getConfig(
             (lang, block) =>
-                (lang === "json" && lang === "json5") ||
+                lang === "json" ||
+                lang === "json5" ||
                 (!lang && block.name === "i18n"),
         )
 
@@ -637,19 +643,21 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
             const linter = createLinter()
             const baseConfig = getConfig()
 
-            const plugin = {
+            const plugin: ESLint.Plugin = {
                 rules: {
                     test: {
-                        create: (context) =>
+                        create: (context: any) =>
                             context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 jsonParser,
                                 {
                                     target: "json",
-                                    create(customBlockContext) {
+                                    create(
+                                        customBlockContext: CustomBlockContext,
+                                    ) {
                                         return {
                                             "JSONLiteral[value='target']"(
-                                                node,
+                                                node: any,
                                             ) {
                                                 customBlockContext.report({
                                                     node,
@@ -696,19 +704,21 @@ describe("parserServices.defineCustomBlocksVisitor tests", () => {
             const linter = createLinter()
             const baseConfig = getConfig()
 
-            const plugin = {
+            const plugin: ESLint.Plugin = {
                 rules: {
                     test: {
-                        create: (context) =>
+                        create: (context: any) =>
                             context.sourceCode.parserServices.defineCustomBlocksVisitor(
                                 context,
                                 jsonParser,
                                 {
                                     target: "json",
-                                    create(customBlockContext) {
+                                    create(
+                                        customBlockContext: CustomBlockContext,
+                                    ) {
                                         return {
                                             "JSONLiteral[value='target']"(
-                                                node,
+                                                node: any,
                                             ) {
                                                 customBlockContext.report({
                                                     node,

@@ -14,7 +14,7 @@ export interface AnalysisOptions {
     impliedStrict?: boolean
     fallback?: string | Function
     sourceType?: "script" | "module"
-    ecmaVersion?: number
+    ecmaVersion?: number | "latest"
     childVisitorKeys?: VisitorKeys
 }
 

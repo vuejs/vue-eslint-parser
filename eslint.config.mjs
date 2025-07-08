@@ -22,7 +22,6 @@ const compat = new FlatCompat({
 export default [
     {
         ignores: [
-            ".nyc_output",
             ".temp",
             "coverage",
             "**/node_modules",
@@ -64,7 +63,7 @@ export default [
                 },
 
                 loggerFn: false,
-                project: "tsconfig.json",
+                project: ["tsconfig.json", "tsconfig.test.json"],
             },
         },
 

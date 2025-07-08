@@ -1,9 +1,10 @@
-const assert = require("assert")
-const parser = require("../src")
+import type { VElement, VText } from "../src/ast"
+import { describe, it, assert } from "vitest"
+import { parseForESLint } from "../src"
 
 describe("About CRLF tests", () => {
     it("should not contain CR in `<script>` contents.", () => {
-        const parsed = parser.parseForESLint(
+        const parsed = parseForESLint(
             `<script>\r
                 export default {\r
                     computed: {\r
@@ -23,15 +24,15 @@ describe("About CRLF tests", () => {
                 sourceType: "module",
             },
         )
-        const script = parsed.services
-            .getDocumentFragment()
+        const script = parsed
+            .services!.getDocumentFragment()!
             .children.find(
                 (child) => child.type === "VElement" && child.name === "script",
-            )
-        assert.ok(!script.children[0].value.includes("\r"))
+            ) as VElement
+        assert.ok(!(script.children[0] as VText).value.includes("\r"))
     })
-    it("should contain CRLF in script comment.", async () => {
-        const parsed = parser.parseForESLint(
+    it("should contain CRLF in script comment.", () => {
+        const parsed = parseForESLint(
             `<script>\r
                 export default {\r
                     computed: {\r
@@ -51,6 +52,6 @@ describe("About CRLF tests", () => {
                 sourceType: "module",
             },
         )
-        assert.ok(parsed.ast.comments[0].value.includes("\r\n"))
+        assert.ok(parsed.ast.comments![0].value.includes("\r\n"))
     })
 })
