@@ -3,14 +3,20 @@
  * @copyright 2017 Toru Nagashima. All rights reserved.
  * See LICENSE file in root directory for full license.
  */
-"use strict"
 
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const assert = require("assert")
-const parse = require("../src").parseForESLint
+import type {
+    ESLintProgram,
+    Token,
+    VElement,
+    VExpressionContainer,
+} from "../src/ast"
+import type TokenStore from "../src/external/token-store"
+import { assert, beforeAll, describe, it } from "vitest"
+import { parseForESLint as parse } from "../src"
 
 //------------------------------------------------------------------------------
 // Helpers
@@ -26,10 +32,10 @@ const PARSER_OPTIONS = {
 
 /**
  * Get the value of the given node.
- * @param {ASTNode} token The node to get value.
- * @returns {string} The value of the node.
+ * @param token The node to get value.
+ * @returns The value of the node.
  */
-function toValue(token) {
+function toValue(token: Token): string {
     if (token.type === "HTMLAssociation") {
         return "="
     }
@@ -48,18 +54,18 @@ describe("services.getTemplateBodyTokenStore", () => {
     <!--comment1-->
     <div a="b" v-show="c &lt; 3 &amp;&amp; ok == &quot;ok&quot;"><!--comment2-->{{ message /*comment3*/ }}<!--comment4--></div>
 </template>`
-    let ast = null
-    let tokens = null
+    let ast: ESLintProgram | null = null
+    let tokens: TokenStore | null = null
 
-    before(() => {
+    beforeAll(() => {
         const result = parse(code, { filePath: "test.vue", ...PARSER_OPTIONS })
         ast = result.ast
-        tokens = result.services.getTemplateBodyTokenStore()
+        tokens = result.services!.getTemplateBodyTokenStore()
     })
 
     describe("ast.templateBody", () => {
         it("should return all tokens (except comments) in the template.", () => {
-            const actual = tokens.getTokens(ast.templateBody).map(toValue)
+            const actual = tokens!.getTokens(ast!.templateBody!).map(toValue)
 
             assert.deepStrictEqual(actual, [
                 "template",
@@ -94,8 +100,8 @@ describe("services.getTemplateBodyTokenStore", () => {
         })
 
         it("should return all tokens (include comments) in the template if you give {includeComments: true} option.", () => {
-            const actual = tokens
-                .getTokens(ast.templateBody, { includeComments: true })
+            const actual = tokens!
+                .getTokens(ast!.templateBody!, { includeComments: true })
                 .map(toValue)
 
             assert.deepStrictEqual(actual, [
@@ -137,8 +143,8 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     describe("ast.templateBody.children[0] (VText)", () => {
         it("should return a text token.", () => {
-            const node = ast.templateBody.children[0]
-            const actual = tokens.getTokens(node).map(toValue)
+            const node = ast!.templateBody!.children[0]
+            const actual = tokens!.getTokens(node).map(toValue)
 
             assert.deepStrictEqual(actual, ["\n    "])
         })
@@ -146,8 +152,8 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     describe("ast.templateBody.children[2] (VElement)", () => {
         it("should return all tokens in the element.", () => {
-            const node = ast.templateBody.children[2]
-            const actual = tokens.getTokens(node).map(toValue)
+            const node = ast!.templateBody!.children[2]
+            const actual = tokens!.getTokens(node).map(toValue)
 
             assert.deepStrictEqual(actual, [
                 "div",
@@ -177,8 +183,8 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     describe("ast.templateBody.children[2].startTag (VStartTag)", () => {
         it("should return all tokens in the tag.", () => {
-            const node = ast.templateBody.children[2].startTag
-            const actual = tokens.getTokens(node).map(toValue)
+            const node = (ast!.templateBody!.children[2] as VElement).startTag
+            const actual = tokens!.getTokens(node).map(toValue)
 
             assert.deepStrictEqual(actual, [
                 "div",
@@ -203,8 +209,9 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     describe("ast.templateBody.children[2].startTag.attributes[0] (VAttribute)", () => {
         it("should return all tokens in the attribute.", () => {
-            const node = ast.templateBody.children[2].startTag.attributes[0]
-            const actual = tokens.getTokens(node).map(toValue)
+            const node = (ast!.templateBody!.children[2] as VElement).startTag
+                .attributes[0]
+            const actual = tokens!.getTokens(node).map(toValue)
 
             assert.deepStrictEqual(actual, ["a", "=", "b"])
         })
@@ -212,8 +219,9 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     describe("ast.templateBody.children[2].startTag.attributes[0].key (VIdentifier)", () => {
         it("should return the identifier token.", () => {
-            const node = ast.templateBody.children[2].startTag.attributes[0].key
-            const actual = tokens.getTokens(node).map(toValue)
+            const node = (ast!.templateBody!.children[2] as VElement).startTag
+                .attributes[0].key
+            const actual = tokens!.getTokens(node).map(toValue)
 
             assert.deepStrictEqual(actual, ["a"])
         })
@@ -221,9 +229,9 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     describe("ast.templateBody.children[2].startTag.attributes[0].value (VAttributeValue)", () => {
         it("should return the value token.", () => {
-            const node =
-                ast.templateBody.children[2].startTag.attributes[0].value
-            const actual = tokens.getTokens(node).map(toValue)
+            const node = (ast!.templateBody!.children[2] as VElement).startTag
+                .attributes[0].value!
+            const actual = tokens!.getTokens(node).map(toValue)
 
             assert.deepStrictEqual(actual, ["b"])
         })
@@ -231,8 +239,9 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     describe("ast.templateBody.children[2].startTag.attributes[1].key (VDirectiveKey)", () => {
         it("should return the identifier token.", () => {
-            const node = ast.templateBody.children[2].startTag.attributes[1].key
-            const actual = tokens.getTokens(node).map(toValue)
+            const node = (ast!.templateBody!.children[2] as VElement).startTag
+                .attributes[1].key
+            const actual = tokens!.getTokens(node).map(toValue)
 
             assert.deepStrictEqual(actual, ["v-show"])
         })
@@ -240,9 +249,9 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     describe("ast.templateBody.children[2].startTag.attributes[1].value (VExpressionContainer)", () => {
         it("should return all tokens in the value.", () => {
-            const node =
-                ast.templateBody.children[2].startTag.attributes[1].value
-            const actual = tokens.getTokens(node).map(toValue)
+            const node = (ast!.templateBody!.children[2] as VElement).startTag
+                .attributes[1].value!
+            const actual = tokens!.getTokens(node).map(toValue)
 
             assert.deepStrictEqual(actual, [
                 '"',
@@ -260,10 +269,11 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     describe("ast.templateBody.children[2].startTag.attributes[1].value.expression (BinaryExpression)", () => {
         it("should return all tokens in the expression.", () => {
-            const node =
-                ast.templateBody.children[2].startTag.attributes[1].value
-                    .expression
-            const actual = tokens.getTokens(node).map(toValue)
+            const node = (
+                (ast!.templateBody!.children[2] as VElement).startTag
+                    .attributes[1].value as VExpressionContainer
+            ).expression!
+            const actual = tokens!.getTokens(node).map(toValue)
 
             assert.deepStrictEqual(actual, [
                 "c",
@@ -279,8 +289,8 @@ describe("services.getTemplateBodyTokenStore", () => {
 
     describe("ast.templateBody.children[2].endTag (VEndTag)", () => {
         it("should return all tokens in the tag.", () => {
-            const node = ast.templateBody.children[2].endTag
-            const actual = tokens.getTokens(node).map(toValue)
+            const node = (ast!.templateBody!.children[2] as VElement).endTag!
+            const actual = tokens!.getTokens(node).map(toValue)
 
             assert.deepStrictEqual(actual, ["div", ">"])
         })
@@ -289,15 +299,13 @@ describe("services.getTemplateBodyTokenStore", () => {
     describe("TokenStore#get{Range,Loc}()", () => {
         it("should return loc and range.", () => {
             const {
-                templateBody: {
-                    children: [node],
-                    tokens: [token],
-                },
-            } = ast
-            assert.equal(typeof tokens.getRange(node)[0], "number")
-            assert.equal(typeof tokens.getRange(token)[1], "number")
-            assert.equal(typeof tokens.getLoc(node).start.line, "number")
-            assert.equal(typeof tokens.getLoc(node).end.column, "number")
+                children: [node],
+                tokens: [token],
+            } = ast!.templateBody!
+            assert.equal(typeof tokens!.getRange(node)[0], "number")
+            assert.equal(typeof tokens!.getRange(token)[1], "number")
+            assert.equal(typeof tokens!.getLoc(node).start.line, "number")
+            assert.equal(typeof tokens!.getLoc(node).end.column, "number")
         })
     })
 })

@@ -8,6 +8,7 @@ import type { ParseError } from "./errors"
 import type { HasLocation } from "./locations"
 import type { Token } from "./tokens"
 import type { TSESTree } from "@typescript-eslint/utils"
+import type { ParserServices } from "../parser-services"
 
 //------------------------------------------------------------------------------
 // Common
@@ -70,7 +71,7 @@ export type ESLintNode =
  */
 export interface ESLintExtendedProgram {
     ast: ESLintProgram
-    services?: {}
+    services?: ParserServices
     visitorKeys?: { [type: string]: string[] }
     scopeManager?: ScopeManager
 }

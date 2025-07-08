@@ -30,5 +30,6 @@
 
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "tsdown.config.ts"]
+  "include": ["src/**/*.ts", "tsdown.config.ts"],
+  "references": [{ "path": "./tsconfig.test.json" }]
 }

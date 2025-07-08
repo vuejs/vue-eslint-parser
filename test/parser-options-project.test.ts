@@ -1,8 +1,7 @@
-"use strict"
-
-const assert = require("assert")
-const { parseForESLint } = require("../src")
-const espree = require("espree")
+import { describe, it, assert } from "vitest"
+import { parseForESLint } from "../src"
+import * as espree from "espree"
+import type { Linter } from "eslint"
 
 describe("use `project: undefined` when parsing template script-let", () => {
     it("should be the project option is defined only once in Simple SFC.", () => {
@@ -39,7 +38,7 @@ describe("use `project: undefined` when parsing template script-let", () => {
                             ast: espree.parse(code, options),
                         }
                     },
-                },
+                } satisfies Linter.Parser,
             },
         )
         assert.strictEqual(projectCount, 1)
@@ -83,7 +82,7 @@ describe("use `project: undefined` when parsing template script-let", () => {
                             ast: espree.parse(code, options),
                         }
                     },
-                },
+                } satisfies Linter.Parser,
             },
         )
         assert.strictEqual(projectCount, 1)
@@ -126,7 +125,7 @@ describe("use `project: undefined` when parsing template script-let", () => {
                             ast: espree.parse(code, options),
                         }
                     },
-                },
+                } satisfies Linter.Parser,
             },
         )
         assert.strictEqual(projectCount, 1)

@@ -2,18 +2,17 @@
  * @author Toru Nagashima <https://github.com/mysticatea>
  * See LICENSE file in root directory for full license.
  */
-"use strict"
 
-const assert = require("assert")
-const { parseForESLint } = require("../src")
-const eslint = require("eslint")
-const Linter = eslint.Linter
+import { describe, it, assert } from "vitest"
+import { parseForESLint } from "../src"
+import type { ESLint } from "eslint"
+import { Linter } from "eslint"
 
 describe("parserOptions", () => {
     describe("parser", () => {
         const linter = new Linter({ configType: "flat" })
-        const parser = { parseForESLint }
-        const plugin = {
+        const parser: Linter.Parser = { parseForESLint }
+        const plugin: ESLint.Plugin = {
             rules: {
                 "template-test": {
                     create(context) {
@@ -33,7 +32,7 @@ describe("parserOptions", () => {
         it("false then skip parsing '<script>'.", () => {
             const code = `<template>Hello</template>
 <script>This is syntax error</script>`
-            const config = {
+            const config: Linter.Config = {
                 files: ["*.vue"],
                 plugins: {
                     vue: plugin,
@@ -57,7 +56,7 @@ describe("parserOptions", () => {
         it("Fail in <script setup> with sourceType: script.", () => {
             const code = `<template>Hello</template>
 <script setup>import Foo from './foo'</script>`
-            const config = {
+            const config: Linter.Config = {
                 files: ["*.vue"],
                 plugins: {
                     vue: plugin,

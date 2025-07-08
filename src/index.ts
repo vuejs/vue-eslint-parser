@@ -85,7 +85,7 @@ export function parseForESLint(
  * @param options The parser options.
  * @returns The parsing result.
  */
-export function parse(code: string, options: any): AST.ESLintProgram {
+export function parse(code: string, options?: any): AST.ESLintProgram {
     return parseForESLint(code, options).ast
 }
 
