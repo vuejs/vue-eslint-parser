@@ -67,7 +67,6 @@
     "preversion": "npm test",
     "version": "npm run -s build",
     "postversion": "git push && git push --tags",
-    "prewatch": "npm run -s clean",
     "watch": "run-p watch:*",
     "watch:tsdown": "tsdown --watch",
     "watch:update-ast": "wait-on dist/index.js && warun dist/index.js \"test/fixtures/ast/*/*.vue\" -- ts-node scripts/update-fixtures-ast.js"

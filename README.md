@@ -326,7 +326,6 @@ The `npm install` command installs dependencies.
 - `npm test` runs tests and measures coverage.
 - `npm run build` compiles TypeScript source code to `index.js`, `index.js.map`, and `index.d.ts` in `dist`.
 - `npm run coverage` shows the coverage result of `npm test` command with the default browser.
-- `npm run clean` removes the temporary files which are created by `npm test` and `npm run build`.
 - `npm run lint` runs ESLint.
 - `npm run update-fixtures` updates files in `test/fixtures/ast` directory based on `test/fixtures/ast/*/source.vue` files.
 - `npm run watch` runs `build`, `update-fixtures`, and tests with `--watch` option.
