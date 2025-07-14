@@ -22,7 +22,14 @@ const FIXTURE_DIR = path.join(__dirname, "fixtures/integrations")
 
 describe("Integration tests", () => {
     beforeAll(async () => {
-        await import("ts-node/register")
+        const { register } = await import("ts-node")
+        register({
+            transpileOnly: true,
+            compilerOptions: {
+                module: "commonjs",
+                moduleResolution: "node",
+            },
+        })
     })
     for (const target of fs.readdirSync(FIXTURE_DIR)) {
         it(target, async () => {
