@@ -32,12 +32,11 @@ export const KEYS = Evk.unionWith({
 
 /**
  * Check that the given key should be traversed or not.
- * @this {Traversable}
  * @param key The key to check.
+ * @param value The value of the key in the node.
  * @returns `true` if the key should be traversed.
  */
-function fallbackKeysFilter(this: any, key: string): boolean {
-    let value = null
+function fallbackKeysFilter(key: string, value: any = null): boolean {
     return (
         key !== "comments" &&
         key !== "leadingComments" &&
@@ -46,7 +45,7 @@ function fallbackKeysFilter(this: any, key: string): boolean {
         key !== "range" &&
         key !== "tokens" &&
         key !== "trailingComments" &&
-        (value = this[key]) !== null &&
+        value !== null &&
         typeof value === "object" &&
         (typeof value.type === "string" || Array.isArray(value))
     )
@@ -57,8 +56,10 @@ function fallbackKeysFilter(this: any, key: string): boolean {
  * @param node The node to get.
  * @returns The keys to traverse.
  */
-function getFallbackKeys(node: Node): string[] {
-    return Object.keys(node).filter(fallbackKeysFilter, node)
+export function getFallbackKeys(node: Node): string[] {
+    return Object.keys(node).filter((key) =>
+        fallbackKeysFilter(key, node[key as keyof Node]),
+    )
 }
 
 /**
@@ -119,5 +120,3 @@ export interface Visitor {
 export function traverseNodes(node: Node, visitor: Visitor): void {
     traverse(node, null, visitor)
 }
-
-export { getFallbackKeys }
