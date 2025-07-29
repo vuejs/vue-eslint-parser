@@ -63,13 +63,14 @@
     "lint": "eslint src test package.json",
     "test": "vitest",
     "test:cover": "vitest --coverage",
-    "update-fixtures": "ts-node --transpile-only scripts/update-fixtures-ast.js && ts-node --transpile-only scripts/update-fixtures-document-fragment.js",
+    "update-fixtures": "npm run ts -- scripts/update-fixtures-ast.js && npm run ts -- scripts/update-fixtures-document-fragment.js",
     "preversion": "npm test",
     "version": "npm run -s build",
     "postversion": "git push && git push --tags",
     "watch": "run-p watch:*",
     "watch:tsdown": "tsdown --watch",
-    "watch:update-ast": "wait-on dist/index.js && warun dist/index.js \"test/fixtures/ast/*/*.vue\" -- ts-node scripts/update-fixtures-ast.js"
+    "watch:update-ast": "wait-on dist/index.js && warun dist/index.js \"test/fixtures/ast/*/*.vue\" -- npm run ts -- scripts/update-fixtures-ast.js",
+    "ts": "ts-node --transpile-only --compilerOptions '{\"module\":\"nodenext\",\"moduleResolution\":\"nodenext\"}'"
   },
   "repository": {
     "type": "git",
