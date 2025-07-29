@@ -1,5 +1,4 @@
 {
-  "compileOnSave": true,
   "compilerOptions": {
     "allowJs": false,
     "allowSyntheticDefaultImports": true,
@@ -8,35 +7,28 @@
     "alwaysStrict": true,
     "baseUrl": ".",
     "checkJs": false,
-    "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "inlineSources": true,
     "lib": ["es2023"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "newLine": "LF",
-    "noEmitOnError": true,
+    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": ".temp",
     "paths": {
       "*": ["typings/*"]
     },
-    "pretty": true,
-    "removeComments": true,
-    "sourceMap": true,
-    "sourceRoot": "src",
+    "resolveJsonModule": true,
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2024",
 
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"],
-  "references": [{ "path": "./tsconfig.test.json" }]
+  "include": ["**/*.ts"]
 }
