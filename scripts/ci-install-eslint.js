@@ -28,10 +28,19 @@ function sh(command) {
         ? requestedVersion
         : `^${requestedVersion}`
 
+    const packageVersions = [`eslint@${requestedVersionSpec}`]
+
+    if (requestedVersion === "10") {
+        packageVersions.push("espree@11", "eslint-scope@9")
+    } else if (Number(requestedVersion) < 10) {
+        packageVersions.push("espree@10", "eslint-scope@8")
+    }
+
     // Install ESLint of the requested version
-    await sh(`npm install eslint@${requestedVersionSpec} -f`)
-    if (Number(requestedVersion) < 9)
+    await sh(`npm install ${packageVersions.join(" ")} -f`)
+    if (Number(requestedVersion) < 9) {
         await sh(`npm install @types/eslint -D -f`)
+    }
 
     // Install ESLint submodule of the requested version
     // const installedVersion = require("eslint/package.json").version

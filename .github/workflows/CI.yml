@@ -40,7 +40,10 @@ jobs:
           - eslint: 9
             node: 'lts/*'
             os: macos-latest
-
+          # newer ESLint version
+          - eslint: 10
+            node: 'lts/*'
+            os: 'ubuntu-latest'
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout
