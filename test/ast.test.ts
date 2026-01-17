@@ -168,7 +168,6 @@ describe("Template AST", () => {
             path.join(ROOT, `${name}/parser-options.js`),
         ].find((fp) => fs.existsSync(fp))
         const requirementsPath = path.join(ROOT, `${name}/requirements.json`)
-        const servicesPath = path.join(ROOT, `${name}/services.json`)
         const source = fs.readFileSync(sourcePath, "utf8")
 
         const parserOptions: ParserOptions = optionsPath
@@ -179,9 +178,7 @@ describe("Template AST", () => {
         )
             ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
             : {}
-        const services = fs.existsSync(servicesPath)
-            ? JSON.parse(fs.readFileSync(servicesPath, "utf8"))
-            : null
+
         if (parserOptions.templateTokenizer) {
             parserOptions.templateTokenizer = Object.fromEntries(
                 Object.entries(parserOptions.templateTokenizer).map(
@@ -313,12 +310,16 @@ describe("Template AST", () => {
                 validateParent(source, parserOptions)
             })
 
-            if (services) {
-                it("should have correct services.", () => {
-                    assert.deepStrictEqual(
-                        Object.keys(actual.services!).sort(),
-                        services,
-                    )
+            const servicesPath = path.join(ROOT, `${name}/services.json`)
+            if (fs.existsSync(servicesPath)) {
+                it("should have correct services.", async () => {
+                    await expect(
+                        JSON.stringify(
+                            Object.keys(actual.services!).sort(),
+                            null,
+                            4,
+                        ),
+                    ).toMatchFileSnapshot(servicesPath)
                 })
             }
         })
