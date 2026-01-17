@@ -221,12 +221,13 @@ describe("Template AST", () => {
 
             it("should have correct range.", async () => {
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
-                const tokens = getAllTokens(actual.ast).map((t) =>
+                const tokenRanges = getAllTokens(actual.ast).map((t) =>
                     source.slice(t.range[0], t.range[1]),
                 )
-                const actualText = JSON.stringify(tokens, null, 4)
 
-                await expect(actualText).toMatchFileSnapshot(resultPath)
+                await expect(
+                    JSON.stringify(tokenRanges, replacer, 4),
+                ).toMatchFileSnapshot(resultPath)
             })
 
             it("should have correct range on windows(CRLF).", async () => {
@@ -242,7 +243,7 @@ describe("Template AST", () => {
                         .slice(t.range[0], t.range[1])
                         .replace(/\r?\n/gu, "\n"),
                 )
-                const actualText = JSON.stringify(tokens, null, 4)
+                const actualText = JSON.stringify(tokens, replacer, 4)
 
                 await expect(actualText).toMatchFileSnapshot(resultPath)
             })
@@ -277,7 +278,7 @@ describe("Template AST", () => {
                         expected,
                         `${JSON.stringify(
                             token,
-                            null,
+                            replacer,
                             4,
                         )} expected ${JSON.stringify(
                             expected,
@@ -288,10 +289,11 @@ describe("Template AST", () => {
 
             it("should traverse AST in the correct order.", async () => {
                 const resultPath = path.join(ROOT, `${name}/tree.json`)
-                const tokens = getTree(source, parserOptions)
-                const actualText = JSON.stringify(tokens, null, 4)
+                const tree = getTree(source, parserOptions)
 
-                await expect(actualText).toMatchFileSnapshot(resultPath)
+                await expect(
+                    JSON.stringify(tree, replacer, 4),
+                ).toMatchFileSnapshot(resultPath)
             })
 
             it("should scope in the correct.", async () => {
@@ -316,7 +318,7 @@ describe("Template AST", () => {
                     await expect(
                         JSON.stringify(
                             Object.keys(actual.services!).sort(),
-                            null,
+                            replacer,
                             4,
                         ),
                     ).toMatchFileSnapshot(servicesPath)
