@@ -58,6 +58,7 @@
     "warun": "^1.0.0"
   },
   "scripts": {
+    "dev": "tsdown --watch",
     "build": "tsdown",
     "coverage": "vitest --coverage --ui",
     "lint": "eslint src test package.json",
@@ -66,9 +67,6 @@
     "preversion": "npm test",
     "version": "npm run -s build",
     "postversion": "git push && git push --tags",
-    "watch": "run-p watch:*",
-    "watch:tsdown": "tsdown --watch",
-    "watch:update-ast": "wait-on dist/index.js && warun dist/index.js \"test/fixtures/ast/*/*.vue\" -- npm run ts -- scripts/update-fixtures-ast.js",
     "ts": "ts-node --transpile-only --compilerOptions '{\"module\":\"nodenext\",\"moduleResolution\":\"nodenext\"}'"
   },
   "repository": {
