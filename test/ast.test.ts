@@ -13,7 +13,7 @@ import type { Node } from "../src/ast"
 import type { ParserOptions } from "../src/common/parser-options"
 import fs from "node:fs"
 import path from "node:path"
-import { describe, it, assert } from "vitest"
+import { describe, it, assert, expect } from "vitest"
 import { Linter } from "eslint"
 import semver from "semver"
 import * as parser from "../src"
@@ -302,17 +302,16 @@ describe("Template AST", () => {
                 assert.strictEqual(actualText, expectedText)
             })
 
-            it("should scope in the correct.", () => {
+            it("should scope in the correct.", async () => {
                 const resultPath = path.join(ROOT, `${name}/scope.json`)
                 if (!fs.existsSync(resultPath)) {
                     return
                 }
-                const expectedText = fs.readFileSync(resultPath, "utf8")
                 const actualText = scopeToJSON(
                     actual.scopeManager || analyze(actual.ast, options),
                 )
 
-                assert.strictEqual(actualText, expectedText)
+                await expect(actualText).toMatchFileSnapshot(resultPath)
             })
 
             it("should have correct parent properties.", () => {
