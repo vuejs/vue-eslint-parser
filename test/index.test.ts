@@ -12,7 +12,7 @@ import type { Rule } from "eslint"
 import path from "node:path"
 import { describe, it, assert, beforeEach, afterEach } from "vitest"
 import tsParser from "@typescript-eslint/parser"
-import fs from "fs-extra"
+import fs from "node:fs"
 import eslint from "eslint"
 import { parse, parseForESLint } from "../src"
 import * as parser from "../src"
@@ -55,18 +55,19 @@ describe("Basic tests", async () => {
         }
     }
     beforeEach(() => {
-        fs.emptyDirSync(FIXTURE_DIR)
+        fs.rmSync(FIXTURE_DIR, { recursive: true, force: true })
         for (const fileName of fs.readdirSync(ORIGINAL_FIXTURE_DIR)) {
             const src = path.join(ORIGINAL_FIXTURE_DIR, fileName)
             const dst = path.join(FIXTURE_DIR, fileName)
 
             if (fs.statSync(src).isFile()) {
-                fs.copySync(src, dst)
+                // eslint-disable-next-line node/no-unsupported-features/node-builtins
+                fs.cpSync(src, dst)
             }
         }
     })
     afterEach(() => {
-        fs.removeSync(FIXTURE_DIR)
+        fs.rmSync(FIXTURE_DIR, { recursive: true, force: true })
     })
 
     describe("About fixtures/hello.vue", () => {
