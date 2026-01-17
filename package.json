@@ -53,9 +53,7 @@
     "tsdown": "^0.12.9",
     "typescript": "~5.7.3",
     "vite": "^6.3.5",
-    "vitest": "^3.2.4",
-    "wait-on": "^6.0.0",
-    "warun": "^1.0.0"
+    "vitest": "^3.2.4"
   },
   "scripts": {
     "dev": "tsdown --watch",
@@ -66,8 +64,7 @@
     "test:cover": "vitest --coverage",
     "preversion": "npm test",
     "version": "npm run -s build",
-    "postversion": "git push && git push --tags",
-    "ts": "ts-node --transpile-only --compilerOptions '{\"module\":\"nodenext\",\"moduleResolution\":\"nodenext\"}'"
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
