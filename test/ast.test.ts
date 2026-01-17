@@ -214,28 +214,25 @@ describe("Template AST", () => {
         const actual = parser.parseForESLint(source, options)
 
         describe(`'test/fixtures/ast/${name}/source.vue'`, () => {
-            it("should be parsed to valid AST.", () => {
+            it("should be parsed to valid AST.", async () => {
                 const resultPath = path.join(ROOT, `${name}/ast.json`)
-                const expected = fs.readFileSync(resultPath, "utf8")
 
-                assert.strictEqual(
+                await expect(
                     JSON.stringify(actual.ast, replacer, 4),
-                    expected,
-                )
+                ).toMatchFileSnapshot(resultPath)
             })
 
-            it("should have correct range.", () => {
+            it("should have correct range.", async () => {
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
-                const expectedText = fs.readFileSync(resultPath, "utf8")
                 const tokens = getAllTokens(actual.ast).map((t) =>
                     source.slice(t.range[0], t.range[1]),
                 )
                 const actualText = JSON.stringify(tokens, null, 4)
 
-                assert.strictEqual(actualText, expectedText)
+                await expect(actualText).toMatchFileSnapshot(resultPath)
             })
 
-            it("should have correct range on windows(CRLF).", () => {
+            it("should have correct range on windows(CRLF).", async () => {
                 const sourceForWin = source.replace(/\r?\n/gu, "\r\n")
                 const actualForWin = parser.parseForESLint(
                     sourceForWin,
@@ -243,7 +240,6 @@ describe("Template AST", () => {
                 )
 
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
-                const expectedText = fs.readFileSync(resultPath, "utf8")
                 const tokens = getAllTokens(actualForWin.ast).map((t) =>
                     sourceForWin
                         .slice(t.range[0], t.range[1])
@@ -251,7 +247,7 @@ describe("Template AST", () => {
                 )
                 const actualText = JSON.stringify(tokens, null, 4)
 
-                assert.strictEqual(actualText, expectedText)
+                await expect(actualText).toMatchFileSnapshot(resultPath)
             })
 
             it("should have correct location.", () => {
@@ -293,13 +289,12 @@ describe("Template AST", () => {
                 }
             })
 
-            it("should traverse AST in the correct order.", () => {
+            it("should traverse AST in the correct order.", async () => {
                 const resultPath = path.join(ROOT, `${name}/tree.json`)
-                const expectedText = fs.readFileSync(resultPath, "utf8")
                 const tokens = getTree(source, parserOptions)
                 const actualText = JSON.stringify(tokens, null, 4)
 
-                assert.strictEqual(actualText, expectedText)
+                await expect(actualText).toMatchFileSnapshot(resultPath)
             })
 
             it("should scope in the correct.", async () => {
