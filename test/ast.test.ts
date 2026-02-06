@@ -13,7 +13,7 @@ import type { Node } from "../src/ast"
 import type { ParserOptions } from "../src/common/parser-options"
 import fs from "node:fs"
 import path from "node:path"
-import { describe, it, assert } from "vitest"
+import { describe, it, assert, expect } from "vitest"
 import { Linter } from "eslint"
 import semver from "semver"
 import * as parser from "../src"
@@ -168,7 +168,6 @@ describe("Template AST", () => {
             path.join(ROOT, `${name}/parser-options.js`),
         ].find((fp) => fs.existsSync(fp))
         const requirementsPath = path.join(ROOT, `${name}/requirements.json`)
-        const servicesPath = path.join(ROOT, `${name}/services.json`)
         const source = fs.readFileSync(sourcePath, "utf8")
 
         const parserOptions: ParserOptions = optionsPath
@@ -179,9 +178,7 @@ describe("Template AST", () => {
         )
             ? JSON.parse(fs.readFileSync(requirementsPath, "utf8"))
             : {}
-        const services = fs.existsSync(servicesPath)
-            ? JSON.parse(fs.readFileSync(servicesPath, "utf8"))
-            : null
+
         if (parserOptions.templateTokenizer) {
             parserOptions.templateTokenizer = Object.fromEntries(
                 Object.entries(parserOptions.templateTokenizer).map(
@@ -214,28 +211,26 @@ describe("Template AST", () => {
         const actual = parser.parseForESLint(source, options)
 
         describe(`'test/fixtures/ast/${name}/source.vue'`, () => {
-            it("should be parsed to valid AST.", () => {
+            it("should be parsed to valid AST.", async () => {
                 const resultPath = path.join(ROOT, `${name}/ast.json`)
-                const expected = fs.readFileSync(resultPath, "utf8")
 
-                assert.strictEqual(
+                await expect(
                     JSON.stringify(actual.ast, replacer, 4),
-                    expected,
-                )
+                ).toMatchFileSnapshot(resultPath)
             })
 
-            it("should have correct range.", () => {
+            it("should have correct range.", async () => {
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
-                const expectedText = fs.readFileSync(resultPath, "utf8")
-                const tokens = getAllTokens(actual.ast).map((t) =>
+                const tokenRanges = getAllTokens(actual.ast).map((t) =>
                     source.slice(t.range[0], t.range[1]),
                 )
-                const actualText = JSON.stringify(tokens, null, 4)
 
-                assert.strictEqual(actualText, expectedText)
+                await expect(
+                    JSON.stringify(tokenRanges, replacer, 4),
+                ).toMatchFileSnapshot(resultPath)
             })
 
-            it("should have correct range on windows(CRLF).", () => {
+            it("should have correct range on windows(CRLF).", async () => {
                 const sourceForWin = source.replace(/\r?\n/gu, "\r\n")
                 const actualForWin = parser.parseForESLint(
                     sourceForWin,
@@ -243,15 +238,14 @@ describe("Template AST", () => {
                 )
 
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
-                const expectedText = fs.readFileSync(resultPath, "utf8")
                 const tokens = getAllTokens(actualForWin.ast).map((t) =>
                     sourceForWin
                         .slice(t.range[0], t.range[1])
                         .replace(/\r?\n/gu, "\n"),
                 )
-                const actualText = JSON.stringify(tokens, null, 4)
+                const actualText = JSON.stringify(tokens, replacer, 4)
 
-                assert.strictEqual(actualText, expectedText)
+                await expect(actualText).toMatchFileSnapshot(resultPath)
             })
 
             it("should have correct location.", () => {
@@ -284,7 +278,7 @@ describe("Template AST", () => {
                         expected,
                         `${JSON.stringify(
                             token,
-                            null,
+                            replacer,
                             4,
                         )} expected ${JSON.stringify(
                             expected,
@@ -293,38 +287,41 @@ describe("Template AST", () => {
                 }
             })
 
-            it("should traverse AST in the correct order.", () => {
+            it("should traverse AST in the correct order.", async () => {
                 const resultPath = path.join(ROOT, `${name}/tree.json`)
-                const expectedText = fs.readFileSync(resultPath, "utf8")
-                const tokens = getTree(source, parserOptions)
-                const actualText = JSON.stringify(tokens, null, 4)
+                const tree = getTree(source, parserOptions)
 
-                assert.strictEqual(actualText, expectedText)
+                await expect(
+                    JSON.stringify(tree, replacer, 4),
+                ).toMatchFileSnapshot(resultPath)
             })
 
-            it("should scope in the correct.", () => {
+            it("should scope in the correct.", async () => {
                 const resultPath = path.join(ROOT, `${name}/scope.json`)
                 if (!fs.existsSync(resultPath)) {
                     return
                 }
-                const expectedText = fs.readFileSync(resultPath, "utf8")
                 const actualText = scopeToJSON(
                     actual.scopeManager || analyze(actual.ast, options),
                 )
 
-                assert.strictEqual(actualText, expectedText)
+                await expect(actualText).toMatchFileSnapshot(resultPath)
             })
 
             it("should have correct parent properties.", () => {
                 validateParent(source, parserOptions)
             })
 
-            if (services) {
-                it("should have correct services.", () => {
-                    assert.deepStrictEqual(
-                        Object.keys(actual.services!).sort(),
-                        services,
-                    )
+            const servicesPath = path.join(ROOT, `${name}/services.json`)
+            if (fs.existsSync(servicesPath)) {
+                it("should have correct services.", async () => {
+                    await expect(
+                        JSON.stringify(
+                            Object.keys(actual.services!).sort(),
+                            replacer,
+                            4,
+                        ),
+                    ).toMatchFileSnapshot(servicesPath)
                 })
             }
         })
