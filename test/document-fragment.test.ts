@@ -5,7 +5,7 @@
 import type { VDocumentFragment } from "../src/ast"
 import fs from "node:fs"
 import path from "node:path"
-import { describe, it, assert } from "vitest"
+import { describe, it, expect } from "vitest"
 import * as parser from "../src"
 import { replacer } from "./test-utils"
 
@@ -51,28 +51,26 @@ describe("services.getDocumentFragment", () => {
         const actual = result.services!.getDocumentFragment()
 
         describe(`'test/fixtures/document-fragment/${name}/${sourceFileName}'`, () => {
-            it("should be parsed to valid document fragment.", () => {
+            it("should be parsed to valid document fragment.", async () => {
                 const resultPath = path.join(
                     ROOT,
                     `${name}/document-fragment.json`,
                 )
-                const expected = fs.readFileSync(resultPath, "utf8")
 
-                assert.strictEqual(
+                await expect(
                     JSON.stringify(actual, replacer, 4),
-                    expected,
-                )
+                ).toMatchFileSnapshot(resultPath)
             })
 
-            it("should have correct range.", () => {
+            it("should have correct range.", async () => {
                 const resultPath = path.join(ROOT, `${name}/token-ranges.json`)
-                const expectedText = fs.readFileSync(resultPath, "utf8")
-                const tokens = getAllTokens(actual!).map((t) =>
+                const tokenRanges = getAllTokens(actual!).map((t) =>
                     source.slice(t.range[0], t.range[1]),
                 )
-                const actualText = JSON.stringify(tokens, null, 4)
 
-                assert.strictEqual(actualText, expectedText)
+                await expect(
+                    JSON.stringify(tokenRanges, replacer, 4),
+                ).toMatchFileSnapshot(resultPath)
             })
         })
     }
