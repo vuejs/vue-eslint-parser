@@ -9,7 +9,7 @@ const banner = `
 
 export default defineConfig({
     entry: "./src/index.ts",
-    target: "es2015",
+    exports: true,
     sourcemap: true,
     outputOptions: {
         banner,

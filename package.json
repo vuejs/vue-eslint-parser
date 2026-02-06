@@ -2,7 +2,12 @@
   "name": "vue-eslint-parser",
   "version": "10.2.0",
   "description": "The ESLint custom parser for `.vue` files.",
-  "main": "dist/index.js",
+  "main": "./dist/index.cjs",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": "./dist/index.cjs",
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist"
   ],
@@ -49,7 +54,7 @@
     "jsonc-eslint-parser": "^2.0.3",
     "prettier": "^3.4.2",
     "ts-node": "^10.9.2",
-    "tsdown": "^0.12.9",
+    "tsdown": "^0.20.3",
     "typescript": "~5.7.3",
     "vite": "^6.3.5",
     "vitest": "^3.2.4"
