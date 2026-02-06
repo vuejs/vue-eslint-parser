@@ -309,7 +309,7 @@ function analyzeScriptSetupVariables(
     }
     const customMacros = new Set(
         parserOptions.vueFeatures?.customMacros &&
-        Array.isArray(parserOptions.vueFeatures.customMacros)
+            Array.isArray(parserOptions.vueFeatures.customMacros)
             ? parserOptions.vueFeatures.customMacros
             : [],
     )

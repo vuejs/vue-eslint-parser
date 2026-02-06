@@ -283,9 +283,7 @@ export interface ESLintPropertyDefinition extends HasLocation, HasParent {
 }
 
 export interface ESLintStaticBlock
-    extends HasLocation,
-        HasParent,
-        Omit<ESLintBlockStatement, "type"> {
+    extends HasLocation, HasParent, Omit<ESLintBlockStatement, "type"> {
     type: "StaticBlock"
     body: ESLintStatement[]
 }
@@ -961,9 +959,7 @@ export interface VElement extends HasLocation, HasParent {
  * Root nodes.
  */
 export interface VDocumentFragment
-    extends HasLocation,
-        HasParent,
-        HasConcreteInfo {
+    extends HasLocation, HasParent, HasConcreteInfo {
     type: "VDocumentFragment"
     parent: null
     children: (VElement | VText | VExpressionContainer | VStyleElement)[]
