@@ -296,7 +296,7 @@ describe("Template AST", () => {
                 ).toMatchFileSnapshot(resultPath)
             })
 
-            it("should scope in the correct.", async () => {
+            it("should scope in the correct order.", async () => {
                 const resultPath = path.join(ROOT, `${name}/scope.json`)
                 if (!fs.existsSync(resultPath)) {
                     return
