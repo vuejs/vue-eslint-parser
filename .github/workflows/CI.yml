@@ -57,6 +57,24 @@ jobs:
       run: node scripts/ci-install-eslint ${{ matrix.eslint }}
     - name: Test
       run: npm run -s test
+  test-for-eslint-v10-rc:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Checkout submodules
+      run: git submodule update --init
+    - name: Install Node.js v24
+      uses: actions/setup-node@v4
+      with:
+        node-version: 24
+    - name: Install Packages
+      run: npm install -f
+    - name: Install ESLint v10 and eslint-scope v9
+      run: npm install eslint@^10.0.0-0 eslint-scope@^9.0.0 --force
+    - name: Test
+      run: npm run -s test
   test-for-old-eslint:
     name: Test
     strategy:
