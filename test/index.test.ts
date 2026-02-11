@@ -14,6 +14,7 @@ import { describe, it, assert, beforeEach, afterEach } from "vitest"
 import tsParser from "@typescript-eslint/parser"
 import fs from "node:fs"
 import eslint from "eslint"
+import semver from "semver"
 import { parse, parseForESLint } from "../src"
 import * as parser from "../src"
 import type { Node, VAttribute, VElement, VText } from "../src/ast"
@@ -42,6 +43,12 @@ const BABEL_PARSER_OPTIONS = {
         ],
     },
 }
+
+const isESLintV10 = semver.satisfies(
+    require("eslint/package.json").version, // eslint-disable-line @typescript-eslint/no-require-imports
+    ">=10",
+)
+
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
@@ -283,28 +290,31 @@ describe("Basic tests", async () => {
     })
 
     describe("About fixtures/typed.js", () => {
-        it("should notify no error with '@babel/eslint-parser'", async () => {
-            const cli = new ESLint({
-                cwd: FIXTURE_DIR,
-                overrideConfig: {
-                    files: ["*.js"],
-                    languageOptions: {
-                        parser,
-                        globals: {},
-                        parserOptions: {
-                            ...BABEL_PARSER_OPTIONS,
-                            sourceType: "module",
+        it.skipIf(isESLintV10)(
+            "should notify no error with '@babel/eslint-parser'",
+            async () => {
+                const cli = new ESLint({
+                    cwd: FIXTURE_DIR,
+                    overrideConfig: {
+                        files: ["*.js"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                ...BABEL_PARSER_OPTIONS,
+                                sourceType: "module",
+                            },
                         },
+                        rules: { semi: ["error", "never"] },
                     },
-                    rules: { semi: ["error", "never"] },
-                },
-                overrideConfigFile: true,
-            })
-            const report = await cli.lintFiles(["typed.js"])
-            const messages = report[0].messages
+                    overrideConfigFile: true,
+                })
+                const report = await cli.lintFiles(["typed.js"])
+                const messages = report[0].messages
 
-            assert.deepStrictEqual(messages, [])
-        })
+                assert.deepStrictEqual(messages, [])
+            },
+        )
 
         it("should notify no error with '@typescript-eslint/parser'", async () => {
             const cli = new ESLint({
@@ -400,27 +410,30 @@ describe("Basic tests", async () => {
     })
 
     describe("About fixtures/typed.vue", () => {
-        it("should notify no error with '@babel/eslint-parser'", async () => {
-            const cli = new ESLint({
-                cwd: FIXTURE_DIR,
-                overrideConfig: {
-                    files: ["*.vue"],
-                    languageOptions: {
-                        parser,
-                        globals: {},
-                        parserOptions: {
-                            ...BABEL_PARSER_OPTIONS,
+        it.skipIf(isESLintV10)(
+            "should notify no error with '@babel/eslint-parser'",
+            async () => {
+                const cli = new ESLint({
+                    cwd: FIXTURE_DIR,
+                    overrideConfig: {
+                        files: ["*.vue"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                ...BABEL_PARSER_OPTIONS,
+                            },
                         },
+                        rules: { semi: ["error", "never"] },
                     },
-                    rules: { semi: ["error", "never"] },
-                },
-                overrideConfigFile: true,
-            })
-            const report = await cli.lintFiles(["typed.vue"])
-            const messages = report[0].messages
+                    overrideConfigFile: true,
+                })
+                const report = await cli.lintFiles(["typed.vue"])
+                const messages = report[0].messages
 
-            assert.deepStrictEqual(messages, [])
-        })
+                assert.deepStrictEqual(messages, [])
+            },
+        )
 
         it("should notify no error with '@typescript-eslint/parser'", async () => {
             const cli = new ESLint({
@@ -444,36 +457,39 @@ describe("Basic tests", async () => {
             assert.deepStrictEqual(messages, [])
         })
 
-        it("should fix 'semi' errors with --fix option with '@babel/eslint-parser'", async () => {
-            const cli = new ESLint({
-                cwd: FIXTURE_DIR,
-                fix: true,
-                overrideConfig: {
-                    files: ["*.vue"],
-                    languageOptions: {
-                        parser,
-                        globals: {},
-                        parserOptions: {
-                            ...BABEL_PARSER_OPTIONS,
+        it.skipIf(isESLintV10)(
+            "should fix 'semi' errors with --fix option with '@babel/eslint-parser'",
+            async () => {
+                const cli = new ESLint({
+                    cwd: FIXTURE_DIR,
+                    fix: true,
+                    overrideConfig: {
+                        files: ["*.vue"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                ...BABEL_PARSER_OPTIONS,
+                            },
                         },
+                        rules: { semi: ["error", "always"] },
                     },
-                    rules: { semi: ["error", "always"] },
-                },
-                overrideConfigFile: true,
-            })
-            await ESLint.outputFixes(await cli.lintFiles(["typed.vue"]))
+                    overrideConfigFile: true,
+                })
+                await ESLint.outputFixes(await cli.lintFiles(["typed.vue"]))
 
-            const actual = fs.readFileSync(
-                path.join(FIXTURE_DIR, "typed.vue"),
-                "utf8",
-            )
-            const expected = fs.readFileSync(
-                path.join(FIXTURE_DIR, "typed.vue.fixed"),
-                "utf8",
-            )
+                const actual = fs.readFileSync(
+                    path.join(FIXTURE_DIR, "typed.vue"),
+                    "utf8",
+                )
+                const expected = fs.readFileSync(
+                    path.join(FIXTURE_DIR, "typed.vue.fixed"),
+                    "utf8",
+                )
 
-            assert(actual === expected)
-        })
+                assert(actual === expected)
+            },
+        )
 
         it("should fix 'semi' errors with --fix option with '@typescript-eslint/parser'", async () => {
             const cli = new ESLint({
@@ -573,35 +589,38 @@ describe("Basic tests", async () => {
         })
     })
 
-    describe("About fixtures/location-issue-with-babel-eslint.vue", () => {
-        it("Identifiers in import declarations should has correct location.", async () => {
-            const cli = new ESLint({
-                cwd: FIXTURE_DIR,
-                overrideConfig: {
-                    files: ["*.vue"],
-                    languageOptions: {
-                        parser,
-                        parserOptions: {
-                            ...BABEL_PARSER_OPTIONS,
-                            sourceType: "module",
-                            ecmaVersion: "latest",
+    describe.skipIf(isESLintV10)(
+        "About fixtures/location-issue-with-babel-eslint.vue",
+        () => {
+            it("Identifiers in import declarations should has correct location.", async () => {
+                const cli = new ESLint({
+                    cwd: FIXTURE_DIR,
+                    overrideConfig: {
+                        files: ["*.vue"],
+                        languageOptions: {
+                            parser,
+                            parserOptions: {
+                                ...BABEL_PARSER_OPTIONS,
+                                sourceType: "module",
+                                ecmaVersion: "latest",
+                            },
+                            globals: {},
                         },
-                        globals: {},
+                        rules: {
+                            "no-use-before-define": "error",
+                        },
                     },
-                    rules: {
-                        "no-use-before-define": "error",
-                    },
-                },
-                overrideConfigFile: true,
-            })
-            const report = await cli.lintFiles([
-                "location-issue-with-babel-eslint.vue",
-            ])
-            const messages = report[0].messages
+                    overrideConfigFile: true,
+                })
+                const report = await cli.lintFiles([
+                    "location-issue-with-babel-eslint.vue",
+                ])
+                const messages = report[0].messages
 
-            assert.deepStrictEqual(messages, [])
-        })
-    })
+                assert.deepStrictEqual(messages, [])
+            })
+        },
+    )
 
     describe("About unexpected-null-character errors", () => {
         it("should keep NULL in DATA state.", () => {
