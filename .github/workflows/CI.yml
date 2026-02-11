@@ -28,6 +28,7 @@ jobs:
   test:
     name: Test
     strategy:
+      fail-fast: false
       matrix:
         eslint: [9]
         node: [18, 20, 21, 'lts/*']
