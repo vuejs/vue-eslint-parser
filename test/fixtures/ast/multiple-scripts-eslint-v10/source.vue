@@ -1,0 +1,9 @@
+<script>
+performGlobalSideEffect()
+
+export const named = 1
+</script>
+
+<script setup>
+let count = 0
+</script>

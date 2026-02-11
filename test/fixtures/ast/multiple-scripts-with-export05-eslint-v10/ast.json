@@ -1,0 +1,1070 @@
+{
+    "type": "Program",
+    "start": 8,
+    "end": 151,
+    "loc": {
+        "start": {
+            "line": 2,
+            "column": 0
+        },
+        "end": {
+            "line": 8,
+            "column": 23
+        }
+    },
+    "range": [
+        9,
+        150
+    ],
+    "body": [
+        {
+            "type": "ExportNamedDeclaration",
+            "start": 9,
+            "end": 30,
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 0
+                },
+                "end": {
+                    "line": 2,
+                    "column": 21
+                }
+            },
+            "range": [
+                9,
+                30
+            ],
+            "declaration": {
+                "type": "VariableDeclaration",
+                "start": 16,
+                "end": 30,
+                "loc": {
+                    "start": {
+                        "line": 2,
+                        "column": 7
+                    },
+                    "end": {
+                        "line": 2,
+                        "column": 21
+                    }
+                },
+                "range": [
+                    16,
+                    30
+                ],
+                "declarations": [
+                    {
+                        "type": "VariableDeclarator",
+                        "start": 20,
+                        "end": 30,
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 11
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 21
+                            }
+                        },
+                        "range": [
+                            20,
+                            30
+                        ],
+                        "id": {
+                            "type": "Identifier",
+                            "start": 20,
+                            "end": 25,
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 11
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 16
+                                }
+                            },
+                            "range": [
+                                20,
+                                25
+                            ],
+                            "name": "count"
+                        },
+                        "init": {
+                            "type": "Literal",
+                            "start": 28,
+                            "end": 30,
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 19
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 21
+                                }
+                            },
+                            "range": [
+                                28,
+                                30
+                            ],
+                            "value": 42,
+                            "raw": "42"
+                        }
+                    }
+                ],
+                "kind": "let"
+            },
+            "specifiers": [],
+            "source": null
+        },
+        {
+            "type": "ExportNamedDeclaration",
+            "start": 31,
+            "end": 58,
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 0
+                },
+                "end": {
+                    "line": 3,
+                    "column": 27
+                }
+            },
+            "range": [
+                31,
+                58
+            ],
+            "declaration": null,
+            "specifiers": [
+                {
+                    "type": "ExportSpecifier",
+                    "start": 39,
+                    "end": 57,
+                    "loc": {
+                        "start": {
+                            "line": 3,
+                            "column": 8
+                        },
+                        "end": {
+                            "line": 3,
+                            "column": 26
+                        }
+                    },
+                    "range": [
+                        39,
+                        57
+                    ],
+                    "local": {
+                        "type": "Identifier",
+                        "start": 39,
+                        "end": 44,
+                        "loc": {
+                            "start": {
+                                "line": 3,
+                                "column": 8
+                            },
+                            "end": {
+                                "line": 3,
+                                "column": 13
+                            }
+                        },
+                        "range": [
+                            39,
+                            44
+                        ],
+                        "name": "count"
+                    },
+                    "exported": {
+                        "type": "Literal",
+                        "start": 48,
+                        "end": 57,
+                        "loc": {
+                            "start": {
+                                "line": 3,
+                                "column": 17
+                            },
+                            "end": {
+                                "line": 3,
+                                "column": 26
+                            }
+                        },
+                        "range": [
+                            48,
+                            57
+                        ],
+                        "value": "foo-bar",
+                        "raw": "\"foo-bar\""
+                    }
+                }
+            ],
+            "source": null
+        },
+        {
+            "type": "VariableDeclaration",
+            "start": 84,
+            "end": 98,
+            "loc": {
+                "start": {
+                    "line": 6,
+                    "column": 0
+                },
+                "end": {
+                    "line": 6,
+                    "column": 14
+                }
+            },
+            "range": [
+                84,
+                98
+            ],
+            "declarations": [
+                {
+                    "type": "VariableDeclarator",
+                    "start": 88,
+                    "end": 98,
+                    "loc": {
+                        "start": {
+                            "line": 6,
+                            "column": 4
+                        },
+                        "end": {
+                            "line": 6,
+                            "column": 14
+                        }
+                    },
+                    "range": [
+                        88,
+                        98
+                    ],
+                    "id": {
+                        "type": "Identifier",
+                        "start": 88,
+                        "end": 93,
+                        "loc": {
+                            "start": {
+                                "line": 6,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 6,
+                                "column": 9
+                            }
+                        },
+                        "range": [
+                            88,
+                            93
+                        ],
+                        "name": "count"
+                    },
+                    "init": {
+                        "type": "Literal",
+                        "start": 96,
+                        "end": 98,
+                        "loc": {
+                            "start": {
+                                "line": 6,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 6,
+                                "column": 14
+                            }
+                        },
+                        "range": [
+                            96,
+                            98
+                        ],
+                        "value": 42,
+                        "raw": "42"
+                    }
+                }
+            ],
+            "kind": "let"
+        },
+        {
+            "type": "ExportNamedDeclaration",
+            "start": 99,
+            "end": 126,
+            "loc": {
+                "start": {
+                    "line": 7,
+                    "column": 0
+                },
+                "end": {
+                    "line": 7,
+                    "column": 27
+                }
+            },
+            "range": [
+                99,
+                126
+            ],
+            "declaration": null,
+            "specifiers": [
+                {
+                    "type": "ExportSpecifier",
+                    "start": 107,
+                    "end": 125,
+                    "loc": {
+                        "start": {
+                            "line": 7,
+                            "column": 8
+                        },
+                        "end": {
+                            "line": 7,
+                            "column": 26
+                        }
+                    },
+                    "range": [
+                        107,
+                        125
+                    ],
+                    "local": {
+                        "type": "Identifier",
+                        "start": 107,
+                        "end": 112,
+                        "loc": {
+                            "start": {
+                                "line": 7,
+                                "column": 8
+                            },
+                            "end": {
+                                "line": 7,
+                                "column": 13
+                            }
+                        },
+                        "range": [
+                            107,
+                            112
+                        ],
+                        "name": "count"
+                    },
+                    "exported": {
+                        "type": "Literal",
+                        "start": 116,
+                        "end": 125,
+                        "loc": {
+                            "start": {
+                                "line": 7,
+                                "column": 17
+                            },
+                            "end": {
+                                "line": 7,
+                                "column": 26
+                            }
+                        },
+                        "range": [
+                            116,
+                            125
+                        ],
+                        "value": "foo-bar",
+                        "raw": "\"foo-bar\""
+                    }
+                }
+            ],
+            "source": null
+        },
+        {
+            "type": "ExportNamedDeclaration",
+            "start": 127,
+            "end": 150,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 0
+                },
+                "end": {
+                    "line": 8,
+                    "column": 23
+                }
+            },
+            "range": [
+                127,
+                150
+            ],
+            "declaration": null,
+            "specifiers": [
+                {
+                    "type": "ExportSpecifier",
+                    "start": 135,
+                    "end": 149,
+                    "loc": {
+                        "start": {
+                            "line": 8,
+                            "column": 8
+                        },
+                        "end": {
+                            "line": 8,
+                            "column": 22
+                        }
+                    },
+                    "range": [
+                        135,
+                        149
+                    ],
+                    "local": {
+                        "type": "Identifier",
+                        "start": 135,
+                        "end": 140,
+                        "loc": {
+                            "start": {
+                                "line": 8,
+                                "column": 8
+                            },
+                            "end": {
+                                "line": 8,
+                                "column": 13
+                            }
+                        },
+                        "range": [
+                            135,
+                            140
+                        ],
+                        "name": "count"
+                    },
+                    "exported": {
+                        "type": "Identifier",
+                        "start": 144,
+                        "end": 149,
+                        "loc": {
+                            "start": {
+                                "line": 8,
+                                "column": 17
+                            },
+                            "end": {
+                                "line": 8,
+                                "column": 22
+                            }
+                        },
+                        "range": [
+                            144,
+                            149
+                        ],
+                        "name": "count"
+                    }
+                }
+            ],
+            "source": null
+        }
+    ],
+    "sourceType": "module",
+    "comments": [],
+    "tokens": [
+        {
+            "type": "Punctuator",
+            "range": [
+                0,
+                8
+            ],
+            "loc": {
+                "start": {
+                    "line": 1,
+                    "column": 0
+                },
+                "end": {
+                    "line": 1,
+                    "column": 8
+                }
+            },
+            "value": "<script>"
+        },
+        {
+            "type": "Keyword",
+            "value": "export",
+            "start": 9,
+            "end": 15,
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 0
+                },
+                "end": {
+                    "line": 2,
+                    "column": 6
+                }
+            },
+            "range": [
+                9,
+                15
+            ]
+        },
+        {
+            "type": "Keyword",
+            "value": "let",
+            "start": 16,
+            "end": 19,
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 7
+                },
+                "end": {
+                    "line": 2,
+                    "column": 10
+                }
+            },
+            "range": [
+                16,
+                19
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "count",
+            "start": 20,
+            "end": 25,
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 11
+                },
+                "end": {
+                    "line": 2,
+                    "column": 16
+                }
+            },
+            "range": [
+                20,
+                25
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "=",
+            "start": 26,
+            "end": 27,
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 17
+                },
+                "end": {
+                    "line": 2,
+                    "column": 18
+                }
+            },
+            "range": [
+                26,
+                27
+            ]
+        },
+        {
+            "type": "Numeric",
+            "value": "42",
+            "start": 28,
+            "end": 30,
+            "loc": {
+                "start": {
+                    "line": 2,
+                    "column": 19
+                },
+                "end": {
+                    "line": 2,
+                    "column": 21
+                }
+            },
+            "range": [
+                28,
+                30
+            ]
+        },
+        {
+            "type": "Keyword",
+            "value": "export",
+            "start": 31,
+            "end": 37,
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 0
+                },
+                "end": {
+                    "line": 3,
+                    "column": 6
+                }
+            },
+            "range": [
+                31,
+                37
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "{",
+            "start": 38,
+            "end": 39,
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 7
+                },
+                "end": {
+                    "line": 3,
+                    "column": 8
+                }
+            },
+            "range": [
+                38,
+                39
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "count",
+            "start": 39,
+            "end": 44,
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 8
+                },
+                "end": {
+                    "line": 3,
+                    "column": 13
+                }
+            },
+            "range": [
+                39,
+                44
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "as",
+            "start": 45,
+            "end": 47,
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 14
+                },
+                "end": {
+                    "line": 3,
+                    "column": 16
+                }
+            },
+            "range": [
+                45,
+                47
+            ]
+        },
+        {
+            "type": "String",
+            "value": "\"foo-bar\"",
+            "start": 48,
+            "end": 57,
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 17
+                },
+                "end": {
+                    "line": 3,
+                    "column": 26
+                }
+            },
+            "range": [
+                48,
+                57
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "}",
+            "start": 57,
+            "end": 58,
+            "loc": {
+                "start": {
+                    "line": 3,
+                    "column": 26
+                },
+                "end": {
+                    "line": 3,
+                    "column": 27
+                }
+            },
+            "range": [
+                57,
+                58
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "range": [
+                59,
+                68
+            ],
+            "loc": {
+                "start": {
+                    "line": 4,
+                    "column": 0
+                },
+                "end": {
+                    "line": 4,
+                    "column": 9
+                }
+            },
+            "value": "</script>"
+        },
+        {
+            "type": "Punctuator",
+            "range": [
+                69,
+                83
+            ],
+            "loc": {
+                "start": {
+                    "line": 5,
+                    "column": 0
+                },
+                "end": {
+                    "line": 5,
+                    "column": 14
+                }
+            },
+            "value": "<script>"
+        },
+        {
+            "type": "Keyword",
+            "value": "let",
+            "start": 84,
+            "end": 87,
+            "loc": {
+                "start": {
+                    "line": 6,
+                    "column": 0
+                },
+                "end": {
+                    "line": 6,
+                    "column": 3
+                }
+            },
+            "range": [
+                84,
+                87
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "count",
+            "start": 88,
+            "end": 93,
+            "loc": {
+                "start": {
+                    "line": 6,
+                    "column": 4
+                },
+                "end": {
+                    "line": 6,
+                    "column": 9
+                }
+            },
+            "range": [
+                88,
+                93
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "=",
+            "start": 94,
+            "end": 95,
+            "loc": {
+                "start": {
+                    "line": 6,
+                    "column": 10
+                },
+                "end": {
+                    "line": 6,
+                    "column": 11
+                }
+            },
+            "range": [
+                94,
+                95
+            ]
+        },
+        {
+            "type": "Numeric",
+            "value": "42",
+            "start": 96,
+            "end": 98,
+            "loc": {
+                "start": {
+                    "line": 6,
+                    "column": 12
+                },
+                "end": {
+                    "line": 6,
+                    "column": 14
+                }
+            },
+            "range": [
+                96,
+                98
+            ]
+        },
+        {
+            "type": "Keyword",
+            "value": "export",
+            "start": 99,
+            "end": 105,
+            "loc": {
+                "start": {
+                    "line": 7,
+                    "column": 0
+                },
+                "end": {
+                    "line": 7,
+                    "column": 6
+                }
+            },
+            "range": [
+                99,
+                105
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "{",
+            "start": 106,
+            "end": 107,
+            "loc": {
+                "start": {
+                    "line": 7,
+                    "column": 7
+                },
+                "end": {
+                    "line": 7,
+                    "column": 8
+                }
+            },
+            "range": [
+                106,
+                107
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "count",
+            "start": 107,
+            "end": 112,
+            "loc": {
+                "start": {
+                    "line": 7,
+                    "column": 8
+                },
+                "end": {
+                    "line": 7,
+                    "column": 13
+                }
+            },
+            "range": [
+                107,
+                112
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "as",
+            "start": 113,
+            "end": 115,
+            "loc": {
+                "start": {
+                    "line": 7,
+                    "column": 14
+                },
+                "end": {
+                    "line": 7,
+                    "column": 16
+                }
+            },
+            "range": [
+                113,
+                115
+            ]
+        },
+        {
+            "type": "String",
+            "value": "\"foo-bar\"",
+            "start": 116,
+            "end": 125,
+            "loc": {
+                "start": {
+                    "line": 7,
+                    "column": 17
+                },
+                "end": {
+                    "line": 7,
+                    "column": 26
+                }
+            },
+            "range": [
+                116,
+                125
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "}",
+            "start": 125,
+            "end": 126,
+            "loc": {
+                "start": {
+                    "line": 7,
+                    "column": 26
+                },
+                "end": {
+                    "line": 7,
+                    "column": 27
+                }
+            },
+            "range": [
+                125,
+                126
+            ]
+        },
+        {
+            "type": "Keyword",
+            "value": "export",
+            "start": 127,
+            "end": 133,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 0
+                },
+                "end": {
+                    "line": 8,
+                    "column": 6
+                }
+            },
+            "range": [
+                127,
+                133
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "{",
+            "start": 134,
+            "end": 135,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 7
+                },
+                "end": {
+                    "line": 8,
+                    "column": 8
+                }
+            },
+            "range": [
+                134,
+                135
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "count",
+            "start": 135,
+            "end": 140,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 8
+                },
+                "end": {
+                    "line": 8,
+                    "column": 13
+                }
+            },
+            "range": [
+                135,
+                140
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "as",
+            "start": 141,
+            "end": 143,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 14
+                },
+                "end": {
+                    "line": 8,
+                    "column": 16
+                }
+            },
+            "range": [
+                141,
+                143
+            ]
+        },
+        {
+            "type": "Identifier",
+            "value": "count",
+            "start": 144,
+            "end": 149,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 17
+                },
+                "end": {
+                    "line": 8,
+                    "column": 22
+                }
+            },
+            "range": [
+                144,
+                149
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "value": "}",
+            "start": 149,
+            "end": 150,
+            "loc": {
+                "start": {
+                    "line": 8,
+                    "column": 22
+                },
+                "end": {
+                    "line": 8,
+                    "column": 23
+                }
+            },
+            "range": [
+                149,
+                150
+            ]
+        },
+        {
+            "type": "Punctuator",
+            "range": [
+                151,
+                160
+            ],
+            "loc": {
+                "start": {
+                    "line": 9,
+                    "column": 0
+                },
+                "end": {
+                    "line": 9,
+                    "column": 9
+                }
+            },
+            "value": "</script>"
+        }
+    ]
+}

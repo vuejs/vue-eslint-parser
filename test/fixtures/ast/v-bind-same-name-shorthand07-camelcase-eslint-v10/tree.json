@@ -1,0 +1,73 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <img :srcUrl>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<img :srcUrl>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<img :srcUrl>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":srcUrl",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":srcUrl",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "srcUrl",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "srcUrl",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "srcUrl",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

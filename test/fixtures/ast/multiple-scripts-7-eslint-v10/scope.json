@@ -1,0 +1,615 @@
+{
+    "type": "global",
+    "variables": [],
+    "references": [],
+    "childScopes": [
+        {
+            "type": "module",
+            "variables": [
+                {
+                    "name": "count",
+                    "identifiers": [
+                        {
+                            "type": "Identifier",
+                            "name": "count",
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 11
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 16
+                                }
+                            }
+                        },
+                        {
+                            "type": "Identifier",
+                            "name": "count",
+                            "loc": {
+                                "start": {
+                                    "line": 7,
+                                    "column": 4
+                                },
+                                "end": {
+                                    "line": 7,
+                                    "column": 9
+                                }
+                            }
+                        }
+                    ],
+                    "defs": [
+                        {
+                            "type": "Variable",
+                            "node": {
+                                "type": "VariableDeclarator",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 11
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 21
+                                    }
+                                }
+                            },
+                            "name": "count"
+                        },
+                        {
+                            "type": "Variable",
+                            "node": {
+                                "type": "VariableDeclarator",
+                                "loc": {
+                                    "start": {
+                                        "line": 7,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 7,
+                                        "column": 14
+                                    }
+                                }
+                            },
+                            "name": "count"
+                        }
+                    ],
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 11
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 16
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 11
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 16
+                                    }
+                                }
+                            },
+                            "init": true
+                        },
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 7,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 7,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 11
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 16
+                                    }
+                                }
+                            },
+                            "init": true
+                        },
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 11
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 16
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "count",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 11
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 16
+                                    }
+                                }
+                            },
+                            "init": null,
+                            "vueUsedInTemplate": true
+                        }
+                    ]
+                },
+                {
+                    "name": "MyComponent1",
+                    "identifiers": [
+                        {
+                            "type": "Identifier",
+                            "name": "MyComponent1",
+                            "loc": {
+                                "start": {
+                                    "line": 6,
+                                    "column": 7
+                                },
+                                "end": {
+                                    "line": 6,
+                                    "column": 19
+                                }
+                            }
+                        }
+                    ],
+                    "defs": [
+                        {
+                            "type": "ImportBinding",
+                            "node": {
+                                "type": "ImportDefaultSpecifier",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 7
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 19
+                                    }
+                                }
+                            },
+                            "name": "MyComponent1"
+                        }
+                    ],
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "MyComponent1",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 7
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 19
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "MyComponent1",
+                                "loc": {
+                                    "start": {
+                                        "line": 6,
+                                        "column": 7
+                                    },
+                                    "end": {
+                                        "line": 6,
+                                        "column": 19
+                                    }
+                                }
+                            },
+                            "init": null,
+                            "vueUsedInTemplate": true
+                        }
+                    ]
+                },
+                {
+                    "name": "MyComponent2",
+                    "identifiers": [
+                        {
+                            "type": "Identifier",
+                            "name": "MyComponent2",
+                            "loc": {
+                                "start": {
+                                    "line": 8,
+                                    "column": 7
+                                },
+                                "end": {
+                                    "line": 8,
+                                    "column": 19
+                                }
+                            }
+                        }
+                    ],
+                    "defs": [
+                        {
+                            "type": "ImportBinding",
+                            "node": {
+                                "type": "ImportDefaultSpecifier",
+                                "loc": {
+                                    "start": {
+                                        "line": 8,
+                                        "column": 7
+                                    },
+                                    "end": {
+                                        "line": 8,
+                                        "column": 19
+                                    }
+                                }
+                            },
+                            "name": "MyComponent2"
+                        }
+                    ],
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "MyComponent2",
+                                "loc": {
+                                    "start": {
+                                        "line": 8,
+                                        "column": 7
+                                    },
+                                    "end": {
+                                        "line": 8,
+                                        "column": 19
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "MyComponent2",
+                                "loc": {
+                                    "start": {
+                                        "line": 8,
+                                        "column": 7
+                                    },
+                                    "end": {
+                                        "line": 8,
+                                        "column": 19
+                                    }
+                                }
+                            },
+                            "init": null,
+                            "vueUsedInTemplate": true
+                        }
+                    ]
+                },
+                {
+                    "name": "a",
+                    "identifiers": [
+                        {
+                            "type": "Identifier",
+                            "name": "a",
+                            "loc": {
+                                "start": {
+                                    "line": 9,
+                                    "column": 4
+                                },
+                                "end": {
+                                    "line": 9,
+                                    "column": 5
+                                }
+                            }
+                        }
+                    ],
+                    "defs": [
+                        {
+                            "type": "Variable",
+                            "node": {
+                                "type": "VariableDeclarator",
+                                "loc": {
+                                    "start": {
+                                        "line": 9,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 9,
+                                        "column": 13
+                                    }
+                                }
+                            },
+                            "name": "a"
+                        }
+                    ],
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "a",
+                                "loc": {
+                                    "start": {
+                                        "line": 9,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 9,
+                                        "column": 5
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "a",
+                                "loc": {
+                                    "start": {
+                                        "line": 9,
+                                        "column": 4
+                                    },
+                                    "end": {
+                                        "line": 9,
+                                        "column": 5
+                                    }
+                                }
+                            },
+                            "init": true
+                        }
+                    ]
+                }
+            ],
+            "references": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "count",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 11
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 16
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "count",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 11
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 16
+                            }
+                        }
+                    },
+                    "init": true
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "count",
+                        "loc": {
+                            "start": {
+                                "line": 7,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 7,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "count",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 11
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 16
+                            }
+                        }
+                    },
+                    "init": true
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "loc": {
+                            "start": {
+                                "line": 9,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 9,
+                                "column": 5
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "a",
+                        "loc": {
+                            "start": {
+                                "line": 9,
+                                "column": 4
+                            },
+                            "end": {
+                                "line": 9,
+                                "column": 5
+                            }
+                        }
+                    },
+                    "init": true
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "loc": {
+                            "start": {
+                                "line": 9,
+                                "column": 8
+                            },
+                            "end": {
+                                "line": 9,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": null,
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "c",
+                        "loc": {
+                            "start": {
+                                "line": 9,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 9,
+                                "column": 13
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": null,
+                    "init": null
+                }
+            ],
+            "childScopes": [],
+            "through": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "b",
+                        "loc": {
+                            "start": {
+                                "line": 9,
+                                "column": 8
+                            },
+                            "end": {
+                                "line": 9,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": null,
+                    "init": null
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "c",
+                        "loc": {
+                            "start": {
+                                "line": 9,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 9,
+                                "column": 13
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": null,
+                    "init": null
+                }
+            ]
+        }
+    ],
+    "through": [
+        {
+            "identifier": {
+                "type": "Identifier",
+                "name": "b",
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 9
+                    }
+                }
+            },
+            "from": "module",
+            "resolved": null,
+            "init": null
+        },
+        {
+            "identifier": {
+                "type": "Identifier",
+                "name": "c",
+                "loc": {
+                    "start": {
+                        "line": 9,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 9,
+                        "column": 13
+                    }
+                }
+            },
+            "from": "module",
+            "resolved": null,
+            "init": null
+        }
+    ]
+}

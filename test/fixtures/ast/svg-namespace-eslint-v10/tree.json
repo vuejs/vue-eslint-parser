@@ -1,0 +1,120 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template xmlns=\"http://www.w3.org/2000/svg\">\n    <defs>\n        <pattern id=\"pat\" viewBox=\"0 0 100 100\"></pattern>\n    </defs>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template xmlns=\"http://www.w3.org/2000/svg\">",
+                "children": [
+                    {
+                        "type": "VAttribute",
+                        "text": "xmlns=\"http://www.w3.org/2000/svg\"",
+                        "children": [
+                            {
+                                "type": "VIdentifier",
+                                "text": "xmlns",
+                                "children": []
+                            },
+                            {
+                                "type": "VLiteral",
+                                "text": "\"http://www.w3.org/2000/svg\"",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<defs>\n        <pattern id=\"pat\" viewBox=\"0 0 100 100\"></pattern>\n    </defs>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<defs>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<pattern id=\"pat\" viewBox=\"0 0 100 100\"></pattern>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<pattern id=\"pat\" viewBox=\"0 0 100 100\">",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "id=\"pat\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "id",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VLiteral",
+                                                "text": "\"pat\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "viewBox=\"0 0 100 100\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "viewBox",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VLiteral",
+                                                "text": "\"0 0 100 100\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</pattern>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</defs>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

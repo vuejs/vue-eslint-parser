@@ -1,0 +1,111 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  {{ count }}\n  <button @click=\"() => count++\">Click Me</button>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{ count }}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "count",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<button @click=\"() => count++\">Click Me</button>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<button @click=\"() => count++\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "@click=\"() => count++\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "@click",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "@",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "click",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"() => count++\"",
+                                        "children": [
+                                            {
+                                                "type": "ArrowFunctionExpression",
+                                                "text": "() => count++",
+                                                "children": [
+                                                    {
+                                                        "type": "UpdateExpression",
+                                                        "text": "count++",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "count",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "Click Me",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</button>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

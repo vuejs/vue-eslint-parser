@@ -1,0 +1,184 @@
+{
+    "type": "global",
+    "variables": [
+        {
+            "name": "userMacro",
+            "identifiers": [],
+            "defs": [],
+            "references": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "userMacro",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 21
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "init": null
+                }
+            ]
+        }
+    ],
+    "references": [],
+    "childScopes": [
+        {
+            "type": "module",
+            "variables": [
+                {
+                    "name": "foo",
+                    "identifiers": [
+                        {
+                            "type": "Identifier",
+                            "name": "foo",
+                            "loc": {
+                                "start": {
+                                    "line": 2,
+                                    "column": 6
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "column": 9
+                                }
+                            }
+                        }
+                    ],
+                    "defs": [
+                        {
+                            "type": "Variable",
+                            "node": {
+                                "type": "VariableDeclarator",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 23
+                                    }
+                                }
+                            },
+                            "name": "foo"
+                        }
+                    ],
+                    "references": [
+                        {
+                            "identifier": {
+                                "type": "Identifier",
+                                "name": "foo",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "from": "module",
+                            "resolved": {
+                                "type": "Identifier",
+                                "name": "foo",
+                                "loc": {
+                                    "start": {
+                                        "line": 2,
+                                        "column": 6
+                                    },
+                                    "end": {
+                                        "line": 2,
+                                        "column": 9
+                                    }
+                                }
+                            },
+                            "init": true
+                        }
+                    ]
+                }
+            ],
+            "references": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "foo",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 6
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "resolved": {
+                        "type": "Identifier",
+                        "name": "foo",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 6
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 9
+                            }
+                        }
+                    },
+                    "init": true
+                },
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "userMacro",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 21
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "init": null
+                }
+            ],
+            "childScopes": [],
+            "through": [
+                {
+                    "identifier": {
+                        "type": "Identifier",
+                        "name": "userMacro",
+                        "loc": {
+                            "start": {
+                                "line": 2,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 2,
+                                "column": 21
+                            }
+                        }
+                    },
+                    "from": "module",
+                    "init": null
+                }
+            ]
+        }
+    ],
+    "through": []
+}

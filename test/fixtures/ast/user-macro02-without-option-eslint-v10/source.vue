@@ -1,0 +1,3 @@
+<script setup>
+const foo = userMacro()
+</script>

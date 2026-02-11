@@ -1,0 +1,139 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <component :is=\"Foo\" />\n  <component :is=\"someCondition ? Foo : Bar\" />\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<component :is=\"Foo\" />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<component :is=\"Foo\" />",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":is=\"Foo\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":is",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "is",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"Foo\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "Foo",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<component :is=\"someCondition ? Foo : Bar\" />",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<component :is=\"someCondition ? Foo : Bar\" />",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":is=\"someCondition ? Foo : Bar\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":is",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "is",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"someCondition ? Foo : Bar\"",
+                                        "children": [
+                                            {
+                                                "type": "ConditionalExpression",
+                                                "text": "someCondition ? Foo : Bar",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "someCondition",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "Foo",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "Bar",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

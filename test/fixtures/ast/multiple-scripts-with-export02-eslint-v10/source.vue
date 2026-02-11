@@ -1,0 +1,19 @@
+<script>
+let count = 0
+</script>
+
+<script setup>
+import A from 'a'
+const a = 42
+export let msg = 'Hello!'
+import B from 'a'
+const b = 42
+export * from 'foo'
+const c = 42
+export default {}
+const d = 42
+export {b,c}
+export {b as b2,c as c2}
+export {}
+const e = 42
+</script>

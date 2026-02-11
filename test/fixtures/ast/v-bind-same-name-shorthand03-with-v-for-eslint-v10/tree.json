@@ -1,0 +1,138 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n  <div>\n    <img v-for=\"src in srcList\" :src>\n  </div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n  ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div>\n    <img v-for=\"src in srcList\" :src>\n  </div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<img v-for=\"src in srcList\" :src>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<img v-for=\"src in srcList\" :src>",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "v-for=\"src in srcList\"",
+                                        "children": [
+                                            {
+                                                "type": "VDirectiveKey",
+                                                "text": "v-for",
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "v-for",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "\"src in srcList\"",
+                                                "children": [
+                                                    {
+                                                        "type": "VForExpression",
+                                                        "text": "src in srcList",
+                                                        "children": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "src",
+                                                                "children": []
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "text": "srcList",
+                                                                "children": []
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VAttribute",
+                                        "text": ":src",
+                                        "children": [
+                                            {
+                                                "type": "VDirectiveKey",
+                                                "text": ":src",
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": ":",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "src",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "src",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "src",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n  ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
