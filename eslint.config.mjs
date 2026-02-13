@@ -1,6 +1,6 @@
 import prettier from "eslint-plugin-prettier"
 import typescriptEslint from "@typescript-eslint/eslint-plugin"
-import eslintComments from "eslint-plugin-eslint-comments"
+import eslintComments from "@eslint-community/eslint-plugin-eslint-comments"
 import node from "eslint-plugin-n"
 import nodeDeps from "eslint-plugin-node-dependencies"
 import unicorn from "eslint-plugin-unicorn"

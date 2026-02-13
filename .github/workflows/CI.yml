@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 'lts/*'
       - name: Install Packages
-        run: npm install -f
+        run: npm install
       - name: Lint
         run: npm run -s lint
 
@@ -56,7 +56,7 @@ jobs:
       with:
         node-version: ${{ matrix.node }}
     - name: Install Packages
-      run: npm install -f
+      run: npm install
     - name: Install ESLint v${{ matrix.eslint }}
       run: node scripts/ci-install-eslint ${{ matrix.eslint }}
     - name: Test
@@ -80,7 +80,7 @@ jobs:
       with:
         node-version: ${{ matrix.node }}
     - name: Install Packages
-      run: npm install -f
+      run: npm install
     - name: Install ESLint v${{ matrix.eslint }}
       run: node scripts/ci-install-eslint ${{ matrix.eslint }}
     - name: Test
