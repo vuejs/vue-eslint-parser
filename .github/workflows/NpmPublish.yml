@@ -1,0 +1,39 @@
+name: publish
+on:
+  push:
+    tags:
+      - "*"
+
+permissions: {}
+
+# Allow one concurrent deployment
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+  release:
+    # prevents this action from running on forks
+    if: github.repository == 'vuejs/vue-eslint-parser'
+    permissions:
+        contents: write # to create release (changesets/action)
+        id-token: write # OpenID Connect token needed for provenance
+        pull-requests: write # to create pull request (changesets/action)
+    name: check version, and release
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: setup Node
+        uses: actions/setup-node@v4
+        with:
+          registry-url: "https://registry.npmjs.org"
+          node-version: lts/*
+      - name: Install Packages
+        run: npm install
+      - name: build
+        run: npm run build
+      - name: check can npm-publish
+        run: npx can-npm-publish
+      - name: release
+        run: npm publish
