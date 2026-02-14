@@ -33,7 +33,7 @@ describe("Integration tests", () => {
     })
     for (const target of fs.readdirSync(FIXTURE_DIR)) {
         it(target, async () => {
-            let ESLinForTest = ESLint
+            let ESLintForTest = ESLint
             if (fs.existsSync(path.join(FIXTURE_DIR, target, "package.json"))) {
                 const originalCwd = process.cwd()
                 try {
@@ -51,7 +51,7 @@ describe("Integration tests", () => {
                     if (semver.lt(ESLint.version, eslintVersion)) {
                         return
                     }
-                    ESLinForTest =
+                    ESLintForTest =
                         // eslint-disable-next-line @typescript-eslint/no-require-imports
                         require(
                             path.join(
@@ -65,7 +65,7 @@ describe("Integration tests", () => {
                 }
             }
             const cwd = path.join(FIXTURE_DIR, target)
-            const cli = new ESLinForTest({
+            const cli = new ESLintForTest({
                 cwd,
             })
             const report = await cli.lintFiles(["**/*.vue"])
