@@ -6,7 +6,7 @@ on:
 
 permissions: {}
 
-# Allow one concurrent deployment
+# Allow one concurrent release
 concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
@@ -16,14 +16,14 @@ jobs:
     # prevents this action from running on forks
     if: github.repository == 'vuejs/vue-eslint-parser'
     permissions:
-        contents: write # to create release (changesets/action)
+        contents: write # to create GitHub releases and update repository contents
         id-token: write # OpenID Connect token needed for provenance
-        pull-requests: write # to create pull request (changesets/action)
+        pull-requests: write # to manage pull requests
     name: check version, and release
     runs-on: ubuntu-latest
     steps:
       - name: checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
       - name: setup Node
         uses: actions/setup-node@v4
         with:
