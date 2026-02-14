@@ -41,14 +41,14 @@ describe("Integration tests", () => {
                     cp.execSync("npm i --force", { stdio: "inherit" })
 
                     // eslint-disable-next-line @typescript-eslint/no-require-imports
-                    const eslintNodeVersion = require(
+                    const eslintVersion = require(
                         path.join(
                             FIXTURE_DIR,
                             target,
                             "node_modules/eslint/package.json",
                         ),
-                    ).engines.node
-                    if (!semver.satisfies(process.version, eslintNodeVersion)) {
+                    ).version
+                    if (semver.lt(ESLint.version, eslintVersion)) {
                         return
                     }
                     ESLinForTest =
