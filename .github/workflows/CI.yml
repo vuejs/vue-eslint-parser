@@ -7,6 +7,9 @@ on:
   schedule:
   - cron: 0 0 * * 0
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint
