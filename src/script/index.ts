@@ -960,7 +960,7 @@ function parseVForExpressionForEcmaVersion5(
                     end: delimiterEnd,
                     loc: {} as any,
                     range: [delimiterStart, delimiterEnd],
-                } as Token,
+                },
                 locationCalculator,
             ),
         )

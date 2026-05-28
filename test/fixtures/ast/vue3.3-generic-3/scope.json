@@ -8,6 +8,18 @@
             "references": []
         },
         {
+            "name": "Map",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "WeakMap",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
             "name": "SymbolConstructor",
             "identifiers": [],
             "defs": [],
@@ -80,6 +92,48 @@
             "references": []
         },
         {
+            "name": "ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ErrorConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Atomics",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uint8Array",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Uint8ArrayConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Temporal",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Date",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
             "name": "ReadonlySetLike",
             "identifiers": [],
             "defs": [],
@@ -93,30 +147,6 @@
         },
         {
             "name": "ReadonlySet",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "ArrayConstructor",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "Iterator",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "IteratorObjectConstructor",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "PromiseConstructor",
             "identifiers": [],
             "defs": [],
             "references": []
@@ -146,67 +176,25 @@
             "references": []
         },
         {
-            "name": "ErrorConstructor",
+            "name": "Iterator",
             "identifiers": [],
             "defs": [],
             "references": []
         },
         {
-            "name": "Atomics",
+            "name": "IteratorObjectConstructor",
             "identifiers": [],
             "defs": [],
             "references": []
         },
         {
-            "name": "ArrayBuffer",
+            "name": "PromiseConstructor",
             "identifiers": [],
             "defs": [],
             "references": []
         },
         {
-            "name": "ArrayBufferConstructor",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "MapConstructor",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "ObjectConstructor",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "PromiseWithResolvers",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "RegExp",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "SharedArrayBuffer",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "SharedArrayBufferConstructor",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "String",
+            "name": "RegExpConstructor",
             "identifiers": [],
             "defs": [],
             "references": []
@@ -350,19 +338,13 @@
             "references": []
         },
         {
-            "name": "Map",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
             "name": "ReadonlyMap",
             "identifiers": [],
             "defs": [],
             "references": []
         },
         {
-            "name": "WeakMap",
+            "name": "MapConstructor",
             "identifiers": [],
             "defs": [],
             "references": []
@@ -410,6 +392,12 @@
             "references": []
         },
         {
+            "name": "String",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
             "name": "Int8Array",
             "identifiers": [],
             "defs": [],
@@ -417,18 +405,6 @@
         },
         {
             "name": "Int8ArrayConstructor",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "Uint8Array",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "Uint8ArrayConstructor",
             "identifiers": [],
             "defs": [],
             "references": []
@@ -531,6 +507,66 @@
         },
         {
             "name": "AsyncIterableIterator",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "Symbol",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "JSON",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "GeneratorFunction",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "RegExp",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ArrayBuffer",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ArrayBufferConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "ObjectConstructor",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "PromiseWithResolvers",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "SharedArrayBuffer",
+            "identifiers": [],
+            "defs": [],
+            "references": []
+        },
+        {
+            "name": "SharedArrayBufferConstructor",
             "identifiers": [],
             "defs": [],
             "references": []
@@ -686,12 +722,6 @@
             "references": []
         },
         {
-            "name": "Date",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
             "name": "Number",
             "identifiers": [],
             "defs": [],
@@ -717,30 +747,6 @@
         },
         {
             "name": "RegExpStringIterator",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "Symbol",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "JSON",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "GeneratorFunction",
-            "identifiers": [],
-            "defs": [],
-            "references": []
-        },
-        {
-            "name": "RegExpConstructor",
             "identifiers": [],
             "defs": [],
             "references": []
