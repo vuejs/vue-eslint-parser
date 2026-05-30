@@ -12,6 +12,7 @@ import type { Rule } from "eslint"
 import path from "node:path"
 import { describe, it, assert, beforeEach, afterEach } from "vitest"
 import tsParser from "@typescript-eslint/parser"
+import babelParser8 from "@babel/eslint-parser-8"
 import fs from "node:fs"
 import eslint from "eslint"
 import semver from "semver"
@@ -43,7 +44,6 @@ const BABEL_PARSER_OPTIONS = {
         ],
     },
 }
-
 const isESLintV10 = semver.satisfies(
     require("eslint/package.json").version, // eslint-disable-line @typescript-eslint/no-require-imports
     ">=10",
@@ -310,6 +310,32 @@ describe("Basic tests", async () => {
                     overrideConfigFile: true,
                 })
                 const report = await cli.lintFiles(["typed.js"])
+                const messages = report[0].messages
+
+                assert.deepStrictEqual(messages, [])
+            },
+        )
+
+        it.runIf(isESLintV10)(
+            "should notify no error with '@babel/eslint-parser-8'",
+            async () => {
+                const cli = new ESLint({
+                    cwd: FIXTURE_DIR,
+                    overrideConfig: {
+                        files: ["*.vue"],
+                        languageOptions: {
+                            parser,
+                            globals: {},
+                            parserOptions: {
+                                ...BABEL_PARSER_OPTIONS,
+                                parser: babelParser8,
+                            },
+                        },
+                        rules: { semi: ["error", "never"] },
+                    },
+                    overrideConfigFile: true,
+                })
+                const report = await cli.lintFiles(["typed.vue"])
                 const messages = report[0].messages
 
                 assert.deepStrictEqual(messages, [])
