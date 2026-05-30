@@ -581,9 +581,14 @@ export function parseScript(
               ? parserOptions.parser
               : getEspree()
 
+    // `parser` option is only used by `vue-eslint-parser`,
+    // which could break the final parser under the hood
+    // like `@babel/eslint-parser` v8
+    const { parser: _, ...scriptParserOptions } = parserOptions
+
     const result: any = isEnhancedParserObject(parser)
-        ? parser.parseForESLint(code, parserOptions)
-        : parser.parse(code, parserOptions)
+        ? parser.parseForESLint(code, scriptParserOptions)
+        : parser.parse(code, scriptParserOptions)
 
     if (result.ast != null) {
         return result

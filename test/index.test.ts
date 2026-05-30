@@ -44,6 +44,7 @@ const BABEL_PARSER_OPTIONS = {
         ],
     },
 }
+
 const isESLintV10 = semver.satisfies(
     require("eslint/package.json").version, // eslint-disable-line @typescript-eslint/no-require-imports
     ">=10",
