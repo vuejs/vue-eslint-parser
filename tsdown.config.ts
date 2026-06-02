@@ -16,4 +16,12 @@ export default defineConfig({
     },
     dts: true,
     format: "cjs",
+    inlineOnly: [
+        "@typescript-eslint/types",
+        "@typescript-eslint/project-service",
+        "@typescript-eslint/typescript-estree",
+        "@typescript-eslint/visitor-keys",
+        "@typescript-eslint/utils",
+        "@typescript-eslint/scope-manager",
+    ],
 })
