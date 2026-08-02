@@ -942,12 +942,20 @@ function remapAST(
                 moduleScope.set.set(variable.name, variable)
             }
         }
+        // Restore child scopes.
+        // Without this, scopes of functions declared in `<script setup>` stay attached to the removed block scope.
+        // They remain in `ScopeManager#scopes`, but rules that traverse `Scope#childScopes` from the `Program` scope
+        // (`no-use-before-define`, `no-shadow`, ...) never reach them and silently report nothing.
+        for (const childScope of blockScope.childScopes) {
+            childScope.upper = moduleScope
+        }
         // Remove scope
         const upper = blockScope.upper
         if (upper) {
             const index = upper.childScopes.indexOf(blockScope)
             if (index >= 0) {
-                upper.childScopes.splice(index, 1)
+                // Put the child scopes where the block scope was, so they stay in source order
+                upper.childScopes.splice(index, 1, ...blockScope.childScopes)
             }
         }
         const index = scopeManager.scopes.indexOf(blockScope)

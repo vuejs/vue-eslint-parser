@@ -989,6 +989,109 @@ export default {}
             // Verify comments are sorted by range
             assert.ok(comments[0].range[0] < comments[1].range[0])
         })
+
+        it("should keep scopes of `<script setup>` functions in the scope tree", () => {
+            const code = `<script lang="ts">
+export const fromFirstScript = () => {
+    return 1
+}
+</script>
+
+<script lang="ts" setup>
+const outer = () => {
+    return inner()
+}
+
+const inner = () => {
+    return 2
+}
+</script>`
+
+            const result = parseForESLint(code, {
+                parser: "@typescript-eslint/parser",
+                sourceType: "module",
+            })
+            const scopeManager = result.scopeManager!
+
+            type ScopeOfManager = (typeof scopeManager.scopes)[number]
+
+            const reachableScopes = new Set<ScopeOfManager>()
+            const collectScopes = (scope: ScopeOfManager) => {
+                reachableScopes.add(scope)
+                scope.childScopes.forEach(collectScopes)
+            }
+            collectScopes(scopeManager.globalScope)
+
+            // Scopes of `outer` and `inner` must be reachable by walking `childScopes` from the global scope,
+            // otherwise rules that traverse the tree (`no-use-before-define`, `no-shadow`, ...) skip them
+            assert.deepStrictEqual(
+                scopeManager.scopes.filter(
+                    (scope) => !reachableScopes.has(scope),
+                ),
+                [],
+            )
+
+            // Every scope must be linked to a scope that is still part of the scope manager,
+            // so that rules walking up through `Scope#upper` never land on the removed block scope
+            assert.deepStrictEqual(
+                scopeManager.scopes.filter(
+                    (scope) =>
+                        scope.upper &&
+                        !scopeManager.scopes.includes(scope.upper),
+                ),
+                [],
+            )
+
+            // The child scopes take the place of the removed block scope, so they stay in source order
+            const moduleScope = scopeManager.globalScope.childScopes.find(
+                (scope) => scope.type === "module",
+            )!
+            const childScopeStarts = moduleScope.childScopes.map(
+                (scope) => scope.block.range![0],
+            )
+            assert.deepStrictEqual(
+                childScopeStarts,
+                [...childScopeStarts].sort((a, b) => a - b),
+            )
+        })
+
+        it("should notify no-use-before-define error in `<script setup>` with a `<script>` block", () => {
+            const code = `<script lang="ts">
+export interface ExportedFromFirstScript {
+    name: string
+}
+</script>
+
+<script lang="ts" setup>
+const outer = () => {
+    return inner()
+}
+
+const inner = () => {
+    return 1
+}
+</script>`
+            const config: eslint.Linter.Config = {
+                languageOptions: {
+                    parser,
+                    parserOptions: {
+                        parser: "@typescript-eslint/parser",
+                        sourceType: "module",
+                    },
+                },
+                rules: {
+                    "no-use-before-define": "error",
+                },
+            }
+            const linter = new Linter()
+            const messages = linter.verify(code, config)
+
+            assert.strictEqual(messages.length, 1)
+            assert.strictEqual(
+                messages[0].message,
+                "'inner' was used before it was defined.",
+            )
+        })
     })
 })
 
