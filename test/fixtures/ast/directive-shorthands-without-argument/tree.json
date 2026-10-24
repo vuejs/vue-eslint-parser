@@ -1,0 +1,301 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <div :=\"attrs\"></div>\n    <div .=\"props\"></div>\n    <div @=\"listeners\"></div>\n    <test-component #=\"{ item }\">{{ item }}</test-component>\n    <div :></div>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div :=\"attrs\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div :=\"attrs\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":=\"attrs\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"attrs\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "attrs",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div .=\"props\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div .=\"props\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ".=\"props\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ".",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ".",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"props\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "props",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div @=\"listeners\"></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div @=\"listeners\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "@=\"listeners\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "@",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "@",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"listeners\"",
+                                        "children": [
+                                            {
+                                                "type": "Identifier",
+                                                "text": "listeners",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<test-component #=\"{ item }\">{{ item }}</test-component>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<test-component #=\"{ item }\">",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": "#=\"{ item }\"",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": "#",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "#",
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VExpressionContainer",
+                                        "text": "\"{ item }\"",
+                                        "children": [
+                                            {
+                                                "type": "VSlotScopeExpression",
+                                                "text": "{ item }",
+                                                "children": [
+                                                    {
+                                                        "type": "ObjectPattern",
+                                                        "text": "{ item }",
+                                                        "children": [
+                                                            {
+                                                                "type": "Property",
+                                                                "text": "item",
+                                                                "children": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "item",
+                                                                        "children": []
+                                                                    },
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "text": "item",
+                                                                        "children": []
+                                                                    }
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{ item }}",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "item",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</test-component>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<div :></div>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<div :>",
+                        "children": [
+                            {
+                                "type": "VAttribute",
+                                "text": ":",
+                                "children": [
+                                    {
+                                        "type": "VDirectiveKey",
+                                        "text": ":",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": ":",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</div>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]

@@ -122,6 +122,37 @@ describe("[references] expression containers", () => {
             )
         })
     })
+
+    describe("in argument-less directive shorthands", () => {
+        const code =
+            '<template><div :="attrs" .="props" @="listeners"></div></template>'
+        // @ts-expect-error init in beforeAll
+        let ast: ESLintProgram = null
+
+        beforeAll(() => {
+            ast = parse(code, { filePath: "test.vue", ...PARSER_OPTIONS }).ast
+        })
+
+        it("should be directives that reference their values.", () => {
+            const element = ast.templateBody!.children[0] as VElement
+            const actual = []
+            for (const directive of element.startTag
+                .attributes as VDirective[]) {
+                actual.push([
+                    directive.directive,
+                    directive.key.name.name,
+                    directive.key.argument,
+                    directive.value!.references.map((r) => r.id.name),
+                ])
+            }
+
+            assert.deepStrictEqual(actual, [
+                [true, "bind", null, ["attrs"]],
+                [true, "bind", null, ["props"]],
+                [true, "on", null, ["listeners"]],
+            ])
+        })
+    })
 })
 
 describe("[variables] elements", () => {

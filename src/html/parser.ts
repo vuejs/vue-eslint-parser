@@ -57,7 +57,9 @@ import type {
 } from "./custom-tokenizer"
 import { isScriptSetupElement, isTSLang } from "../common/ast-utils"
 
-const DIRECTIVE_NAME = /^(?:v-|[.:@#]).*[^.:@#]$/u
+// A lone shorthand sign (`:`, `.`, `@`, `#`) is an argument-less directive,
+// the same as `v-bind`, `v-bind.prop`, `v-on` and `v-slot`.
+const DIRECTIVE_NAME = /^(?:(?:v-|[.:@#]).*[^.:@#]|[.:@#])$/u
 const DT_DD = /^d[dt]$/u
 const DUMMY_PARENT: any = Object.freeze({})
 
