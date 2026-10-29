@@ -323,9 +323,10 @@ The `npm install` command installs dependencies.
 
 ### Development Tools
 
-- `npm test` runs tests and measures coverage.
-- `npm run build` compiles TypeScript source code to `index.js`, `index.js.map`, and `index.d.ts` in `dist`.
-- `npm run coverage` shows the coverage result of `npm test` command with the default browser.
+- `npm test` runs tests with Vitest. (`npm test -- run` runs them once without watching.)
+- `npm run test:cover` runs tests and measures coverage.
+- `npm run coverage` runs tests and shows the coverage result in the Vitest UI.
+- `npm run build` compiles TypeScript source code to `index.cjs`, `index.cjs.map`, and `index.d.cts` in `dist`.
+- `npm run dev` runs `build` with `--watch` option.
 - `npm run lint` runs ESLint.
-- `npm run update-fixtures` updates files in `test/fixtures/ast` directory based on `test/fixtures/ast/*/source.vue` files.
-- `npm run watch` runs `build`, `update-fixtures`, and tests with `--watch` option.
+- `npm test -- run -u` updates files in `test/fixtures/ast` directory based on `test/fixtures/ast/*/source.vue` files.
