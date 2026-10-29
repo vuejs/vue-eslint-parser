@@ -221,20 +221,32 @@ function analyzeUsedInTemplateVariables(
     }
 
     function processVElement(node: VElement) {
+        let name = node.rawName
+        const isAttr = node.startTag.attributes.find(
+            (attr): attr is VAttribute =>
+                !attr.directive && attr.key.name === "is",
+        )
         if (
-            (node.rawName === node.name && NATIVE_TAGS.has(node.rawName)) ||
-            BUILTIN_COMPONENTS.has(node.rawName)
+            isAttr?.value?.value.startsWith("vue:") &&
+            name !== "component" &&
+            name !== "Component"
         ) {
+            // e.g. <tr is="vue:my-row">
+            // https://github.com/vuejs/core/blob/bf5f0dd877dd3c23ce85c2cbc1dd771567e84c8c/packages/compiler-core/src/transforms/transformElement.ts#L274-L282
+            name = isAttr.value.value.slice(4)
+        } else if (node.rawName === node.name && NATIVE_TAGS.has(name)) {
             return
         }
-        if (!markSetupReferenceVariableAsUsed(node.rawName)) {
+        // `name` is empty for `is="vue:"`.
+        if (!name || BUILTIN_COMPONENTS.has(name)) {
+            return
+        }
+        if (!markSetupReferenceVariableAsUsed(name)) {
             // Check namespace
             // https://github.com/vuejs/vue-next/blob/48de8a42b7fed7a03f7f1ff5d53d6a704252cafe/packages/compiler-core/src/transforms/transformElement.ts#L306
-            const dotIndex = node.rawName.indexOf(".")
+            const dotIndex = name.indexOf(".")
             if (dotIndex > 0) {
-                markSetupReferenceVariableAsUsed(
-                    node.rawName.slice(0, dotIndex),
-                )
+                markSetupReferenceVariableAsUsed(name.slice(0, dotIndex))
             }
         }
     }
