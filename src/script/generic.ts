@@ -6,7 +6,7 @@ import type {
     VElement,
     VGenericExpression,
 } from "../ast/index"
-import type { TSESTree } from "@typescript-eslint/utils"
+import type { TSESTree } from "@typescript-eslint/types"
 import type {
     Reference,
     Scope,
