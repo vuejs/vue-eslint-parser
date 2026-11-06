@@ -20,9 +20,16 @@ export function getEslintScope(): ESLintScope {
  */
 function getNewest(): ESLintScope {
     let newest = escope
-    const userEscope = getEslintScopeFromUser()
-    if (userEscope.version != null && lte(newest.version, userEscope.version)) {
-        newest = userEscope
+    for (const candidate of [
+        getEslintScopeFromUser(),
+        getEslintScopeFromESLint(),
+    ]) {
+        if (
+            candidate.version != null &&
+            lte(newest.version, candidate.version)
+        ) {
+            newest = candidate
+        }
     }
     return newest
 }
@@ -35,6 +42,22 @@ function getEslintScopeFromUser(): ESLintScope {
         const cwd = process.cwd()
         const relativeTo = path.join(cwd, "__placeholder__.js")
         return createRequire(relativeTo)("eslint-scope")
+    } catch {
+        return escope
+    }
+}
+
+/**
+ * Load `eslint-scope` from the user's ESLint, which may have its own copy.
+ */
+function getEslintScopeFromESLint(): ESLintScope {
+    try {
+        const cwd = process.cwd()
+        const relativeTo = path.join(cwd, "__placeholder__.js")
+        const eslintPath = createRequire(relativeTo).resolve(
+            "eslint/package.json",
+        )
+        return createRequire(eslintPath)("eslint-scope")
     } catch {
         return escope
     }
