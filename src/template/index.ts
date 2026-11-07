@@ -162,6 +162,7 @@ function parseDirectiveKeyStatically(
         directiveKey.argument = modifiers.shift() ?? null
     }
     directiveKey.modifiers = modifiers.filter(isNotEmptyModifier)
+    normalizeSlotDirectiveKeyArgument(directiveKey, text, rawText, offset)
 
     if (directiveKey.name.name === "v-") {
         insertError(
@@ -190,6 +191,36 @@ function parseDirectiveKeyStatically(
     }
 
     return directiveKey
+}
+
+function normalizeSlotDirectiveKeyArgument(
+    directiveKey: VDirectiveKey,
+    text: string,
+    rawText: string,
+    offset: number,
+) {
+    if (!isSlotDirectiveKeyName(directiveKey.name.name)) {
+        return
+    }
+
+    const lastModifier = directiveKey.modifiers.at(-1)
+    if (directiveKey.argument != null && lastModifier != null) {
+        const argumentStart = directiveKey.argument.range[0] - offset
+        const argumentEnd = lastModifier.range[1] - offset
+        directiveKey.argument.range[1] = lastModifier.range[1]
+        directiveKey.argument.loc.end = lastModifier.loc.end
+        directiveKey.argument.name = text.slice(argumentStart, argumentEnd)
+        directiveKey.argument.rawName = rawText.slice(
+            argumentStart,
+            argumentEnd,
+        )
+    }
+
+    directiveKey.modifiers = []
+}
+
+function isSlotDirectiveKeyName(name: string) {
+    return name === "slot" || name === "v-slot"
 }
 
 /**
