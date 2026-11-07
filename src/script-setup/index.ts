@@ -947,7 +947,7 @@ function remapAST(
         if (upper) {
             const index = upper.childScopes.indexOf(blockScope)
             if (index >= 0) {
-                upper.childScopes.splice(index, 1)
+                upper.childScopes.splice(index, 1, ...blockScope.childScopes)
             }
         }
         const index = scopeManager.scopes.indexOf(blockScope)
