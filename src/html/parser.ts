@@ -34,6 +34,7 @@ import {
     HTML_RCDATA_TAGS,
     HTML_VOID_ELEMENT_TAGS,
     SVG_ELEMENT_NAME_MAP,
+    VUE_TEMPLATE_RAWTEXT_TAGS,
 } from "./util/tag-names"
 import type {
     IntermediateToken,
@@ -684,7 +685,10 @@ export class Parser {
                 if (HTML_RCDATA_TAGS.has(elementName)) {
                     this.tokenizer.state = "RCDATA"
                 }
-                if (HTML_RAWTEXT_TAGS.has(elementName)) {
+                const rawTextTags = this.isSFC
+                    ? VUE_TEMPLATE_RAWTEXT_TAGS
+                    : HTML_RAWTEXT_TAGS
+                if (rawTextTags.has(elementName)) {
                     this.tokenizer.state = "RAWTEXT"
                 }
             }

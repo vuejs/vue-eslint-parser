@@ -67,6 +67,14 @@ export const HTML_RAWTEXT_TAGS = new Set([
 ])
 
 /**
+ * Tag names of RAWTEXT in Vue templates.
+ * https://github.com/vuejs/core/blob/bf5f0dd877dd3c23ce85c2cbc1dd771567e84c8c/packages/compiler-core/src/tokenizer.ts#L577-L579
+ */
+export const VUE_TEMPLATE_RAWTEXT_TAGS = new Set([
+    "style", "script",
+])
+
+/**
  * SVG tag names.
  */
 export const SVG_TAGS = new Set([

@@ -1,0 +1,179 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>\n    <noscript>\n        <img :src=\"url\" alt=\"\">\n        {{ message }}\n    </noscript>\n    <iframe><p>{{ fallback }}</p></iframe>\n</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<noscript>\n        <img :src=\"url\" alt=\"\">\n        {{ message }}\n    </noscript>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<noscript>",
+                        "children": []
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<img :src=\"url\" alt=\"\">",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<img :src=\"url\" alt=\"\">",
+                                "children": [
+                                    {
+                                        "type": "VAttribute",
+                                        "text": ":src=\"url\"",
+                                        "children": [
+                                            {
+                                                "type": "VDirectiveKey",
+                                                "text": ":src",
+                                                "children": [
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": ":",
+                                                        "children": []
+                                                    },
+                                                    {
+                                                        "type": "VIdentifier",
+                                                        "text": "src",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "type": "VExpressionContainer",
+                                                "text": "\"url\"",
+                                                "children": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "text": "url",
+                                                        "children": []
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "type": "VAttribute",
+                                        "text": "alt=\"\"",
+                                        "children": [
+                                            {
+                                                "type": "VIdentifier",
+                                                "text": "alt",
+                                                "children": []
+                                            },
+                                            {
+                                                "type": "VLiteral",
+                                                "text": "\"\"",
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n        ",
+                        "children": []
+                    },
+                    {
+                        "type": "VExpressionContainer",
+                        "text": "{{ message }}",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "message",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VText",
+                        "text": "\n    ",
+                        "children": []
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</noscript>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n    ",
+                "children": []
+            },
+            {
+                "type": "VElement",
+                "text": "<iframe><p>{{ fallback }}</p></iframe>",
+                "children": [
+                    {
+                        "type": "VStartTag",
+                        "text": "<iframe>",
+                        "children": []
+                    },
+                    {
+                        "type": "VElement",
+                        "text": "<p>{{ fallback }}</p>",
+                        "children": [
+                            {
+                                "type": "VStartTag",
+                                "text": "<p>",
+                                "children": []
+                            },
+                            {
+                                "type": "VExpressionContainer",
+                                "text": "{{ fallback }}",
+                                "children": [
+                                    {
+                                        "type": "Identifier",
+                                        "text": "fallback",
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "VEndTag",
+                                "text": "</p>",
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "type": "VEndTag",
+                        "text": "</iframe>",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VText",
+                "text": "\n",
+                "children": []
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
