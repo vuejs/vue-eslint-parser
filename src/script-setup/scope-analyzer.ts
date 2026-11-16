@@ -100,6 +100,19 @@ function capitalize(str: string) {
 }
 
 /**
+ * Checks whether the variable is a default import of a `.vue` file.
+ * Vue's `compileScript` treats it as `setup-const`, which is resolved first.
+ */
+function isVueFileImport(variable: escopeTypes.Variable | undefined) {
+    const def: any = variable?.defs[0]
+    return (
+        def?.node.type === "ImportDefaultSpecifier" &&
+        def.parent.importKind !== "type" &&
+        def.parent.source.value.endsWith(".vue")
+    )
+}
+
+/**
  * Analyze `<script setup>` scope.
  * This method does the following process:
  *
@@ -155,18 +168,14 @@ function analyzeUsedInTemplateVariables(
      * @see https://github.com/vuejs/vue-next/blob/48de8a42b7fed7a03f7f1ff5d53d6a704252cafe/packages/compiler-core/src/transforms/transformElement.ts#L335
      */
     function markSetupReferenceVariableAsUsed(name: string) {
-        if (scriptVariables.has(name)) {
-            markVariableAsUsed(name)
-            return true
-        }
         const camelName = camelize(name)
-        if (scriptVariables.has(camelName)) {
-            markVariableAsUsed(camelName)
-            return true
-        }
-        const pascalName = capitalize(camelName)
-        if (scriptVariables.has(pascalName)) {
-            markVariableAsUsed(pascalName)
+        const names = [name, camelName, capitalize(camelName)]
+        // Like Vue, `.vue` imports take precedence over refs with a similar name.
+        const found =
+            names.find((n) => isVueFileImport(scriptVariables.get(n))) ??
+            names.find((n) => scriptVariables.has(n))
+        if (found) {
+            markVariableAsUsed(found)
             return true
         }
         return false
