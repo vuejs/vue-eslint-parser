@@ -1,0 +1,29 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>{{ foo }}</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{ foo }}",
+                "children": [
+                    {
+                        "type": "Identifier",
+                        "text": "foo",
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
