@@ -19,12 +19,15 @@ export function isScriptElement(node: VNode): node is VElement {
 
 /**
  * Checks whether the given script element is `<script setup>`.
+ * `<script vapor>` is also treated as `<script setup>`, as in `@vue/compiler-sfc`.
  */
 export function isScriptSetupElement(script: VElement): boolean {
     return (
         isScriptElement(script) &&
         script.startTag.attributes.some(
-            (attr) => !attr.directive && attr.key.name === "setup",
+            (attr) =>
+                !attr.directive &&
+                (attr.key.name === "setup" || attr.key.name === "vapor"),
         )
     )
 }

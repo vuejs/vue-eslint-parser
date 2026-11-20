@@ -1,0 +1,40 @@
+[
+    {
+        "type": "VElement",
+        "text": "<template>{{ props.msg }}</template>",
+        "children": [
+            {
+                "type": "VStartTag",
+                "text": "<template>",
+                "children": []
+            },
+            {
+                "type": "VExpressionContainer",
+                "text": "{{ props.msg }}",
+                "children": [
+                    {
+                        "type": "MemberExpression",
+                        "text": "props.msg",
+                        "children": [
+                            {
+                                "type": "Identifier",
+                                "text": "props",
+                                "children": []
+                            },
+                            {
+                                "type": "Identifier",
+                                "text": "msg",
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "VEndTag",
+                "text": "</template>",
+                "children": []
+            }
+        ]
+    }
+]
